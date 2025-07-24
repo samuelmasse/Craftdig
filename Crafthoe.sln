@@ -1,9 +1,10 @@
-
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.14.36301.6 d17.14
+VisualStudioVersion = 17.14.36301.6
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crafthoe", "src\Crafthoe\Crafthoe.csproj", "{97E3A8DF-66AA-4575-ACB2-7CFAEFBD09C1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlvorEngine", "src\AlvorEngine\AlvorEngine.csproj", "{0E1FE117-5261-4306-B670-E0506BEA2782}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +16,10 @@ Global
 		{97E3A8DF-66AA-4575-ACB2-7CFAEFBD09C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{97E3A8DF-66AA-4575-ACB2-7CFAEFBD09C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{97E3A8DF-66AA-4575-ACB2-7CFAEFBD09C1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0E1FE117-5261-4306-B670-E0506BEA2782}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0E1FE117-5261-4306-B670-E0506BEA2782}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0E1FE117-5261-4306-B670-E0506BEA2782}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0E1FE117-5261-4306-B670-E0506BEA2782}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

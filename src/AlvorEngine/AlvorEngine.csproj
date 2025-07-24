@@ -1,0 +1,9 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <ItemGroup>
+        <PackageReference Include="Glw2D.Fonts" Version="0.*" />
+        <PackageReference Include="NeedlerDI" Version="0.*" />
+        <PackageReference Include="Wigdow" Version="0.*" />
+    </ItemGroup>
+
+</Project>

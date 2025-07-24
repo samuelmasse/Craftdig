@@ -4,4 +4,17 @@
         <OutputType>Exe</OutputType>
     </PropertyGroup>
 
+    <ItemGroup>
+        <ProjectReference Include="..\AlvorEngine\AlvorEngine.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="GlwLayer.Driver.OpenTK" Version="0.*" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <Using Include="Crafthoe" />
+        <Using Include="GlwLayer.Driver.OpenTK" />
+    </ItemGroup>
+
 </Project>
