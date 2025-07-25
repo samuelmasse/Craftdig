@@ -1,9 +1,17 @@
 namespace Crafthoe.Player;
 
 [Player]
-public class PlayerContext(RootCanvas canvas, AppFiles files, PlayerGlw gl)
+public class PlayerContext(
+    RootKeyboard keyboard,
+    RootCanvas canvas,
+    AppFiles files,
+    PlayerGlw gl,
+    PlayerPerspective perspective,
+    PlayerCamera camera)
 {
     private int shaderProgram;
+    private int uniformMatView;
+    private int uniformMatProjection;
     private int vao;
 
     public void Load()
@@ -13,6 +21,8 @@ public class PlayerContext(RootCanvas canvas, AppFiles files, PlayerGlw gl)
         var program = new ShaderProgram(gl, [vert, frag]);
 
         shaderProgram = program.Id;
+        uniformMatView = GL.GetUniformLocation(shaderProgram, "matView");
+        uniformMatProjection = GL.GetUniformLocation(shaderProgram, "matProjection");
 
         float[] vertices = [
             0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f,
@@ -36,6 +46,19 @@ public class PlayerContext(RootCanvas canvas, AppFiles files, PlayerGlw gl)
 
         gl.UnbindVertexArray();
         gl.UnbindBuffer(BufferTarget.ArrayBuffer);
+
+        camera.Offset = (0, 0, 10);
+    }
+
+    public void Update(double time)
+    {
+        if (keyboard.IsKeyDown(Keys.W))
+            camera.Offset.Z -= (float)(time * 10);
+        if (keyboard.IsKeyDown(Keys.S))
+            camera.Offset.Z += (float)(time * 10);
+
+        camera.Update();
+        perspective.Update();
     }
 
     public void Render()
@@ -43,6 +66,9 @@ public class PlayerContext(RootCanvas canvas, AppFiles files, PlayerGlw gl)
         gl.Viewport(canvas.Size);
 
         gl.UseProgram(shaderProgram);
+        GL.UniformMatrix4(uniformMatView, true, ref perspective.View);
+        GL.UniformMatrix4(uniformMatProjection, true, ref perspective.Projection);
+
         gl.BindVertexArray(vao);
 
         gl.DrawArrays(PrimitiveType.Triangles, 0, 3);

@@ -8,6 +8,11 @@ public class PlayerState(RootBackbuffer backbuffer, RootSprites sprites, AppFont
         context.Load();
     }
 
+    public override void Update(double time)
+    {
+        context.Update(time);
+    }
+
     public override void Render()
     {
         backbuffer.Clear();
