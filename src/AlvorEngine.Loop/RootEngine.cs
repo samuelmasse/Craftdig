@@ -1,7 +1,7 @@
 namespace AlvorEngine.Loop;
 
 [Root]
-public class RootEngine(RootState state, RootGraphics2D graphics2D)
+public class RootEngine(RootState state, RootGlw gl, RootGraphics2D graphics2D)
 {
     public void Load()
     {
@@ -11,6 +11,7 @@ public class RootEngine(RootState state, RootGraphics2D graphics2D)
     public void Unload()
     {
         graphics2D.Unload();
+        gl.Dispose();
     }
 
     public void Update(double time)

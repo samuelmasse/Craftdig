@@ -10,28 +10,27 @@ public class AppMenuState(
     AppScope scope,
     AppFont font) : State
 {
-    private int ticks;
+    private Stopwatch? watch;
 
     public override void Load()
     {
         screen.Title = "Crafthoe";
         screen.Size = (screen.MonitorSize / 4) * 3;
-        screen.IsVsyncOn = true;
+        watch = Stopwatch.StartNew();
     }
 
     public override void Update(double time)
     {
-        if (ticks > 20)
+        if (watch?.ElapsedMilliseconds > 30)
+            screen.IsVisible = true;
+
+        if (watch?.ElapsedMilliseconds > 250)
         {
             var moduleScope = scope.Scope<ModuleScope>();
             var worldScope = moduleScope.Scope<WorldScope>();
             var playerScope = worldScope.Scope<PlayerScope>();
             state.Current = playerScope.New<PlayerState>();
         }
-        else if (ticks > 0)
-            screen.IsVisible = true;
-
-        ticks++;
     }
 
     public override void Render() => backbuffer.Clear();
