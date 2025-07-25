@@ -2,6 +2,7 @@ namespace Crafthoe.Player;
 
 [Player]
 public class PlayerContext(
+    RootMouse mouse,
     RootKeyboard keyboard,
     RootCanvas canvas,
     AppFiles files,
@@ -47,15 +48,32 @@ public class PlayerContext(
         gl.UnbindVertexArray();
         gl.UnbindBuffer(BufferTarget.ArrayBuffer);
 
+        perspective.Fov = 70;
         camera.Offset = (0, 0, 10);
     }
 
     public void Update(double time)
     {
+        float speed = (float)(time * 10);
+
         if (keyboard.IsKeyDown(Keys.W))
-            camera.Offset.Z -= (float)(time * 10);
+            camera.Offset += camera.Front * speed;
+        if (keyboard.IsKeyDown(Keys.A))
+            camera.Offset -= camera.Right * speed;
         if (keyboard.IsKeyDown(Keys.S))
-            camera.Offset.Z += (float)(time * 10);
+            camera.Offset -= camera.Front * speed;
+        if (keyboard.IsKeyDown(Keys.D))
+            camera.Offset += camera.Right * speed;
+
+        if (keyboard.IsKeyDown(Keys.Space))
+            camera.Offset.Y += speed;
+        if (keyboard.IsKeyDown(Keys.LeftControl))
+            camera.Offset.Y -= speed;
+
+        mouse.Track = true;
+        camera.Rotate(new(-MathHelper.DegreesToRadians(mouse.Delta.X * 0.2f),
+            -MathHelper.DegreesToRadians(mouse.Delta.Y * 0.2f), 0));
+        camera.PreventBackFlipsAndFrontFlips();
 
         camera.Update();
         perspective.Update();

@@ -13,12 +13,14 @@
 
     <ItemGroup>
         <Using Include="AlvorEngine" />
+        <Using Include="Cysharp.Text" />
         <Using Include="GlwLayer" />
         <Using Include="GlwLayer.Driver" />
         <Using Include="Glw2D" />
         <Using Include="Glw2D.Fonts" />
         <Using Include="OpenTK.Graphics.OpenGL4" />
         <Using Include="OpenTK.Mathematics" />
+        <Using Include="OpenTK.Windowing.Common" />
         <Using Include="OpenTK.Windowing.Desktop" />
         <Using Include="OpenTK.Windowing.GraphicsLibraryFramework" />
         <Using Include="System.Collections.Concurrent" />

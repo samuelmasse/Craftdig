@@ -23,6 +23,7 @@ public class RootLoop(RootArgs args)
 
         root.Get<RootState>().Current = (State)root.New(args.BootState);
         var engine = root.Get<RootEngine>();
+        engine.Load();
 
         manager.Update += engine.Update;
         manager.Render += engine.Render;

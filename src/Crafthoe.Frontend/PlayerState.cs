@@ -1,8 +1,27 @@
 namespace Crafthoe.Frontend;
 
 [Player]
-public class PlayerState(RootBackbuffer backbuffer, RootSprites sprites, AppFont font, PlayerContext context) : State
+public class PlayerState(
+    RootMouse mouse,
+    RootKeyboard keyboard,
+    RootBackbuffer backbuffer,
+    RootSprites sprites,
+    RootMetrics metrics,
+    RootText text,
+    AppFont font,
+    PlayerContext context,
+    PlayerCamera camera) : State
 {
+    private bool paused;
+
+    private readonly Func<ReadOnlySpan<char>>[] lines =
+    [
+        () => text.Format("Frame: {0}. {1:F3} ms ({2} FPS)",
+            metrics.Frame.Ticks, metrics.FrameWindow.Average, metrics.FrameWindow.Ticks),
+        () => text.Format("Position: {0:F3}", camera.Offset),
+        () => text.Format("Rotation: {0:F3}", camera.Rotation)
+    ];
+
     public override void Load()
     {
         context.Load();
@@ -10,7 +29,14 @@ public class PlayerState(RootBackbuffer backbuffer, RootSprites sprites, AppFont
 
     public override void Update(double time)
     {
-        context.Update(time);
+        if (keyboard.IsKeyPressed(Keys.Escape))
+            paused = !paused;
+
+        mouse.Track = false;
+        if (!paused)
+            context.Update(time);
+
+        mouse.CursorState = mouse.Track ? CursorState.Grabbed : CursorState.Normal;
     }
 
     public override void Render()
@@ -21,6 +47,9 @@ public class PlayerState(RootBackbuffer backbuffer, RootSprites sprites, AppFont
 
     public override void Draw()
     {
-        sprites.Batch.Write(font.Value.Size(55), "Player View", (50, 50));
+        var fontSize = font.Value.Size(45);
+
+        for (int i = 0; i < lines.Length; i++)
+            sprites.Batch.Write(fontSize, lines[i].Invoke(), (35, 50 + i * fontSize.Metrics.Height));
     }
 }

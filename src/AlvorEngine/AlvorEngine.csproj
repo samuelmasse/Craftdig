@@ -4,6 +4,7 @@
         <PackageReference Include="Glw2D.Fonts" Version="0.*" />
         <PackageReference Include="NeedlerDI" Version="0.*" />
         <PackageReference Include="Wigdow" Version="0.*" />
+        <PackageReference Include="ZString" Version="2.6.0" />
     </ItemGroup>
 
     <ItemGroup>
