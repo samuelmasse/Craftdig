@@ -1,4 +1,4 @@
-namespace AlvorEngine;
+namespace AlvorEngine.Loop;
 
 [Root]
 public record class RootArgs

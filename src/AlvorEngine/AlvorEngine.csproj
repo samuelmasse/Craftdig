@@ -6,4 +6,8 @@
         <PackageReference Include="Wigdow" Version="0.*" />
     </ItemGroup>
 
+    <ItemGroup>
+        <InternalsVisibleTo Include="AlvorEngine.Loop" />
+    </ItemGroup>
+
 </Project>

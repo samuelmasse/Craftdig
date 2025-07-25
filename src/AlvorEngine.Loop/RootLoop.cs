@@ -1,4 +1,4 @@
-namespace AlvorEngine;
+namespace AlvorEngine.Loop;
 
 public class RootLoop(RootArgs args)
 {
@@ -21,7 +21,7 @@ public class RootLoop(RootArgs args)
         root.Add(new RootMouse(manager));
         root.Add(new RootScreen(manager));
 
-        root.Get<RootState>().Current = (State)root.Get(args.BootState);
+        root.Get<RootState>().Current = (State)root.New(args.BootState);
         var engine = root.Get<RootEngine>();
 
         manager.Update += engine.Update;

@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\src\AlvorEngine.Loop\AlvorEngine.Loop.csproj" />
+        <ProjectReference Include="..\Crafthoe.App\Crafthoe.App.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <Using Include="AlvorEngine.Loop" />
+        <Using Include="Crafthoe.App" />
+    </ItemGroup>
+
+</Project>

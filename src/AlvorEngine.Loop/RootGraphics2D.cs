@@ -1,10 +1,13 @@
-namespace AlvorEngine;
+namespace AlvorEngine.Loop;
 
 [Root]
-public class RootGraphics2D(RootState state, RootGlw gl, RootCanvas canvas, RootSprites sprites)
+public class RootGraphics2D(RootState state, RootGlw gl, RootCanvas canvas, RootFonts fonts, RootSprites sprites)
 {
+    public void Unload() => fonts.Unload();
+
     public void Render()
     {
+        fonts.Pack();
         sprites.Begin(canvas.Size);
         state.Current.Draw();
 

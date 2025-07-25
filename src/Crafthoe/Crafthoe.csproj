@@ -5,15 +5,16 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\AlvorEngine\AlvorEngine.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
         <PackageReference Include="GlwLayer.Driver.OpenTK" Version="0.*" />
     </ItemGroup>
 
     <ItemGroup>
-        <Using Include="Crafthoe" />
+        <ProjectReference Include="..\Crafthoe.Frontend\Crafthoe.Frontend.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <Using Include="AlvorEngine.Loop" />
+        <Using Include="Crafthoe.Frontend" />
         <Using Include="GlwLayer.Driver.OpenTK" />
     </ItemGroup>
 

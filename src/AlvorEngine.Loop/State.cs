@@ -1,4 +1,4 @@
-namespace AlvorEngine;
+namespace AlvorEngine.Loop;
 
 public class State
 {
