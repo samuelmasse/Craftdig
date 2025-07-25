@@ -12,6 +12,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crafthoe.App", "src\Craftho
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crafthoe.Frontend", "src\Crafthoe.Frontend\Crafthoe.Frontend.csproj", "{30CBDFDD-F622-49E6-A415-6E82178E2536}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crafthoe.Module", "src\Crafthoe.Module\Crafthoe.Module.csproj", "{3FD5174E-BCF1-4719-AE11-9976079DB30B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crafthoe.World", "src\Crafthoe.World\Crafthoe.World.csproj", "{EACB4003-0119-4916-B5B0-90D7DAD7192D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crafthoe.Player", "src\Crafthoe.Player\Crafthoe.Player.csproj", "{1621EB6C-B78D-4F6F-84BD-B1C042FB22AE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -38,6 +44,18 @@ Global
 		{30CBDFDD-F622-49E6-A415-6E82178E2536}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{30CBDFDD-F622-49E6-A415-6E82178E2536}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{30CBDFDD-F622-49E6-A415-6E82178E2536}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3FD5174E-BCF1-4719-AE11-9976079DB30B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3FD5174E-BCF1-4719-AE11-9976079DB30B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3FD5174E-BCF1-4719-AE11-9976079DB30B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3FD5174E-BCF1-4719-AE11-9976079DB30B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EACB4003-0119-4916-B5B0-90D7DAD7192D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EACB4003-0119-4916-B5B0-90D7DAD7192D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EACB4003-0119-4916-B5B0-90D7DAD7192D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EACB4003-0119-4916-B5B0-90D7DAD7192D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1621EB6C-B78D-4F6F-84BD-B1C042FB22AE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1621EB6C-B78D-4F6F-84BD-B1C042FB22AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1621EB6C-B78D-4F6F-84BD-B1C042FB22AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1621EB6C-B78D-4F6F-84BD-B1C042FB22AE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
