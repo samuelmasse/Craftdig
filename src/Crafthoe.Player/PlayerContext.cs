@@ -1,43 +1,15 @@
 namespace Crafthoe.Player;
 
 [Player]
-public class PlayerContext(RootCanvas canvas, PlayerGlw gl)
+public class PlayerContext(RootCanvas canvas, AppFiles files, PlayerGlw gl)
 {
-    private const string vertexShaderSource =
-        """
-        #version 330 core
-        layout (location = 0) in vec3 aPos;
-        layout (location = 1) in vec3 aColor;
-
-        out vec3 ourColor;
-
-        void main()
-        {
-            gl_Position = vec4(aPos, 1.0);
-            ourColor = aColor;
-        }
-        """;
-
-    private const string fragmentShaderSource =
-        """
-        #version 330 core
-        out vec4 FragColor;
-
-        in vec3 ourColor;
-
-        void main()
-        {
-            FragColor = vec4(ourColor, 1.0f);
-        }
-        """;
-
     private int shaderProgram;
     private int vao;
 
     public void Load()
     {
-        using var vert = new ShaderStage(gl, vertexShaderSource, ShaderType.VertexShader);
-        using var frag = new ShaderStage(gl, fragmentShaderSource, ShaderType.FragmentShader);
+        using var vert = new ShaderStage(gl, File.ReadAllText(files["Shaders/PositionColor.vert"]), ShaderType.VertexShader);
+        using var frag = new ShaderStage(gl, File.ReadAllText(files["Shaders/PositionColor.frag"]), ShaderType.FragmentShader);
         var program = new ShaderProgram(gl, [vert, frag]);
 
         shaderProgram = program.Id;
@@ -64,11 +36,6 @@ public class PlayerContext(RootCanvas canvas, PlayerGlw gl)
 
         gl.UnbindVertexArray();
         gl.UnbindBuffer(BufferTarget.ArrayBuffer);
-    }
-
-    public void Update(double time)
-    {
-
     }
 
     public void Render()
