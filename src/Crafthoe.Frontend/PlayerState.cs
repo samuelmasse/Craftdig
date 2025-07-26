@@ -2,6 +2,7 @@ namespace Crafthoe.Frontend;
 
 [Player]
 public class PlayerState(
+    RootCanvas canvas,
     RootMouse mouse,
     RootKeyboard keyboard,
     RootBackbuffer backbuffer,
@@ -51,5 +52,8 @@ public class PlayerState(
 
         for (int i = 0; i < lines.Length; i++)
             sprites.Batch.Write(fontSize, lines[i].Invoke(), (35, 50 + i * fontSize.Metrics.Height));
+
+        if (paused)
+            sprites.Batch.Draw((0, 0), canvas.Size, (0.3f, 0.3f, 0.3f, 0.3f));
     }
 }
