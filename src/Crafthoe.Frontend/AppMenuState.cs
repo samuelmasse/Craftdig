@@ -32,7 +32,8 @@ public class AppMenuState(
         {
             var moduleScope = scope.Scope<ModuleScope>();
             var worldScope = moduleScope.Scope<WorldScope>();
-            var playerScope = worldScope.Scope<PlayerScope>();
+            var dimensionScope = worldScope.Scope<DimensionScope>();
+            var playerScope = dimensionScope.Scope<PlayerScope>();
             state.Current = playerScope.New<PlayerState>();
         }
     }

@@ -26,6 +26,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlvorEngine.Triangle3D.Demo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlvorEngine.TextureCube.Demo", "demos\AlvorEngine.TextureCube.Demo\AlvorEngine.TextureCube.Demo.csproj", "{BFF74297-E672-48A6-9483-80B355E4B110}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crafthoe.Dimension", "src\Crafthoe.Dimension\Crafthoe.Dimension.csproj", "{2C31F134-807C-457D-B2C4-B4835D8CDFF3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -76,6 +78,10 @@ Global
 		{BFF74297-E672-48A6-9483-80B355E4B110}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BFF74297-E672-48A6-9483-80B355E4B110}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BFF74297-E672-48A6-9483-80B355E4B110}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2C31F134-807C-457D-B2C4-B4835D8CDFF3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2C31F134-807C-457D-B2C4-B4835D8CDFF3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2C31F134-807C-457D-B2C4-B4835D8CDFF3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2C31F134-807C-457D-B2C4-B4835D8CDFF3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

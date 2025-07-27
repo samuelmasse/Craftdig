@@ -9,6 +9,7 @@
         <Using Include="AlvorEngine" />
         <Using Include="AlvorEngine.Loop" />
         <Using Include="Crafthoe.App" />
+        <Using Include="Crafthoe.Dimension" />
         <Using Include="Crafthoe.Module" />
         <Using Include="Crafthoe.Player" />
         <Using Include="Crafthoe.World" />
