@@ -13,6 +13,7 @@
 
     <ItemGroup>
         <Using Include="AlvorEngine" />
+        <Using Include="BigGustave" />
         <Using Include="Cysharp.Text" />
         <Using Include="GlwLayer" />
         <Using Include="GlwLayer.Driver" />

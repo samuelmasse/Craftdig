@@ -6,18 +6,29 @@ public class PlayerContext(
     RootKeyboard keyboard,
     RootCanvas canvas,
     RootQuadIndexBuffer quadIndexBuffer,
-    RootPositionColorProgram3D positionColorProgram3D,
+    RootPositionColorTextureProgram3D positionColorTextureProgram3D,
     RootCube cube,
+    RootPngs pngs,
+    AppFiles files,
     PlayerGlw gl,
     PlayerPerspective perspective,
     PlayerCamera camera)
 {
+    private Texture texture = null!;
     private int vao;
     private int count;
 
     public void Load()
     {
-        PositionColorVertex[] vertices =
+        var image = pngs[files["Textures/Noise.png"]];
+        texture = new Texture2D(gl, image.Size)
+        {
+            PixelsMipmap = image.Pixels.Span,
+            MagFilter = TextureMagFilter.Nearest,
+            MinFilter = TextureMinFilter.NearestMipmapLinear
+        };
+
+        PositionColorTextureVertex[] vertices =
         [
             ..VertexQuad(cube.Front.Quad, 1),
             ..VertexQuad(cube.Back.Quad, 1),
@@ -27,12 +38,12 @@ public class PlayerContext(
             ..VertexQuad(cube.Right.Quad, 0.5f)
         ];
 
-        static PositionColorVertex[] VertexQuad(Quad quad, float shadow) =>
+        static PositionColorTextureVertex[] VertexQuad(Quad quad, float shadow) =>
         [
-            new(quad.TopLeft, new Vector3(1, 0, 0) * shadow),
-            new(quad.TopRight, new Vector3(0, 1, 0) * shadow),
-            new(quad.BottomLeft, new Vector3(0, 0, 1) * shadow),
-            new(quad.BottomRight, new Vector3(1, 0, 1) * shadow)
+            new(quad.TopLeft, new Vector3(1, 0, 0) * shadow, (0, 1)),
+            new(quad.TopRight, new Vector3(0, 1, 0) * shadow, (1, 1)),
+            new(quad.BottomLeft, new Vector3(0, 0, 1) * shadow, (0, 0)),
+            new(quad.BottomRight, new Vector3(1, 0, 1) * shadow, (1, 0))
         ];
 
         vao = gl.GenVertexArray();
@@ -40,7 +51,7 @@ public class PlayerContext(
         gl.BindBuffer(BufferTarget.ArrayBuffer, gl.GenBuffer());
         gl.BindBuffer(BufferTarget.ElementArrayBuffer, quadIndexBuffer.Id);
         gl.BufferData(BufferTarget.ArrayBuffer, vertices.AsSpan(), BufferUsageHint.StaticDraw);
-        positionColorProgram3D.SetAttributes();
+        positionColorTextureProgram3D.SetAttributes();
         gl.UnbindVertexArray();
         gl.UnbindBuffer(BufferTarget.ArrayBuffer);
         gl.UnbindBuffer(BufferTarget.ElementArrayBuffer);
@@ -84,12 +95,14 @@ public class PlayerContext(
         gl.Enable(EnableCap.CullFace);
         gl.CullFace(TriangleFace.Back);
 
-        gl.UseProgram(positionColorProgram3D.Id);
-        positionColorProgram3D.View = perspective.View;
-        positionColorProgram3D.Projection = perspective.Projection;
+        gl.UseProgram(positionColorTextureProgram3D.Id);
+        positionColorTextureProgram3D.View = perspective.View;
+        positionColorTextureProgram3D.Projection = perspective.Projection;
+        texture.Bind(positionColorTextureProgram3D.SamplerTexture);
         gl.BindVertexArray(vao);
         gl.DrawElements(BeginMode.Triangles, count, DrawElementsType.UnsignedInt, 0);
         gl.UnbindVertexArray();
+        texture.Unbind(positionColorTextureProgram3D.SamplerTexture);
         gl.UnuseProgram();
 
         gl.ResetCullFace();

@@ -1,7 +1,8 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <ItemGroup>
-        <PackageReference Include="Glw2D.Fonts" Version="0.*" />
+        <PackageReference Include="BigGustave" Version="1.0.6" />
+        <PackageReference Include="Glw2D.Fonts" Version="0.3" />
         <PackageReference Include="NeedlerDI" Version="0.*" />
         <PackageReference Include="Wigdow" Version="0.2" />
         <PackageReference Include="ZString" Version="2.6.0" />
