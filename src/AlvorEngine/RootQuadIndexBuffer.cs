@@ -15,7 +15,7 @@ public class RootQuadIndexBuffer(RootGlw gl)
             return;
 
         int newCapacity = (int)System.Numerics.BitOperations.RoundUpToPowerOf2((uint)quadVertexCount + 1);
-        int indexCount = newCapacity / 4 * 6;
+        int indexCount = IndexCount(newCapacity);
         var indexValues = new uint[indexCount];
         uint vertexIndex = 0;
 
@@ -40,4 +40,6 @@ public class RootQuadIndexBuffer(RootGlw gl)
 
         capacity = newCapacity;
     }
+
+    public int IndexCount(int quadVertexCount) => quadVertexCount / 4 * 6;
 }

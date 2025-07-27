@@ -92,12 +92,13 @@ class Triangle3DState(
 
         camera.Rotate(-mouse.Delta / 300);
         camera.PreventBackFlipsAndFrontFlips();
-        camera.ComputeVectors();
-        perspective.ComputeMatrix(canvas.Size, camera);
     }
 
     public override void Render()
     {
+        camera.ComputeVectors();
+        perspective.ComputeMatrix(canvas.Size, camera);
+
         backbuffer.Clear();
         gl.Viewport(canvas.Size);
         gl.UseProgram(positionColorProgram3D.Id);

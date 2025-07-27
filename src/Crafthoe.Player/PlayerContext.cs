@@ -7,6 +7,7 @@ public class PlayerContext(
     RootCanvas canvas,
     RootQuadIndexBuffer quadIndexBuffer,
     RootPositionColorProgram3D positionColorProgram3D,
+    RootCube cube,
     PlayerGlw gl,
     PlayerPerspective perspective,
     PlayerCamera camera)
@@ -16,45 +17,23 @@ public class PlayerContext(
 
     public void Load()
     {
-        Vector3 red = (1, 0, 0);
-        Vector3 green = (0, 1, 0);
-        Vector3 blue = (0, 0, 1);
-        Vector3 yellow = (1, 0, 1);
-
-        PositionColorVertex[] vertices = [
-            // Front
-            new((0, 1, 1), red),
-            new((1, 1, 1), green),
-            new((0, 0, 1), blue),
-            new((1, 0, 1), yellow),
-            // Back
-            new((1, 1, 0), red),
-            new((0, 1, 0), green),
-            new((1, 0, 0), blue),
-            new((0, 0, 0), yellow),
-            // Top
-            new((0, 1, 0), red * 0.8f),
-            new((1, 1, 0), green * 0.8f),
-            new((0, 1, 1), blue * 0.8f),
-            new((1, 1, 1), yellow * 0.8f),
-            // Bottom
-            new((0, 0, 1), red * 0.8f),
-            new((1, 0, 1), green * 0.8f),
-            new((0, 0, 0), blue * 0.8f),
-            new((1, 0, 0), yellow * 0.8f),
-            // Left
-            new((0, 1, 0), red * 0.5f),
-            new((0, 1, 1), green * 0.5f),
-            new((0, 0, 0), blue * 0.5f),
-            new((0, 0, 1), yellow * 0.5f),
-            // Right
-            new((1, 1, 1), red * 0.5f),
-            new((1, 1, 0), green * 0.5f),
-            new((1, 0, 1), blue * 0.5f),
-            new((1, 0, 0), yellow * 0.5f)
+        PositionColorVertex[] vertices =
+        [
+            ..VertexQuad(cube.Front.Quad, 1),
+            ..VertexQuad(cube.Back.Quad, 1),
+            ..VertexQuad(cube.Top.Quad, 0.8f),
+            ..VertexQuad(cube.Bottom.Quad, 0.8f),
+            ..VertexQuad(cube.Left.Quad, 0.5f),
+            ..VertexQuad(cube.Right.Quad, 0.5f)
         ];
 
-        count = (vertices.Length / 4) * 6;
+        static PositionColorVertex[] VertexQuad(Quad quad, float shadow) =>
+        [
+            new(quad.TopLeft, new Vector3(1, 0, 0) * shadow),
+            new(quad.TopRight, new Vector3(0, 1, 0) * shadow),
+            new(quad.BottomLeft, new Vector3(0, 0, 1) * shadow),
+            new(quad.BottomRight, new Vector3(1, 0, 1) * shadow)
+        ];
 
         vao = gl.GenVertexArray();
         gl.BindVertexArray(vao);
@@ -68,6 +47,7 @@ public class PlayerContext(
 
         camera.Offset = (0, 0, 10);
         quadIndexBuffer.EnsureCapacity(vertices.Length);
+        count = quadIndexBuffer.IndexCount(vertices.Length);
     }
 
     public void Update(double time)
@@ -91,12 +71,13 @@ public class PlayerContext(
         mouse.Track = true;
         camera.Rotate(-mouse.Delta / 300);
         camera.PreventBackFlipsAndFrontFlips();
-        camera.ComputeVectors();
-        perspective.ComputeMatrix(canvas.Size, camera);
     }
 
     public void Render()
     {
+        camera.ComputeVectors();
+        perspective.ComputeMatrix(canvas.Size, camera);
+
         gl.Viewport(canvas.Size);
         gl.Enable(EnableCap.DepthTest);
         gl.DepthFunc(DepthFunction.Less);
