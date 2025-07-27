@@ -1,7 +1,7 @@
 namespace AlvorEngine;
 
-internal interface IRenderProgram3D : IRenderProgram
+public interface IRenderProgram3D : IRenderProgram
 {
-    public Matrix4 View { set; }
-    public Matrix4 Projection { set; }
+    Matrix4 View { set; }
+    Matrix4 Projection { set; }
 }
