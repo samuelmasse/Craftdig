@@ -6,16 +6,17 @@ public class AppMenuState(
     RootBackbuffer backbuffer,
     RootScreen screen,
     RootMouse mouse,
+    RootRoboto roboto,
     RootSprites sprites,
-    AppScope scope,
-    AppFont font) : State
+    RootScale scale,
+    AppScope scope) : State
 {
     private Stopwatch? watch;
 
     public override void Load()
     {
         screen.Title = "Crafthoe";
-        screen.Size = (screen.MonitorSize / 4) * 3;
+        screen.Size = screen.MonitorSize / 4 * 3;
         watch = Stopwatch.StartNew();
     }
 
@@ -37,7 +38,7 @@ public class AppMenuState(
 
     public override void Draw()
     {
-        sprites.Batch.Draw(mouse.Position, (250, 500), (0, 1, 1, 1));
-        sprites.Batch.Write(font.Value.Size(55), "Hello Crafthoe", (50, 50));
+        sprites.Batch.Draw(mouse.Position, (scale[125], scale[250]), (0, 1, 1, 1));
+        sprites.Batch.Write(roboto[scale[27]], "Hello Crafthoe", (scale[25], scale[25]));
     }
 }

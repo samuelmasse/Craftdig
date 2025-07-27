@@ -5,51 +5,69 @@ public class PlayerContext(
     RootMouse mouse,
     RootKeyboard keyboard,
     RootCanvas canvas,
-    AppFiles files,
+    RootQuadIndexBuffer quadIndexBuffer,
+    RootPositionColorProgram3D positionColorProgram3D,
     PlayerGlw gl,
     PlayerPerspective perspective,
     PlayerCamera camera)
 {
-    private int shaderProgram;
-    private int uniformMatView;
-    private int uniformMatProjection;
     private int vao;
+    private int count;
 
     public void Load()
     {
-        using var vert = new ShaderStage(gl, File.ReadAllText(files["Shaders/PositionColor.vert"]), ShaderType.VertexShader);
-        using var frag = new ShaderStage(gl, File.ReadAllText(files["Shaders/PositionColor.frag"]), ShaderType.FragmentShader);
-        var program = new ShaderProgram(gl, [vert, frag]);
+        Vector3 red = (1, 0, 0);
+        Vector3 green = (0, 1, 0);
+        Vector3 blue = (0, 0, 1);
+        Vector3 yellow = (1, 0, 1);
 
-        shaderProgram = program.Id;
-        uniformMatView = GL.GetUniformLocation(shaderProgram, "matView");
-        uniformMatProjection = GL.GetUniformLocation(shaderProgram, "matProjection");
-
-        float[] vertices = [
-            0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f,
-            -0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f,
-            0.0f, 0.5f, 0.0f, 0.0f, 0.0f, 1.0f
+        PositionColorVertex[] vertices = [
+            // Front
+            new((0, 1, 1), red),
+            new((1, 1, 1), green),
+            new((0, 0, 1), blue),
+            new((1, 0, 1), yellow),
+            // Back
+            new((1, 1, 0), red),
+            new((0, 1, 0), green),
+            new((1, 0, 0), blue),
+            new((0, 0, 0), yellow),
+            // Top
+            new((0, 1, 0), red * 0.8f),
+            new((1, 1, 0), green * 0.8f),
+            new((0, 1, 1), blue * 0.8f),
+            new((1, 1, 1), yellow * 0.8f),
+            // Bottom
+            new((0, 0, 1), red * 0.8f),
+            new((1, 0, 1), green * 0.8f),
+            new((0, 0, 0), blue * 0.8f),
+            new((1, 0, 0), yellow * 0.8f),
+            // Left
+            new((0, 1, 0), red * 0.5f),
+            new((0, 1, 1), green * 0.5f),
+            new((0, 0, 0), blue * 0.5f),
+            new((0, 0, 1), yellow * 0.5f),
+            // Right
+            new((1, 1, 1), red * 0.5f),
+            new((1, 1, 0), green * 0.5f),
+            new((1, 0, 1), blue * 0.5f),
+            new((1, 0, 0), yellow * 0.5f)
         ];
 
+        count = (vertices.Length / 4) * 6;
+
         vao = gl.GenVertexArray();
-        int vbo = gl.GenBuffer();
-
         gl.BindVertexArray(vao);
-        gl.BindBuffer(BufferTarget.ArrayBuffer, vbo);
-
-        gl.BufferData<float>(BufferTarget.ArrayBuffer, vertices, BufferUsageHint.StaticDraw);
-
-        gl.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, 6 * sizeof(float), 0);
-        gl.EnableVertexAttribArray(0);
-
-        gl.VertexAttribPointer(1, 3, VertexAttribPointerType.Float, false, 6 * sizeof(float), 3 * sizeof(float));
-        gl.EnableVertexAttribArray(1);
-
+        gl.BindBuffer(BufferTarget.ArrayBuffer, gl.GenBuffer());
+        gl.BindBuffer(BufferTarget.ElementArrayBuffer, quadIndexBuffer.Id);
+        gl.BufferData(BufferTarget.ArrayBuffer, vertices.AsSpan(), BufferUsageHint.StaticDraw);
+        positionColorProgram3D.SetAttributes();
         gl.UnbindVertexArray();
         gl.UnbindBuffer(BufferTarget.ArrayBuffer);
+        gl.UnbindBuffer(BufferTarget.ElementArrayBuffer);
 
-        perspective.Fov = 70;
         camera.Offset = (0, 0, 10);
+        quadIndexBuffer.EnsureCapacity(vertices.Length);
     }
 
     public void Update(double time)
@@ -71,29 +89,32 @@ public class PlayerContext(
             camera.Offset.Y -= speed;
 
         mouse.Track = true;
-        camera.Rotate(new(-MathHelper.DegreesToRadians(mouse.Delta.X * 0.2f),
-            -MathHelper.DegreesToRadians(mouse.Delta.Y * 0.2f), 0));
+        camera.Rotate(-mouse.Delta / 300);
         camera.PreventBackFlipsAndFrontFlips();
-
-        camera.Update();
-        perspective.Update();
+        camera.ComputeVectors();
+        perspective.ComputeMatrix(canvas.Size, camera);
     }
 
     public void Render()
     {
         gl.Viewport(canvas.Size);
+        gl.Enable(EnableCap.DepthTest);
+        gl.DepthFunc(DepthFunction.Less);
+        gl.Enable(EnableCap.CullFace);
+        gl.CullFace(TriangleFace.Back);
 
-        gl.UseProgram(shaderProgram);
-        GL.UniformMatrix4(uniformMatView, true, ref perspective.View);
-        GL.UniformMatrix4(uniformMatProjection, true, ref perspective.Projection);
-
+        gl.UseProgram(positionColorProgram3D.Id);
+        positionColorProgram3D.View = perspective.View;
+        positionColorProgram3D.Projection = perspective.Projection;
         gl.BindVertexArray(vao);
-
-        gl.DrawArrays(PrimitiveType.Triangles, 0, 3);
-
+        gl.DrawElements(BeginMode.Triangles, count, DrawElementsType.UnsignedInt, 0);
         gl.UnbindVertexArray();
         gl.UnuseProgram();
 
+        gl.ResetCullFace();
+        gl.Disable(EnableCap.CullFace);
+        gl.ResetDepthFunc();
+        gl.Disable(EnableCap.DepthTest);
         gl.ResetViewport();
     }
 }

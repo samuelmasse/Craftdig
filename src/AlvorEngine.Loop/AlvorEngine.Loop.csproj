@@ -4,4 +4,8 @@
         <ProjectReference Include="..\AlvorEngine\AlvorEngine.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+        <EmbeddedResource Include="../../res/Fonts/RobotoMono-Regular.ttf" Visible="false" />
+    </ItemGroup>
+
 </Project>

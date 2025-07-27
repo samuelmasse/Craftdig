@@ -4,31 +4,25 @@ namespace AlvorEngine.Loop;
 public class RootFonts(RootGlw gl)
 {
     private readonly FontContext ctx = new(gl, new FontFreeTypeDriver(), new(gl));
-    private readonly Dictionary<string, Font> fonts = [];
+    private readonly HashSet<Font> fonts = [];
 
-    public Font this[string path]
+    public Font Open(FontOptions options)
     {
-        get
-        {
-            if (fonts.TryGetValue(path, out var value))
-                return value;
-
-            var font = new Font(ctx, path);
-            fonts[path] = font;
-            return font;
-        }
+        var font = new Font(ctx, options);
+        fonts.Add(font);
+        return font;
     }
 
     internal void Pack()
     {
         foreach (var font in fonts)
-            font.Value.Pack();
+            font.Pack();
     }
 
     internal void Unload()
     {
         foreach (var font in fonts)
-            font.Value.Dispose();
+            font.Dispose();
 
         ctx.Dispose();
     }

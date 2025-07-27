@@ -9,7 +9,8 @@ public class PlayerState(
     RootSprites sprites,
     RootMetrics metrics,
     RootText text,
-    AppFont font,
+    RootScale scale,
+    RootRoboto roboto,
     PlayerContext context,
     PlayerCamera camera) : State
 {
@@ -48,10 +49,10 @@ public class PlayerState(
 
     public override void Draw()
     {
-        var fontSize = font.Value.Size(45);
+        var fontSize = roboto[scale[22]];
 
         for (int i = 0; i < lines.Length; i++)
-            sprites.Batch.Write(fontSize, lines[i].Invoke(), (35, 50 + i * fontSize.Metrics.Height));
+            sprites.Batch.Write(fontSize, lines[i].Invoke(), (scale[17], scale[25] + i * fontSize.Metrics.Height));
 
         if (paused)
             sprites.Batch.Draw((0, 0), canvas.Size, (0.3f, 0.3f, 0.3f, 0.3f));

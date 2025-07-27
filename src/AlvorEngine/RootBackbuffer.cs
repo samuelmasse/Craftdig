@@ -8,7 +8,7 @@ public class RootBackbuffer(RootGlw gl, RootCanvas canvas)
         gl.Viewport(canvas.Size);
         gl.ClearColor(color);
 
-        gl.Clear(ClearBufferMask.ColorBufferBit);
+        gl.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
         gl.ResetClearColor();
         gl.ResetViewport();
