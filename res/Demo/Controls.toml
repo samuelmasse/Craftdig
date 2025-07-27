@@ -1,9 +1,9 @@
 [Pause]
-KeyDown = "Escape"
+KeyPress = "Escape"
 [ZoomIn]
-KeyDown = "Equal"
+KeyPressRepeat = "Equal"
 [ZoomOut]
-KeyDown = "Minus"
+KeyPressRepeat = "Minus"
 [CameraFront]
 KeyDown = "W"
 Shift = "Any"

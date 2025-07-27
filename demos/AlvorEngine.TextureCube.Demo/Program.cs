@@ -19,7 +19,6 @@ new RootLoop(new()
 [Root]
 class TextureCubeState(
     RootMouse mouse,
-    RootKeyboard keyboard,
     RootGlw gl,
     RootScreen screen,
     RootBackbuffer backbuffer,
@@ -94,7 +93,7 @@ class TextureCubeState(
 
     public override void Update(double time)
     {
-        if (keyboard.IsKeyPressed(Keys.Escape))
+        if (controls.Pause.Run())
             paused = !paused;
 
         mouse.Track = !paused;
