@@ -3,7 +3,6 @@ namespace Crafthoe.Player;
 [Player]
 public class PlayerContext(
     RootMouse mouse,
-    RootKeyboard keyboard,
     RootCanvas canvas,
     RootQuadIndexBuffer quadIndexBuffer,
     RootPositionColorTextureProgram3D positionColorTextureProgram3D,
@@ -29,37 +28,35 @@ public class PlayerContext(
             MinFilter = TextureMinFilter.NearestMipmapLinear
         };
 
-        PositionColorTextureVertex[] vertices =
-        [
-            ..VertexQuad(cube.Front.Quad, 1),
-            ..VertexQuad(cube.Back.Quad, 1),
-            ..VertexQuad(cube.Top.Quad, 0.8f),
-            ..VertexQuad(cube.Bottom.Quad, 0.8f),
-            ..VertexQuad(cube.Left.Quad, 0.5f),
-            ..VertexQuad(cube.Right.Quad, 0.5f)
-        ];
+        var noise = new FastNoiseLite();
+        var vertices = new List<PositionColorTextureVertex>();
 
-        static PositionColorTextureVertex[] VertexQuad(Quad quad, float shadow) =>
-        [
-            new(quad.TopLeft, new Vector3(1, 0, 0) * shadow, (0, 1)),
-            new(quad.TopRight, new Vector3(0, 1, 0) * shadow, (1, 1)),
-            new(quad.BottomLeft, new Vector3(0, 0, 1) * shadow, (0, 0)),
-            new(quad.BottomRight, new Vector3(1, 0, 1) * shadow, (1, 0))
-        ];
+        for (int z = -256; z < 256; z++)
+        {
+            for (int x = -256; x < 256; x++)
+            {
+                int y = (int)(noise.GetNoise(x, z) * 15);
+
+                vertices.Add(new(cube.Top.Quad.TopLeft + (x, y, z), (1, 1, 1), (0, 1)));
+                vertices.Add(new(cube.Top.Quad.TopRight + (x, y, z), (1, 1, 1), (1, 1)));
+                vertices.Add(new(cube.Top.Quad.BottomLeft + (x, y, z), (1, 1, 1), (0, 0)));
+                vertices.Add(new(cube.Top.Quad.BottomRight + (x, y, z), (1, 1, 1), (1, 0)));
+            }
+        }
 
         vao = gl.GenVertexArray();
         gl.BindVertexArray(vao);
         gl.BindBuffer(BufferTarget.ArrayBuffer, gl.GenBuffer());
         gl.BindBuffer(BufferTarget.ElementArrayBuffer, quadIndexBuffer.Id);
-        gl.BufferData(BufferTarget.ArrayBuffer, vertices.AsSpan(), BufferUsageHint.StaticDraw);
+        gl.BufferData(BufferTarget.ArrayBuffer, vertices.ToArray().AsSpan(), BufferUsageHint.StaticDraw);
         positionColorTextureProgram3D.SetAttributes();
         gl.UnbindVertexArray();
         gl.UnbindBuffer(BufferTarget.ArrayBuffer);
         gl.UnbindBuffer(BufferTarget.ElementArrayBuffer);
 
-        camera.Offset = (0, 0, 10);
-        quadIndexBuffer.EnsureCapacity(vertices.Length);
-        count = quadIndexBuffer.IndexCount(vertices.Length);
+        camera.Offset = (0, 20, 0);
+        quadIndexBuffer.EnsureCapacity(vertices.Count);
+        count = quadIndexBuffer.IndexCount(vertices.Count);
     }
 
     public void Update(double time)
