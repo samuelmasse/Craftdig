@@ -13,11 +13,11 @@ new RootLoop(new()
 {
     Window = new WindowOpenTK(new(new(), new() { StartVisible = false })),
     Driver = new GldOpenTK(),
-    BootState = typeof(Triangle3DState)
+    BootState = typeof(TextureCubeState)
 }).Run();
 
 [Root]
-class Triangle3DState(
+class TextureCubeState(
     RootMouse mouse,
     RootKeyboard keyboard,
     RootGlw gl,
@@ -32,7 +32,9 @@ class Triangle3DState(
     RootRoboto roboto,
     RootText text,
     RootScale scale,
-    RootMetrics metrics) : State
+    RootMetrics metrics,
+    RootControlsToml controlsToml,
+    TextureCubeControls controls) : State
 {
     private readonly Camera3D camera = new();
     private readonly Perspective3D perspective = new();
@@ -83,6 +85,8 @@ class Triangle3DState(
         quadIndexBuffer.EnsureCapacity(vertices.Length);
         count = quadIndexBuffer.IndexCount(vertices.Length);
 
+        controlsToml.AddFromFile("Controls.toml");
+
         screen.Title = "AlvorEngine.TextureCube.Demo";
         screen.Size = screen.MonitorSize / 4 * 3;
         screen.IsVisible = true;
@@ -100,24 +104,24 @@ class Triangle3DState(
         {
             float speed = (float)(time * 10);
 
-            if (keyboard.IsKeyDown(Keys.W))
+            if (controls.CameraFront.Run())
                 camera.Offset += camera.Front * speed;
-            if (keyboard.IsKeyDown(Keys.A))
+            if (controls.CameraLeft.Run())
                 camera.Offset -= camera.Right * speed;
-            if (keyboard.IsKeyDown(Keys.S))
+            if (controls.CameraBack.Run())
                 camera.Offset -= camera.Front * speed;
-            if (keyboard.IsKeyDown(Keys.D))
+            if (controls.CameraRight.Run())
                 camera.Offset += camera.Right * speed;
 
-            if (keyboard.IsKeyDown(Keys.Space))
+            if (controls.CameraUp.Run())
                 camera.Offset.Y += speed;
-            if (keyboard.IsKeyDown(Keys.LeftControl))
+            if (controls.CameraDown.Run())
                 camera.Offset.Y -= speed;
         }
 
-        if (keyboard.IsKeyPressedRepeated(Keys.Minus) && scale.Numerator > scale.Denominator)
+        if (scale.Numerator > scale.Denominator && controls.ZoomOut.Run())
             scale.Numerator--;
-        if (keyboard.IsKeyPressedRepeated(Keys.Equal) && scale.Numerator < scale.Denominator * 4)
+        if (scale.Numerator < scale.Denominator * 4 && controls.ZoomIn.Run())
             scale.Numerator++;
 
         camera.Rotate(-mouse.Delta / 300);
@@ -167,3 +171,14 @@ class Triangle3DState(
             sprites.Batch.Draw((0, 0), canvas.Size, (0.3f, 0.3f, 0.3f, 0.3f));
     }
 }
+
+record TextureCubeControls(
+    Control Pause,
+    Control ZoomIn,
+    Control ZoomOut,
+    Control CameraFront,
+    Control CameraRight,
+    Control CameraBack,
+    Control CameraLeft,
+    Control CameraUp,
+    Control CameraDown) : ControlList;

@@ -12,7 +12,8 @@ public class PlayerContext(
     AppFiles files,
     PlayerGlw gl,
     PlayerPerspective perspective,
-    PlayerCamera camera)
+    PlayerCamera camera,
+    PlayerControls controls)
 {
     private Texture texture = null!;
     private int vao;
@@ -65,18 +66,18 @@ public class PlayerContext(
     {
         float speed = (float)(time * 10);
 
-        if (keyboard.IsKeyDown(Keys.W))
+        if (controls.CameraFront.Run())
             camera.Offset += camera.Front * speed;
-        if (keyboard.IsKeyDown(Keys.A))
+        if (controls.CameraLeft.Run())
             camera.Offset -= camera.Right * speed;
-        if (keyboard.IsKeyDown(Keys.S))
+        if (controls.CameraBack.Run())
             camera.Offset -= camera.Front * speed;
-        if (keyboard.IsKeyDown(Keys.D))
+        if (controls.CameraRight.Run())
             camera.Offset += camera.Right * speed;
 
-        if (keyboard.IsKeyDown(Keys.Space))
+        if (controls.CameraUp.Run())
             camera.Offset.Y += speed;
-        if (keyboard.IsKeyDown(Keys.LeftControl))
+        if (controls.CameraDown.Run())
             camera.Offset.Y -= speed;
 
         mouse.Track = true;

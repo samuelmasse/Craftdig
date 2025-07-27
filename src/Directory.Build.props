@@ -33,6 +33,9 @@
         <Using Include="System.Runtime.InteropServices" />
         <Using Include="System.Text" />
         <Using Include="System.Text.RegularExpressions" />
+        <Using Include="Tomlyn" />
+        <Using Include="Tomlyn.Model" />
+        <Using Include="Tomlyn.Syntax" />
         <Using Include="Wigdow" />
         <Using Include="NeedlerDI" />
     </ItemGroup>

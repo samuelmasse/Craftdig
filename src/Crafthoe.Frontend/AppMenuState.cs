@@ -9,12 +9,15 @@ public class AppMenuState(
     RootRoboto roboto,
     RootSprites sprites,
     RootScale scale,
-    AppScope scope) : State
+    RootControlsToml controlsToml,
+    AppScope scope,
+    AppFiles files) : State
 {
     private Stopwatch? watch;
 
     public override void Load()
     {
+        controlsToml.AddFromFile(files["Controls.toml"]);
         screen.Title = "Crafthoe";
         screen.Size = screen.MonitorSize / 4 * 3;
         watch = Stopwatch.StartNew();

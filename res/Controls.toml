@@ -1,0 +1,23 @@
+[CameraFront]
+KeyDown = "W"
+Shift = "Any"
+Control = "Any"
+[CameraLeft]
+KeyDown = "A"
+Shift = "Any"
+Control = "Any"
+[CameraBack]
+KeyDown = "S"
+Shift = "Any"
+Control = "Any"
+[CameraRight]
+KeyDown = "D"
+Shift = "Any"
+Control = "Any"
+[CameraUp]
+KeyDown = "Space"
+Shift = "Any"
+Control = "Any"
+[CameraDown]
+Control = "Down"
+Shift = "Any"

@@ -9,8 +9,14 @@
     </ItemGroup>
 
     <ItemGroup>
-        <None Include="..\..\res\Textures\Noise.png" Visible="false">
-          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        <None Include="..\..\res\Demo\Noise.png" Visible="false">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Include="..\..\res\Demo\Controls.toml" Visible="false">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
     </ItemGroup>
 

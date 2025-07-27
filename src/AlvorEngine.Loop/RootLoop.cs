@@ -21,6 +21,8 @@ public class RootLoop(RootArgs args)
         root.Add(new RootMouse(manager));
         root.Add(new RootScreen(manager));
 
+        injector.Handler(root.Get<RootControlListInjector>());
+
         root.Get<RootState>().Current = (State)root.New(args.BootState);
         var engine = root.Get<RootEngine>();
         engine.Load();
