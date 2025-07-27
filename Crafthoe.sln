@@ -24,6 +24,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Demos", "Demos", "{02EA681E
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlvorEngine.Triangle3D.Demo", "demos\AlvorEngine.Triangle3D.Demo\AlvorEngine.Triangle3D.Demo.csproj", "{67B998DC-5C55-4F97-A978-D4A2763322BE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlvorEngine.TextureCube.Demo", "demos\AlvorEngine.TextureCube.Demo\AlvorEngine.TextureCube.Demo.csproj", "{BFF74297-E672-48A6-9483-80B355E4B110}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -70,6 +72,10 @@ Global
 		{67B998DC-5C55-4F97-A978-D4A2763322BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{67B998DC-5C55-4F97-A978-D4A2763322BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{67B998DC-5C55-4F97-A978-D4A2763322BE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BFF74297-E672-48A6-9483-80B355E4B110}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BFF74297-E672-48A6-9483-80B355E4B110}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BFF74297-E672-48A6-9483-80B355E4B110}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BFF74297-E672-48A6-9483-80B355E4B110}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -77,6 +83,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{BE3DA076-03CF-4715-A875-311C58DAAADD} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 		{67B998DC-5C55-4F97-A978-D4A2763322BE} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{BFF74297-E672-48A6-9483-80B355E4B110} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D3960390-E3E3-4C6E-B87F-B047DB15D968}
