@@ -10,7 +10,6 @@ public class DimensionSectionMesher(RootCube cube, DimensionChunks chunks, Dimen
     public void Render(Vector3i sloc)
     {
         var loc = sloc * sections.Unit;
-        Console.WriteLine(sloc);
 
         for (int z = 0; z < chunks.Unit.Z; z++)
             for (int y = 0; y < chunks.Unit.Y; y++)

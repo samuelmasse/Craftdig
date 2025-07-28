@@ -6,7 +6,6 @@ public class PlayerContext(
     RootCanvas canvas,
     RootQuadIndexBuffer quadIndexBuffer,
     RootPositionColorTextureProgram3D positionColorTextureProgram3D,
-    RootCube cube,
     RootPngs pngs,
     AppFiles files,
     DimensionChunks chunks,
@@ -21,8 +20,6 @@ public class PlayerContext(
     PlayerControls controls)
 {
     private Texture texture = null!;
-    private int vao;
-    private int count;
     private int far = 10;
     private bool gentype = false;
     private readonly Stopwatch chunkReqWatch = Stopwatch.StartNew();
@@ -38,35 +35,7 @@ public class PlayerContext(
             MinFilter = TextureMinFilter.NearestMipmapLinear
         };
 
-        var noise = new FastNoiseLite();
-        var vertices = new List<PositionColorTextureVertex>();
-
-        for (int z = -256; z < 256; z++)
-        {
-            for (int x = -256; x < 256; x++)
-            {
-                int y = (int)(noise.GetNoise(x, z) * 15);
-
-                vertices.Add(new(cube.Top.Quad.TopLeft + (x, y, z), (1, 1, 1), (0, 1)));
-                vertices.Add(new(cube.Top.Quad.TopRight + (x, y, z), (1, 1, 1), (1, 1)));
-                vertices.Add(new(cube.Top.Quad.BottomLeft + (x, y, z), (1, 1, 1), (0, 0)));
-                vertices.Add(new(cube.Top.Quad.BottomRight + (x, y, z), (1, 1, 1), (1, 0)));
-            }
-        }
-
-        vao = gl.GenVertexArray();
-        gl.BindVertexArray(vao);
-        gl.BindBuffer(BufferTarget.ArrayBuffer, gl.GenBuffer());
-        gl.BindBuffer(BufferTarget.ElementArrayBuffer, quadIndexBuffer.Id);
-        gl.BufferData(BufferTarget.ArrayBuffer, vertices.ToArray().AsSpan(), BufferUsageHint.StaticDraw);
-        positionColorTextureProgram3D.SetAttributes();
-        gl.UnbindVertexArray();
-        gl.UnbindBuffer(BufferTarget.ArrayBuffer);
-        gl.UnbindBuffer(BufferTarget.ElementArrayBuffer);
-
         camera.Offset = (0, 80, 0);
-        quadIndexBuffer.EnsureCapacity(vertices.Count);
-        count = quadIndexBuffer.IndexCount(vertices.Count);
     }
 
     public void Update(double time)
