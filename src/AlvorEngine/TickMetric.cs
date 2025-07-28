@@ -1,4 +1,4 @@
-namespace AlvorEngine.Loop;
+namespace AlvorEngine;
 
 public class TickMetric(TimeSpan duration)
 {

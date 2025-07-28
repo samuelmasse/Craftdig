@@ -19,6 +19,8 @@
         <Using Include="GlwLayer.Driver" />
         <Using Include="Glw2D" />
         <Using Include="Glw2D.Fonts" />
+        <Using Include="HadvarECS" />
+        <Using Include="HadvarECS.Generator" />
         <Using Include="OpenTK.Graphics.OpenGL4" />
         <Using Include="OpenTK.Mathematics" />
         <Using Include="OpenTK.Windowing.Common" />

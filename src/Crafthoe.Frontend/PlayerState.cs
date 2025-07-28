@@ -11,6 +11,7 @@ public class PlayerState(
     RootText text,
     RootScale scale,
     RootRoboto roboto,
+    DimensionsMetrics dimensionsMetrics,
     PlayerContext context,
     PlayerCamera camera) : State
 {
@@ -21,7 +22,11 @@ public class PlayerState(
         () => text.Format("Frame: {0}. {1:F3} ms ({2} FPS)",
             metrics.Frame.Ticks, metrics.FrameWindow.Average, metrics.FrameWindow.Ticks),
         () => text.Format("Position: {0:F3}", camera.Offset),
-        () => text.Format("Rotation: {0:F3}", camera.Rotation)
+        () => text.Format("Rotation: {0:F3}", camera.Rotation),
+        () => text.Format("Spike: {0}", metrics.Frame.Max),
+        () => text.Format("Render: {0}", dimensionsMetrics.RenderMetric.Value.Max),
+        () => text.Format("Chunk: {0}", dimensionsMetrics.ChunkMetric.Value.Max),
+        () => text.Format("Section: {0}", dimensionsMetrics.SectionMetric.Value.Max),
     ];
 
     public override void Load()

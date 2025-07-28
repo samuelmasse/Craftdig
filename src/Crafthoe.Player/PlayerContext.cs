@@ -9,6 +9,12 @@ public class PlayerContext(
     RootCube cube,
     RootPngs pngs,
     AppFiles files,
+    DimensionChunks chunks,
+    DimensionSections sections,
+    DimensionGenerator generator,
+    DimensionSectionMesher sectionMesher,
+    DimensionMeshTransferer meshTransferer,
+    DimensionsMetrics metrics,
     PlayerGlw gl,
     PlayerPerspective perspective,
     PlayerCamera camera,
@@ -17,6 +23,10 @@ public class PlayerContext(
     private Texture texture = null!;
     private int vao;
     private int count;
+    private int far = 10;
+    private bool gentype = false;
+    private readonly Stopwatch chunkReqWatch = Stopwatch.StartNew();
+    private readonly Stopwatch sectionReqWatch = Stopwatch.StartNew();
 
     public void Load()
     {
@@ -54,7 +64,7 @@ public class PlayerContext(
         gl.UnbindBuffer(BufferTarget.ArrayBuffer);
         gl.UnbindBuffer(BufferTarget.ElementArrayBuffer);
 
-        camera.Offset = (0, 20, 0);
+        camera.Offset = (0, 80, 0);
         quadIndexBuffer.EnsureCapacity(vertices.Count);
         count = quadIndexBuffer.IndexCount(vertices.Count);
     }
@@ -84,6 +94,12 @@ public class PlayerContext(
 
     public void Render()
     {
+        if (gentype)
+            RequestChunks();
+        else RequestSections();
+
+        gentype = !gentype;
+
         camera.ComputeVectors();
         perspective.ComputeMatrix(canvas.Size, camera);
 
@@ -97,9 +113,31 @@ public class PlayerContext(
         positionColorTextureProgram3D.View = perspective.View;
         positionColorTextureProgram3D.Projection = perspective.Projection;
         texture.Bind(positionColorTextureProgram3D.SamplerTexture);
-        gl.BindVertexArray(vao);
-        gl.DrawElements(BeginMode.Triangles, count, DrawElementsType.UnsignedInt, 0);
-        gl.UnbindVertexArray();
+
+        var cloc = new Vector3i((int)camera.Offset.X, (int)camera.Offset.Z, (int)camera.Offset.Y) / chunks.Unit;
+
+        metrics.RenderMetric.Start();
+
+        for (int dy = -far; dy <= far; dy++)
+        {
+            for (int dx = -far; dx <= far; dx++)
+            {
+                for (int dz = -cloc.Z; dz < (chunks.Unit.Z / sections.Unit.Z) - cloc.Z; dz++)
+                {
+                    var nsloc = cloc + (dx, dy, dz);
+                    if (sections.TryGet(nsloc, out var section) && section.SectionTerrainGenerated())
+                    {
+                        var mesh = section.SectionTerrainMesh();
+                        gl.BindVertexArray(mesh.Vao);
+                        gl.DrawElements(BeginMode.Triangles, quadIndexBuffer.IndexCount(mesh.Count), DrawElementsType.UnsignedInt, 0);
+                        gl.UnbindVertexArray();
+                    }
+                }
+            }
+        }
+
+        metrics.RenderMetric.End();
+
         texture.Unbind(positionColorTextureProgram3D.SamplerTexture);
         gl.UnuseProgram();
 
@@ -108,5 +146,86 @@ public class PlayerContext(
         gl.ResetDepthFunc();
         gl.Disable(EnableCap.DepthTest);
         gl.ResetViewport();
+    }
+
+    private void RequestChunks()
+    {
+        if (chunkReqWatch.ElapsedMilliseconds < 4)
+            return;
+
+        var cloc = new Vector2i((int)camera.Offset.X, (int)camera.Offset.Z) / chunks.Unit.Xy;
+
+        Vector2i? best = null;
+        float bestDist = 0;
+
+        for (int dy = -far; dy <= far; dy++)
+        {
+            for (int dx = -far; dx <= far; dx++)
+            {
+                var ncloc = cloc + (dx, dy);
+                if (chunks[ncloc] == null)
+                {
+                    float dist = Vector2.DistanceSquared(ncloc, cloc);
+                    if (best == null || dist < bestDist)
+                    {
+                        best = ncloc;
+                        bestDist = dist;
+                    }
+                }
+            }
+        }
+
+        if (best != null)
+        {
+            metrics.ChunkMetric.Start();
+            chunks.Alloc(best.Value);
+            generator.Generate(best.Value);
+            chunkReqWatch.Restart();
+            metrics.ChunkMetric.End();
+        }
+    }
+
+    private void RequestSections()
+    {
+        if (sectionReqWatch.ElapsedMilliseconds < 1)
+            return;
+
+        var sloc = new Vector3i((int)camera.Offset.X, (int)camera.Offset.Z, (int)camera.Offset.Y) / chunks.Unit;
+
+        Entity? best = null;
+        float bestDist = 0;
+
+        for (int dy = -far; dy <= far; dy++)
+        {
+            for (int dx = -far; dx <= far; dx++)
+            {
+                for (int dz = -sloc.Z; dz < (chunks.Unit.Z / sections.Unit.Z) - sloc.Z; dz++)
+                {
+                    var nsloc = sloc + (dx, dy, dz);
+                    if (sections.TryGet(nsloc, out var section) && !section.SectionTerrainGenerated())
+                    {
+                        float dist = Vector3.DistanceSquared(nsloc, sloc);
+                        if (best == null || dist < bestDist)
+                        {
+                            best = section;
+                            bestDist = dist;
+                        }
+                    }
+                }
+            }
+        }
+
+        if (best != null)
+        {
+            metrics.SectionMetric.Start();
+            sectionMesher.Render(best.Value.SectionLocation());
+            var mesh = best.Value.SectionTerrainMesh();
+            meshTransferer.Transfer(positionColorTextureProgram3D, sectionMesher.Vertices, ref mesh);
+            best.Value.SectionTerrainMesh(mesh);
+            best.Value.SectionTerrainGenerated(true);
+            sectionMesher.Reset();
+            sectionReqWatch.Restart();
+            metrics.SectionMetric.End();
+        }
     }
 }
