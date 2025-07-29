@@ -23,4 +23,15 @@ public class DimensionMeshTransferer(RootQuadIndexBuffer quadIndexBuffer, Dimens
         quadIndexBuffer.EnsureCapacity(vertices.Length);
         dst.Count = vertices.Length;
     }
+
+    public void Free(ref VaoVboCount dst)
+    {
+        if (dst.Vbo != 0)
+            gl.DeleteBuffer(dst.Vbo);
+
+        if (dst.Vao != 0)
+            gl.DeleteVertexArray(dst.Vao);
+
+        dst = default;
+    }
 }

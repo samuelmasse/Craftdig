@@ -2,35 +2,35 @@
 namespace Crafthoe.Frontend;
 
 [Dimension]
-public class DimensionOverworldChunkGenerator(
-    ModuleBlocks block,
-    DimensionChunks chunks,
-    DimensionBlocks blocks) : IChunkGenerator
+public class DimensionOverworldChunkGenerator(ModuleBlocks block, DimensionBlocks blocks) : IChunkGenerator
 {
     private readonly FastNoiseLite noise = new();
 
     public void Generate(Vector2i cloc)
     {
-        Console.WriteLine(cloc);
-        var loc = new Vector3i(cloc.X * chunks.Unit.X, cloc.Y * chunks.Unit.Y, 0);
+        var mem = blocks.ChunkBlocks(cloc);
+        var sloc = cloc * SectionSize;
 
-        for (int y = 0; y < chunks.Unit.Y; y++)
+        for (int y = 0; y < SectionSize; y++)
         {
-            for (int x = 0; x < chunks.Unit.X; x++)
+            for (int x = 0; x < SectionSize; x++)
             {
-                int h = (int)(noise.GetNoise(loc.X + x, loc.Y + y) * 15) + 60;
+                int h = (int)(noise.GetNoise(sloc.X + x, sloc.Y + y) * 15) + 60;
 
-                for (int z = 0; z < chunks.Unit.Z; z++)
-                    blocks.TrySet(loc + (x, y, z), Generate(loc + (x, y, z), h));
+                for (int z = 0; z < HeightSize; z++)
+                {
+                    int index = (z << (SectionBits * 2)) + (y << SectionBits) + x;
+                    mem[index] = Generate(z, h);
+                }
             }
         }
     }
 
-    private ReadOnlyEntity Generate(Vector3i loc, float h)
+    private ReadOnlyEntity Generate(int z, float h)
     {
-        if (loc.Z < h - 5)
+        if (z < h - 5)
             return block.Stone;
-        else if (loc.Z < h)
+        else if (z < h)
             return block.Dirt;
         else return block.Air;
     }

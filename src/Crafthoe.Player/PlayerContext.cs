@@ -19,11 +19,11 @@ public class PlayerContext(
     PlayerCamera camera,
     PlayerControls controls)
 {
-    private Texture texture = null!;
-    private int far = 10;
-    private bool gentype = false;
     private readonly Stopwatch chunkReqWatch = Stopwatch.StartNew();
     private readonly Stopwatch sectionReqWatch = Stopwatch.StartNew();
+    private readonly int far = 32;
+    private Texture texture = null!;
+    private bool gentype = false;
 
     public void Load()
     {
@@ -41,6 +41,9 @@ public class PlayerContext(
     public void Update(double time)
     {
         float speed = (float)(time * 10);
+
+        if (controls.CameraFast.Run())
+            speed *= 10;
 
         if (controls.CameraFront.Run())
             camera.Offset += camera.Front * speed;
@@ -83,7 +86,7 @@ public class PlayerContext(
         positionColorTextureProgram3D.Projection = perspective.Projection;
         texture.Bind(positionColorTextureProgram3D.SamplerTexture);
 
-        var cloc = new Vector3i((int)camera.Offset.X, (int)camera.Offset.Z, (int)camera.Offset.Y) / chunks.Unit;
+        var cloc = new Vector3i((int)camera.Offset.X, (int)camera.Offset.Z, (int)camera.Offset.Y) / ChunkSize;
 
         metrics.RenderMetric.Start();
 
@@ -91,10 +94,12 @@ public class PlayerContext(
         {
             for (int dx = -far; dx <= far; dx++)
             {
-                for (int dz = -cloc.Z; dz < (chunks.Unit.Z / sections.Unit.Z) - cloc.Z; dz++)
+                for (int dz = -cloc.Z; dz < (HeightSize / SectionSize) - cloc.Z; dz++)
                 {
                     var nsloc = cloc + (dx, dy, dz);
-                    if (sections.TryGet(nsloc, out var section) && section.SectionTerrainGenerated())
+                    if (sections.TryGet(nsloc, out var section) &&
+                        section.SectionTerrainGenerated() &&
+                        section.SectionTerrainMesh().Count > 0)
                     {
                         var mesh = section.SectionTerrainMesh();
                         gl.BindVertexArray(mesh.Vao);
@@ -122,7 +127,7 @@ public class PlayerContext(
         if (chunkReqWatch.ElapsedMilliseconds < 4)
             return;
 
-        var cloc = new Vector2i((int)camera.Offset.X, (int)camera.Offset.Z) / chunks.Unit.Xy;
+        var cloc = new Vector2i((int)camera.Offset.X, (int)camera.Offset.Z) / SectionSize;
 
         Vector2i? best = null;
         float bestDist = 0;
@@ -159,7 +164,7 @@ public class PlayerContext(
         if (sectionReqWatch.ElapsedMilliseconds < 1)
             return;
 
-        var sloc = new Vector3i((int)camera.Offset.X, (int)camera.Offset.Z, (int)camera.Offset.Y) / chunks.Unit;
+        var sloc = new Vector3i((int)camera.Offset.X, (int)camera.Offset.Z, (int)camera.Offset.Y) / ChunkSize;
 
         Entity? best = null;
         float bestDist = 0;
@@ -168,7 +173,7 @@ public class PlayerContext(
         {
             for (int dx = -far; dx <= far; dx++)
             {
-                for (int dz = -sloc.Z; dz < (chunks.Unit.Z / sections.Unit.Z) - sloc.Z; dz++)
+                for (int dz = -sloc.Z; dz < (HeightSize / SectionSize) - sloc.Z; dz++)
                 {
                     var nsloc = sloc + (dx, dy, dz);
                     if (sections.TryGet(nsloc, out var section) && !section.SectionTerrainGenerated())
@@ -188,8 +193,12 @@ public class PlayerContext(
         {
             metrics.SectionMetric.Start();
             sectionMesher.Render(best.Value.SectionLocation());
+            metrics.SectionMetric.End();
+
             var mesh = best.Value.SectionTerrainMesh();
-            meshTransferer.Transfer(positionColorTextureProgram3D, sectionMesher.Vertices, ref mesh);
+            if (sectionMesher.Vertices.Length > 0)
+                meshTransferer.Transfer(positionColorTextureProgram3D, sectionMesher.Vertices, ref mesh);
+            else meshTransferer.Free(ref mesh);
             best.Value.SectionTerrainMesh(mesh);
             best.Value.SectionTerrainGenerated(true);
             sectionMesher.Reset();

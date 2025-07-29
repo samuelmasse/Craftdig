@@ -1,3 +1,6 @@
+[CameraFast]
+Shift = "Down"
+Control = "Any"
 [CameraFront]
 KeyDown = "W"
 Shift = "Any"

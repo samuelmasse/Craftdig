@@ -1,6 +1,7 @@
 namespace Crafthoe.Player;
 
 public record PlayerControls(
+    Control CameraFast,
     Control CameraFront,
     Control CameraRight,
     Control CameraBack,

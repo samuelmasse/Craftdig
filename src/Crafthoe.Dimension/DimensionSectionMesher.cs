@@ -1,7 +1,7 @@
 namespace Crafthoe.Dimension;
 
 [Dimension]
-public class DimensionSectionMesher(RootCube cube, DimensionChunks chunks, DimensionSections sections, DimensionBlocks blocks)
+public class DimensionSectionMesher(RootCube cube, DimensionBlocks blocks)
 {
     private readonly List<PositionColorTextureVertex> vertices = [];
 
@@ -9,11 +9,11 @@ public class DimensionSectionMesher(RootCube cube, DimensionChunks chunks, Dimen
 
     public void Render(Vector3i sloc)
     {
-        var loc = sloc * sections.Unit;
+        var loc = sloc * SectionSize;
 
-        for (int z = 0; z < chunks.Unit.Z; z++)
-            for (int y = 0; y < chunks.Unit.Y; y++)
-                for (int x = 0; x < chunks.Unit.X; x++)
+        for (int z = 0; z < SectionSize; z++)
+            for (int y = 0; y < SectionSize; y++)
+                for (int x = 0; x < SectionSize; x++)
                     RenderBlock(loc + (x, y, z));
     }
 

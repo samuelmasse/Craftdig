@@ -2,6 +2,7 @@ namespace Crafthoe.Frontend;
 
 [Player]
 public class PlayerState(
+    RootGlw gl,
     RootCanvas canvas,
     RootMouse mouse,
     RootKeyboard keyboard,
@@ -27,6 +28,7 @@ public class PlayerState(
         () => text.Format("Render: {0}", dimensionsMetrics.RenderMetric.Value.Max),
         () => text.Format("Chunk: {0}", dimensionsMetrics.ChunkMetric.Value.Max),
         () => text.Format("Section: {0}", dimensionsMetrics.SectionMetric.Value.Max),
+        () => text.Format("Buffers: {0}", gl.BufferTotalUsage)
     ];
 
     public override void Load()

@@ -10,6 +10,9 @@
         <Using Include="Crafthoe.Dimension" />
         <Using Include="Crafthoe.Module" />
         <Using Include="Crafthoe.World" />
+        <Using Include="Crafthoe.Dimension.Unit">
+            <Static>True</Static>
+        </Using>
     </ItemGroup>
 
 </Project>
