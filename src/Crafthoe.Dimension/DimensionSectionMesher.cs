@@ -19,13 +19,42 @@ public class DimensionSectionMesher(RootCube cube, DimensionBlocks blocks)
 
     public void RenderBlock(Vector3i loc)
     {
-        if (blocks.TryGet(loc, out var block) && blocks.TryGet(loc + (0, 0, 1), out var top) && block.IsSolid() != top.IsSolid())
+        blocks.TryGet(loc, out var block);
+        if (!block.IsSolid())
+            return;
+
+        var rloc = new Vector3i(loc.X, loc.Z, loc.Y);
+
+        blocks.TryGet(loc + (0, 1, 0), out var front);
+        blocks.TryGet(loc - (0, 1, 0), out var back);
+
+        blocks.TryGet(loc + (1, 0, 0), out var right);
+        blocks.TryGet(loc - (1, 0, 0), out var left);
+
+        blocks.TryGet(loc + (0, 0, 1), out var top);
+        blocks.TryGet(loc - (0, 0, 1), out var bottom);
+
+        if (!front.IsSolid())
+            AddQuad(cube.Front.Quad, 1);
+        if (!back.IsSolid())
+            AddQuad(cube.Back.Quad, 1);
+
+        if (!left.IsSolid())
+            AddQuad(cube.Left.Quad, 0.5f);
+        if (!right.IsSolid())
+            AddQuad(cube.Right.Quad, 0.5f);
+
+        if (!top.IsSolid())
+            AddQuad(cube.Top.Quad, 0.8f);
+        if (!bottom.IsSolid())
+            AddQuad(cube.Bottom.Quad, 0.8f);
+
+        void AddQuad(Quad quad, float shadow)
         {
-            var rloc = new Vector3i(loc.X, loc.Z, loc.Y);
-            vertices.Add(new(cube.Top.Quad.TopLeft + rloc, (1, 1, 1), (0, 1)));
-            vertices.Add(new(cube.Top.Quad.TopRight + rloc, (1, 1, 1), (1, 1)));
-            vertices.Add(new(cube.Top.Quad.BottomLeft + rloc, (1, 1, 1), (0, 0)));
-            vertices.Add(new(cube.Top.Quad.BottomRight + rloc, (1, 1, 1), (1, 0)));
+            vertices.Add(new(quad.TopLeft + rloc, Vector3.One * shadow, (0, 1)));
+            vertices.Add(new(quad.TopRight + rloc, Vector3.One * shadow, (1, 1)));
+            vertices.Add(new(quad.BottomLeft + rloc, Vector3.One * shadow, (0, 0)));
+            vertices.Add(new(quad.BottomRight + rloc, Vector3.One * shadow, (1, 0)));
         }
     }
 

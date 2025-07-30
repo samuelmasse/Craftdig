@@ -6,7 +6,8 @@ file record DimensionComponents(
     [ComponentToString] Vector2i ChunkLocation,
     [ComponentReturnSpan] Memory<ReadOnlyEntity> ChunkBlocks,
     [ComponentReturnSpan] Memory<Entity> ChunkSections,
+    SortedSet<int>? ChunkUnrendered,
+    SortedSet<int>? ChunkRendered,
     [ComponentToString] bool IsSection,
     [ComponentToString] Vector3i SectionLocation,
-    VaoVboCount SectionTerrainMesh,
-    bool SectionTerrainGenerated);
+    VaoVboCount SectionTerrainMesh);

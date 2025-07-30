@@ -8,30 +8,40 @@ public class DimensionOverworldChunkGenerator(ModuleBlocks block, DimensionBlock
 
     public void Generate(Vector2i cloc)
     {
+        noise.SetFractalType(FastNoiseLite.FractalType.FBm);
+
         var mem = blocks.ChunkBlocks(cloc);
-        var sloc = cloc * SectionSize;
+        var loc = cloc * SectionSize;
 
         for (int y = 0; y < SectionSize; y++)
         {
             for (int x = 0; x < SectionSize; x++)
             {
-                int h = (int)(noise.GetNoise(sloc.X + x, sloc.Y + y) * 15) + 60;
-
                 for (int z = 0; z < HeightSize; z++)
                 {
                     int index = (z << (SectionBits * 2)) + (y << SectionBits) + x;
-                    mem[index] = Generate(z, h);
+                    mem[index] = Generate((loc.X + x, loc.Y + y, z));
                 }
             }
         }
     }
 
-    private ReadOnlyEntity Generate(int z, float h)
+    private ReadOnlyEntity Generate(Vector3i loc)
     {
-        if (z < h - 5)
+        if (loc.X == 0 && loc.Y == 0)
             return block.Stone;
-        else if (z < h)
-            return block.Dirt;
-        else return block.Air;
+
+        if (loc.Z < 45)
+            return block.Stone;
+
+        if (loc.Z >= 105)
+            return block.Air;
+
+        float n = noise.GetNoise(loc.X, loc.Y, loc.Z) + 0.5f;
+
+        if (n - ((loc.Z - 60) / 30f) > 0)
+            return block.Stone;
+
+        return block.Air;
     }
 }
