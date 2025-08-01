@@ -2,6 +2,7 @@ namespace Crafthoe.Dimension;
 
 [Components]
 file record DimensionComponents(
+    Vector3 Position,
     [ComponentToString] bool IsChunk,
     [ComponentToString] Vector2i ChunkLocation,
     [ComponentReturnSpan] Memory<ReadOnlyEntity> ChunkBlocks,

@@ -10,22 +10,17 @@ public class PlayerContext(
     AppFiles files,
     DimensionChunks chunks,
     DimensionSections sections,
-    DimensionGenerator generator,
-    DimensionSectionMesher sectionMesher,
-    DimensionMeshTransferer meshTransferer,
-    DimensionsMetrics metrics,
-    DimensionChunkGeneratedEvent chunkGeneratedEvent,
-    DimensionChunkRenderScheduler chunkRenderScheduler,
+    DimensionMetrics metrics,
+    DimensionChunkRequester chunkRequester,
     PlayerGlw gl,
     PlayerPerspective perspective,
     PlayerCamera camera,
-    PlayerControls controls)
+    PlayerControls controls,
+    PlayerEntity entity)
 {
-    private readonly Stopwatch chunkReqWatch = Stopwatch.StartNew();
-    private readonly Stopwatch sectionReqWatch = Stopwatch.StartNew();
-    private readonly int far = 24;
     private Texture texture = null!;
-    private bool gentype = false;
+
+    public Vector3 Position => (camera.Offset.X, camera.Offset.Z, camera.Offset.Y);
 
     public void Load()
     {
@@ -64,29 +59,11 @@ public class PlayerContext(
         mouse.Track = true;
         camera.Rotate(-mouse.Delta / 300);
         camera.PreventBackFlipsAndFrontFlips();
+        entity.Entity.Position((camera.Offset.X, camera.Offset.Z, camera.Offset.Y));
     }
 
     public void Render()
     {
-        if (gentype)
-            RequestChunks();
-        else
-        {
-            metrics.SectionMetric.Start();
-
-            sectionReqWatch.Restart();
-            bool req;
-            do req = RequestSections();
-            while (req && sectionReqWatch.ElapsedMilliseconds < 1);
-
-            metrics.SectionMetric.End();
-        }
-
-        chunkRenderScheduler.Tick();
-        chunkGeneratedEvent.Reset();
-
-        gentype = !gentype;
-
         camera.ComputeVectors();
         perspective.ComputeMatrix(canvas.Size, camera);
 
@@ -105,27 +82,33 @@ public class PlayerContext(
 
         metrics.RenderMetric.Start();
 
-        for (int dy = -far; dy <= far; dy++)
+        for (int dy = -chunkRequester.Far; dy <= chunkRequester.Far; dy++)
         {
-            for (int dx = -far; dx <= far; dx++)
+            for (int dx = -chunkRequester.Far; dx <= chunkRequester.Far; dx++)
             {
                 var ncloc = cloc + (dx, dy);
+
+                var delta = Vector2i.Abs(cloc - ncloc);
+                var dist = delta.X + delta.Y;
+                if (dist > chunkRequester.Far)
+                    continue;
+
                 var chunk = chunks[ncloc].GetValueOrDefault();
                 var rendered = chunk.ChunkRendered();
-                if (rendered?.Count > 0)
+                if (rendered == null)
+                    continue;
+
+                foreach (var z in rendered)
                 {
-                    foreach (var z in rendered)
-                    {
-                        var nsloc = new Vector3i(ncloc.X, ncloc.Y, z);
-                        if (sections.TryGet(nsloc, out var section) &&
-                            section.SectionTerrainMesh().Count > 0)
-                        {
-                            var mesh = section.SectionTerrainMesh();
-                            gl.BindVertexArray(mesh.Vao);
-                            gl.DrawElements(BeginMode.Triangles, quadIndexBuffer.IndexCount(mesh.Count), DrawElementsType.UnsignedInt, 0);
-                            gl.UnbindVertexArray();
-                        }
-                    }
+                    var nsloc = new Vector3i(ncloc.X, ncloc.Y, z);
+                    if (!sections.TryGet(nsloc, out var section) || section.SectionTerrainMesh().Count <= 0)
+                        continue;
+
+                    var mesh = section.SectionTerrainMesh();
+                    gl.BindVertexArray(mesh.Vao);
+                    gl.DrawElements(BeginMode.Triangles,
+                        quadIndexBuffer.IndexCount(mesh.Count), DrawElementsType.UnsignedInt, 0);
+                    gl.UnbindVertexArray();
                 }
             }
         }
@@ -140,115 +123,5 @@ public class PlayerContext(
         gl.ResetDepthFunc();
         gl.Disable(EnableCap.DepthTest);
         gl.ResetViewport();
-    }
-
-    private void RequestChunks()
-    {
-        if (chunkReqWatch.ElapsedMilliseconds < 4)
-            return;
-
-        var cloc = new Vector2i((int)camera.Offset.X, (int)camera.Offset.Z) / SectionSize;
-
-        Vector2i? best = null;
-        float bestDist = 0;
-
-        for (int dy = -far; dy <= far; dy++)
-        {
-            for (int dx = -far; dx <= far; dx++)
-            {
-                var ncloc = cloc + (dx, dy);
-                if (chunks[ncloc] == null)
-                {
-                    float dist = Vector2.DistanceSquared(ncloc, cloc);
-                    if (best == null || dist < bestDist)
-                    {
-                        best = ncloc;
-                        bestDist = dist;
-                    }
-                }
-            }
-        }
-
-        if (best != null)
-        {
-            metrics.ChunkMetric.Start();
-            chunks.Alloc(best.Value);
-            generator.Generate(best.Value);
-            chunkGeneratedEvent.Add(best.Value);
-            chunkReqWatch.Restart();
-            metrics.ChunkMetric.End();
-        }
-    }
-
-    private bool RequestSections()
-    {
-        var sloc = new Vector3i((int)camera.Offset.X, (int)camera.Offset.Z, (int)camera.Offset.Y) / ChunkSize;
-
-        Entity bestChunk = default;
-        float bestChunkDist = float.PositiveInfinity;
-
-        for (int dy = -far; dy <= far; dy++)
-        {
-            for (int dx = -far; dx <= far; dx++)
-            {
-                var cloc = sloc.Xy + (dx, dy);
-                var chunk = chunks[cloc].GetValueOrDefault();
-                if (chunk.ChunkUnrendered()?.Count > 0)
-                {
-                    float dist = Vector2.DistanceSquared(cloc, sloc.Xy);
-                    if (dist < bestChunkDist)
-                    {
-                        bestChunk = chunk;
-                        bestChunkDist = dist;
-                    }
-                }
-            }
-        }
-
-        var unrendered = bestChunk.ChunkUnrendered();
-        if (unrendered == null)
-            return false;
-
-        Entity bestSection = default;
-        float bestSectionDist = float.PositiveInfinity;
-
-        foreach (var sz in unrendered)
-        {
-            var nsloc = new Vector3i(bestChunk.ChunkLocation(), sz);
-
-            if (sections.TryGet(nsloc, out var section))
-            {
-                float dist = Vector3.DistanceSquared(nsloc, sloc);
-                if (dist < bestSectionDist)
-                {
-                    bestSection = section;
-                    bestSectionDist = dist;
-                }
-            }
-        }
-
-        if (!bestSection.IsSection())
-            return false;
-
-        sectionMesher.Render(bestSection.SectionLocation());
-
-        var mesh = bestSection.SectionTerrainMesh();
-        if (sectionMesher.Vertices.Length > 0)
-            meshTransferer.Transfer(positionColorTextureProgram3D, sectionMesher.Vertices, ref mesh);
-        else meshTransferer.Free(ref mesh);
-        bestSection.SectionTerrainMesh(mesh);
-        sectionMesher.Reset();
-
-        unrendered.Remove(bestSection.SectionLocation().Z);
-
-        var rendered = bestChunk.ChunkRendered();
-        if (rendered == null)
-        {
-            rendered = [];
-            bestChunk.ChunkRendered(rendered);
-        }
-
-        rendered.Add(bestSection.SectionLocation().Z);
-        return true;
     }
 }

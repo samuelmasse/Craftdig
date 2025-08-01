@@ -12,8 +12,9 @@ public class PlayerState(
     RootText text,
     RootScale scale,
     RootRoboto roboto,
-    DimensionsMetrics dimensionsMetrics,
-    PlayerContext context,
+    DimensionContext dimension,
+    DimensionMetrics dimensionsMetrics,
+    PlayerContext player,
     PlayerCamera camera) : State
 {
     private bool paused;
@@ -33,7 +34,7 @@ public class PlayerState(
 
     public override void Load()
     {
-        context.Load();
+        player.Load();
     }
 
     public override void Update(double time)
@@ -43,15 +44,19 @@ public class PlayerState(
 
         mouse.Track = false;
         if (!paused)
-            context.Update(time);
+        {
+            dimension.Update(time);
+            player.Update(time);
+        }
 
         mouse.CursorState = mouse.Track ? CursorState.Grabbed : CursorState.Normal;
     }
 
     public override void Render()
     {
+        dimension.Tick();
         backbuffer.Clear();
-        context.Render();
+        player.Render();
     }
 
     public override void Draw()

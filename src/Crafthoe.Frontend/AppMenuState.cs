@@ -33,8 +33,15 @@ public class AppMenuState(
             var moduleScope = scope.Scope<ModuleScope>();
             var worldScope = moduleScope.Scope<WorldScope>();
             var dimensionScope = worldScope.Scope<DimensionScope>();
-            dimensionScope.Add(new DimensionGenerator(dimensionScope.Get<DimensionOverworldChunkGenerator>()));
+            dimensionScope.Add(new DimensionChunkGenerator(dimensionScope.Get<DimensionOverworldChunkGenerator>()));
+
+            var players = dimensionScope.Get<DimensionPlayers>();
+            var player = new Entity();
+            players.Add(player);
+
             var playerScope = dimensionScope.Scope<PlayerScope>();
+            playerScope.Add(new PlayerEntity(player));
+
             state.Current = playerScope.New<PlayerState>();
         }
     }
