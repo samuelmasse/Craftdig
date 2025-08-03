@@ -3,28 +3,31 @@ namespace Crafthoe.Dimension;
 [Dimension]
 public class DimensionSections(DimensionChunks chunks)
 {
-    public bool TryGet(Vector3i sloc, out Entity entity)
+    private readonly Queue<Memory<EntPtr>> pool = [];
+
+    public bool TryGet(Vector3i sloc, out EntMut entity)
     {
-        var chunk = chunks[sloc.Xy];
-        if (chunk == null)
+        if (!chunks.TryGet(sloc.Xy, out var chunk))
         {
             entity = default;
             return false;
         }
 
-        var sections = chunk.Value.ChunkSections();
-        if (sections.IsEmpty)
+        if (chunk.Sections().IsEmpty)
         {
-            // TODO: the entities must be cleaned up
-            var array = new Entity[HeightSize / SectionSize];
-            for (int z = 0; z < array.Length; z++)
-                array[z] = new Entity().IsSection(true).SectionLocation((sloc.X, sloc.Y, z));
+            chunk.Sections() = pool.Count > 0 ? pool.Dequeue() : new EntPtr[HeightSize / SectionSize];
 
-            chunk.Value.ChunkSections(array);
-            sections = chunk.Value.ChunkSections();
+            for (int z = 0; z < chunk.Sections().Length; z++)
+                chunk.Sections().Span[z] = new EntPtr().IsSection(true).Chunk(chunk).Sloc((sloc.X, sloc.Y, z));
         }
 
-        entity = sections[sloc.Z];
+        entity = chunk.Sections().Span[sloc.Z];
         return true;
+    }
+
+    public void ReturnSections(Memory<EntPtr> sections)
+    {
+        sections.Span.Clear();
+        pool.Enqueue(sections);
     }
 }

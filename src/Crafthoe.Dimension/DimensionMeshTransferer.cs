@@ -5,6 +5,12 @@ public class DimensionMeshTransferer(RootQuadIndexBuffer quadIndexBuffer, Dimens
 {
     public void Transfer<T>(IRenderProgram program, ReadOnlySpan<T> vertices, ref VaoVboCount dst) where T : unmanaged, IVertex
     {
+        if (vertices.Length == 0)
+        {
+            Free(ref dst);
+            return;
+        }
+
         if (dst.Vao == 0)
             dst.Vao = gl.GenVertexArray();
 

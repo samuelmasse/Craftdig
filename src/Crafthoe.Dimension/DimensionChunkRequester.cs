@@ -51,7 +51,7 @@ public class DimensionChunkRequester(
             for (int dx = -far; dx <= far; dx++)
             {
                 var ncloc = center + (dx, dy);
-                if (chunks[ncloc] != null)
+                if (chunks.TryGet(ncloc, out _))
                     continue;
 
                 var delta = Vector2i.Abs(center - ncloc);

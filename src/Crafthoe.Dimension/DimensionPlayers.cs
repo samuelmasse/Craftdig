@@ -3,10 +3,10 @@ namespace Crafthoe.Dimension;
 [Dimension]
 public class DimensionPlayers
 {
-    private readonly List<Entity> players = [];
+    private readonly List<EntRef> players = [];
 
-    public ReadOnlySpan<Entity> Players => CollectionsMarshal.AsSpan(players);
+    public ReadOnlySpan<EntRef> Players => CollectionsMarshal.AsSpan(players);
 
-    public void Add(Entity entity) => players.Add(entity);
-    public void Remove(Entity entity) => players.Remove(entity);
+    public void Add(EntRef entity) => players.Add(entity);
+    public void Remove(EntRef entity) => players.Remove(entity);
 }

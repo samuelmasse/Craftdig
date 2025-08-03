@@ -41,9 +41,9 @@ public class DimensionSectionRequester(
         return true;
     }
 
-    private bool TryGetNeareastChunkWithUnloadedSections(Vector2i center, out Vector2i cloc)
+    private bool TryGetNeareastChunkWithUnloadedSections(Vector2i center, out EntMut val)
     {
-        cloc = default;
+        val = default;
 
         float nearest = float.PositiveInfinity;
         bool found = false;
@@ -53,8 +53,7 @@ public class DimensionSectionRequester(
             for (int dx = -chunkRequester.Far; dx <= chunkRequester.Far; dx++)
             {
                 var ncloc = center + (dx, dy);
-                var unrendered = chunks[ncloc].GetValueOrDefault().ChunkUnrendered();
-                if (unrendered == null || unrendered.Count == 0)
+                if (!chunks.TryGet(ncloc, out var chunk) || chunk.Unrendered().Count == 0)
                     continue;
 
                 var delta = Vector2i.Abs(center - ncloc);
@@ -65,7 +64,7 @@ public class DimensionSectionRequester(
                 if (dist >= nearest)
                     continue;
 
-                cloc = ncloc;
+                val = chunk;
                 nearest = dist;
                 found = true;
             }
@@ -74,21 +73,17 @@ public class DimensionSectionRequester(
         return found;
     }
 
-    private bool TryGetNearestUnloadedSection(Vector3i center, Vector2i cloc, out Vector3i sloc)
+    private bool TryGetNearestUnloadedSection(Vector3i center, EntMut chunk, out EntMut val)
     {
-        sloc = default;
-
-        var chunk = chunks[cloc].GetValueOrDefault();
-        var unrendered = chunk.ChunkUnrendered();
-        if (unrendered == null)
-            return false;
+        val = default;
 
         float nearest = float.PositiveInfinity;
         bool found = false;
 
-        foreach (var sz in unrendered)
+        for (int i = 0; i < chunk.Unrendered().Count; i++)
         {
-            var nsloc = new Vector3i(cloc.X, cloc.Y, sz);
+            var sz = chunk.Unrendered()[chunk.Unrendered().Keys[i]];
+            var nsloc = new Vector3i(chunk.Cloc().X, chunk.Cloc().Y, sz);
 
             if (!sections.TryGet(nsloc, out var section))
                 continue;
@@ -97,7 +92,7 @@ public class DimensionSectionRequester(
             if (dist >= nearest)
                 continue;
 
-            sloc = nsloc;
+            val = section;
             nearest = dist;
             found = true;
         }

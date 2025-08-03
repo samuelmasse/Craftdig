@@ -3,7 +3,9 @@ namespace Crafthoe.Dimension;
 [Dimension]
 public class DimensionBlocks(DimensionChunks chunks)
 {
-    public bool TryGet(Vector3i loc, out ReadOnlyEntity block)
+    private readonly Queue<Memory<Ent>> pool = [];
+
+    public bool TryGet(Vector3i loc, out Ent block)
     {
         if ((uint)loc.Z >= HeightSize)
         {
@@ -30,10 +32,10 @@ public class DimensionBlocks(DimensionChunks chunks)
         return true;
     }
 
-    public bool TrySet(Vector3i loc, ReadOnlyEntity block)
+    public bool TrySet(Vector3i loc, Ent block)
     {
         if ((uint)loc.Z >= HeightSize)
-            block = default;
+            return false;
 
         int cx = loc.X >> SectionBits;
         int cy = loc.Y >> SectionBits;
@@ -51,19 +53,21 @@ public class DimensionBlocks(DimensionChunks chunks)
         return true;
     }
 
-    public Span<ReadOnlyEntity> ChunkBlocks(Vector2i cloc)
+    public Span<Ent> ChunkBlocks(Vector2i cloc)
     {
-        var chunk = chunks[cloc];
-        if (chunk == null)
+        if (!chunks.TryGet(cloc, out var chunk))
             return default;
 
-        var blocks = chunk.Value.ChunkBlocks();
+        ref var blocks = ref chunk.Blocks();
         if (blocks.Length == 0)
-        {
-            chunk.Value.ChunkBlocks(new ReadOnlyEntity[HeightSize * SectionSize * SectionSize]);
-            return chunk.Value.ChunkBlocks();
-        }
+            blocks = pool.Count > 0 ? pool.Dequeue() : new Ent[HeightSize * SectionSize * SectionSize];
 
-        return blocks;
+        return blocks.Span;
+    }
+
+    public void ReturnBlocks(Memory<Ent> blocks)
+    {
+        blocks.Span.Clear();
+        pool.Enqueue(blocks);
     }
 }

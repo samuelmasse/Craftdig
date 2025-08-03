@@ -1,3 +1,5 @@
+using System.Runtime;
+
 namespace AlvorEngine.Loop;
 
 public class RootLoop(RootArgs args)
@@ -6,6 +8,7 @@ public class RootLoop(RootArgs args)
     {
         CultureInfo.DefaultThreadCurrentCulture = CultureInfo.InvariantCulture;
         CultureInfo.DefaultThreadCurrentUICulture = CultureInfo.InvariantCulture;
+        GCSettings.LatencyMode = GCLatencyMode.SustainedLowLatency;
 
         using var manager = new WindowManager(args.Window);
         var injector = new Injector();

@@ -5,8 +5,11 @@ public class DimensionContext(
     DimensionChunkRequester chunkRequester,
     DimensionSectionRequester sectionRequester,
     DimensionChunkGeneratedEvent chunkGeneratedEvent,
-    DimensionChunkRenderScheduler chunkRenderScheduler)
+    DimensionChunkRenderScheduler chunkRenderScheduler,
+    DimensionChunkCollector chunkCollector)
 {
+    private bool requesterType;
+
     public void Update(double time)
     {
 
@@ -14,8 +17,13 @@ public class DimensionContext(
 
     public void Tick()
     {
-        chunkRequester.Tick();
-        sectionRequester.Tick();
+        chunkCollector.Collect();
+
+        if (requesterType)
+            chunkRequester.Tick();
+        else sectionRequester.Tick();
+
+        requesterType = !requesterType;
 
         chunkRenderScheduler.Tick();
         chunkGeneratedEvent.Reset();

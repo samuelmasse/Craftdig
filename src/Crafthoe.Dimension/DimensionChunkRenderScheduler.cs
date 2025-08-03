@@ -31,15 +31,10 @@ public class DimensionChunkRenderScheduler(DimensionChunks chunks, DimensionChun
             IsNull(cloc + (1, -1)))
             return;
 
-        var chunk = chunks[cloc].GetValueOrDefault();
-        var unrendered = chunk.ChunkUnrendered();
-        if (unrendered != null)
+        if (!chunks.TryGet(cloc, out var chunk) || chunk.IsUnrendered())
             return;
 
-        unrendered = [];
-        chunk.ChunkUnrendered(unrendered);
-
-        var mem = chunk.ChunkBlocks();
+        var mem = chunk.GetBlocks();
         for (int sz = 0; sz < HeightSize / SectionSize; sz++)
         {
             int start = sz * SectionSize * SectionSize * SectionSize;
@@ -56,9 +51,11 @@ public class DimensionChunkRenderScheduler(DimensionChunks chunks, DimensionChun
             }
 
             if (!uniform || block.IsSolid())
-                unrendered.Add(sz);
+                chunk.Unrendered().Add(sz, sz);
         }
+
+        chunk.IsUnrendered() = true;
     }
 
-    private bool IsNull(Vector2i cloc) => chunks[cloc] == null;
+    private bool IsNull(Vector2i cloc) => !chunks.TryGet(cloc, out _);
 }

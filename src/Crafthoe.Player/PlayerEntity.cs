@@ -1,7 +1,7 @@
 namespace Crafthoe.Player;
 
 [Player]
-public class PlayerEntity(Entity entity)
+public class PlayerEntity(EntRefMut entity)
 {
-    public Entity Entity => entity;
+    public EntRefMut Entity => entity;
 }

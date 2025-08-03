@@ -36,7 +36,7 @@ public class AppMenuState(
             dimensionScope.Add(new DimensionChunkGenerator(dimensionScope.Get<DimensionOverworldChunkGenerator>()));
 
             var players = dimensionScope.Get<DimensionPlayers>();
-            var player = new Entity();
+            var player = new EntObj();
             players.Add(player);
 
             var playerScope = dimensionScope.Scope<PlayerScope>();

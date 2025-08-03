@@ -20,13 +20,13 @@ public class DimensionOverworldChunkGenerator(ModuleBlocks block, DimensionBlock
                 for (int z = 0; z < HeightSize; z++)
                 {
                     int index = (z << (SectionBits * 2)) + (y << SectionBits) + x;
-                    mem[index] = Generate((loc.X + x, loc.Y + y, z));
+                    mem[index] = (Ent)Generate((loc.X + x, loc.Y + y, z));
                 }
             }
         }
     }
 
-    private ReadOnlyEntity Generate(Vector3i loc)
+    private EntRef Generate(Vector3i loc)
     {
         if (loc.X == 0 && loc.Y == 0)
             return block.Stone;

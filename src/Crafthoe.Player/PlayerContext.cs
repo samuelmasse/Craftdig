@@ -32,7 +32,7 @@ public class PlayerContext(
             MinFilter = TextureMinFilter.NearestMipmapLinear
         };
 
-        camera.Offset = (0, 80, 0);
+        camera.Offset = (0, 100, 0);
     }
 
     public void Update(double time)
@@ -93,18 +93,17 @@ public class PlayerContext(
                 if (dist > chunkRequester.Far)
                     continue;
 
-                var chunk = chunks[ncloc].GetValueOrDefault();
-                var rendered = chunk.ChunkRendered();
-                if (rendered == null)
+                if (!chunks.TryGet(ncloc, out var chunk))
                     continue;
 
-                foreach (var z in rendered)
+                for (int i = 0; i < chunk.Rendered().Count; i++)
                 {
+                    var z = chunk.Rendered()[chunk.Rendered().Keys[i]];
                     var nsloc = new Vector3i(ncloc.X, ncloc.Y, z);
-                    if (!sections.TryGet(nsloc, out var section) || section.SectionTerrainMesh().Count <= 0)
+                    if (!sections.TryGet(nsloc, out var section) || section.TerrainMesh().Count <= 0)
                         continue;
 
-                    var mesh = section.SectionTerrainMesh();
+                    var mesh = section.TerrainMesh();
                     gl.BindVertexArray(mesh.Vao);
                     gl.DrawElements(BeginMode.Triangles,
                         quadIndexBuffer.IndexCount(mesh.Count), DrawElementsType.UnsignedInt, 0);
