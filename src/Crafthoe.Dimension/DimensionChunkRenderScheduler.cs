@@ -38,7 +38,7 @@ public class DimensionChunkRenderScheduler(DimensionChunks chunks)
             var block = mem[start];
             bool uniform = true;
 
-            for (int i = 1; i < SectionSize * SectionSize; i++)
+            for (int i = 1; i < SectionSize * SectionSize * SectionSize; i++)
             {
                 if (mem[start + i] != block)
                 {
@@ -49,7 +49,7 @@ public class DimensionChunkRenderScheduler(DimensionChunks chunks)
 
             if (!uniform || block.IsSolid())
                 chunk.Unrendered().Add(sz, sz);
-        }
+         }
 
         chunk.IsUnrendered() = true;
     }
