@@ -10,7 +10,8 @@ file record DimensionComponents(
     [ComponentReturnSpan] Memory<Ent> Blocks,
     [ComponentReturnSpan] Memory<EntPtr> Sections,
     LazySortedList<int, int> Unrendered,
-    bool IsUnrendered,
+    bool IsUnrenderedListBuilt,
+    bool IsReadyToRender,
     LazySortedList<int, int> Rendered,
 
     // Section

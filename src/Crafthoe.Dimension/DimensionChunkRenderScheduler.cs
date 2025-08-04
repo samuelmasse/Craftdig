@@ -28,30 +28,35 @@ public class DimensionChunkRenderScheduler(DimensionChunks chunks)
             IsNull(cloc + (1, -1)))
             return;
 
-        if (!chunks.TryGet(cloc, out var chunk) || chunk.IsUnrendered())
+        if (!chunks.TryGet(cloc, out var chunk))
             return;
 
-        var mem = chunk.GetBlocks();
-        for (int sz = 0; sz < HeightSize / SectionSize; sz++)
+        if (!chunk.IsUnrenderedListBuilt())
         {
-            int start = sz * SectionSize * SectionSize * SectionSize;
-            var block = mem[start];
-            bool uniform = true;
-
-            for (int i = 1; i < SectionSize * SectionSize * SectionSize; i++)
+            var mem = chunk.GetBlocks();
+            for (int sz = 0; sz < HeightSize / SectionSize; sz++)
             {
-                if (mem[start + i] != block)
+                int start = sz * SectionSize * SectionSize * SectionSize;
+                var block = mem[start];
+                bool uniform = true;
+
+                for (int i = 1; i < SectionSize * SectionSize * SectionSize; i++)
                 {
-                    uniform = false;
-                    break;
+                    if (mem[start + i] != block)
+                    {
+                        uniform = false;
+                        break;
+                    }
                 }
+
+                if (!uniform || block.IsSolid())
+                    chunk.Unrendered().Add(sz, sz);
             }
 
-            if (!uniform || block.IsSolid())
-                chunk.Unrendered().Add(sz, sz);
-         }
+            chunk.IsUnrenderedListBuilt() = true;
+        }
 
-        chunk.IsUnrendered() = true;
+        chunk.IsReadyToRender() = true;
     }
 
     private bool IsNull(Vector2i cloc) => !chunks.TryGet(cloc, out _);

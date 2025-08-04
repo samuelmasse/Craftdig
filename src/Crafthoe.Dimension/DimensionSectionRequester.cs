@@ -53,7 +53,7 @@ public class DimensionSectionRequester(
             for (int dx = -chunkRequester.Far; dx <= chunkRequester.Far; dx++)
             {
                 var ncloc = center + (dx, dy);
-                if (!chunks.TryGet(ncloc, out var chunk) || chunk.Unrendered().Count == 0)
+                if (!chunks.TryGet(ncloc, out var chunk) || !chunk.IsReadyToRender() || chunk.Unrendered().Count == 0)
                     continue;
 
                 var delta = Vector2i.Abs(center - ncloc);
