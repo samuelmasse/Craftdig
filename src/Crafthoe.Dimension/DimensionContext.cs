@@ -4,8 +4,6 @@ namespace Crafthoe.Dimension;
 public class DimensionContext(
     DimensionChunkRequester chunkRequester,
     DimensionSectionRequester sectionRequester,
-    DimensionChunkGeneratedEvent chunkGeneratedEvent,
-    DimensionChunkRenderScheduler chunkRenderScheduler,
     DimensionChunkCollector chunkCollector)
 {
     private bool requesterType;
@@ -24,8 +22,5 @@ public class DimensionContext(
         else sectionRequester.Tick();
 
         requesterType = !requesterType;
-
-        chunkRenderScheduler.Tick();
-        chunkGeneratedEvent.Reset();
     }
 }

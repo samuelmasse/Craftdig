@@ -5,8 +5,8 @@ public class DimensionChunkLoader(
     DimensionChunks chunks,
     DimensionChunkGenerator chunkGenerator,
     DimensionMetrics metrics,
-    DimensionChunkIndex chunkIndex,
-    DimensionChunkGeneratedEvent chunkGeneratedEvent)
+    DimensionChunkRenderScheduler chunkRenderScheduler,
+    DimensionChunkIndex chunkIndex)
 {
     public void Load(Vector2i cloc)
     {
@@ -14,8 +14,8 @@ public class DimensionChunkLoader(
 
         var chunk = chunks.Alloc(cloc);
         chunkGenerator.Generate(cloc);
+        chunkRenderScheduler.Add(cloc);
         chunkIndex.Add(chunk);
-        chunkGeneratedEvent.Add(cloc);
 
         metrics.ChunkMetric.End();
     }

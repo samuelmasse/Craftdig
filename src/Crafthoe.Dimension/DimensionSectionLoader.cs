@@ -2,7 +2,7 @@ namespace Crafthoe.Dimension;
 
 [Dimension]
 public class DimensionSectionLoader(
-    RootPositionColorTextureProgram3D positionColorTextureProgram3D,
+    DimensionBlockProgram blockProgram,
     DimensionMetrics metrics,
     DimensionSectionMesher sectionMesher,
     DimensionMeshTransferer meshTransferer)
@@ -14,7 +14,7 @@ public class DimensionSectionLoader(
         sectionMesher.Render(section.Sloc());
 
         meshTransferer.Transfer(
-            positionColorTextureProgram3D,
+            blockProgram,
             sectionMesher.Vertices,
             ref section.TerrainMesh());
 

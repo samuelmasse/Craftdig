@@ -5,9 +5,9 @@ public class PlayerContext(
     RootMouse mouse,
     RootCanvas canvas,
     RootQuadIndexBuffer quadIndexBuffer,
-    RootPositionColorTextureProgram3D positionColorTextureProgram3D,
     RootPngs pngs,
     AppFiles files,
+    DimensionBlockProgram blockProgram,
     DimensionChunks chunks,
     DimensionSections sections,
     DimensionMetrics metrics,
@@ -20,8 +20,6 @@ public class PlayerContext(
 {
     private Texture texture = null!;
 
-    public Vector3 Position => (camera.Offset.X, camera.Offset.Z, camera.Offset.Y);
-
     public void Load()
     {
         var image = pngs[files["Textures/Noise.png"]];
@@ -32,7 +30,7 @@ public class PlayerContext(
             MinFilter = TextureMinFilter.NearestMipmapLinear
         };
 
-        camera.Offset = (0, 100, 0);
+        entity.Entity.Position() = (15, 15, 100);
     }
 
     public void Update(double time)
@@ -42,24 +40,29 @@ public class PlayerContext(
         if (controls.CameraFast.Run())
             speed *= 10;
 
+        var offset = entity.Entity.Position();
+        (offset.Y, offset.Z) = (offset.Z, offset.Y);
+
         if (controls.CameraFront.Run())
-            camera.Offset += camera.Front * speed;
+            offset += camera.Front * speed;
         if (controls.CameraLeft.Run())
-            camera.Offset -= camera.Right * speed;
+            offset -= camera.Right * speed;
         if (controls.CameraBack.Run())
-            camera.Offset -= camera.Front * speed;
+            offset -= camera.Front * speed;
         if (controls.CameraRight.Run())
-            camera.Offset += camera.Right * speed;
+            offset += camera.Right * speed;
 
         if (controls.CameraUp.Run())
-            camera.Offset.Y += speed;
+            offset.Y += speed;
         if (controls.CameraDown.Run())
-            camera.Offset.Y -= speed;
+            offset.Y -= speed;
+
+        (offset.Y, offset.Z) = (offset.Z, offset.Y);
 
         mouse.Track = true;
         camera.Rotate(-mouse.Delta / 300);
         camera.PreventBackFlipsAndFrontFlips();
-        entity.Entity.Position((camera.Offset.X, camera.Offset.Z, camera.Offset.Y));
+        entity.Entity.Position(offset);
     }
 
     public void Render()
@@ -73,12 +76,14 @@ public class PlayerContext(
         gl.Enable(EnableCap.CullFace);
         gl.CullFace(TriangleFace.Back);
 
-        gl.UseProgram(positionColorTextureProgram3D.Id);
-        positionColorTextureProgram3D.View = perspective.View;
-        positionColorTextureProgram3D.Projection = perspective.Projection;
-        texture.Bind(positionColorTextureProgram3D.SamplerTexture);
+        gl.UseProgram(blockProgram.Id);
+        blockProgram.View = perspective.View;
+        blockProgram.Projection = perspective.Projection;
+        texture.Bind(blockProgram.SamplerTexture);
 
-        var cloc = new Vector2i((int)camera.Offset.X, (int)camera.Offset.Z) / SectionSize;
+        var cloc = (Vector2i)(entity.Entity.Position().Xy / SectionSize);
+        var pos = entity.Entity.Position();
+        (pos.Y, pos.Z) = (pos.Z, pos.Y);
 
         metrics.RenderMetric.Start();
 
@@ -103,6 +108,8 @@ public class PlayerContext(
                     if (!sections.TryGet(nsloc, out var section) || section.TerrainMesh().Count <= 0)
                         continue;
 
+                    blockProgram.Offset = (Vector3)(new Vector3i(nsloc.X, nsloc.Z, nsloc.Y) * SectionSize - pos);
+
                     var mesh = section.TerrainMesh();
                     gl.BindVertexArray(mesh.Vao);
                     gl.DrawElements(BeginMode.Triangles,
@@ -114,7 +121,7 @@ public class PlayerContext(
 
         metrics.RenderMetric.End();
 
-        texture.Unbind(positionColorTextureProgram3D.SamplerTexture);
+        texture.Unbind(blockProgram.SamplerTexture);
         gl.UnuseProgram();
 
         gl.ResetCullFace();

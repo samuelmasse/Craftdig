@@ -14,16 +14,16 @@ public class DimensionSectionMesher(RootCube cube, DimensionBlocks blocks)
         for (int z = 0; z < SectionSize; z++)
             for (int y = 0; y < SectionSize; y++)
                 for (int x = 0; x < SectionSize; x++)
-                    RenderBlock(loc + (x, y, z));
+                    RenderBlock(loc, loc + (x, y, z));
     }
 
-    public void RenderBlock(Vector3i loc)
+    public void RenderBlock(Vector3i origin, Vector3i loc)
     {
         blocks.TryGet(loc, out var block);
         if (!block.IsSolid())
             return;
 
-        var rloc = new Vector3i(loc.X, loc.Z, loc.Y);
+        var rloc = new Vector3i(loc.X, loc.Z, loc.Y) - (origin.X, origin.Z, origin.Y);
 
         blocks.TryGet(loc + (0, 1, 0), out var front);
         blocks.TryGet(loc - (0, 1, 0), out var back);

@@ -14,7 +14,8 @@ public class PlayerState(
     RootRoboto roboto,
     DimensionContext dimension,
     DimensionMetrics dimensionsMetrics,
-    PlayerContext player,
+    PlayerContext playerContext,
+    PlayerEntity playerEntity,
     PlayerCamera camera) : State
 {
     private bool paused;
@@ -23,7 +24,7 @@ public class PlayerState(
     [
         () => text.Format("Frame: {0}. {1:F3} ms ({2} FPS)",
             metrics.Frame.Ticks, metrics.FrameWindow.Average, metrics.FrameWindow.Ticks),
-        () => text.Format("Position: {0:F3}", camera.Offset),
+        () => text.Format("Position: {0:F3}", playerEntity.Entity.Position()),
         () => text.Format("Rotation: {0:F3}", camera.Rotation),
         () => text.Format("Spike: {0}", metrics.Frame.Max),
         () => text.Format("Render: {0}", dimensionsMetrics.RenderMetric.Value.Max),
@@ -34,7 +35,7 @@ public class PlayerState(
 
     public override void Load()
     {
-        player.Load();
+        playerContext.Load();
     }
 
     public override void Update(double time)
@@ -46,7 +47,7 @@ public class PlayerState(
         if (!paused)
         {
             dimension.Update(time);
-            player.Update(time);
+            playerContext.Update(time);
         }
 
         mouse.CursorState = mouse.Track ? CursorState.Grabbed : CursorState.Normal;
@@ -56,7 +57,7 @@ public class PlayerState(
     {
         dimension.Tick();
         backbuffer.Clear();
-        player.Render();
+        playerContext.Render();
     }
 
     public override void Draw()

@@ -18,16 +18,25 @@ public class RootText
         Fmt((Vector2i val, Span<char> dst, out int w, ReadOnlySpan<char> fmt) =>
             Vector((val.X, val.Y, 0, 0), 2, dst, out w, fmt));
 
+        Fmt((Vector2d val, Span<char> dst, out int w, ReadOnlySpan<char> fmt) =>
+            Vector((val.X, val.Y, 0, 0), 2, dst, out w, fmt));
+
         Fmt((Vector3 val, Span<char> dst, out int w, ReadOnlySpan<char> fmt) =>
             Vector((val.X, val.Y, val.Z, 0), 3, dst, out w, fmt));
 
         Fmt((Vector3i val, Span<char> dst, out int w, ReadOnlySpan<char> fmt) =>
             Vector((val.X, val.Y, val.Z, 0), 3, dst, out w, fmt));
 
+        Fmt((Vector3d val, Span<char> dst, out int w, ReadOnlySpan<char> fmt) =>
+            Vector((val.X, val.Y, val.Z, 0), 3, dst, out w, fmt));
+
         Fmt((Vector4 val, Span<char> dst, out int w, ReadOnlySpan<char> fmt) =>
             Vector((val.X, val.Y, val.Z, val.W), 4, dst, out w, fmt));
 
         Fmt((Vector4i val, Span<char> dst, out int w, ReadOnlySpan<char> fmt) =>
+            Vector((val.X, val.Y, val.Z, val.W), 4, dst, out w, fmt));
+
+        Fmt((Vector4d val, Span<char> dst, out int w, ReadOnlySpan<char> fmt) =>
             Vector((val.X, val.Y, val.Z, val.W), 4, dst, out w, fmt));
 
         static bool Vector<T>((T, T, T, T) val, int count, Span<char> dst,

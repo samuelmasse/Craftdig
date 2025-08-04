@@ -1,22 +1,19 @@
 namespace Crafthoe.Dimension;
 
 [Dimension]
-public class DimensionChunkRenderScheduler(DimensionChunks chunks, DimensionChunkGeneratedEvent chunkGeneratedEvent)
+public class DimensionChunkRenderScheduler(DimensionChunks chunks)
 {
-    public void Tick()
+    public void Add(Vector2i cloc)
     {
-        foreach (var e in chunkGeneratedEvent.Events)
-        {
-            Process(e);
-            Process(e + (1, 0));
-            Process(e + (0, 1));
-            Process(e + (-1, 0));
-            Process(e + (0, -1));
-            Process(e + (1, 1));
-            Process(e + (-1, 1));
-            Process(e + (-1, -1));
-            Process(e + (1, -1));
-        }
+        Process(cloc);
+        Process(cloc + (1, 0));
+        Process(cloc + (0, 1));
+        Process(cloc + (-1, 0));
+        Process(cloc + (0, -1));
+        Process(cloc + (1, 1));
+        Process(cloc + (-1, 1));
+        Process(cloc + (-1, -1));
+        Process(cloc + (1, -1));
     }
 
     private void Process(Vector2i cloc)

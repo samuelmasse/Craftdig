@@ -2,7 +2,7 @@ namespace Crafthoe.Dimension;
 
 [Components]
 file record DimensionComponents(
-    Vector3 Position,
+    Vector3d Position,
 
     // Chunk
     [ComponentToString] bool IsChunk,
