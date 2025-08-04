@@ -1,7 +1,7 @@
 namespace Crafthoe.Dimension;
 
 [Dimension]
-public class DimensionBlockProgram : RenderProgram3D<PositionColorTextureVertex>
+public class DimensionBlockProgram : RenderProgram3D<BlockVertex>
 {
     private readonly int vecOffset;
     private readonly TextureUnit samplerTexture;

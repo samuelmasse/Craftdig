@@ -18,17 +18,45 @@ public class PlayerContext(
     PlayerControls controls,
     PlayerEntity entity)
 {
-    private Texture texture = null!;
+    private Texture texArray = null!;
 
     public void Load()
     {
         var image = pngs[files["Textures/Noise.png"]];
-        texture = new Texture2D(gl, image.Size)
+
+        texArray = new Texture(gl, (image.Size.X, image.Size.Y), TextureTarget.Texture2DArray)
         {
-            PixelsMipmap = image.Pixels.Span,
             MagFilter = TextureMagFilter.Nearest,
-            MinFilter = TextureMinFilter.NearestMipmapLinear
+            MinFilter = TextureMinFilter.NearestMipmapLinear,
+            WrapS = TextureWrapMode.Repeat,
+            WrapT = TextureWrapMode.Repeat
         };
+
+        texArray.Bind();
+        gl.ActiveTexture(TextureUnit.Texture0);
+        gl.TexImage3D(TextureTarget.Texture2DArray,
+            0,
+            PixelInternalFormat.Rgba,
+            (int)texArray.Size.X,
+            (int)texArray.Size.Y,
+            0xFF,
+            0,
+            PixelFormat.Rgba,
+            PixelType.UnsignedByte,
+            0,
+            sizeof(byte),
+            4);
+
+        var pixels = new (byte, byte, byte, byte)[image.Pixels.Length];
+        image.Pixels.CopyTo(pixels);
+        GL.TexSubImage3D(
+            TextureTarget.Texture2DArray,
+            0, 0, 0, 0,
+            (int)texArray.Size.X, (int)texArray.Size.Y, 1, PixelFormat.Rgba, PixelType.UnsignedByte, pixels);
+
+        gl.ResetActiveTexture();
+        texArray.Unbind();
+        texArray.GenerateMipmap();
 
         entity.Entity.Position() = (15, 15, 100);
     }
@@ -79,7 +107,7 @@ public class PlayerContext(
         gl.UseProgram(blockProgram.Id);
         blockProgram.View = perspective.View;
         blockProgram.Projection = perspective.Projection;
-        texture.Bind(blockProgram.SamplerTexture);
+        texArray.Bind(blockProgram.SamplerTexture);
 
         var cloc = (Vector2i)(entity.Entity.Position().Xy / SectionSize);
         var pos = entity.Entity.Position();
@@ -121,7 +149,7 @@ public class PlayerContext(
 
         metrics.RenderMetric.End();
 
-        texture.Unbind(blockProgram.SamplerTexture);
+        texArray.Unbind(blockProgram.SamplerTexture);
         gl.UnuseProgram();
 
         gl.ResetCullFace();
