@@ -6,7 +6,6 @@ public class PlayerState(
     RootCanvas canvas,
     RootMouse mouse,
     RootKeyboard keyboard,
-    RootBackbuffer backbuffer,
     RootSprites sprites,
     RootMetrics metrics,
     RootText text,
@@ -56,7 +55,6 @@ public class PlayerState(
     public override void Render()
     {
         dimension.Tick();
-        backbuffer.Clear();
         playerContext.Render();
     }
 

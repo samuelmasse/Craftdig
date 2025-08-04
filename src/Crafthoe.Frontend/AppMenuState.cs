@@ -33,7 +33,11 @@ public class AppMenuState(
             var moduleScope = scope.Scope<ModuleScope>();
             var worldScope = moduleScope.Scope<WorldScope>();
             var dimensionScope = worldScope.Scope<DimensionScope>();
-            dimensionScope.Add(new DimensionChunkGenerator(dimensionScope.Get<DimensionOverworldChunkGenerator>()));
+
+            dimensionScope.Add(new DimensionTerrainGenerator(
+                dimensionScope.Get<DimensionOverworldTerrainGenerator>()));
+            dimensionScope.Add(new DimensionBiomeGenerator(
+                dimensionScope.Get<DimensionOverworldBiomeGenerator>()));
 
             var players = dimensionScope.Get<DimensionPlayers>();
             var player = new EntObj();

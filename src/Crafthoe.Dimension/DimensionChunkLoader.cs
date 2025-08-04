@@ -3,7 +3,8 @@ namespace Crafthoe.Dimension;
 [Dimension]
 public class DimensionChunkLoader(
     DimensionChunks chunks,
-    DimensionChunkGenerator chunkGenerator,
+    DimensionTerrainGenerator chunkGenerator,
+    DimensionBiomeGenerator biomeGenerator,
     DimensionMetrics metrics,
     DimensionChunkRenderScheduler chunkRenderScheduler,
     DimensionChunkIndex chunkIndex)
@@ -14,6 +15,7 @@ public class DimensionChunkLoader(
 
         var chunk = chunks.Alloc(cloc);
         chunkGenerator.Generate(cloc);
+        biomeGenerator.Generate(cloc);
         chunkRenderScheduler.Add(cloc);
         chunkIndex.Add(chunk);
 

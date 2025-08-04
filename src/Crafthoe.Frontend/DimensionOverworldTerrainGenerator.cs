@@ -2,7 +2,7 @@
 namespace Crafthoe.Frontend;
 
 [Dimension]
-public class DimensionOverworldChunkGenerator(ModuleBlocks block, DimensionBlocks blocks) : IChunkGenerator
+public class DimensionOverworldTerrainGenerator(ModuleBlocks block, DimensionBlocks blocks) : ITerrainGenerator
 {
     private readonly FastNoiseLite noise = new();
 

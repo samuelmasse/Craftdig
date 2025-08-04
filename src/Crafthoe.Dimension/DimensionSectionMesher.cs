@@ -3,9 +3,9 @@ namespace Crafthoe.Dimension;
 [Dimension]
 public class DimensionSectionMesher(RootCube cube, DimensionBlocks blocks)
 {
-    private readonly List<PositionColorTextureVertex> vertices = [];
+    private readonly List<BlockVertex> vertices = [];
 
-    public ReadOnlySpan<PositionColorTextureVertex> Vertices => CollectionsMarshal.AsSpan(vertices);
+    public ReadOnlySpan<BlockVertex> Vertices => CollectionsMarshal.AsSpan(vertices);
 
     public void Render(Vector3i sloc)
     {
@@ -34,27 +34,29 @@ public class DimensionSectionMesher(RootCube cube, DimensionBlocks blocks)
         blocks.TryGet(loc + (0, 0, 1), out var top);
         blocks.TryGet(loc - (0, 0, 1), out var bottom);
 
+        var faces = block.Faces();
+
         if (!front.IsSolid())
-            AddQuad(cube.Front.Quad, 1);
+            AddQuad(cube.Front.Quad, 0.8f, faces.Front.FaceIndex());
         if (!back.IsSolid())
-            AddQuad(cube.Back.Quad, 1);
+            AddQuad(cube.Back.Quad, 0.8f, faces.Back.FaceIndex());
 
         if (!left.IsSolid())
-            AddQuad(cube.Left.Quad, 0.5f);
+            AddQuad(cube.Left.Quad, 0.6f, faces.Left.FaceIndex());
         if (!right.IsSolid())
-            AddQuad(cube.Right.Quad, 0.5f);
+            AddQuad(cube.Right.Quad, 0.6f, faces.Right.FaceIndex());
 
         if (!top.IsSolid())
-            AddQuad(cube.Top.Quad, 0.8f);
+            AddQuad(cube.Top.Quad, 1f, faces.Top.FaceIndex());
         if (!bottom.IsSolid())
-            AddQuad(cube.Bottom.Quad, 0.8f);
+            AddQuad(cube.Bottom.Quad, 0.5f, faces.Bottom.FaceIndex());
 
-        void AddQuad(Quad quad, float shadow)
+        void AddQuad(Quad quad, float shadow, int texture)
         {
-            vertices.Add(new(quad.TopLeft + rloc, Vector3.One * shadow, (0, 1)));
-            vertices.Add(new(quad.TopRight + rloc, Vector3.One * shadow, (1, 1)));
-            vertices.Add(new(quad.BottomLeft + rloc, Vector3.One * shadow, (0, 0)));
-            vertices.Add(new(quad.BottomRight + rloc, Vector3.One * shadow, (1, 0)));
+            vertices.Add(new(quad.TopLeft + rloc, Vector3.One * shadow, (0, 1, texture)));
+            vertices.Add(new(quad.TopRight + rloc, Vector3.One * shadow, (1, 1, texture)));
+            vertices.Add(new(quad.BottomLeft + rloc, Vector3.One * shadow, (0, 0, texture)));
+            vertices.Add(new(quad.BottomRight + rloc, Vector3.One * shadow, (1, 0, texture)));
         }
     }
 

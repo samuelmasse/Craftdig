@@ -1,6 +1,6 @@
 namespace Crafthoe.Dimension;
 
-public interface IChunkGenerator
+public interface ITerrainGenerator
 {
     void Generate(Vector2i cloc);
 }

@@ -4,4 +4,14 @@ namespace Crafthoe.Module;
 file record ModuleComponents(
     [ComponentToString] long ModuleId,
     [ComponentToString] string ModuleName,
-    bool IsSolid);
+
+    // Block
+    [ComponentToString] bool IsBlock,
+    BlockFaces Faces,
+    bool IsSolid,
+
+    // Face
+    [ComponentToString] bool IsFace,
+    [ComponentToString] string FaceFile,
+    [ComponentToString] int FaceIndex
+);

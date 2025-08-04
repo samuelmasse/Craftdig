@@ -5,8 +5,8 @@ public class PlayerContext(
     RootMouse mouse,
     RootCanvas canvas,
     RootQuadIndexBuffer quadIndexBuffer,
-    RootPngs pngs,
-    AppFiles files,
+    RootBackbuffer backbuffer,
+    ModuleBlockAtlas blockAtlas,
     DimensionBlockProgram blockProgram,
     DimensionChunks chunks,
     DimensionSections sections,
@@ -18,46 +18,8 @@ public class PlayerContext(
     PlayerControls controls,
     PlayerEntity entity)
 {
-    private Texture texArray = null!;
-
     public void Load()
     {
-        var image = pngs[files["Textures/Noise.png"]];
-
-        texArray = new Texture(gl, (image.Size.X, image.Size.Y), TextureTarget.Texture2DArray)
-        {
-            MagFilter = TextureMagFilter.Nearest,
-            MinFilter = TextureMinFilter.NearestMipmapLinear,
-            WrapS = TextureWrapMode.Repeat,
-            WrapT = TextureWrapMode.Repeat
-        };
-
-        texArray.Bind();
-        gl.ActiveTexture(TextureUnit.Texture0);
-        gl.TexImage3D(TextureTarget.Texture2DArray,
-            0,
-            PixelInternalFormat.Rgba,
-            (int)texArray.Size.X,
-            (int)texArray.Size.Y,
-            0xFF,
-            0,
-            PixelFormat.Rgba,
-            PixelType.UnsignedByte,
-            0,
-            sizeof(byte),
-            4);
-
-        var pixels = new (byte, byte, byte, byte)[image.Pixels.Length];
-        image.Pixels.CopyTo(pixels);
-        GL.TexSubImage3D(
-            TextureTarget.Texture2DArray,
-            0, 0, 0, 0,
-            (int)texArray.Size.X, (int)texArray.Size.Y, 1, PixelFormat.Rgba, PixelType.UnsignedByte, pixels);
-
-        gl.ResetActiveTexture();
-        texArray.Unbind();
-        texArray.GenerateMipmap();
-
         entity.Entity.Position() = (15, 15, 100);
     }
 
@@ -95,6 +57,8 @@ public class PlayerContext(
 
     public void Render()
     {
+        var sky = new Vector3(127, 172, 255);
+        backbuffer.Clear(new Vector4(sky / 0xFF, 1));
         camera.ComputeVectors();
         perspective.ComputeMatrix(canvas.Size, camera);
 
@@ -107,7 +71,7 @@ public class PlayerContext(
         gl.UseProgram(blockProgram.Id);
         blockProgram.View = perspective.View;
         blockProgram.Projection = perspective.Projection;
-        texArray.Bind(blockProgram.SamplerTexture);
+        blockAtlas.Bind(blockProgram.SamplerTexture);
 
         var cloc = (Vector2i)(entity.Entity.Position().Xy / SectionSize);
         var pos = entity.Entity.Position();
@@ -149,7 +113,7 @@ public class PlayerContext(
 
         metrics.RenderMetric.End();
 
-        texArray.Unbind(blockProgram.SamplerTexture);
+        blockAtlas.Unbind(blockProgram.SamplerTexture);
         gl.UnuseProgram();
 
         gl.ResetCullFace();

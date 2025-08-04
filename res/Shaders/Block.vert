@@ -2,10 +2,10 @@
 
 layout (location = 0) in vec3 inPosition;
 layout (location = 1) in vec3 inColor;
-layout (location = 2) in vec2 inTexCoord;
+layout (location = 2) in vec3 inTexCoord;
 
 out vec3 fragColor;
-out vec2 fragTexCoord;
+out vec3 fragTexCoord;
 
 uniform mat4 matView;
 uniform mat4 matProjection;
