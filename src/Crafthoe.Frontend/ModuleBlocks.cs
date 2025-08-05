@@ -3,25 +3,20 @@ namespace Crafthoe.Frontend;
 [Module]
 public class ModuleBlocks
 {
-    private readonly ModuleBlockFaces faces;
+    public readonly Ent Air;
+    public readonly Ent Grass;
+    public readonly Ent Dirt;
+    public readonly Ent Stone;
 
-    public readonly EntRef Air;
-    public readonly EntRef Grass;
-    public readonly EntRef Dirt;
-    public readonly EntRef Stone;
-
-    public ModuleBlocks(ModuleBlockFaces faces)
+    public ModuleBlocks(ModuleEntities entities, ModuleBlockFaces faces)
     {
-        this.faces = faces;
+        Air = entities["AirBlock"]
+            .IsBlock(true);
 
-        Air = new EntObj()
-            .ModuleId(1)
-            .ModuleName("Air");
-
-        Grass = new EntObj()
-            .ModuleId(2)
-            .ModuleName("Grass")
+        Grass = entities["GrassBlock"]
+            .IsBlock(true)
             .IsSolid(true)
+            .IsBuildable(true)
             .Faces(new()
             {
                 Top = faces.Grass,
@@ -32,16 +27,16 @@ public class ModuleBlocks
                 Back = faces.GrassSide
             });
 
-        Dirt = new EntObj()
-            .ModuleId(3)
-            .ModuleName("Dirt")
+        Dirt = entities["DirtBlock"]
+            .IsBlock(true)
             .IsSolid(true)
+            .IsBuildable(true)
             .Faces(new(faces.Dirt));
 
-        Stone = new EntObj()
-            .ModuleId(4)
-            .ModuleName("Stone")
+        Stone = entities["StoneBlock"]
+            .IsBlock(true)
             .IsSolid(true)
+            .IsBuildable(true)
             .Faces(new(faces.Stone));
     }
 }

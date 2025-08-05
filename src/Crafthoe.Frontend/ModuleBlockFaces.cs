@@ -3,45 +3,32 @@ namespace Crafthoe.Frontend;
 [Module]
 public class ModuleBlockFaces
 {
-    private readonly EntRef grass;
-    private readonly EntRef grassSide;
-    private readonly EntRef stone;
-    private readonly EntRef dirt;
+    public readonly Ent Grass;
+    public readonly Ent GrassSide;
+    public readonly Ent Stone;
+    public readonly Ent Dirt;
 
-    public Ent Grass => (Ent)grass;
-    public Ent GrassSide => (Ent)grassSide;
-    public Ent Stone => (Ent)stone;
-    public Ent Dirt => (Ent)dirt;
-
-    public ModuleBlockFaces(ModuleBlockAtlas blockAtlas)
+    public ModuleBlockFaces(ModuleEntities entities, ModuleBlockAtlas blockAtlas)
     {
-        var faces = new List<EntObj>();
+        var faces = new List<EntMut>();
 
-        grass = Face()
-            .ModuleName("GrassFace")
-            .IsFace(true)
+        Grass = Face("GrassFace")
             .FaceFile("Grass");
 
-        grassSide = Face()
-            .ModuleName("GrassSideFace")
-            .IsFace(true)
+        GrassSide = Face("GrassSideFace")
             .FaceFile("GrassSide");
 
-        stone = Face()
-            .ModuleName("StoneFace")
-            .IsFace(true)
+        Stone = Face("StoneFace")
             .FaceFile("Stone");
 
-        dirt = Face()
-            .ModuleName("DirtFace")
-            .IsFace(true)
+        Dirt = Face("DirtFace")
             .FaceFile("Dirt");
 
         faces.ForEach(x => x.FaceIndex(blockAtlas[x.FaceFile()]));
 
-        EntObj Face()
+        EntMut Face(string name)
         {
-            var ent = new EntObj();
+            var ent = entities[name].IsFace(true);
             faces.Add(ent);
             return ent;
         }

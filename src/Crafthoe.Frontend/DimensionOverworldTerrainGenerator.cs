@@ -2,7 +2,7 @@
 namespace Crafthoe.Frontend;
 
 [Dimension]
-public class DimensionOverworldTerrainGenerator(ModuleBlocks block, DimensionBlocks blocks) : ITerrainGenerator
+public class DimensionOverworldTerrainGenerator(ModuleBlocks block, DimensionBlocksRaw blocksRaw) : ITerrainGenerator
 {
     private readonly FastNoiseLite noise = new();
 
@@ -10,23 +10,16 @@ public class DimensionOverworldTerrainGenerator(ModuleBlocks block, DimensionBlo
     {
         noise.SetFractalType(FastNoiseLite.FractalType.FBm);
 
-        var mem = blocks.ChunkBlocks(cloc);
+        var mem = blocksRaw.Span(cloc);
         var loc = cloc * SectionSize;
 
         for (int y = 0; y < SectionSize; y++)
-        {
             for (int x = 0; x < SectionSize; x++)
-            {
                 for (int z = 0; z < HeightSize; z++)
-                {
-                    int index = (z << (SectionBits * 2)) + (y << SectionBits) + x;
-                    mem[index] = (Ent)Generate((loc.X + x, loc.Y + y, z));
-                }
-            }
-        }
+                    mem[new Vector3i(x, y, z).ToInnerIndex()] = Generate((loc.X + x, loc.Y + y, z));
     }
 
-    private EntRef Generate(Vector3i loc)
+    private Ent Generate(Vector3i loc)
     {
         if (loc.X == 0 && loc.Y == 0)
             return block.Stone;

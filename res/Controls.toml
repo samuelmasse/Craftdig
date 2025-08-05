@@ -1,6 +1,6 @@
 [CameraFast]
-Shift = "Down"
-Control = "Any"
+Control = "Down"
+Shift = "Any"
 [CameraFront]
 KeyDown = "W"
 Shift = "Any"
@@ -22,5 +22,5 @@ KeyDown = "Space"
 Shift = "Any"
 Control = "Any"
 [CameraDown]
-Control = "Down"
-Shift = "Any"
+Shift = "Down"
+Control = "Any"

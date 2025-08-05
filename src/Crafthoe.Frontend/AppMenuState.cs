@@ -34,6 +34,7 @@ public class AppMenuState(
             var worldScope = moduleScope.Scope<WorldScope>();
             var dimensionScope = worldScope.Scope<DimensionScope>();
 
+            dimensionScope.Add(new DimensionAir(moduleScope.Get<ModuleBlocks>().Air));
             dimensionScope.Add(new DimensionTerrainGenerator(
                 dimensionScope.Get<DimensionOverworldTerrainGenerator>()));
             dimensionScope.Add(new DimensionBiomeGenerator(

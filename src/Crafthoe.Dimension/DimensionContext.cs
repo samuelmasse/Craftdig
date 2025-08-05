@@ -2,11 +2,16 @@ namespace Crafthoe.Dimension;
 
 [Dimension]
 public class DimensionContext(
+    DimensionScope scope,
     DimensionChunkRequester chunkRequester,
+    DimensionChunkCollector chunkCollector,
     DimensionSectionRequester sectionRequester,
-    DimensionChunkCollector chunkCollector)
+    DimensionSectionInvalidation sectionInvalidation,
+    DimensionBlockChanges blockChanges)
 {
     private bool requesterType;
+
+    public DimensionScope Scope => scope;
 
     public void Update(double time)
     {
@@ -15,6 +20,7 @@ public class DimensionContext(
 
     public void Tick()
     {
+        sectionInvalidation.Tick();
         chunkCollector.Collect();
 
         if (requesterType)
@@ -22,5 +28,7 @@ public class DimensionContext(
         else sectionRequester.Tick();
 
         requesterType = !requesterType;
+
+        blockChanges.Clear();
     }
 }

@@ -6,7 +6,7 @@ public class DimensionChunkUnloader(
     DimensionChunkIndex chunkIndex,
     DimensionMeshTransferer meshTransferer,
     DimensionSections sections,
-    DimensionBlocks blocks,
+    DimensionBlocksRaw blocksRaw,
     DimensionChunkRenderDescheduler chunkRenderDescheduler)
 {
     public void Unload(Vector2i cloc)
@@ -28,7 +28,7 @@ public class DimensionChunkUnloader(
         if (!chunk.Sections().IsEmpty)
             sections.ReturnSections(chunk.Sections());
         if (!chunk.Blocks().IsEmpty)
-            blocks.ReturnBlocks(chunk.Blocks());
+            blocksRaw.Return(chunk.Blocks());
 
         chunks.Free(cloc);
     }

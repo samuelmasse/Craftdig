@@ -15,7 +15,8 @@ public class PlayerState(
     DimensionMetrics dimensionsMetrics,
     PlayerContext playerContext,
     PlayerEntity playerEntity,
-    PlayerCamera camera) : State
+    PlayerCamera camera,
+    PlayerSelected selected) : State
 {
     private bool paused;
 
@@ -29,7 +30,9 @@ public class PlayerState(
         () => text.Format("Render: {0}", dimensionsMetrics.RenderMetric.Value.Max),
         () => text.Format("Chunk: {0}", dimensionsMetrics.ChunkMetric.Value.Max),
         () => text.Format("Section: {0}", dimensionsMetrics.SectionMetric.Value.Max),
-        () => text.Format("Buffers: {0}", gl.BufferTotalUsage)
+        () => text.Format("Buffers: {0}", gl.BufferTotalUsage),
+        () => text.Format("Selected Loc: {0}", selected.Loc.GetValueOrDefault()),
+        () => text.Format("Selected Normal: {0}", selected.Normal.GetValueOrDefault())
     ];
 
     public override void Load()
@@ -67,5 +70,12 @@ public class PlayerState(
 
         if (paused)
             sprites.Batch.Draw((0, 0), canvas.Size, (0.3f, 0.3f, 0.3f, 0.3f));
+
+        float cht = scale[4];
+        float chl = cht * 9;
+        var c = canvas.Size / 2;
+
+        sprites.Batch.Draw(c - (cht / 2, chl / 2), (cht, chl));
+        sprites.Batch.Draw(c - (chl / 2, cht / 2), (chl, cht));
     }
 }

@@ -30,7 +30,7 @@ public class DimensionChunkCollector(
 
         foreach (var player in players.Players)
         {
-            var pcloc = (Vector2i)player.Position().Xy / SectionSize;
+            var pcloc = player.Position().ToLoc().Xy.ToCloc();
 
             var delta = Vector2i.Abs(chunk.Cloc() - pcloc);
             var dist = delta.X + delta.Y;

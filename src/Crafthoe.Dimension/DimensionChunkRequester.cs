@@ -26,7 +26,7 @@ public class DimensionChunkRequester(
     private Vector2i RandomPlayerChunkLocation()
     {
         var player = players.Players[rng.Next(players.Players.Length)];
-        return (Vector2i)player.Position().Xy / SectionSize;
+        return player.Position().ToLoc().Xy.ToCloc();
     }
 
     private bool LoadNearestChunk(Vector2i cloc)

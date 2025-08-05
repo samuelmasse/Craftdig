@@ -34,13 +34,13 @@ public class DimensionChunkRenderScheduler(DimensionChunks chunks)
         if (!chunk.IsUnrenderedListBuilt())
         {
             var mem = chunk.GetBlocks();
-            for (int sz = 0; sz < HeightSize / SectionSize; sz++)
+            for (int sz = 0; sz < SectionHeight; sz++)
             {
-                int start = sz * SectionSize * SectionSize * SectionSize;
+                int start = sz * SectionVolume;
                 var block = mem[start];
                 bool uniform = true;
 
-                for (int i = 1; i < SectionSize * SectionSize * SectionSize; i++)
+                for (int i = 1; i < SectionVolume; i++)
                 {
                     if (mem[start + i] != block)
                     {

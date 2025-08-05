@@ -21,7 +21,8 @@ public class DimensionSectionLoader(
         sectionMesher.Reset();
 
         section.Chunk().Unrendered().Remove(section.Sloc().Z);
-        section.Chunk().Rendered().Add(section.Sloc().Z, section.Sloc().Z);
+        if (!section.Chunk().Rendered().ContainsKey(section.Sloc().Z))
+            section.Chunk().Rendered().Add(section.Sloc().Z, section.Sloc().Z);
 
         metrics.SectionMetric.End();
     }

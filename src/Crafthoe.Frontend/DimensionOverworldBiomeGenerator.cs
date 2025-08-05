@@ -2,11 +2,11 @@
 namespace Crafthoe.Frontend;
 
 [Dimension]
-public class DimensionOverworldBiomeGenerator(ModuleBlocks block, DimensionBlocks blocks) : IBiomeGenerator
+public class DimensionOverworldBiomeGenerator(ModuleBlocks block, DimensionBlocksRaw blocksRaw) : IBiomeGenerator
 {
     public void Generate(Vector2i cloc)
     {
-        var mem = blocks.ChunkBlocks(cloc);
+        var mem = blocksRaw.Span(cloc);
         var loc = cloc * SectionSize;
 
         bool wasAir = true;
@@ -17,8 +17,7 @@ public class DimensionOverworldBiomeGenerator(ModuleBlocks block, DimensionBlock
             {
                 for (int z = HeightSize - 1; z >= 0; z--)
                 {
-                    int index = (z << (SectionBits * 2)) + (y << SectionBits) + x;
-                    var block = mem[index];
+                    var block = mem[new Vector3i(x, y, z).ToInnerIndex()];
 
                     if (block.IsSolid())
                     {
@@ -35,8 +34,8 @@ public class DimensionOverworldBiomeGenerator(ModuleBlocks block, DimensionBlock
 
     private void Generate(Vector3i loc)
     {
-        blocks.TrySet(loc, (Ent)block.Grass);
-        blocks.TrySet(loc - (0, 0, 1), (Ent)block.Dirt);
-        blocks.TrySet(loc - (0, 0, 2), (Ent)block.Dirt);
+        blocksRaw.TrySet(loc, (Ent)block.Grass);
+        blocksRaw.TrySet(loc - (0, 0, 1), (Ent)block.Dirt);
+        blocksRaw.TrySet(loc - (0, 0, 2), (Ent)block.Dirt);
     }
 }

@@ -2,11 +2,11 @@ namespace Crafthoe.Module;
 
 [Components]
 file record ModuleComponents(
-    [ComponentToString] long ModuleId,
     [ComponentToString] string ModuleName,
 
     // Block
     [ComponentToString] bool IsBlock,
+    bool IsBuildable,
     BlockFaces Faces,
     bool IsSolid,
 
