@@ -40,7 +40,6 @@ public class PlayerContext(
                 blocks.Add(ent);
         }
 
-        blocks.ForEach(x => Console.WriteLine(x.ModuleName()));
         buildableBlocks = [.. blocks];
     }
 

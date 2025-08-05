@@ -10,7 +10,7 @@ public class PlayerState(
     RootMetrics metrics,
     RootText text,
     RootScale scale,
-    RootRoboto roboto,
+    AppMonocraft monocraft,
     DimensionContext dimension,
     DimensionMetrics dimensionsMetrics,
     PlayerContext playerContext,
@@ -63,10 +63,10 @@ public class PlayerState(
 
     public override void Draw()
     {
-        var fontSize = roboto[scale[22]];
+        var fontSize = monocraft[scale[22]];
 
         for (int i = 0; i < lines.Length; i++)
-            sprites.Batch.Write(fontSize, lines[i].Invoke(), (scale[17], scale[25] + i * fontSize.Metrics.Height));
+            sprites.Batch.Write(fontSize, lines[i].Invoke(), (scale[10], scale[20] + i * fontSize.Metrics.Height));
 
         if (paused)
             sprites.Batch.Draw((0, 0), canvas.Size, (0.3f, 0.3f, 0.3f, 0.3f));
