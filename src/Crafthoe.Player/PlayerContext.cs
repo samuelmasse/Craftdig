@@ -23,6 +23,7 @@ public class PlayerContext(
     public void Load()
     {
         ent.Ent.Position() = (15, 0, 100);
+        ent.Ent.HitBox() = new Box3d((-0.3, -0.3, -1.62), (0.3, 0.3, 0.18));
         rigidBag.Add((EntMut)ent.Ent);
 
         var blocks = new List<Ent>();

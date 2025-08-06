@@ -23,6 +23,7 @@ file record DimensionComponents(
     Vector3d Position,
     Vector3d PrevPosition,
     Vector3d Velocity,
+    Box3d HitBox,
     [ComponentToString] bool IsRigid,
     int RigidBagIndex,
 
