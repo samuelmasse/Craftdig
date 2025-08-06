@@ -15,8 +15,8 @@ public class PlayerState(
     DimensionMetrics dimensionMetrics,
     DimensionContext dimension,
     DimensionMetrics dimensionsMetrics,
-    PlayerContext playerContext,
-    PlayerEntity playerEntity,
+    PlayerContext player,
+    PlayerEnt ent,
     PlayerCamera camera,
     PlayerSelected selected) : State
 {
@@ -26,8 +26,8 @@ public class PlayerState(
     [
         () => text.Format("Frame: {0}. {1:F3} ms ({2} FPS)",
             metrics.Frame.Ticks, metrics.FrameWindow.Average, metrics.FrameWindow.Ticks),
-        () => text.Format("Position: {0:F3}", playerEntity.Entity.Position()),
-        () => text.Format("Velocity: {0:F3}", playerEntity.Entity.Velocity()),
+        () => text.Format("Position: {0:F3}", ent.Ent.Position()),
+        () => text.Format("Velocity: {0:F3}", ent.Ent.Velocity()),
         () => text.Format("Rotation: {0:F3}", camera.Rotation),
         () => text.Format("Spike: {0}", metrics.Frame.Max),
         () => text.Format("Render: {0}", dimensionsMetrics.RenderMetric.Value.Max),
@@ -41,7 +41,7 @@ public class PlayerState(
 
     public override void Load()
     {
-        playerContext.Load();
+        player.Load();
     }
 
     public override void Update(double time)
@@ -53,21 +53,18 @@ public class PlayerState(
         if (!paused)
         {
             int ticks = tick.Update(time);
-            if (ticks > 0)
+            while (ticks > 0)
             {
-                while (ticks > 0)
-                {
-                    dimensionMetrics.TickMetric.Start();
+                dimensionMetrics.TickMetric.Start();
 
-                    playerContext.Tick();
-                    dimension.Update(time);
-                    ticks--;
+                player.Tick();
+                dimension.Tick();
+                ticks--;
 
-                    dimensionMetrics.TickMetric.End();
-                }
+                dimensionMetrics.TickMetric.End();
             }
 
-            playerContext.Update(time);
+            player.Update(time);
         }
 
         mouse.CursorState = mouse.Track ? CursorState.Grabbed : CursorState.Normal;
@@ -75,8 +72,8 @@ public class PlayerState(
 
     public override void Render()
     {
-        dimension.Tick();
-        playerContext.Render();
+        dimension.Frame();
+        player.Render();
     }
 
     public override void Draw()

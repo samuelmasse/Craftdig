@@ -2,7 +2,7 @@ namespace Crafthoe.Dimension;
 
 [Dimension]
 public class DimensionChunkRequester(
-    DimensionPlayers players,
+    DimensionPlayerBag playerBag,
     DimensionChunks chunks,
     DimensionChunkLoader chunkLoader)
 {
@@ -12,9 +12,9 @@ public class DimensionChunkRequester(
 
     public int Far => far;
 
-    public void Tick()
+    public void Frame()
     {
-        if (players.Players.IsEmpty)
+        if (playerBag.Ents.IsEmpty)
             return;
 
         watch.Restart();
@@ -25,7 +25,7 @@ public class DimensionChunkRequester(
 
     private Vector2i RandomPlayerChunkLocation()
     {
-        var player = players.Players[rng.Next(players.Players.Length)];
+        var player = playerBag.Ents[rng.Next(playerBag.Ents.Length)];
         return player.Position().ToLoc().Xy.ToCloc();
     }
 

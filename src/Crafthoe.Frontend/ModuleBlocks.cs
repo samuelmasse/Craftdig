@@ -8,7 +8,7 @@ public class ModuleBlocks
     public readonly Ent Dirt;
     public readonly Ent Stone;
 
-    public ModuleBlocks(ModuleEntities entities, ModuleBlockFaces faces)
+    public ModuleBlocks(ModuleEnts entities, ModuleBlockFaces faces)
     {
         Air = entities["AirBlock"]
             .IsBlock(true);

@@ -5,11 +5,11 @@ public class DimensionSections(DimensionChunks chunks)
 {
     private readonly Queue<Memory<EntPtr>> pool = [];
 
-    public bool TryGet(Vector3i sloc, out EntMut entity)
+    public bool TryGet(Vector3i sloc, out EntMut ent)
     {
         if (!chunks.TryGet(sloc.Xy, out var chunk))
         {
-            entity = default;
+            ent = default;
             return false;
         }
 
@@ -21,7 +21,7 @@ public class DimensionSections(DimensionChunks chunks)
                 chunk.Sections().Span[z] = new EntPtr().IsSection(true).Chunk(chunk).Sloc((sloc.X, sloc.Y, z));
         }
 
-        entity = chunk.Sections().Span[sloc.Z];
+        ent = chunk.Sections().Span[sloc.Z];
         return true;
     }
 

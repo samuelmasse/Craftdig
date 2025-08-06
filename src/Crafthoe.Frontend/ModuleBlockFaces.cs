@@ -8,7 +8,7 @@ public class ModuleBlockFaces
     public readonly Ent Stone;
     public readonly Ent Dirt;
 
-    public ModuleBlockFaces(ModuleEntities entities, ModuleBlockAtlas blockAtlas)
+    public ModuleBlockFaces(ModuleEnts entities, ModuleBlockAtlas blockAtlas)
     {
         var faces = new List<EntMut>();
 

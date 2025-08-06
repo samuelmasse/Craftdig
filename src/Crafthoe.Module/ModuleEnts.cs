@@ -1,7 +1,7 @@
 namespace Crafthoe.Module;
 
 [Module]
-public class ModuleEntities
+public class ModuleEnts
 {
     private readonly Dictionary<string, EntObj> entities = [];
     private readonly List<Ent> list = [];

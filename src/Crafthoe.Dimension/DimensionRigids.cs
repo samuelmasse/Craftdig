@@ -1,11 +1,11 @@
 namespace Crafthoe.Dimension;
 
 [Dimension]
-public class DimensionRigids(DimensionRigidBag bag)
+public class DimensionRigids(DimensionRigidBag rigidBag)
 {
     public void Tick()
     {
-        foreach (var ent in bag.Ents)
+        foreach (var ent in rigidBag.Ents)
         {
             double d = ent.Velocity().Z;
             ent.PrevPosition() = ent.Position();

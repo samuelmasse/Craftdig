@@ -14,19 +14,19 @@ public class DimensionContext(
 
     public DimensionScope Scope => scope;
 
-    public void Update(double time)
+    public void Tick()
     {
         rigids.Tick();
     }
 
-    public void Tick()
+    public void Frame()
     {
-        sectionInvalidation.Tick();
-        chunkCollector.Collect();
+        sectionInvalidation.Frame();
+        chunkCollector.Frame();
 
         if (requesterType)
-            chunkRequester.Tick();
-        else sectionRequester.Tick();
+            chunkRequester.Frame();
+        else sectionRequester.Frame();
 
         requesterType = !requesterType;
 

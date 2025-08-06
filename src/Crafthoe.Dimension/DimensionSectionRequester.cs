@@ -2,7 +2,7 @@ namespace Crafthoe.Dimension;
 
 [Dimension]
 public class DimensionSectionRequester(
-    DimensionPlayers players,
+    DimensionPlayerBag playerBag,
     DimensionChunkRequester chunkRequester,
     DimensionChunks chunks,
     DimensionSections sections,
@@ -11,9 +11,9 @@ public class DimensionSectionRequester(
     private readonly Stopwatch watch = new();
     private readonly Random rng = new();
 
-    public void Tick()
+    public void Frame()
     {
-        if (players.Players.IsEmpty)
+        if (playerBag.Ents.IsEmpty)
             return;
 
         watch.Restart();
@@ -24,7 +24,7 @@ public class DimensionSectionRequester(
 
     private Vector3i RandomPlayerSectionLocation()
     {
-        var player = players.Players[rng.Next(players.Players.Length)];
+        var player = playerBag.Ents[rng.Next(playerBag.Ents.Length)];
         return (Vector3i)player.Position() / SectionSize;
     }
 

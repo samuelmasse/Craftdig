@@ -1,7 +1,7 @@
 namespace Crafthoe.Player;
 
 [Player]
-public class PlayerSelected(DimensionBlocks blocks, PlayerEntity player, PlayerCamera camera)
+public class PlayerSelected(DimensionBlocks blocks, PlayerEnt player, PlayerCamera camera)
 {
     private Vector3i? loc;
     private Vector3i? normal;
@@ -13,7 +13,7 @@ public class PlayerSelected(DimensionBlocks blocks, PlayerEntity player, PlayerC
 
     public void Render()
     {
-        Vector3d origin = player.Entity.Position();
+        Vector3d origin = player.Ent.Position();
         Vector3d lookAt = (camera.LookAt.X, camera.LookAt.Z, camera.LookAt.Y);
 
         Vector3i dir = (Math.Sign(lookAt.X), Math.Sign(lookAt.Y), Math.Sign(lookAt.Z));

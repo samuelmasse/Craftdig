@@ -1,13 +1,13 @@
 namespace Crafthoe.App;
 
-public class EntBag<N>
+public class EntBag<E, N> where E : IEntSet<E>
 {
-    private EntMut[] ents = [default, default];
+    private E[] ents = [default!, default!];
     private int count = 1;
 
-    public ReadOnlySpan<EntMut> Ents => new(ents, 1, count - 1);
+    public ReadOnlySpan<E> Ents => new(ents, 1, count - 1);
 
-    public void Add(EntMut ent)
+    public void Add(E ent)
     {
         ent.Set<int, N>(count);
         if (count >= ents.Length)
@@ -15,7 +15,7 @@ public class EntBag<N>
         ents[count++] = ent;
     }
 
-    public void Remove(Ent ent)
+    public void Remove(E ent)
     {
         if (!Contains(ent))
             return;
@@ -28,5 +28,5 @@ public class EntBag<N>
         count--;
     }
 
-    public bool Contains(Ent chunk) => chunk.Has<int, N>();
+    public bool Contains(E chunk) => chunk.Has<int, N>();
 }

@@ -3,7 +3,7 @@ namespace Crafthoe.Dimension;
 [Dimension]
 public class DimensionSectionInvalidation(DimensionChunks chunks, DimensionBlockChanges blockChanges)
 {
-    public void Tick()
+    public void Frame()
     {
         foreach (var c in blockChanges.Span)
             Process(c.Loc);

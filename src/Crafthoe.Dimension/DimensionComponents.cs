@@ -24,5 +24,8 @@ file record DimensionComponents(
     Vector3d PrevPosition,
     Vector3d Velocity,
     [ComponentToString] bool IsRigid,
-    int RigidBagIndex
+    int RigidBagIndex,
+
+    // Player
+    int PlayerBagIndex
 );

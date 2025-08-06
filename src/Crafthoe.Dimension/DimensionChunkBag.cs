@@ -1,4 +1,4 @@
 namespace Crafthoe.Dimension;
 
 [Dimension]
-public class DimensionChunkBag : EntBag<DimensionComponents.ChunkBagIndexComponent>;
+public class DimensionChunkBag : EntBag<EntMut, DimensionComponents.ChunkBagIndexComponent>;

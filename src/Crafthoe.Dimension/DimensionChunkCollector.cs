@@ -3,19 +3,19 @@ namespace Crafthoe.Dimension;
 [Dimension]
 public class DimensionChunkCollector(
     DimensionChunkRequester chunkRequester,
-    DimensionChunkBag chunkIndex,
-    DimensionPlayers players,
+    DimensionChunkBag chunkBag,
+    DimensionPlayerBag playerBag,
     DimensionChunkUnloader chunkUnloader)
 {
     private long index;
 
-    public void Collect()
+    public void Frame()
     {
-        var iters = Math.Min(chunkIndex.Ents.Length, 200);
+        var iters = Math.Min(chunkBag.Ents.Length, 200);
 
         for (int i = 0; i < iters; i++)
         {
-            var chunk = chunkIndex.Ents[(int)(index % chunkIndex.Ents.Length)];
+            var chunk = chunkBag.Ents[(int)(index % chunkBag.Ents.Length)];
 
             if (ShouldCollect(chunk))
                 Collect(chunk);
@@ -28,7 +28,7 @@ public class DimensionChunkCollector(
     {
         var far = chunkRequester.Far;
 
-        foreach (var player in players.Players)
+        foreach (var player in playerBag.Ents)
         {
             var pcloc = player.Position().ToLoc().Xy.ToCloc();
 

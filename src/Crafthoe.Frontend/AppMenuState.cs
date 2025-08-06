@@ -40,12 +40,12 @@ public class AppMenuState(
             dimensionScope.Add(new DimensionBiomeGenerator(
                 dimensionScope.Get<DimensionOverworldBiomeGenerator>()));
 
-            var players = dimensionScope.Get<DimensionPlayers>();
+            var players = dimensionScope.Get<DimensionPlayerBag>();
             var player = new EntObj();
-            players.Add(player);
+            players.Add((EntMut)player);
 
             var playerScope = dimensionScope.Scope<PlayerScope>();
-            playerScope.Add(new PlayerEntity(player));
+            playerScope.Add(new PlayerEnt(player));
 
             state.Current = playerScope.New<PlayerState>();
         }
