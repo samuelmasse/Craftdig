@@ -11,6 +11,8 @@ public class PlayerState(
     RootText text,
     RootScale scale,
     AppMonocraft monocraft,
+    WorldTick tick,
+    DimensionMetrics dimensionMetrics,
     DimensionContext dimension,
     DimensionMetrics dimensionsMetrics,
     PlayerContext playerContext,
@@ -25,6 +27,7 @@ public class PlayerState(
         () => text.Format("Frame: {0}. {1:F3} ms ({2} FPS)",
             metrics.Frame.Ticks, metrics.FrameWindow.Average, metrics.FrameWindow.Ticks),
         () => text.Format("Position: {0:F3}", playerEntity.Entity.Position()),
+        () => text.Format("Velocity: {0:F3}", playerEntity.Entity.Velocity()),
         () => text.Format("Rotation: {0:F3}", camera.Rotation),
         () => text.Format("Spike: {0}", metrics.Frame.Max),
         () => text.Format("Render: {0}", dimensionsMetrics.RenderMetric.Value.Max),
@@ -32,7 +35,8 @@ public class PlayerState(
         () => text.Format("Section: {0}", dimensionsMetrics.SectionMetric.Value.Max),
         () => text.Format("Buffers: {0}", gl.BufferTotalUsage),
         () => text.Format("Selected Loc: {0}", selected.Loc.GetValueOrDefault()),
-        () => text.Format("Selected Normal: {0}", selected.Normal.GetValueOrDefault())
+        () => text.Format("Selected Normal: {0:F3}", selected.Normal.GetValueOrDefault()),
+        () => text.Format("TPS: {0}", dimensionMetrics.TickMetricWindow.Value.Ticks)
     ];
 
     public override void Load()
@@ -48,7 +52,21 @@ public class PlayerState(
         mouse.Track = false;
         if (!paused)
         {
-            dimension.Update(time);
+            int ticks = tick.Update(time);
+            if (ticks > 0)
+            {
+                while (ticks > 0)
+                {
+                    dimensionMetrics.TickMetric.Start();
+
+                    playerContext.Tick();
+                    dimension.Update(time);
+                    ticks--;
+
+                    dimensionMetrics.TickMetric.End();
+                }
+            }
+
             playerContext.Update(time);
         }
 

@@ -7,7 +7,7 @@ public class DimensionChunkLoader(
     DimensionBiomeGenerator biomeGenerator,
     DimensionMetrics metrics,
     DimensionChunkRenderScheduler chunkRenderScheduler,
-    DimensionChunkIndex chunkIndex)
+    DimensionChunkBag chunkIndex)
 {
     public void Load(Vector2i cloc)
     {

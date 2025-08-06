@@ -24,15 +24,12 @@ public class DimensionOverworldTerrainGenerator(ModuleBlocks block, DimensionBlo
         if (loc.X == 0 && loc.Y == 0)
             return block.Stone;
 
-        if (loc.Z < 45)
-            return block.Stone;
-
-        if (loc.Z >= 105)
-            return block.Air;
-
+        float bias = ((loc.Z - 60) / 30f);
+        if (bias >= 1.5f)
+            return loc.Z < 60 ? block.Stone : block.Air;
         float n = noise.GetNoise(loc.X, loc.Y, loc.Z) + 0.5f;
 
-        if (n - ((loc.Z - 60) / 30f) > 0)
+        if (n - bias > 0)
             return block.Stone;
 
         return block.Air;

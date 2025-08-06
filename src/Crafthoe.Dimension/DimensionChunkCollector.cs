@@ -3,7 +3,7 @@ namespace Crafthoe.Dimension;
 [Dimension]
 public class DimensionChunkCollector(
     DimensionChunkRequester chunkRequester,
-    DimensionChunkIndex chunkIndex,
+    DimensionChunkBag chunkIndex,
     DimensionPlayers players,
     DimensionChunkUnloader chunkUnloader)
 {
@@ -11,11 +11,11 @@ public class DimensionChunkCollector(
 
     public void Collect()
     {
-        var iters = Math.Min(chunkIndex.Chunks.Length, 200);
+        var iters = Math.Min(chunkIndex.Ents.Length, 200);
 
         for (int i = 0; i < iters; i++)
         {
-            var chunk = chunkIndex.Chunks[(int)(index % chunkIndex.Chunks.Length)];
+            var chunk = chunkIndex.Ents[(int)(index % chunkIndex.Ents.Length)];
 
             if (ShouldCollect(chunk))
                 Collect(chunk);

@@ -7,7 +7,8 @@ public class DimensionContext(
     DimensionChunkCollector chunkCollector,
     DimensionSectionRequester sectionRequester,
     DimensionSectionInvalidation sectionInvalidation,
-    DimensionBlockChanges blockChanges)
+    DimensionBlockChanges blockChanges,
+    DimensionRigids rigids)
 {
     private bool requesterType;
 
@@ -15,7 +16,7 @@ public class DimensionContext(
 
     public void Update(double time)
     {
-
+        rigids.Tick();
     }
 
     public void Tick()

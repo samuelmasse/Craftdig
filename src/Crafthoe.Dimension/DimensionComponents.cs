@@ -2,8 +2,6 @@ namespace Crafthoe.Dimension;
 
 [Components]
 file record DimensionComponents(
-    Vector3d Position,
-
     // Chunk
     [ComponentToString] bool IsChunk,
     [ComponentToString] Vector2i Cloc,
@@ -13,9 +11,18 @@ file record DimensionComponents(
     bool IsUnrenderedListBuilt,
     bool IsReadyToRender,
     LazySortedList<int, int> Rendered,
+    int ChunkBagIndex,
 
     // Section
     [ComponentToString] bool IsSection,
     [ComponentToString] Vector3i Sloc,
     VaoVboCount TerrainMesh,
-    EntMut Chunk);
+    EntMut Chunk,
+
+    // Rigid
+    Vector3d Position,
+    Vector3d PrevPosition,
+    Vector3d Velocity,
+    [ComponentToString] bool IsRigid,
+    int RigidBagIndex
+);

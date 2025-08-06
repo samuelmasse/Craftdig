@@ -9,6 +9,7 @@ public class PlayerContext(
     RootBackbuffer backbuffer,
     ModuleBlockAtlas blockAtlas,
     ModuleEntities entities,
+    WorldTick tick,
     DimensionAir air,
     DimensionBlocks blocks,
     DimensionBlockProgram blockProgram,
@@ -16,6 +17,7 @@ public class PlayerContext(
     DimensionSections sections,
     DimensionMetrics metrics,
     DimensionChunkRequester chunkRequester,
+    DimensionRigidBag rigidBag,
     PlayerScope scope,
     PlayerGlw gl,
     PlayerPerspective perspective,
@@ -31,7 +33,8 @@ public class PlayerContext(
 
     public void Load()
     {
-        entity.Entity.Position() = (15, 15, 100);
+        entity.Entity.Position() = (15, 0, 100);
+        rigidBag.Add((EntMut)entity.Entity);
 
         var blocks = new List<Ent>();
         foreach (var ent in entities.Span)
@@ -43,36 +46,38 @@ public class PlayerContext(
         buildableBlocks = [.. blocks];
     }
 
-    public void Update(double time)
+    public void Tick()
     {
-        float speed = (float)(time * 10);
+        ref var vel = ref entity.Entity.Velocity();
+        vel = vel.Swizzle();
 
-        if (controls.CameraFast.Run())
-            speed *= 10;
-
-        var offset = entity.Entity.Position();
-        (offset.Y, offset.Z) = (offset.Z, offset.Y);
-
-        if (controls.CameraFront.Run())
-            offset += camera.Front * speed;
-        if (controls.CameraLeft.Run())
-            offset -= camera.Right * speed;
-        if (controls.CameraBack.Run())
-            offset -= camera.Front * speed;
-        if (controls.CameraRight.Run())
-            offset += camera.Right * speed;
+        float speed = 0.05f;
 
         if (controls.CameraUp.Run())
-            offset.Y += speed;
+            vel.Y += speed * 3;
         if (controls.CameraDown.Run())
-            offset.Y -= speed;
+            vel.Y -= speed * 3;
 
-        (offset.Y, offset.Z) = (offset.Z, offset.Y);
+        if (controls.CameraFast.Run())
+            speed *= 2f;
 
+        if (controls.CameraFront.Run())
+            vel += camera.Front * speed;
+        if (controls.CameraLeft.Run())
+            vel -= camera.Right * speed;
+        if (controls.CameraBack.Run())
+            vel -= camera.Front * speed;
+        if (controls.CameraRight.Run())
+            vel += camera.Right * speed;
+
+        vel = vel.Swizzle();
+    }
+
+    public void Update(double time)
+    {
         mouse.Track = true;
         camera.Rotate(-mouse.Delta / 300);
         camera.PreventBackFlipsAndFrontFlips();
-        entity.Entity.Position(offset);
 
         for (int i = 0; i < 9; i++)
         {
@@ -113,8 +118,8 @@ public class PlayerContext(
         blockProgram.Projection = perspective.Projection;
         blockAtlas.Bind(blockProgram.SamplerTexture);
 
-        var cloc = entity.Entity.Position().ToLoc().Xy.ToCloc();
-        var pos = entity.Entity.Position();
+        var pos = Vector3d.Lerp(entity.Entity.PrevPosition(), entity.Entity.Position(), (float)tick.Alpha);
+        var cloc = pos.ToLoc().Xy.ToCloc();
         (pos.Y, pos.Z) = (pos.Z, pos.Y);
 
         metrics.RenderMetric.Start();
