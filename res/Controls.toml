@@ -21,6 +21,13 @@ Control = "Any"
 KeyDown = "Space"
 Shift = "Any"
 Control = "Any"
+[CameraJump]
+KeyDown = "Space"
+Shift = "Any"
+Control = "Any"
 [CameraDown]
+Shift = "Down"
+Control = "Any"
+[CameraCrouch]
 Shift = "Down"
 Control = "Any"

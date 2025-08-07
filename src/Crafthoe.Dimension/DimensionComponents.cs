@@ -23,8 +23,10 @@ file record DimensionComponents(
     Vector3d Position,
     Vector3d PrevPosition,
     Vector3d Velocity,
+    Vector3i CollisionNormal,
     Box3d HitBox,
     [ComponentToString] bool IsRigid,
+    bool IsFlying,
     int RigidBagIndex,
 
     // Player

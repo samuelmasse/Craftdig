@@ -17,6 +17,8 @@ public class PlayerContext(
 {
     private Ent[] buildableBlocks = [];
     private Ent hand;
+    private int mainCooldown;
+    private int secondaryCooldown;
 
     public PlayerScope Scope => scope;
 
@@ -36,9 +38,30 @@ public class PlayerContext(
         buildableBlocks = [.. blocks];
     }
 
-    public void Tick() => movement.Tick();
+    public void Tick()
+    {
+        movement.Tick();
 
-    public void Update(double time)
+        mainCooldown--;
+        secondaryCooldown--;
+
+        if (selected.Loc != null)
+        {
+            if (mouse.IsMainDown() && mainCooldown <= 0)
+            {
+                blocks.TrySet(selected.Loc.Value, air.Block);
+                mainCooldown = 5;
+            }
+
+            if (selected.Normal != null && hand.IsBuildable() && mouse.IsSecondaryDown() && secondaryCooldown <= 0)
+            {
+                blocks.TrySet(selected.Loc.Value + selected.Normal.Value, hand);
+                secondaryCooldown = 4;
+            }
+        }
+    }
+
+    public void Input()
     {
         mouse.Track = true;
         camera.Rotate(-mouse.Delta / 300);
@@ -55,13 +78,11 @@ public class PlayerContext(
             }
         }
 
-        if (selected.Loc != null)
-        {
-            if (mouse.IsMainPressed())
-                blocks.TrySet(selected.Loc.Value, air.Block);
-            if (selected.Normal != null && hand.IsBuildable() && mouse.IsSecondaryPressed())
-                blocks.TrySet(selected.Loc.Value + selected.Normal.Value, hand);
-        }
+        if (!mouse.IsMainDown())
+            mainCooldown = 0;
+
+        if (!mouse.IsSecondaryDown())
+            secondaryCooldown = 0;
     }
 
     public void Render() => renderer.Render();

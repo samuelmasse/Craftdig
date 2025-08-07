@@ -8,13 +8,21 @@ public class DimensionRigids(DimensionBlocks blocks, DimensionRigidBag rigidBag)
         foreach (var ent in rigidBag.Ents)
         {
             ent.PrevPosition() = ent.Position();
+            ent.CollisionNormal() = default;
             Collide(ent);
-            double v = ent.Velocity().Z;
             ent.Position() += ent.Velocity();
-            ent.Velocity() *= (0.91f, 0.91f, 0.98f);
 
-            // TODO: Only if flying
-            ent.Velocity().Z = v * 0.6f;
+            if (ent.GetIsFlying())
+            {
+                double v = ent.Velocity().Z;
+                ent.Velocity() *= (0.91f, 0.91f, 0.98f);
+                ent.Velocity().Z = v * 0.6f;
+            }
+            else
+            {
+                ent.Velocity() *= (0.91f * 0.6f, 0.91f * 0.6f, 0.98f);
+                ent.Velocity().Z -= 0.08;
+            }
         }
     }
 
@@ -65,6 +73,7 @@ public class DimensionRigids(DimensionBlocks blocks, DimensionRigidBag rigidBag)
         tmin -= 0.001;
         pos += vel * tmin * Vector3i.Abs(nmin);
         vel *= Vector3i.One - Vector3i.Abs(nmin);
+        ent.CollisionNormal() = Vector3i.Clamp(ent.CollisionNormal() + nmin, -Vector3i.One, Vector3i.One);
     }
 
     private static bool Collide(Box3d moving, Vector3d vel, Box3d solid, out double time, out Vector3i normal)

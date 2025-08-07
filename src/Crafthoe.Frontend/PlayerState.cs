@@ -28,6 +28,7 @@ public class PlayerState(
             metrics.Frame.Ticks, metrics.FrameWindow.Average, metrics.FrameWindow.Ticks),
         () => text.Format("Position: {0:F3}", ent.Ent.Position()),
         () => text.Format("Velocity: {0:F3}", ent.Ent.Velocity()),
+        () => text.Format("Collision: {0:F3}", ent.Ent.CollisionNormal()),
         () => text.Format("Rotation: {0:F3}", camera.Rotation),
         () => text.Format("Spike: {0}", metrics.Frame.Max),
         () => text.Format("Render: {0}", dimensionsMetrics.RenderMetric.Value.Max),
@@ -64,7 +65,7 @@ public class PlayerState(
                 dimensionMetrics.TickMetric.End();
             }
 
-            player.Update(time);
+            player.Input();
         }
 
         mouse.CursorState = mouse.Track ? CursorState.Grabbed : CursorState.Normal;
