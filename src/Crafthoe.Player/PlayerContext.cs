@@ -61,8 +61,9 @@ public class PlayerContext(
         }
     }
 
-    public void Input()
+    public void Update(double delta)
     {
+        movement.Update(delta);
         mouse.Track = true;
         camera.Rotate(-mouse.Delta / 300);
         camera.PreventBackFlipsAndFrontFlips();

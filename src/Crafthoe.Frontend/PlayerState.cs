@@ -65,7 +65,7 @@ public class PlayerState(
                 dimensionMetrics.TickMetric.End();
             }
 
-            player.Input();
+            player.Update(time);
         }
 
         mouse.CursorState = mouse.Track ? CursorState.Grabbed : CursorState.Normal;

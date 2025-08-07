@@ -1,14 +1,43 @@
 namespace Crafthoe.Player;
 
 [Player]
-public class PlayerMovement(PlayerCamera camera, PlayerControls controls, PlayerEnt ent)
+public class PlayerMovement(
+    AppDoublePress doublePress,
+    PlayerPerspective perspective,
+    PlayerCamera camera,
+    PlayerControls controls,
+    PlayerEnt ent)
 {
     private bool sprinting;
+
+    public void Update(double delta)
+    {
+        if (doublePress.IsDoublePressed(Keys.W))
+            sprinting = true;
+
+        if (doublePress.IsDoublePressed(Keys.Space))
+        {
+            ent.Ent.IsFlying() = !ent.Ent.IsFlying();
+            if (!ent.Ent.IsFlying())
+                sprinting = false;
+        }
+
+        float fov = 70;
+        if (ent.Ent.IsFlying())
+            fov += 10;
+        if (sprinting)
+            fov += 10;
+
+        perspective.Fov = (float)MathHelper.Lerp(perspective.Fov, fov, delta * 10);
+    }
 
     public void Tick()
     {
         ref var vel = ref ent.Ent.Velocity();
         vel = vel.Swizzle();
+
+        if (ent.Ent.CollisionNormal().Z == 1)
+            ent.Ent.IsFlying() = false;
 
         float speed = ent.Ent.IsFlying() ? 0.05f : 0.1f;
 
