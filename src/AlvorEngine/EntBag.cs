@@ -1,4 +1,4 @@
-namespace Crafthoe.App;
+namespace AlvorEngine;
 
 public class EntBag<E, N> where E : IEntSet<E>
 {

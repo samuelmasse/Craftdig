@@ -2,60 +2,30 @@ namespace Crafthoe.Frontend;
 
 [App]
 public class AppMenuState(
-    RootState state,
     RootBackbuffer backbuffer,
     RootScreen screen,
-    RootMouse mouse,
-    RootRoboto roboto,
-    RootSprites sprites,
-    RootScale scale,
-    RootControlsToml controlsToml,
-    AppScope scope,
-    AppFiles files) : State
+    RootUi ui,
+    AppMainMenu mainMenu) : State
 {
-    private Stopwatch? watch;
+    private readonly EntObj menus = Node(ui).SizeRelativeV((1, 1));
+    private readonly Stopwatch watch = new();
 
     public override void Load()
     {
-        controlsToml.AddFromFile(files["Controls.toml"]);
-        screen.Title = "Crafthoe";
-        screen.Size = screen.MonitorSize / 4 * 3;
-        watch = Stopwatch.StartNew();
+        menus.NodeStack().Push(mainMenu.Get(menus));
+        watch.Start();
+    }
+
+    public override void Unload()
+    {
+        ui.Nodes().Remove(menus);
     }
 
     public override void Update(double time)
     {
-        if (watch?.ElapsedMilliseconds > 30)
+        if (watch.ElapsedMilliseconds > 30)
             screen.IsVisible = true;
-
-        if (watch?.ElapsedMilliseconds > 250)
-        {
-            var moduleScope = scope.Scope<ModuleScope>();
-            var worldScope = moduleScope.Scope<WorldScope>();
-            var dimensionScope = worldScope.Scope<DimensionScope>();
-
-            dimensionScope.Add(new DimensionAir(moduleScope.Get<ModuleBlocks>().Air));
-            dimensionScope.Add(new DimensionTerrainGenerator(
-                dimensionScope.Get<DimensionOverworldTerrainGenerator>()));
-            dimensionScope.Add(new DimensionBiomeGenerator(
-                dimensionScope.Get<DimensionOverworldBiomeGenerator>()));
-
-            var players = dimensionScope.Get<DimensionPlayerBag>();
-            var player = new EntObj();
-            players.Add((EntMut)player);
-
-            var playerScope = dimensionScope.Scope<PlayerScope>();
-            playerScope.Add(new PlayerEnt(player));
-
-            state.Current = playerScope.New<PlayerState>();
-        }
     }
 
     public override void Render() => backbuffer.Clear();
-
-    public override void Draw()
-    {
-        sprites.Batch.Draw(mouse.Position, (scale[125], scale[250]), (0, 1, 1, 1));
-        sprites.Batch.Write(roboto[scale[27]], "Hello Crafthoe", (scale[25], scale[25]));
-    }
 }

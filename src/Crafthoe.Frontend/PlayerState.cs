@@ -2,53 +2,53 @@ namespace Crafthoe.Frontend;
 
 [Player]
 public class PlayerState(
-    RootGlw gl,
     RootCanvas canvas,
     RootMouse mouse,
     RootKeyboard keyboard,
     RootSprites sprites,
-    RootMetrics metrics,
-    RootText text,
     RootScale scale,
-    AppMonocraft monocraft,
+    RootUi ui,
     WorldTick tick,
     DimensionMetrics dimensionMetrics,
     DimensionContext dimension,
-    DimensionMetrics dimensionsMetrics,
     PlayerContext player,
-    PlayerEnt ent,
-    PlayerCamera camera,
-    PlayerSelected selected) : State
+    PlayerDebugMenu debugMenu,
+    PlayerEscapeMenu escapeMenu) : State
 {
+    private readonly EntObj menus = Node(ui).SizeRelativeV((1, 1));
+    private readonly EntObj dark = Node().SizeRelativeV((1, 1)).ColorV((0.3f, 0.3f, 0.3f, 0.3f));
     private bool paused;
-
-    private readonly Func<ReadOnlySpan<char>>[] lines =
-    [
-        () => text.Format("Frame: {0}. {1:F3} ms ({2} FPS)",
-            metrics.Frame.Ticks, metrics.FrameWindow.Average, metrics.FrameWindow.Ticks),
-        () => text.Format("Position: {0:F3}", ent.Ent.Position()),
-        () => text.Format("Velocity: {0:F3}", ent.Ent.Velocity()),
-        () => text.Format("Collision: {0:F3}", ent.Ent.CollisionNormal()),
-        () => text.Format("Rotation: {0:F3}", camera.Rotation),
-        () => text.Format("Spike: {0}", metrics.Frame.Max),
-        () => text.Format("Render: {0}", dimensionsMetrics.RenderMetric.Value.Max),
-        () => text.Format("Chunk: {0}", dimensionsMetrics.ChunkMetric.Value.Max),
-        () => text.Format("Section: {0}", dimensionsMetrics.SectionMetric.Value.Max),
-        () => text.Format("Buffers: {0}", gl.BufferTotalUsage),
-        () => text.Format("Selected Loc: {0}", selected.Loc.GetValueOrDefault()),
-        () => text.Format("Selected Normal: {0:F3}", selected.Normal.GetValueOrDefault()),
-        () => text.Format("TPS: {0}", dimensionMetrics.TickMetricWindow.Value.Ticks)
-    ];
 
     public override void Load()
     {
         player.Load();
+        menus.Nodes().Add(debugMenu.Get());
+    }
+
+    public override void Unload()
+    {
+        ui.Nodes().Remove(menus);
     }
 
     public override void Update(double time)
     {
         if (keyboard.IsKeyPressed(Keys.Escape))
-            paused = !paused;
+        {
+            if (menus.NodeStack().Count > 0)
+                menus.NodeStack().Pop();
+            else
+            {
+                paused = true;
+                menus.Nodes().Add(dark);
+                menus.NodeStack().Push(escapeMenu.Get(menus));
+            }
+        }
+
+        if (paused && menus.NodeStack().Count == 0)
+        {
+            paused = false;
+            menus.Nodes().Remove(dark);
+        }
 
         mouse.Track = false;
         if (!paused)
@@ -79,14 +79,6 @@ public class PlayerState(
 
     public override void Draw()
     {
-        var fontSize = monocraft[scale[22]];
-
-        for (int i = 0; i < lines.Length; i++)
-            sprites.Batch.Write(fontSize, lines[i].Invoke(), (scale[10], scale[20] + i * fontSize.Metrics.Height));
-
-        if (paused)
-            sprites.Batch.Draw((0, 0), canvas.Size, (0.3f, 0.3f, 0.3f, 0.3f));
-
         float cht = scale[4];
         float chl = cht * 9;
         var c = canvas.Size / 2;

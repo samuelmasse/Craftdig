@@ -6,7 +6,11 @@ public class RootEngine(
     RootGlw gl,
     RootGraphics2D graphics2D,
     RootMetrics metrics,
-    RootText text)
+    RootText text,
+    RootCanvas canvas,
+    RootUiSystem uiSystem,
+    RootUi ui,
+    RootUiMouse uiMouse)
 {
     public void Load()
     {
@@ -22,6 +26,11 @@ public class RootEngine(
 
     public void Update(double time)
     {
+        ui.SizeV() = canvas.Size;
+        uiSystem.Size(ui.SizeR(), ui);
+        uiSystem.Position(ui.SizeR(), ui);
+        uiMouse.Update((0, 0), ui);
+
         state.Current.Update(time);
     }
 

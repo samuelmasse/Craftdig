@@ -1,7 +1,15 @@
 namespace AlvorEngine.Loop;
 
 [Root]
-public class RootGraphics2D(RootState state, RootGlw gl, RootCanvas canvas, RootFonts fonts, RootSprites sprites)
+public class RootGraphics2D(
+    RootState state,
+    RootGlw gl,
+    RootCanvas canvas,
+    RootFonts fonts,
+    RootSprites sprites,
+    RootUi ui,
+    RootUiMouse uiMouse,
+    RootUiSystem uiSystem)
 {
     public void Unload() => fonts.Unload();
 
@@ -10,6 +18,12 @@ public class RootGraphics2D(RootState state, RootGlw gl, RootCanvas canvas, Root
         fonts.Pack();
         sprites.Begin(canvas.Size);
         state.Current.Draw();
+
+        ui.SizeV() = canvas.Size;
+        uiSystem.Size(ui.SizeR(), ui);
+        uiSystem.Position(ui.SizeR(), ui);
+        uiMouse.Update((0, 0), ui);
+        uiSystem.Draw(ui.OffsetR(), ui);
 
         gl.Viewport(canvas.Size);
 

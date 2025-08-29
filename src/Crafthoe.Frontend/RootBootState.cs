@@ -4,5 +4,5 @@ namespace Crafthoe.Frontend;
 public class RootBootState(RootState state, RootScope scope) : State
 {
     public override void Load() =>
-        state.Current = scope.Scope<AppScope>().New<AppMenuState>();
+        state.Current = scope.Scope<AppScope>().New<AppInitializeState>();
 }

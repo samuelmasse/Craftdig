@@ -8,6 +8,9 @@
     <ItemGroup>
         <Using Include="AlvorEngine" />
         <Using Include="AlvorEngine.Loop" />
+        <Using Include="AlvorEngine.Loop.UiSyntax">
+            <Static>True</Static>
+        </Using>
         <Using Include="Crafthoe.App" />
         <Using Include="Crafthoe.Dimension" />
         <Using Include="Crafthoe.Module" />

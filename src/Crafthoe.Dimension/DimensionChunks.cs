@@ -1,7 +1,7 @@
 namespace Crafthoe.Dimension;
 
 [Dimension]
-public class DimensionChunks
+public class DimensionChunks(WorldEntPtrBag entPtrBag)
 {
     private readonly EntPtr[][][] map = new EntPtr[LevelSize * LevelSize][][];
 
@@ -59,6 +59,7 @@ public class DimensionChunks
         chunk = new EntPtr()
             .IsChunk(true)
             .Cloc(cloc);
+        entPtrBag.Add(chunk);
 
         return chunk;
     }
@@ -83,6 +84,7 @@ public class DimensionChunks
         int y3 = (cloc.Y) & LevelMask;
 
         ref var val = ref level2[(y3 << LevelBits) + x3];
+        entPtrBag.Remove(val);
         val.Dispose();
         val = default;
     }
