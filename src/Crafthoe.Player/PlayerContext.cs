@@ -15,8 +15,6 @@ public class PlayerContext(
     PlayerMovement movement,
     PlayerRenderer renderer)
 {
-    private Ent[] buildableBlocks = [];
-    private Ent hand;
     private int mainCooldown;
     private int secondaryCooldown;
 
@@ -35,7 +33,11 @@ public class PlayerContext(
                 blocks.Add(ent);
         }
 
-        buildableBlocks = [.. blocks];
+        for (int i = 0; i < HotBarSlots.Count; i++)
+        {
+            var val = i < blocks.Count ? blocks[i] : default;
+            ent.Ent.HotBarSlots()[i] = val;
+        }
     }
 
     public void Tick()
@@ -53,6 +55,7 @@ public class PlayerContext(
                 mainCooldown = 5;
             }
 
+            var hand = ent.Ent.HotBarSlots()[ent.Ent.HotBarIndex()];
             if (selected.Normal != null && hand.IsBuildable() && mouse.IsSecondaryDown() && secondaryCooldown <= 0)
             {
                 blocks.TrySet(selected.Loc.Value + selected.Normal.Value, hand);
@@ -72,11 +75,7 @@ public class PlayerContext(
         {
             var key = Keys.D1 + i;
             if (keyboard.IsKeyPressed(key))
-            {
-                if (i < buildableBlocks.Length)
-                    hand = buildableBlocks[i];
-                else hand = default;
-            }
+                ent.Ent.HotBarIndex() = i;
         }
 
         if (!mouse.IsMainDown())
@@ -84,6 +83,18 @@ public class PlayerContext(
 
         if (!mouse.IsSecondaryDown())
             secondaryCooldown = 0;
+
+        ref var index = ref ent.Ent.HotBarIndex();
+
+        if (mouse.Wheel.Y < 0)
+            index++;
+        else if (mouse.Wheel.Y > 0)
+            index--;
+
+        if (index < 0)
+            index = HotBarSlots.Count - 1;
+        if (index >= HotBarSlots.Count)
+            index = 0;
     }
 
     public void Render() => renderer.Render();

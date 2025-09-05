@@ -2,5 +2,8 @@ namespace Crafthoe.World;
 
 [Components]
 file record WorldComponents(
-    int WorldEntPtrBagIndex
+    int WorldEntPtrBagIndex,
+
+    HotBarSlots HotBarSlots,
+    int HotBarIndex
 );

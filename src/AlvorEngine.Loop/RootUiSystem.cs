@@ -15,8 +15,10 @@ public class RootUiSystem(RootSprites sprites)
         }
 
         SizeNode(s, n);
+        n.PaddingR() = Get(n.PaddingV(), n.PaddingF());
+
         foreach (var c in n.Nodes())
-            Size(n.SizeR(), c);
+            Size(n.SizeR() - n.PaddingR().Xy - n.PaddingR().Zw, c);
 
         SizeInnerMaxRelative(s, n);
         SizeInnerSumRelative(s, n);
@@ -67,6 +69,9 @@ public class RootUiSystem(RootSprites sprites)
             sizeInnerMax.Y = Math.Max(c.SizeR().Y, sizeInnerMax.Y);
         }
 
+        sizeInnerMax.X += n.PaddingR().X + n.PaddingR().Z;
+        sizeInnerMax.Y += n.PaddingR().Y + n.PaddingR().W;
+
         n.SizeR() += sizeInnerMaxRelative * sizeInnerMax;
     }
 
@@ -80,6 +85,9 @@ public class RootUiSystem(RootSprites sprites)
 
         foreach (var c in n.Nodes())
             sizeInnerSum += c.SizeR();
+
+        sizeInnerSum.X += n.PaddingR().X + n.PaddingR().Z;
+        sizeInnerSum.Y += n.PaddingR().Y + n.PaddingR().W;
 
         n.SizeR() += sizeInnerSumRelative * sizeInnerSum;
 
@@ -118,7 +126,10 @@ public class RootUiSystem(RootSprites sprites)
     {
         PositionNode(s, n);
         foreach (var c in n.Nodes())
+        {
             Position(n.SizeR(), c);
+            c.OffsetR() += n.PaddingR().Xy;
+        }
 
         var innerLayout = Get(n.InnerLayoutV(), n.InnerLayoutF());
         var innerSpacing = Get(n.InnerSpacingV(), n.InnerSpacingF());
@@ -205,13 +216,17 @@ public class RootUiSystem(RootSprites sprites)
         if (text.IsEmpty)
             return;
 
+        var textColor = Get(n.TextColorV(), n.TextColorF());
+        if (textColor.W == 0)
+            return;
+
         var alignment = Get(n.TextAlignmentV(), n.TextAlignmentF()) ?? Alignment.Center;
         var size = new Vector2(sprites.Batch.Measure(font.Size(fontSize), text), font.Size(fontSize).Metrics.Height);
         var offset = Vector2.Zero;
 
         Align(ref offset, size, n.SizeR(), alignment);
         offset.Y += size.Y / 2;
-        sprites.Batch.Write(font.Size(fontSize), text, o + offset);
+        sprites.Batch.Write(font.Size(fontSize), text, o + offset, textColor);
     }
 
     private T? Get<T>(T? value, Func<T>? func) where T : allows ref struct

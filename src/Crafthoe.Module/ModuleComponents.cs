@@ -3,6 +3,7 @@ namespace Crafthoe.Module;
 [Components]
 file record ModuleComponents(
     [ComponentToString] string ModuleName,
+    [ComponentToString] string Name,
 
     // Block
     [ComponentToString] bool IsBlock,

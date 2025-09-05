@@ -5,6 +5,9 @@ file record UiComponents(
     LazyList<EntObj> Nodes,
     LazyStack<EntObj> NodeStack,
 
+    bool IsSelectableV,
+    Func<bool>? IsSelectableF,
+
     InnerLayout InnerLayoutV,
     Func<InnerLayout>? InnerLayoutF,
 
@@ -22,6 +25,9 @@ file record UiComponents(
 
     Alignment AlignmentV,
     Func<Alignment>? AlignmentF,
+
+    Vector4 PaddingV,
+    Func<Vector4>? PaddingF,
 
     Vector2 SizeV,
     Func<Vector2>? SizeF,
@@ -53,6 +59,9 @@ file record UiComponents(
     Alignment? TextAlignmentV,
     Func<Alignment?>? TextAlignmentF,
 
+    Vector4 TextColorV,
+    Func<Vector4>? TextColorF,
+
     Action? OnClickF,
     Action? OnDrawF,
     Action? OnPressF,
@@ -60,5 +69,6 @@ file record UiComponents(
     [ComponentTryGet] EntObj? StackedNodeR,
     Vector2 OffsetR,
     Vector2 SizeR,
+    Vector4 PaddingR,
     bool IsHoveredR
 );

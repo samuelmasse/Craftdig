@@ -13,21 +13,28 @@ public class PlayerState(
     DimensionContext dimension,
     PlayerContext player,
     PlayerDebugMenu debugMenu,
-    PlayerEscapeMenu escapeMenu) : State
+    PlayerEscapeMenu escapeMenu,
+    PlayerOverlayMenu playerOverlayMenu,
+    PlayerCreativeInventoryMenu creativeInventoryMenu) : State
 {
-    private readonly EntObj menus = Node(ui).SizeRelativeV((1, 1));
+    private readonly EntObj menus = Node().SizeRelativeV((1, 1));
+    private readonly EntObj overlay = playerOverlayMenu.Get();
     private readonly EntObj dark = Node().SizeRelativeV((1, 1)).ColorV((0.3f, 0.3f, 0.3f, 0.3f));
     private bool paused;
+    private bool inv;
 
     public override void Load()
     {
         player.Load();
+        ui.Nodes().Add(overlay);
+        ui.Nodes().Add(menus);
         menus.Nodes().Add(debugMenu.Get());
     }
 
     public override void Unload()
     {
         ui.Nodes().Remove(menus);
+        ui.Nodes().Remove(overlay);
     }
 
     public override void Update(double time)
@@ -39,14 +46,36 @@ public class PlayerState(
             else
             {
                 paused = true;
-                menus.Nodes().Add(dark);
                 menus.NodeStack().Push(escapeMenu.Get(menus));
             }
         }
 
-        if (paused && menus.NodeStack().Count == 0)
+        if (keyboard.IsKeyPressed(Keys.E))
+        {
+            if (menus.NodeStack().Count > 0)
+            {
+                if (inv)
+                {
+                    while (menus.NodeStack().Count > 0)
+                        menus.NodeStack().Pop();
+
+                    inv = false;
+                }
+            }
+            else
+            {
+                inv = true;
+                menus.NodeStack().Push(creativeInventoryMenu.Get());
+            }
+        }
+
+        if (menus.NodeStack().Count > 0 && !menus.Nodes().Contains(dark))
+            menus.Nodes().Add(dark);
+
+        if (menus.NodeStack().Count == 0 && menus.Nodes().Contains(dark))
         {
             paused = false;
+            inv = false;
             menus.Nodes().Remove(dark);
         }
 
@@ -58,14 +87,17 @@ public class PlayerState(
             {
                 dimensionMetrics.TickMetric.Start();
 
-                player.Tick();
+                if (!inv)
+                    player.Tick();
+
                 dimension.Tick();
                 ticks--;
 
                 dimensionMetrics.TickMetric.End();
             }
 
-            player.Update(time);
+            if (!inv)
+                player.Update(time);
         }
 
         mouse.CursorState = mouse.Track ? CursorState.Grabbed : CursorState.Normal;

@@ -47,7 +47,12 @@ public class RootUiMouse(RootMouse mouse)
 
         EntObj? hovered = null;
 
-        if (box.ContainsInclusive(mouse.Position))
+        bool isSelectable = n.IsSelectableV();
+        var f = n.IsSelectableF();
+        if (f != null)
+            isSelectable = f.Invoke();
+
+        if (box.ContainsInclusive(mouse.Position) && isSelectable)
             hovered = n;
 
         foreach (var c in n.Nodes())

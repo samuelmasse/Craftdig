@@ -11,9 +11,11 @@ public class ModuleBlocks
     public ModuleBlocks(ModuleEnts entities, ModuleBlockFaces faces)
     {
         Air = entities["AirBlock"]
+            .Name("Air")
             .IsBlock(true);
 
         Grass = entities["GrassBlock"]
+            .Name("Grass")
             .IsBlock(true)
             .IsSolid(true)
             .IsBuildable(true)
@@ -28,12 +30,14 @@ public class ModuleBlocks
             });
 
         Dirt = entities["DirtBlock"]
+            .Name("Dirt")
             .IsBlock(true)
             .IsSolid(true)
             .IsBuildable(true)
             .Faces(new(faces.Dirt));
 
         Stone = entities["StoneBlock"]
+            .Name("Stone")
             .IsBlock(true)
             .IsSolid(true)
             .IsBuildable(true)
