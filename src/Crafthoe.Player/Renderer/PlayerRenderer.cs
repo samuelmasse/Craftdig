@@ -20,7 +20,7 @@ public class PlayerRenderer(
 {
     public void Render()
     {
-        var sky = new Vector3(86, 139, 255);
+        var sky = new Vector3(84, 145, 255);
         backbuffer.Clear(new Vector4(sky / 0xFF, 1));
         camera.ComputeVectors();
         perspective.ComputeMatrix(canvas.Size, camera);
