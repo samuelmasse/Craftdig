@@ -5,8 +5,17 @@ file record UiComponents(
     LazyList<EntObj> Nodes,
     LazyStack<EntObj> NodeStack,
 
+    bool IsOrderedV,
+    Func<bool>? IsOrderedF,
+
+    float OrderValueV,
+    Func<float>? OrderValueF,
+
     bool IsSelectableV,
     Func<bool>? IsSelectableF,
+
+    bool IsDeletedV,
+    Func<bool>? IsDeletedF,
 
     InnerLayout InnerLayoutV,
     Func<InnerLayout>? InnerLayoutF,
@@ -63,8 +72,9 @@ file record UiComponents(
     Func<Vector4>? TextColorF,
 
     Action? OnClickF,
-    Action? OnDrawF,
     Action? OnPressF,
+    Action? OnSecondaryClickF,
+    Action? OnSecondaryPressF,
 
     [ComponentTryGet] EntObj? StackedNodeR,
     Vector2 OffsetR,

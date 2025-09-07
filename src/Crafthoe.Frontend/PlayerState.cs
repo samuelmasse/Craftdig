@@ -11,14 +11,17 @@ public class PlayerState(
     WorldTick tick,
     DimensionMetrics dimensionMetrics,
     DimensionContext dimension,
+    PlayerHand playerHand,
     PlayerContext player,
     PlayerDebugMenu debugMenu,
     PlayerEscapeMenu escapeMenu,
     PlayerOverlayMenu playerOverlayMenu,
+    PlayerHandMenu playerHandMenu,
     PlayerCreativeInventoryMenu creativeInventoryMenu) : State
 {
-    private readonly EntObj menus = Node().SizeRelativeV((1, 1));
+    private readonly EntObj menus = Node().SizeRelativeV((1, 1)).OrderValueV(1);
     private readonly EntObj overlay = playerOverlayMenu.Get();
+    private readonly EntObj hand = playerHandMenu.Get();
     private readonly EntObj dark = Node().SizeRelativeV((1, 1)).ColorV((0.3f, 0.3f, 0.3f, 0.3f));
     private bool paused;
     private bool inv;
@@ -26,6 +29,7 @@ public class PlayerState(
     public override void Load()
     {
         player.Load();
+        ui.Nodes().Add(hand);
         ui.Nodes().Add(overlay);
         ui.Nodes().Add(menus);
         menus.Nodes().Add(debugMenu.Get());
@@ -33,6 +37,7 @@ public class PlayerState(
 
     public override void Unload()
     {
+        ui.Nodes().Remove(hand);
         ui.Nodes().Remove(menus);
         ui.Nodes().Remove(overlay);
     }
@@ -76,6 +81,7 @@ public class PlayerState(
         {
             paused = false;
             inv = false;
+            playerHand.Ent = default;
             menus.Nodes().Remove(dark);
         }
 

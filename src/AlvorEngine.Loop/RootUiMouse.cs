@@ -5,7 +5,11 @@ public class RootUiMouse(RootMouse mouse)
 {
     private EntObj? prevHovered;
     private EntObj? pressed;
+    private EntObj? secondaryPressed;
     private bool prevMouseDown;
+    private bool prevSecondaryMouseDown;
+
+    public EntObj? Hovered => prevHovered;
 
     public void Update(Vector2 o, EntObj n)
     {
@@ -31,11 +35,34 @@ public class RootUiMouse(RootMouse mouse)
         {
             if (prevMouseDown)
             {
-
+                if (pressed == hovered)
+                    pressed?.OnClickF()?.Invoke();
             }
 
             pressed = null;
             prevMouseDown = false;
+        }
+
+        if (mouse.IsSecondaryDown())
+        {
+            if (!prevSecondaryMouseDown)
+            {
+                secondaryPressed = hovered;
+                secondaryPressed?.OnSecondaryPressF()?.Invoke();
+            }
+
+            prevSecondaryMouseDown = true;
+        }
+        else
+        {
+            if (prevSecondaryMouseDown)
+            {
+                if (secondaryPressed == hovered)
+                    secondaryPressed?.OnSecondaryClickF()?.Invoke();
+            }
+
+            secondaryPressed = null;
+            prevSecondaryMouseDown = false;
         }
 
         prevHovered = hovered;

@@ -3,8 +3,14 @@ namespace AlvorEngine.Loop;
 [Root]
 public class RootUiSystem(RootSprites sprites)
 {
+    private EntObj[] orderBufferKeys = new EntObj[16];
+    private float[] orderBufferVals = new float[16];
+
     public void Size(Vector2 s, EntObj n)
     {
+        RemoveNodes(n);
+        OrderNodes(n);
+
         if (n.TryGetStackedNodeR(out var stackedNode))
             n.Nodes().Remove(stackedNode);
 
@@ -158,7 +164,7 @@ public class RootUiSystem(RootSprites sprites)
         }
     }
 
-    public void PositionNode(Vector2 s, EntObj n)
+    private void PositionNode(Vector2 s, EntObj n)
     {
         n.OffsetR() = default;
         n.OffsetR() += Get(n.OffsetV(), n.OffsetF());
@@ -181,7 +187,7 @@ public class RootUiSystem(RootSprites sprites)
             Draw(o + n.OffsetR(), sc);
     }
 
-    public void DrawNode(Vector2 o, EntObj n)
+    private void DrawNode(Vector2 o, EntObj n)
     {
         DrawFlatSurface(o, n);
         DrawText(o, n);
@@ -229,7 +235,7 @@ public class RootUiSystem(RootSprites sprites)
         sprites.Batch.Write(font.Size(fontSize), text, o + offset, textColor);
     }
 
-    private T? Get<T>(T? value, Func<T>? func) where T : allows ref struct
+    public T? Get<T>(T? value, Func<T>? func) where T : allows ref struct
     {
         if (func != null)
             return func.Invoke();
@@ -247,5 +253,50 @@ public class RootUiSystem(RootSprites sprites)
             val.X += parent.X - size.X;
         if ((alignment & Alignment.Bottom) != 0)
             val.Y += parent.Y - size.Y;
+    }
+
+    private void OrderNodes(EntObj n)
+    {
+        if (!n.HasIsOrderedV() && !n.HasIsOrderedF())
+            return;
+
+        var ordered = Get(n.IsOrderedV(), n.IsOrderedF());
+        if (!ordered)
+            return;
+
+        var nodes = n.Nodes();
+        if (orderBufferKeys.Length <= nodes.Count)
+        {
+            Array.Resize(ref orderBufferKeys, MathHelper.NextPowerOfTwo(nodes.Count));
+            Array.Resize(ref orderBufferVals, MathHelper.NextPowerOfTwo(nodes.Count));
+        }
+
+        var keys = orderBufferKeys.AsSpan()[..nodes.Count];
+        var vals = orderBufferVals.AsSpan()[..nodes.Count];
+
+        for (int i = 0; i < nodes.Count; i++)
+        {
+            keys[i] = nodes[i];
+            vals[i] = Get(nodes[i].OrderValueV(), nodes[i].OrderValueF());
+        }
+
+        vals.Sort(keys);
+
+        for (int i = 0; i < nodes.Count; i++)
+            nodes[i] = keys[i];
+    }
+
+    private void RemoveNodes(EntObj n)
+    {
+        for (int i = n.Nodes().Count - 1; i >= 0; i--)
+        {
+            var c = n.Nodes()[i];
+            if (!c.HasIsDeletedV() && !c.HasIsDeletedF())
+                continue;
+
+            var isDeleted = Get(c.IsDeletedV(), c.IsDeletedF());
+            if (isDeleted)
+                n.Nodes().RemoveAt(i);
+        }
     }
 }

@@ -26,6 +26,7 @@ public class RootEngine(
 
     public void Update(double time)
     {
+        ui.IsOrderedV() = true;
         ui.SizeV() = canvas.Size;
         uiSystem.Size(ui.SizeR(), ui);
         uiSystem.Position(ui.SizeR(), ui);

@@ -4,7 +4,6 @@ namespace Crafthoe.Player;
 public class PlayerContext(
     RootMouse mouse,
     RootKeyboard keyboard,
-    ModuleEnts ents,
     DimensionAir air,
     DimensionBlocks blocks,
     DimensionRigidBag rigidBag,
@@ -25,19 +24,6 @@ public class PlayerContext(
         ent.Ent.Position() = (15, 0, 100);
         ent.Ent.HitBox() = new Box3d((-0.3, -0.3, -1.62), (0.3, 0.3, 0.18));
         rigidBag.Add((EntMut)ent.Ent);
-
-        var blocks = new List<Ent>();
-        foreach (var ent in ents.Span)
-        {
-            if (ent.IsBlock() && ent.IsBuildable())
-                blocks.Add(ent);
-        }
-
-        for (int i = 0; i < HotBarSlots.Count; i++)
-        {
-            var val = i < blocks.Count ? blocks[i] : default;
-            ent.Ent.HotBarSlots()[i] = val;
-        }
     }
 
     public void Tick()
