@@ -20,6 +20,7 @@ public class RootGraphics2D(
         state.Current.Draw();
 
         ui.SizeV() = canvas.Size;
+        uiSystem.Traverse(ui, 0);
         uiSystem.Size(ui.SizeR(), ui);
         uiSystem.Position(ui.SizeR(), ui);
         uiMouse.Update((0, 0), ui);

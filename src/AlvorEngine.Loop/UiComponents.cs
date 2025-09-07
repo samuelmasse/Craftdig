@@ -5,6 +5,9 @@ file record UiComponents(
     LazyList<EntObj> Nodes,
     LazyStack<EntObj> NodeStack,
 
+    bool IsDisabledV,
+    Func<bool>? IsDisabledF,
+
     bool IsOrderedV,
     Func<bool>? IsOrderedF,
 
@@ -80,5 +83,6 @@ file record UiComponents(
     Vector2 OffsetR,
     Vector2 SizeR,
     Vector4 PaddingR,
-    bool IsHoveredR
+    bool IsHoveredR,
+    [ComponentReturnSpan] Memory<EntObj> NodesR
 );

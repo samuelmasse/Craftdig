@@ -82,7 +82,7 @@ public class RootUiMouse(RootMouse mouse)
         if (box.ContainsInclusive(mouse.Position) && isSelectable)
             hovered = n;
 
-        foreach (var c in n.Nodes())
+        foreach (var c in n.GetNodesR())
         {
             var chovered = FindHovered(o + n.OffsetR(), c);
             if (chovered != null)

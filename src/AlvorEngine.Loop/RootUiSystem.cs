@@ -3,14 +3,73 @@ namespace AlvorEngine.Loop;
 [Root]
 public class RootUiSystem(RootSprites sprites)
 {
+    private EntObj[] traverseBuffer = new EntObj[16];
+    private int traverseBufferIndex;
+
     private EntObj[] orderBufferKeys = new EntObj[16];
     private float[] orderBufferVals = new float[16];
 
-    public void Size(Vector2 s, EntObj n)
+    public void Traverse(EntObj n, int depth)
     {
+        if (depth == 0)
+            traverseBufferIndex = 0;
+
         RemoveNodes(n);
         OrderNodes(n);
+        StackNodes(n);
+        CompileNodes(n);
 
+        foreach (var c in n.GetNodesR())
+            Traverse(c, depth + 1);
+    }
+
+    private void OrderNodes(EntObj n)
+    {
+        if (!n.HasIsOrderedV() && !n.HasIsOrderedF())
+            return;
+
+        var ordered = Get(n.IsOrderedV(), n.IsOrderedF());
+        if (!ordered)
+            return;
+
+        var nodes = n.Nodes();
+        if (orderBufferKeys.Length <= nodes.Count)
+        {
+            Array.Resize(ref orderBufferKeys, MathHelper.NextPowerOfTwo(nodes.Count));
+            Array.Resize(ref orderBufferVals, MathHelper.NextPowerOfTwo(nodes.Count));
+        }
+
+        var keys = orderBufferKeys.AsSpan()[..nodes.Count];
+        var vals = orderBufferVals.AsSpan()[..nodes.Count];
+
+        for (int i = 0; i < nodes.Count; i++)
+        {
+            keys[i] = nodes[i];
+            vals[i] = Get(nodes[i].OrderValueV(), nodes[i].OrderValueF());
+        }
+
+        vals.Sort(keys);
+
+        for (int i = 0; i < nodes.Count; i++)
+            nodes[i] = keys[i];
+    }
+
+    private void RemoveNodes(EntObj n)
+    {
+        for (int i = n.Nodes().Count - 1; i >= 0; i--)
+        {
+            var c = n.Nodes()[i];
+            if (!c.HasIsDeletedV() && !c.HasIsDeletedF())
+                continue;
+
+            var isDeleted = Get(c.IsDeletedV(), c.IsDeletedF());
+            if (isDeleted)
+                n.Nodes().RemoveAt(i);
+        }
+    }
+
+    private void StackNodes(EntObj n)
+    {
         if (n.TryGetStackedNodeR(out var stackedNode))
             n.Nodes().Remove(stackedNode);
 
@@ -19,11 +78,34 @@ public class RootUiSystem(RootSprites sprites)
             n.Nodes().Add(topStack);
             n.StackedNodeR() = topStack;
         }
+    }
 
+    private void CompileNodes(EntObj n)
+    {
+        int start = traverseBufferIndex;
+        int count = 0;
+
+        foreach (var c in n.Nodes())
+        {
+            var disabled = Get(c.IsDisabledV(), c.IsDisabledF());
+            if (disabled)
+                continue;
+
+            if (traverseBufferIndex == traverseBuffer.Length)
+                Array.Resize(ref traverseBuffer, traverseBuffer.Length * 2);
+            traverseBuffer[traverseBufferIndex++] = c;
+            count++;
+        }
+
+        n.NodesR() = traverseBuffer.AsMemory().Slice(start, count);
+    }
+
+    public void Size(Vector2 s, EntObj n)
+    {
         SizeNode(s, n);
         n.PaddingR() = Get(n.PaddingV(), n.PaddingF());
 
-        foreach (var c in n.Nodes())
+        foreach (var c in n.GetNodesR())
             Size(n.SizeR() - n.PaddingR().Xy - n.PaddingR().Zw, c);
 
         SizeInnerMaxRelative(s, n);
@@ -69,7 +151,7 @@ public class RootUiSystem(RootSprites sprites)
         var sizeInnerMaxRelative = Get(n.SizeInnerMaxRelativeV(), n.SizeInnerMaxRelativeF());
         var sizeInnerMax = Vector2.Zero;
 
-        foreach (var c in n.Nodes())
+        foreach (var c in n.GetNodesR())
         {
             sizeInnerMax.X = Math.Max(c.SizeR().X, sizeInnerMax.X);
             sizeInnerMax.Y = Math.Max(c.SizeR().Y, sizeInnerMax.Y);
@@ -89,7 +171,7 @@ public class RootUiSystem(RootSprites sprites)
         var sizeInnerSumRelative = Get(n.SizeInnerSumRelativeV(), n.SizeInnerSumRelativeF());
         var sizeInnerSum = Vector2.Zero;
 
-        foreach (var c in n.Nodes())
+        foreach (var c in n.GetNodesR())
             sizeInnerSum += c.SizeR();
 
         sizeInnerSum.X += n.PaddingR().X + n.PaddingR().Z;
@@ -98,7 +180,7 @@ public class RootUiSystem(RootSprites sprites)
         n.SizeR() += sizeInnerSumRelative * sizeInnerSum;
 
         var innerSpacing = Get(n.InnerSpacingV(), n.InnerSpacingF());
-        n.SizeR() += sizeInnerSumRelative * innerSpacing * Math.Max(0, (n.Nodes().Count - 1));
+        n.SizeR() += sizeInnerSumRelative * innerSpacing * Math.Max(0, (n.GetNodesR().Length - 1));
     }
 
     private void SizeInnerSizing(Vector2 s, EntObj n)
@@ -109,21 +191,21 @@ public class RootUiSystem(RootSprites sprites)
         var innerSizing = Get(n.InnerSizingV(), n.InnerSizingF());
         float totalWeight = 0;
 
-        foreach (var c in n.Nodes())
+        foreach (var c in n.GetNodesR())
             totalWeight += Get(n.SizeWeightV(), n.SizeWeightF()) ?? 1;
 
         var innerSpacing = Get(n.InnerSpacingV(), n.InnerSpacingF());
-        var totalSpacing = innerSpacing * Math.Max(0, n.Nodes().Count - 1);
+        var totalSpacing = innerSpacing * Math.Max(0, n.GetNodesR().Length - 1);
         Vector2 useableSize = n.SizeR() - (totalSpacing, totalSpacing);
 
         if (innerSizing == InnerSizing.HorizontalWeight)
         {
-            foreach (var c in n.Nodes())
+            foreach (var c in n.GetNodesR())
                 c.SizeR().X = (Get(n.SizeWeightV(), n.SizeWeightF()) ?? 1 / totalWeight) * useableSize.X;
         }
         else if (innerSizing == InnerSizing.VerticalWeight)
         {
-            foreach (var c in n.Nodes())
+            foreach (var c in n.GetNodesR())
                 c.SizeR().Y = (Get(n.SizeWeightV(), n.SizeWeightF()) ?? 1 / totalWeight) * useableSize.Y;
         }
     }
@@ -131,7 +213,7 @@ public class RootUiSystem(RootSprites sprites)
     public void Position(Vector2 s, EntObj n)
     {
         PositionNode(s, n);
-        foreach (var c in n.Nodes())
+        foreach (var c in n.GetNodesR())
         {
             Position(n.SizeR(), c);
             c.OffsetR() += n.PaddingR().Xy;
@@ -144,7 +226,7 @@ public class RootUiSystem(RootSprites sprites)
         {
             float y = 0;
 
-            foreach (var c in n.Nodes())
+            foreach (var c in n.GetNodesR())
             {
                 c.OffsetR().Y += y;
                 y += c.SizeR().Y;
@@ -155,7 +237,7 @@ public class RootUiSystem(RootSprites sprites)
         {
             float x = 0;
 
-            foreach (var c in n.Nodes())
+            foreach (var c in n.GetNodesR())
             {
                 c.OffsetR().X += x;
                 x += c.SizeR().X;
@@ -183,7 +265,7 @@ public class RootUiSystem(RootSprites sprites)
     public void Draw(Vector2 o, EntObj n)
     {
         DrawNode(o + n.OffsetR(), n);
-        foreach (var sc in n.Nodes())
+        foreach (var sc in n.GetNodesR())
             Draw(o + n.OffsetR(), sc);
     }
 
@@ -253,50 +335,5 @@ public class RootUiSystem(RootSprites sprites)
             val.X += parent.X - size.X;
         if ((alignment & Alignment.Bottom) != 0)
             val.Y += parent.Y - size.Y;
-    }
-
-    private void OrderNodes(EntObj n)
-    {
-        if (!n.HasIsOrderedV() && !n.HasIsOrderedF())
-            return;
-
-        var ordered = Get(n.IsOrderedV(), n.IsOrderedF());
-        if (!ordered)
-            return;
-
-        var nodes = n.Nodes();
-        if (orderBufferKeys.Length <= nodes.Count)
-        {
-            Array.Resize(ref orderBufferKeys, MathHelper.NextPowerOfTwo(nodes.Count));
-            Array.Resize(ref orderBufferVals, MathHelper.NextPowerOfTwo(nodes.Count));
-        }
-
-        var keys = orderBufferKeys.AsSpan()[..nodes.Count];
-        var vals = orderBufferVals.AsSpan()[..nodes.Count];
-
-        for (int i = 0; i < nodes.Count; i++)
-        {
-            keys[i] = nodes[i];
-            vals[i] = Get(nodes[i].OrderValueV(), nodes[i].OrderValueF());
-        }
-
-        vals.Sort(keys);
-
-        for (int i = 0; i < nodes.Count; i++)
-            nodes[i] = keys[i];
-    }
-
-    private void RemoveNodes(EntObj n)
-    {
-        for (int i = n.Nodes().Count - 1; i >= 0; i--)
-        {
-            var c = n.Nodes()[i];
-            if (!c.HasIsDeletedV() && !c.HasIsDeletedF())
-                continue;
-
-            var isDeleted = Get(c.IsDeletedV(), c.IsDeletedF());
-            if (isDeleted)
-                n.Nodes().RemoveAt(i);
-        }
     }
 }
