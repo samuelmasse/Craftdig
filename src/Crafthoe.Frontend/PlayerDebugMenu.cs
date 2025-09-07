@@ -5,6 +5,7 @@ public class PlayerDebugMenu(
     RootGlw gl,
     RootText text,
     RootMetrics metrics,
+    RootKeyboard keyboard,
     AppStyle s,
     DimensionMetrics dimensionMetrics,
     PlayerEnt ent,
@@ -13,7 +14,13 @@ public class PlayerDebugMenu(
 {
     public EntObj Get()
     {
-        Node(out var menu).SizeRelativeV((1, 1));
+        bool disabled = false;
+
+        Node(out var menu).SizeRelativeV((1, 1)).OnUpdateF(() =>
+        {
+            if (keyboard.IsKeyPressed(Keys.F3))
+                disabled = !disabled;
+        });
 
         List<Func<ReadOnlySpan<char>>> lines =
         [
@@ -36,7 +43,8 @@ public class PlayerDebugMenu(
         Node(menu, out var list)
             .SizeInnerMaxRelativeV((1, 0))
             .SizeInnerSumRelativeV((0, 1))
-            .InnerLayoutV(InnerLayout.VerticalList);
+            .InnerLayoutV(InnerLayout.VerticalList)
+            .IsDisabledF(() => disabled);
         {
             lines.ForEach(x => Node(list)
                 .Mut(s.Label)

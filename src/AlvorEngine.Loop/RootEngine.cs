@@ -32,6 +32,7 @@ public class RootEngine(
         uiSystem.Size(ui.SizeR(), ui);
         uiSystem.Position(ui.SizeR(), ui);
         uiMouse.Update((0, 0), ui);
+        uiSystem.Update(ui);
 
         state.Current.Update(time);
     }

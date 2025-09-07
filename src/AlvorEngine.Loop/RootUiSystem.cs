@@ -262,6 +262,15 @@ public class RootUiSystem(RootSprites sprites)
         Align(ref n.OffsetR(), n.SizeR(), s, alignment);
     }
 
+    public void Update(EntObj n)
+    {
+        if (n.HasOnUpdateF())
+            n.OnUpdateF()?.Invoke();
+
+        foreach (var c in n.GetNodesR())
+            Update(c);
+    }
+
     public void Draw(Vector2 o, EntObj n)
     {
         DrawNode(o + n.OffsetR(), n);

@@ -74,6 +74,7 @@ file record UiComponents(
     Vector4 TextColorV,
     Func<Vector4>? TextColorF,
 
+    Action? OnUpdateF,
     Action? OnClickF,
     Action? OnPressF,
     Action? OnSecondaryClickF,

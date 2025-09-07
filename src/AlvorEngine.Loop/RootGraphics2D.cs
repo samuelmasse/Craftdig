@@ -8,7 +8,6 @@ public class RootGraphics2D(
     RootFonts fonts,
     RootSprites sprites,
     RootUi ui,
-    RootUiMouse uiMouse,
     RootUiSystem uiSystem)
 {
     public void Unload() => fonts.Unload();
@@ -23,7 +22,6 @@ public class RootGraphics2D(
         uiSystem.Traverse(ui, 0);
         uiSystem.Size(ui.SizeR(), ui);
         uiSystem.Position(ui.SizeR(), ui);
-        uiMouse.Update((0, 0), ui);
         uiSystem.Draw(ui.OffsetR(), ui);
 
         gl.Viewport(canvas.Size);
