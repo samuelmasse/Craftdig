@@ -114,9 +114,9 @@ public class PlayerState(
 
     public override void Draw()
     {
-        float cht = 4;
+        float cht = 4 * uiSystem.Scale;
         float chl = cht * 9;
-        var c = (canvas.Size / uiSystem.Scale) / 2;
+        var c = canvas.Size / 2;
 
         sprites.Batch.Draw(c - (cht / 2, chl / 2), (cht, chl));
         sprites.Batch.Draw(c - (chl / 2, cht / 2), (chl, cht));

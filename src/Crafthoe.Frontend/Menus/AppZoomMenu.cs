@@ -6,6 +6,10 @@ public class AppZoomMenu(RootKeyboard keyboard, RootText text, RootUiSystem uiSy
     public void Create(EntObj root)
     {
         int zoom = (int)(uiSystem.Scale * 8);
+        var sw = Stopwatch.StartNew();
+
+        float last = uiSystem.Scale;
+        bool initial = true;
 
         Node(root)
             .OnUpdateF(() =>
@@ -23,7 +27,19 @@ public class AppZoomMenu(RootKeyboard keyboard, RootText text, RootUiSystem uiSy
             .Mut(s.Label)
             .AlignmentV(Alignment.Top | Alignment.Right)
             .TextF(() => text.Format("{0}%", uiSystem.Scale * 100))
-            .ColorV(s.TooltipColor * (1, 1, 1, 0.5f))
+            .OnUpdateF(() =>
+            {
+                if (uiSystem.Scale != last)
+                {
+                    initial = false;
+                    last = uiSystem.Scale;
+                    sw.Restart();
+                }
+            })
+            .ColorF(() => s.TooltipColor * (1, 1, 1, 0.5f * Opacity()))
+            .TextColorF(() => s.TextColor * (1, 1, 1, Opacity()))
             .SizeV((s.ItemSpacing, s.ItemSpacing));
+
+        float Opacity() => initial ? 0 : Math.Clamp(3 - (float)sw.Elapsed.TotalSeconds * 4, 0, 1);
     }
 }

@@ -15,15 +15,21 @@ public class RootGraphics2D(
     public void Render()
     {
         fonts.Pack();
-        sprites.Begin(canvas.Size / uiSystem.Scale);
+        sprites.Begin(canvas.Size);
         state.Current.Draw();
+        End();
 
+        sprites.Begin(canvas.Size / uiSystem.Scale);
         ui.SizeV() = canvas.Size / uiSystem.Scale;
         uiSystem.Traverse(ui, 0);
         uiSystem.Size(ui.SizeR(), ui);
         uiSystem.Position(ui.SizeR(), ui);
         uiSystem.Draw(ui.OffsetR(), ui);
+        End();
+    }
 
+    private void End()
+    {
         gl.Viewport(canvas.Size);
 
         gl.Enable(EnableCap.Blend);
