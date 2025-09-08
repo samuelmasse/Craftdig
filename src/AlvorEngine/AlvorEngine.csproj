@@ -3,7 +3,7 @@
     <ItemGroup>
         <PackageReference Include="AlvorEngine.FastNoiseLite" Version="1.0" />
         <PackageReference Include="BigGustave" Version="1.0.6" />
-        <PackageReference Include="Glw2D.Fonts" Version="0.3" />
+        <PackageReference Include="Glw2D.Fonts" Version="0.4" />
         <PackageReference Include="HadvarECS" Version="0.7" />
         <PackageReference Include="HadvarECS.Generator" Version="0.7" />
         <PackageReference Include="NeedlerDI" Version="0.*" />

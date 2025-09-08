@@ -80,6 +80,8 @@ file record UiComponents(
     Action? OnSecondaryClickF,
     Action? OnSecondaryPressF,
 
+    [ComponentToString] string? TagV,
+
     [ComponentTryGet] EntObj? StackedNodeR,
     Vector2 OffsetR,
     Vector2 SizeR,

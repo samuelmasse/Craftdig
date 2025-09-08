@@ -15,10 +15,10 @@ public class RootGraphics2D(
     public void Render()
     {
         fonts.Pack();
-        sprites.Begin(canvas.Size);
+        sprites.Begin(canvas.Size / uiSystem.Scale);
         state.Current.Draw();
 
-        ui.SizeV() = canvas.Size;
+        ui.SizeV() = canvas.Size / uiSystem.Scale;
         uiSystem.Traverse(ui, 0);
         uiSystem.Size(ui.SizeR(), ui);
         uiSystem.Position(ui.SizeR(), ui);

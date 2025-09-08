@@ -3,9 +3,10 @@ namespace Crafthoe.Frontend;
 [Player]
 public class PlayerCreativeInventoryMenu(ModuleEnts ents, AppStyle s, PlayerHand hand, PlayerEnt player)
 {
-    public EntObj Get()
+    public void Create(EntObj root)
     {
-        var blocks = new Ent[6 * HotBarSlots.Count];
+        int rows = 5;
+        var blocks = new Ent[(rows + 1) * HotBarSlots.Count];
         int count = 0;
 
         foreach (var ent in ents.Span)
@@ -14,14 +15,12 @@ public class PlayerCreativeInventoryMenu(ModuleEnts ents, AppStyle s, PlayerHand
                 blocks[count++] = ent;
         }
 
-        Node(out var menu).SizeRelativeV((1, 1));
-
-        Node(menu, out var vert)
-            .SizeInnerSumRelativeV((0, 1))
-            .SizeInnerMaxRelativeV((1, 0))
-            .PaddingV((32, 32, 32, 32))
-            .InnerSpacingV(32)
-            .ColorV((1, 0, 0, 1))
+        Node(root, out var vert)
+            .SizeInnerSumRelativeV(s.Vertical)
+            .SizeInnerMaxRelativeV(s.Horizontal)
+            .PaddingV((s.ItemSpacing, s.ItemSpacing, s.ItemSpacing, s.ItemSpacing))
+            .InnerSpacingV(s.ItemSpacing)
+            .ColorV(s.BoardColor)
             .IsSelectableV(true)
             .InnerLayoutV(InnerLayout.VerticalList)
             .AlignmentV(Alignment.Center);
@@ -31,16 +30,16 @@ public class PlayerCreativeInventoryMenu(ModuleEnts ents, AppStyle s, PlayerHand
             .TextV("Building Blocks");
 
         Node(vert, out var blocksVert)
-            .SizeInnerSumRelativeV((0, 1))
-            .SizeInnerMaxRelativeV((1, 0))
-            .InnerSpacingV(12)
+            .SizeInnerSumRelativeV(s.Vertical)
+            .SizeInnerMaxRelativeV(s.Horizontal)
+            .InnerSpacingV(s.ItemSpacingS)
             .InnerLayoutV(InnerLayout.VerticalList);
-        for (int y = 0; y < 5; y++)
+        for (int y = 0; y < rows; y++)
         {
             Node(blocksVert, out var blocksHor)
-                .SizeInnerSumRelativeV((1, 0))
-                .SizeInnerMaxRelativeV((0, 1))
-                .InnerSpacingV(12)
+                .SizeInnerSumRelativeV(s.Horizontal)
+                .SizeInnerMaxRelativeV(s.Vertical)
+                .InnerSpacingV(s.ItemSpacingS)
                 .InnerLayoutV(InnerLayout.HorizontalList);
 
             for (int x = 0; x < HotBarSlots.Count; x++)
@@ -50,7 +49,7 @@ public class PlayerCreativeInventoryMenu(ModuleEnts ents, AppStyle s, PlayerHand
 
                 Node(blocksHor, out var square)
                     .Mut(s.Button)
-                    .SizeV((120, 120))
+                    .SizeV((s.SlotSize, s.SlotSize))
                     .OnPressF(() =>
                     {
                         if (hand.Ent == default)
@@ -74,9 +73,9 @@ public class PlayerCreativeInventoryMenu(ModuleEnts ents, AppStyle s, PlayerHand
         }
 
         Node(vert, out var hotbar)
-            .SizeInnerSumRelativeV((1, 0))
-            .SizeInnerMaxRelativeV((0, 1))
-            .InnerSpacingV(12)
+            .SizeInnerSumRelativeV(s.Horizontal)
+            .SizeInnerMaxRelativeV(s.Vertical)
+            .InnerSpacingV(s.ItemSpacingS)
             .InnerLayoutV(InnerLayout.HorizontalList);
         for (int x = 0; x < HotBarSlots.Count; x++)
         {
@@ -85,7 +84,7 @@ public class PlayerCreativeInventoryMenu(ModuleEnts ents, AppStyle s, PlayerHand
 
             Node(hotbar, out var square)
                 .Mut(s.Button)
-                .SizeV((120, 120))
+                .SizeV((s.SlotSize, s.SlotSize))
                 .OnPressF(() =>
                 {
                     if (hand.Ent == default)
@@ -106,7 +105,5 @@ public class PlayerCreativeInventoryMenu(ModuleEnts ents, AppStyle s, PlayerHand
                 .OnSecondaryClickF(square.OnSecondaryClickF())
                 .TooltipF(() => hand.Ent == default ? player.Ent.HotBarSlots()[i].Name() : null);
         }
-
-        return menu;
     }
 }

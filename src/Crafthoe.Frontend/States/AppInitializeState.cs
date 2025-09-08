@@ -8,7 +8,8 @@ public class AppInitializeState(
     RootUi ui,
     AppScope scope,
     AppFiles files,
-    AppTooltipMenu tooltipMenu) : State
+    AppTooltipMenu tooltipMenu,
+    AppZoomMenu zoomMenu) : State
 {
     public override void Load()
     {
@@ -16,7 +17,8 @@ public class AppInitializeState(
         screen.Title = "Crafthoe";
         screen.Size = screen.MonitorSize / 4 * 3;
 
-        ui.Nodes().Add(tooltipMenu.Get());
+        ui.Nodes().Add(Node().SizeRelativeV((1, 1)).OrderValueV(2).Mut(tooltipMenu.Create));
+        ui.Nodes().Add(Node().SizeRelativeV((1, 1)).OrderValueV(5).Mut(zoomMenu.Create));
 
         state.Current = scope.New<AppMenuState>();
     }

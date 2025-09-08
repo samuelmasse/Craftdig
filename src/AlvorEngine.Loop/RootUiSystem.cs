@@ -1,13 +1,21 @@
 namespace AlvorEngine.Loop;
 
 [Root]
-public class RootUiSystem(RootSprites sprites)
+public class RootUiSystem(RootScale rscale, RootSprites sprites)
 {
+    private float scale = rscale.Scale;
+
     private EntObj[] traverseBuffer = new EntObj[16];
     private int traverseBufferIndex;
 
     private EntObj[] orderBufferKeys = new EntObj[16];
     private float[] orderBufferVals = new float[16];
+
+    public float Scale
+    {
+        get => scale;
+        set => scale = value;
+    }
 
     public void Traverse(EntObj n, int depth)
     {
@@ -130,7 +138,7 @@ public class RootUiSystem(RootSprites sprites)
         if (font == null)
             return;
 
-        var fontSize = Get(n.FontSizeV(), n.FontSizeF());
+        var fontSize = (int)(Get(n.FontSizeV(), n.FontSizeF()) * scale);
         if (fontSize <= 0)
             return;
 
@@ -139,8 +147,8 @@ public class RootUiSystem(RootSprites sprites)
             return;
 
         var sizeTextRelative = Get(n.SizeTextRelativeV(), n.SizeTextRelativeF());
-        n.SizeR().X += sizeTextRelative.X * sprites.Batch.Measure(font.Size(fontSize), text);
-        n.SizeR().Y += sizeTextRelative.Y * font.Size(fontSize).Metrics.Height;
+        n.SizeR().X += sizeTextRelative.X * (sprites.Batch.Measure(font.Size(fontSize), text) / scale);
+        n.SizeR().Y += sizeTextRelative.Y * (font.Size(fontSize).Metrics.Height / scale);
     }
 
     private void SizeInnerMaxRelative(Vector2 s, EntObj n)
@@ -216,7 +224,12 @@ public class RootUiSystem(RootSprites sprites)
         foreach (var c in n.GetNodesR())
         {
             Position(n.SizeR(), c);
-            c.OffsetR() += n.PaddingR().Xy;
+
+            var alignment = GetAlignment(c);
+            if ((alignment & (Alignment.Right | Alignment.Horizontal)) == 0)
+                c.OffsetR().X += n.PaddingR().X;
+            if ((alignment & (Alignment.Bottom | Alignment.Vertical)) == 0)
+                c.OffsetR().Y += n.PaddingR().Y;
         }
 
         var innerLayout = Get(n.InnerLayoutV(), n.InnerLayoutF());
@@ -255,11 +268,16 @@ public class RootUiSystem(RootSprites sprites)
 
     private void PositionAlignement(Vector2 s, EntObj n)
     {
-        if (!n.HasAlignmentV() && !n.HasAlignmentF())
-            return;
-
-        var alignment = Get(n.AlignmentV(), n.AlignmentF());
+        var alignment = GetAlignment(n);
         Align(ref n.OffsetR(), n.SizeR(), s, alignment);
+    }
+
+    private Alignment GetAlignment(EntObj n)
+    {
+        if (!n.HasAlignmentV() && !n.HasAlignmentF())
+            return Alignment.None;
+
+        return Get(n.AlignmentV(), n.AlignmentF());
     }
 
     public void Update(EntObj n)
@@ -305,7 +323,7 @@ public class RootUiSystem(RootSprites sprites)
         if (font == null)
             return;
 
-        var fontSize = Get(n.FontSizeV(), n.FontSizeF());
+        var fontSize = (int)(Get(n.FontSizeV(), n.FontSizeF()) * scale);
         if (fontSize <= 0)
             return;
 
@@ -318,12 +336,12 @@ public class RootUiSystem(RootSprites sprites)
             return;
 
         var alignment = Get(n.TextAlignmentV(), n.TextAlignmentF()) ?? Alignment.Center;
-        var size = new Vector2(sprites.Batch.Measure(font.Size(fontSize), text), font.Size(fontSize).Metrics.Height);
+        var size = new Vector2(sprites.Batch.Measure(font.Size(fontSize), text), font.Size(fontSize).Metrics.Height) / scale;
         var offset = Vector2.Zero;
 
         Align(ref offset, size, n.SizeR(), alignment);
         offset.Y += size.Y / 2;
-        sprites.Batch.Write(font.Size(fontSize), text, o + offset, textColor);
+        sprites.Batch.Write(font.Size(fontSize), text, (o + offset) * scale, textColor, scale);
     }
 
     public T? Get<T>(T? value, Func<T>? func) where T : allows ref struct

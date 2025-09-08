@@ -12,16 +12,8 @@ public class PlayerDebugMenu(
     PlayerCamera camera,
     PlayerSelected selected)
 {
-    public EntObj Get()
+    public void Create(EntObj root)
     {
-        bool disabled = false;
-
-        Node(out var menu).SizeRelativeV((1, 1)).OnUpdateF(() =>
-        {
-            if (keyboard.IsKeyPressed(Keys.F3))
-                disabled = !disabled;
-        });
-
         List<Func<ReadOnlySpan<char>>> lines =
         [
             () => text.Format("Frame: {0}. {1:F3} ms ({2} FPS)",
@@ -40,11 +32,10 @@ public class PlayerDebugMenu(
             () => text.Format("TPS: {0}", dimensionMetrics.TickMetricWindow.Value.Ticks)
         ];
 
-        Node(menu, out var list)
-            .SizeInnerMaxRelativeV((1, 0))
-            .SizeInnerSumRelativeV((0, 1))
-            .InnerLayoutV(InnerLayout.VerticalList)
-            .IsDisabledF(() => disabled);
+        Node(root, out var list)
+            .SizeInnerMaxRelativeV(s.Horizontal)
+            .SizeInnerSumRelativeV(s.Vertical)
+            .InnerLayoutV(InnerLayout.VerticalList);
         {
             lines.ForEach(x => Node(list)
                 .Mut(s.Label)
@@ -52,6 +43,10 @@ public class PlayerDebugMenu(
                 .TextF(x));
         }
 
-        return menu;
+        Node(root).OnUpdateF(() =>
+        {
+            if (keyboard.IsKeyPressed(Keys.F3))
+                list.IsDisabledV() = !list.IsDisabledV();
+        });
     }
 }

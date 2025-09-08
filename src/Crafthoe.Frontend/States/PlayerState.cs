@@ -6,8 +6,8 @@ public class PlayerState(
     RootMouse mouse,
     RootKeyboard keyboard,
     RootSprites sprites,
-    RootScale scale,
     RootUi ui,
+    RootUiSystem uiSystem,
     WorldTick tick,
     DimensionMetrics dimensionMetrics,
     DimensionContext dimension,
@@ -19,9 +19,9 @@ public class PlayerState(
     PlayerHandMenu playerHandMenu,
     PlayerCreativeInventoryMenu creativeInventoryMenu) : State
 {
-    private readonly EntObj menus = Node().SizeRelativeV((1, 1)).OrderValueV(1);
-    private readonly EntObj overlay = playerOverlayMenu.Get();
-    private readonly EntObj hand = playerHandMenu.Get();
+    private readonly EntObj menus = Node(ui).SizeRelativeV((1, 1)).OrderValueV(1);
+    private readonly EntObj overlay = Node(ui).SizeRelativeV((1, 1)).Mut(playerOverlayMenu.Create);
+    private readonly EntObj hand = Node(ui).SizeRelativeV((1, 1)).OrderValueV(1.5f).Mut(playerHandMenu.Create);
     private readonly EntObj dark = Node().SizeRelativeV((1, 1)).ColorV((0.3f, 0.3f, 0.3f, 0.3f));
     private bool paused;
     private bool inv;
@@ -29,10 +29,7 @@ public class PlayerState(
     public override void Load()
     {
         player.Load();
-        ui.Nodes().Add(hand);
-        ui.Nodes().Add(overlay);
-        ui.Nodes().Add(menus);
-        menus.Nodes().Add(debugMenu.Get());
+        Node(menus).SizeRelativeV((1, 1)).Mut(debugMenu.Create);
     }
 
     public override void Unload()
@@ -51,7 +48,7 @@ public class PlayerState(
             else
             {
                 paused = true;
-                menus.NodeStack().Push(escapeMenu.Get(menus));
+                menus.NodeStack().Push(Node().SizeRelativeV((1, 1)).StackRootV(menus).Mut(escapeMenu.Create));
             }
         }
 
@@ -70,7 +67,7 @@ public class PlayerState(
             else
             {
                 inv = true;
-                menus.NodeStack().Push(creativeInventoryMenu.Get());
+                menus.NodeStack().Push(Node().SizeRelativeV((1, 1)).Mut(creativeInventoryMenu.Create));
             }
         }
 
@@ -117,9 +114,9 @@ public class PlayerState(
 
     public override void Draw()
     {
-        float cht = scale[4];
+        float cht = 4;
         float chl = cht * 9;
-        var c = canvas.Size / 2;
+        var c = (canvas.Size / uiSystem.Scale) / 2;
 
         sprites.Batch.Draw(c - (cht / 2, chl / 2), (cht, chl));
         sprites.Batch.Draw(c - (chl / 2, cht / 2), (chl, cht));

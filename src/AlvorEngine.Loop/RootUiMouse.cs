@@ -1,18 +1,22 @@
 namespace AlvorEngine.Loop;
 
 [Root]
-public class RootUiMouse(RootMouse mouse)
+public class RootUiMouse(RootMouse mouse, RootUiSystem uiSystem)
 {
+    private Vector2 position;
     private EntObj? prevHovered;
     private EntObj? pressed;
     private EntObj? secondaryPressed;
     private bool prevMouseDown;
     private bool prevSecondaryMouseDown;
 
+    public Vector2 Position => position;
     public EntObj? Hovered => prevHovered;
 
     public void Update(Vector2 o, EntObj n)
     {
+        position = mouse.Position / uiSystem.Scale;
+
         var hovered = FindHovered(o, n);
 
         if (hovered != prevHovered)
@@ -79,7 +83,7 @@ public class RootUiMouse(RootMouse mouse)
         if (f != null)
             isSelectable = f.Invoke();
 
-        if (box.ContainsInclusive(mouse.Position) && isSelectable)
+        if (box.ContainsInclusive(position) && isSelectable)
             hovered = n;
 
         foreach (var c in n.GetNodesR())

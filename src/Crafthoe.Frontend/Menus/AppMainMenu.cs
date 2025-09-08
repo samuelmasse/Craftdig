@@ -4,57 +4,57 @@ namespace Crafthoe.Frontend;
 public class AppMainMenu(
     RootScreen screen,
     AppStyle s,
-    AppSinglePlayerWorldSelectMenu singlePlayerWorldSelectMenu)
+    AppSinglePlayerWorldSelectMenu worldSelectMenu)
 {
-    public EntObj Get(EntObj ui)
+    public void Create(EntObj root)
     {
-        Node(out var menu).SizeRelativeV((1, 1));
-
-        Node(menu, out var list)
+        Node(root, out var list)
             .AlignmentV(Alignment.Center)
             .InnerLayoutV(InnerLayout.VerticalList)
-            .InnerSpacingV(80)
-            .SizeInnerSumRelativeV((0, 1))
-            .SizeInnerMaxRelativeV((1, 0))
-            .ColorV((1, 0, 0, 1));
+            .InnerSpacingV(s.ItemSpacingXXL)
+            .SizeInnerSumRelativeV(s.Vertical)
+            .SizeInnerMaxRelativeV(s.Horizontal)
+            .ColorV(s.BoardColor);
         {
             Node(list)
                 .Mut(s.Label)
                 .TextV("Crafthoe")
-                .FontSizeV(300)
-                .ColorV((1, 0, 1, 1))
+                .FontSizeV(s.FontSizeTitle)
+                .ColorV(s.ButtonColor)
                 .AlignmentV(Alignment.Horizontal);
 
             Node(list, out var list2)
                 .AlignmentV(Alignment.Horizontal)
                 .InnerLayoutV(InnerLayout.VerticalList)
-                .InnerSpacingV(40)
-                .SizeV((512, 0))
-                .SizeInnerSumRelativeV((0, 1))
-                .ColorV((1, 1, 0, 1));
+                .InnerSpacingV(s.ItemSpacing)
+                .SizeV((s.ItemWidth, 0))
+                .SizeInnerSumRelativeV(s.Vertical)
+                .ColorV(s.BoardColor2);
             {
                 Node(list2)
                     .Mut(s.Button)
-                    .OnPressF(() => ui.NodeStack().Push(singlePlayerWorldSelectMenu.Get(ui)))
+                    .OnPressF(() => root.StackRootV().NodeStack().Push(
+                        Node()
+                            .SizeRelativeV((1, 1))
+                            .StackRootV(root.StackRootV())
+                            .Mut(worldSelectMenu.Create)))
                     .TextV("Singleplayer");
 
                 Node(list2)
                     .Mut(s.Button)
                     .TextV("Multiplayer");
 
-                Node(list2, out var list3)
+                Node(list2)
                     .Mut(s.Button)
                     .OnPressF(screen.Close)
                     .TextV("Quit");
             }
         }
 
-        Node(menu)
+        Node(root)
             .Mut(s.Label)
             .TextV("Crafthoe 0.1")
             .AlignmentV(Alignment.Left | Alignment.Bottom)
-            .OffsetV((15, -10));
-
-        return menu;
+            .OffsetV((s.ItemSpacingS, -s.ItemSpacingXS));
     }
 }

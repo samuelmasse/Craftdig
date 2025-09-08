@@ -3,33 +3,31 @@ namespace Crafthoe.Frontend;
 [App]
 public class AppSinglePlayerWorldSelectMenu(AppStyle s, AppLoadWorldAction loadWorldAction)
 {
-    public EntObj Get(EntObj ui)
+    public void Create(EntObj root)
     {
-        Node(out var menu).SizeRelativeV((1, 1));
+        Node(root, out var topBar)
+            .SizeRelativeV(s.Horizontal)
+            .SizeV((0, s.BarHeight))
+            .ColorV(s.BoardColor);
 
-        Node(menu, out var topBar)
-            .SizeRelativeV((1, 0))
-            .SizeV((0, 300))
-            .ColorV((1, 0, 0, 1));
-
-        Node(menu, out var bottomBar)
-            .SizeRelativeV((1, 0))
-            .SizeV((0, 300))
+        Node(root, out var bottomBar)
+            .SizeRelativeV(s.Horizontal)
+            .SizeV((0, s.BarHeight))
             .AlignmentV(Alignment.Horizontal | Alignment.Bottom)
-            .ColorV((1, 0, 0, 1));
+            .ColorV(s.BoardColor);
         {
             Node(bottomBar, out var buttonsList)
                 .AlignmentV(Alignment.Center)
-                .SizeInnerSumRelativeV((1, 0))
-                .SizeInnerMaxRelativeV((0, 1))
+                .SizeInnerSumRelativeV(s.Horizontal)
+                .SizeInnerMaxRelativeV(s.Vertical)
                 .InnerLayoutV(InnerLayout.HorizontalList)
-                .InnerSpacingV(40)
-                .ColorV((0.5f, 0.7f, 0, 1));
+                .InnerSpacingV(s.ItemSpacingL)
+                .ColorV(s.BoardColor2);
             {
                 Node(buttonsList, out var leftButtonsVertical)
-                    .SizeV((1024, 0))
-                    .SizeInnerSumRelativeV((0, 1))
-                    .InnerSpacingV(30)
+                    .SizeV((s.ItemWidthL, 0))
+                    .SizeInnerSumRelativeV(s.Vertical)
+                    .InnerSpacingV(s.ItemSpacing)
                     .InnerLayoutV(InnerLayout.VerticalList);
                 {
                     Node(leftButtonsVertical)
@@ -37,9 +35,9 @@ public class AppSinglePlayerWorldSelectMenu(AppStyle s, AppLoadWorldAction loadW
                         .Mut(s.Button);
 
                     Node(leftButtonsVertical, out var leftButtonsHorizontal)
-                        .SizeRelativeV((1, 0))
-                        .SizeInnerMaxRelativeV((0, 1))
-                        .InnerSpacingV(30)
+                        .SizeRelativeV(s.Horizontal)
+                        .SizeInnerMaxRelativeV(s.Vertical)
+                        .InnerSpacingV(s.ItemSpacing)
                         .InnerLayoutV(InnerLayout.HorizontalList)
                         .InnerSizingV(InnerSizing.HorizontalWeight);
                     {
@@ -54,9 +52,9 @@ public class AppSinglePlayerWorldSelectMenu(AppStyle s, AppLoadWorldAction loadW
                 }
 
                 Node(buttonsList, out var rightButtonsVertical)
-                    .SizeV((1024, 0))
-                    .SizeInnerSumRelativeV((0, 1))
-                    .InnerSpacingV(30)
+                    .SizeV((s.ItemWidthL, 0))
+                    .SizeInnerSumRelativeV(s.Vertical)
+                    .InnerSpacingV(s.ItemSpacing)
                     .InnerLayoutV(InnerLayout.VerticalList);
                 {
                     Node(rightButtonsVertical)
@@ -65,9 +63,9 @@ public class AppSinglePlayerWorldSelectMenu(AppStyle s, AppLoadWorldAction loadW
                         .Mut(s.Button);
 
                     Node(rightButtonsVertical, out var rightButtonsHorizontal)
-                        .SizeRelativeV((1, 0))
-                        .SizeInnerMaxRelativeV((0, 1))
-                        .InnerSpacingV(30)
+                        .SizeRelativeV(s.Horizontal)
+                        .SizeInnerMaxRelativeV(s.Vertical)
+                        .InnerSpacingV(s.ItemSpacing)
                         .InnerLayoutV(InnerLayout.HorizontalList)
                         .InnerSizingV(InnerSizing.HorizontalWeight);
                     {
@@ -76,14 +74,12 @@ public class AppSinglePlayerWorldSelectMenu(AppStyle s, AppLoadWorldAction loadW
                             .Mut(s.Button);
 
                         Node(rightButtonsHorizontal)
-                            .OnPressF(() => ui.NodeStack().Pop())
+                            .OnPressF(() => root.StackRootV().NodeStack().Pop())
                             .TextV("Back")
                             .Mut(s.Button);
                     }
                 }
             }
         }
-
-        return menu;
     }
 }

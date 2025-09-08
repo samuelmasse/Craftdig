@@ -1,15 +1,13 @@
 namespace Crafthoe.Frontend;
 
 [App]
-public class AppTooltipMenu(RootMouse mouse, RootUiMouse uiMouse, RootUiSystem uiSystem, AppStyle s)
+public class AppTooltipMenu(RootUiMouse uiMouse, RootUiSystem uiSystem, AppStyle s)
 {
-    public EntObj Get()
+    public void Create(EntObj root)
     {
-        Node(out var menu).SizeRelativeV((1, 1)).OrderValueV(2);
-
-        Node(menu, out var text)
+        Node(root, out var text)
             .Mut(s.Label)
-            .OffsetF(() => mouse.Position + (32, -64))
+            .OffsetF(() => uiMouse.Position + (s.ItemSpacing, -s.ItemSpacingXL))
             .TextF(() =>
             {
                 var hovered = uiMouse.Hovered;
@@ -21,8 +19,6 @@ public class AppTooltipMenu(RootMouse mouse, RootUiMouse uiMouse, RootUiSystem u
 
                 return uiSystem.Get(hovered.TooltipV() ?? string.Empty, hovered.TooltipF());
             })
-            .ColorV((0.5f, 0.28f, 1, 1));
-
-        return menu;
+            .ColorV(s.TooltipColor);
     }
 }

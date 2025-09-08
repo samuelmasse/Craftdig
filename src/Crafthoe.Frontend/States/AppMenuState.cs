@@ -12,7 +12,7 @@ public class AppMenuState(
 
     public override void Load()
     {
-        menus.NodeStack().Push(mainMenu.Get(menus));
+        menus.NodeStack().Push(Node().SizeRelativeV((1, 1)).StackRootV(menus).Mut(mainMenu.Create));
         watch.Start();
     }
 
