@@ -15,7 +15,7 @@ public class PlayerEscapeMenu(RootScope scope, RootState state, AppStyle s, Play
             .ColorV(s.BoardColor);
         {
             Node(list)
-                .Mut(s.Label) 
+                .Mut(s.Label)
                 .TextV("Game Menu")
                 .AlignmentV(Alignment.Horizontal);
 
