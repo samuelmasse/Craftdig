@@ -28,6 +28,7 @@ public class RootEngine(
     {
         ui.IsOrderedV() = true;
         ui.SizeV() = canvas.Size / uiSystem.Scale;
+        ui.SizeRelativeV() = (0, 0);
         uiSystem.Traverse(ui, 0);
         uiSystem.Size(ui.SizeR(), ui);
         uiSystem.Position(ui.SizeR(), ui);

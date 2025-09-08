@@ -7,12 +7,12 @@ public class AppMenuState(
     RootUi ui,
     AppMainMenu mainMenu) : State
 {
-    private readonly EntObj menus = Node(ui).SizeRelativeV((1, 1));
+    private readonly EntObj menus = Node(ui);
     private readonly Stopwatch watch = new();
 
     public override void Load()
     {
-        menus.NodeStack().Push(Node().SizeRelativeV((1, 1)).StackRootV(menus).Mut(mainMenu.Create));
+        menus.NodeStack().Push(Node().StackRootV(menus).Mut(mainMenu.Create));
         watch.Start();
     }
 

@@ -19,17 +19,17 @@ public class PlayerState(
     PlayerHandMenu playerHandMenu,
     PlayerCreativeInventoryMenu creativeInventoryMenu) : State
 {
-    private readonly EntObj menus = Node(ui).SizeRelativeV((1, 1)).OrderValueV(1);
-    private readonly EntObj overlay = Node(ui).SizeRelativeV((1, 1)).Mut(playerOverlayMenu.Create);
-    private readonly EntObj hand = Node(ui).SizeRelativeV((1, 1)).OrderValueV(1.5f).Mut(playerHandMenu.Create);
-    private readonly EntObj dark = Node().SizeRelativeV((1, 1)).ColorV((0.3f, 0.3f, 0.3f, 0.3f));
+    private readonly EntObj menus = Node(ui).OrderValueV(1);
+    private readonly EntObj overlay = Node(ui).Mut(playerOverlayMenu.Create);
+    private readonly EntObj hand = Node(ui).OrderValueV(1.5f).Mut(playerHandMenu.Create);
+    private readonly EntObj dark = Node().ColorV((0.3f, 0.3f, 0.3f, 0.3f));
     private bool paused;
     private bool inv;
 
     public override void Load()
     {
         player.Load();
-        Node(menus).SizeRelativeV((1, 1)).Mut(debugMenu.Create);
+        Node(menus).Mut(debugMenu.Create);
     }
 
     public override void Unload()
@@ -48,7 +48,7 @@ public class PlayerState(
             else
             {
                 paused = true;
-                menus.NodeStack().Push(Node().SizeRelativeV((1, 1)).StackRootV(menus).Mut(escapeMenu.Create));
+                menus.NodeStack().Push(Node().StackRootV(menus).Mut(escapeMenu.Create));
             }
         }
 
@@ -67,7 +67,7 @@ public class PlayerState(
             else
             {
                 inv = true;
-                menus.NodeStack().Push(Node().SizeRelativeV((1, 1)).Mut(creativeInventoryMenu.Create));
+                menus.NodeStack().Push(Node().Mut(creativeInventoryMenu.Create));
             }
         }
 

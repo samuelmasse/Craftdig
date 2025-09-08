@@ -17,18 +17,16 @@ public class AppSinglePlayerWorldSelectMenu(AppStyle s, AppLoadWorldAction loadW
             .ColorV(s.BoardColor);
         {
             Node(bottomBar, out var buttonsList)
+                .Mut(s.HorizontalList)
                 .AlignmentV(Alignment.Center)
-                .SizeInnerSumRelativeV(s.Horizontal)
                 .SizeInnerMaxRelativeV(s.Vertical)
-                .InnerLayoutV(InnerLayout.HorizontalList)
                 .InnerSpacingV(s.ItemSpacingL)
                 .ColorV(s.BoardColor2);
             {
                 Node(buttonsList, out var leftButtonsVertical)
+                    .Mut(s.VerticalList)
                     .SizeV((s.ItemWidthL, 0))
-                    .SizeInnerSumRelativeV(s.Vertical)
-                    .InnerSpacingV(s.ItemSpacing)
-                    .InnerLayoutV(InnerLayout.VerticalList);
+                    .InnerSpacingV(s.ItemSpacing);
                 {
                     Node(leftButtonsVertical)
                         .TextV("Play Selected World")
@@ -52,10 +50,9 @@ public class AppSinglePlayerWorldSelectMenu(AppStyle s, AppLoadWorldAction loadW
                 }
 
                 Node(buttonsList, out var rightButtonsVertical)
+                    .Mut(s.VerticalList)
                     .SizeV((s.ItemWidthL, 0))
-                    .SizeInnerSumRelativeV(s.Vertical)
-                    .InnerSpacingV(s.ItemSpacing)
-                    .InnerLayoutV(InnerLayout.VerticalList);
+                    .InnerSpacingV(s.ItemSpacing);
                 {
                     Node(rightButtonsVertical)
                         .OnPressF(loadWorldAction.Run)

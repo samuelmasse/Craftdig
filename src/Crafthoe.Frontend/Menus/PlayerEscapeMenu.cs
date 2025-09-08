@@ -6,10 +6,9 @@ public class PlayerEscapeMenu(RootScope scope, RootState state, AppStyle s, Play
     public void Create(EntObj root)
     {
         Node(root, out var list)
+            .Mut(s.VerticalList)
             .SizeV((s.ItemWidth, 0))
-            .SizeInnerSumRelativeV(s.Vertical)
             .AlignmentV(Alignment.Horizontal)
-            .InnerLayoutV(InnerLayout.VerticalList)
             .InnerSpacingV(s.ItemSpacing)
             .PaddingV((s.ItemSpacing, s.ItemSpacing, s.ItemSpacing, s.ItemSpacing))
             .AlignmentV(Alignment.Center)

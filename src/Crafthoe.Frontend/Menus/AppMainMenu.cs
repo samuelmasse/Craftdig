@@ -9,10 +9,9 @@ public class AppMainMenu(
     public void Create(EntObj root)
     {
         Node(root, out var list)
+            .Mut(s.VerticalList)
             .AlignmentV(Alignment.Center)
-            .InnerLayoutV(InnerLayout.VerticalList)
             .InnerSpacingV(s.ItemSpacingXXL)
-            .SizeInnerSumRelativeV(s.Vertical)
             .SizeInnerMaxRelativeV(s.Horizontal)
             .ColorV(s.BoardColor);
         {
@@ -24,20 +23,16 @@ public class AppMainMenu(
                 .AlignmentV(Alignment.Horizontal);
 
             Node(list, out var list2)
+                .Mut(s.VerticalList)
                 .AlignmentV(Alignment.Horizontal)
-                .InnerLayoutV(InnerLayout.VerticalList)
                 .InnerSpacingV(s.ItemSpacing)
                 .SizeV((s.ItemWidth, 0))
-                .SizeInnerSumRelativeV(s.Vertical)
                 .ColorV(s.BoardColor2);
             {
                 Node(list2)
                     .Mut(s.Button)
                     .OnPressF(() => root.StackRootV().NodeStack().Push(
-                        Node()
-                            .SizeRelativeV((1, 1))
-                            .StackRootV(root.StackRootV())
-                            .Mut(worldSelectMenu.Create)))
+                        Node().StackRootV(root.StackRootV()).Mut(worldSelectMenu.Create)))
                     .TextV("Singleplayer");
 
                 Node(list2)

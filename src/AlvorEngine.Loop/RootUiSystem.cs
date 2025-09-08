@@ -124,7 +124,7 @@ public class RootUiSystem(RootScale rscale, RootSprites sprites)
     private void SizeNode(Vector2 s, EntObj n)
     {
         n.SizeR() = default;
-        n.SizeR() += Get(n.SizeRelativeV(), n.SizeRelativeF()) * s;
+        n.SizeR() += (Get(n.SizeRelativeV(), n.SizeRelativeF()) ?? (1, 1)) * s;
         n.SizeR() += Get(n.SizeV(), n.SizeF());
         SizeTextRelative(s, n);
     }

@@ -16,13 +16,12 @@ public class PlayerCreativeInventoryMenu(ModuleEnts ents, AppStyle s, PlayerHand
         }
 
         Node(root, out var vert)
-            .SizeInnerSumRelativeV(s.Vertical)
+            .Mut(s.VerticalList)
             .SizeInnerMaxRelativeV(s.Horizontal)
             .PaddingV((s.ItemSpacing, s.ItemSpacing, s.ItemSpacing, s.ItemSpacing))
             .InnerSpacingV(s.ItemSpacing)
             .ColorV(s.BoardColor)
             .IsSelectableV(true)
-            .InnerLayoutV(InnerLayout.VerticalList)
             .AlignmentV(Alignment.Center);
 
         Node(vert, out var title)
@@ -30,17 +29,15 @@ public class PlayerCreativeInventoryMenu(ModuleEnts ents, AppStyle s, PlayerHand
             .TextV("Building Blocks");
 
         Node(vert, out var blocksVert)
-            .SizeInnerSumRelativeV(s.Vertical)
+            .Mut(s.VerticalList)
             .SizeInnerMaxRelativeV(s.Horizontal)
-            .InnerSpacingV(s.ItemSpacingS)
-            .InnerLayoutV(InnerLayout.VerticalList);
+            .InnerSpacingV(s.ItemSpacingS);
         for (int y = 0; y < rows; y++)
         {
             Node(blocksVert, out var blocksHor)
-                .SizeInnerSumRelativeV(s.Horizontal)
+                .Mut(s.HorizontalList)
                 .SizeInnerMaxRelativeV(s.Vertical)
-                .InnerSpacingV(s.ItemSpacingS)
-                .InnerLayoutV(InnerLayout.HorizontalList);
+                .InnerSpacingV(s.ItemSpacingS);
 
             for (int x = 0; x < HotBarSlots.Count; x++)
             {
@@ -73,10 +70,9 @@ public class PlayerCreativeInventoryMenu(ModuleEnts ents, AppStyle s, PlayerHand
         }
 
         Node(vert, out var hotbar)
-            .SizeInnerSumRelativeV(s.Horizontal)
+            .Mut(s.HorizontalList)
             .SizeInnerMaxRelativeV(s.Vertical)
-            .InnerSpacingV(s.ItemSpacingS)
-            .InnerLayoutV(InnerLayout.HorizontalList);
+            .InnerSpacingV(s.ItemSpacingS);
         for (int x = 0; x < HotBarSlots.Count; x++)
         {
             bool added = false;

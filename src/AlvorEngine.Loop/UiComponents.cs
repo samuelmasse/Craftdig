@@ -44,8 +44,8 @@ file record UiComponents(
     Vector2 SizeV,
     Func<Vector2>? SizeF,
 
-    Vector2 SizeRelativeV,
-    Func<Vector2>? SizeRelativeF,
+    Vector2? SizeRelativeV,
+    Func<Vector2?>? SizeRelativeF,
 
     Vector2 SizeInnerMaxRelativeV,
     Func<Vector2>? SizeInnerMaxRelativeF,
@@ -65,7 +65,7 @@ file record UiComponents(
     int FontSizeV,
     Func<int>? FontSizeF,
 
-    string TextV,
+    [ComponentToString] string TextV,
     Func<ReadOnlySpan<char>>? TextF,
 
     Alignment? TextAlignmentV,

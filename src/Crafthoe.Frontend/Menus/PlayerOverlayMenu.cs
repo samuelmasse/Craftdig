@@ -6,10 +6,9 @@ public class PlayerOverlayMenu(AppStyle s, PlayerEnt ent)
     public void Create(EntObj root)
     {
         Node(root, out var verticalList)
+            .Mut(s.VerticalList)
             .SizeInnerMaxRelativeV(s.Horizontal)
-            .SizeInnerSumRelativeV(s.Vertical)
-            .AlignmentV(Alignment.Bottom | Alignment.Horizontal)
-            .InnerLayoutV(InnerLayout.VerticalList);
+            .AlignmentV(Alignment.Bottom | Alignment.Horizontal);
         {
             var sw = Stopwatch.StartNew();
             Ent lastSelected = default;
@@ -33,11 +32,10 @@ public class PlayerOverlayMenu(AppStyle s, PlayerEnt ent)
                 .TextColorF(() => s.TextColor * (1, 1, 1, Math.Clamp(3 - (float)sw.Elapsed.TotalSeconds * 4, 0, 1)));
 
             Node(verticalList, out var bar)
+                .Mut(s.HorizontalList)
                 .PaddingV((s.ItemSpacingS, s.ItemSpacingS, s.ItemSpacingS, s.ItemSpacingS))
                 .ColorV(s.BoardColor)
                 .SizeInnerMaxRelativeV(s.Vertical)
-                .SizeInnerSumRelativeV(s.Horizontal)
-                .InnerLayoutV(InnerLayout.HorizontalList)
                 .InnerSpacingV(s.ItemSpacingS);
             {
                 for (int i = 0; i < HotBarSlots.Count; i++)
@@ -46,6 +44,7 @@ public class PlayerOverlayMenu(AppStyle s, PlayerEnt ent)
 
                     Node(bar, out var square)
                         .SizeV((s.SlotSize, s.SlotSize))
+                        .SizeRelativeV((0, 0))
                         .ColorF(() => ent.Ent.HotBarIndex() == k ? (0, 0, 1, 1) : (0, 1, 0, 1));
                 }
             }
