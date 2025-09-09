@@ -1,7 +1,7 @@
 namespace Crafthoe.Frontend;
 
 [Player]
-public class PlayerCreativeInventoryMenu(ModuleEnts ents, AppStyle s, PlayerHand hand, PlayerEnt player)
+public class PlayerCreativeInventoryMenu(ModuleEnts ents, AppStyle s, PlayerEnt player)
 {
     public void Create(EntObj root)
     {
@@ -49,22 +49,22 @@ public class PlayerCreativeInventoryMenu(ModuleEnts ents, AppStyle s, PlayerHand
                     .SizeV((s.SlotSize, s.SlotSize))
                     .OnPressF(() =>
                     {
-                        if (hand.Ent == default)
+                        if (player.Ent.Offhand() == default)
                         {
-                            hand.Ent = blocks[loc.Y * HotBarSlots.Count + loc.X];
+                            player.Ent.Offhand() = blocks[loc.Y * HotBarSlots.Count + loc.X];
                             added = true;
                         }
                     })
                     .OnClickF(() =>
                     {
                         if (!added)
-                            hand.Ent = default;
+                            player.Ent.Offhand() = default;
 
                         added = false;
                     })
                     .OnSecondaryPressF(square.OnPressF())
                     .OnSecondaryClickF(square.OnClickF())
-                    .TooltipF(() => hand.Ent == default ?
+                    .TooltipF(() => player.Ent.Offhand() == default ?
                         blocks[loc.Y * HotBarSlots.Count + loc.X].Name() : null);
             }
         }
@@ -83,9 +83,9 @@ public class PlayerCreativeInventoryMenu(ModuleEnts ents, AppStyle s, PlayerHand
                 .SizeV((s.SlotSize, s.SlotSize))
                 .OnPressF(() =>
                 {
-                    if (hand.Ent == default)
+                    if (player.Ent.Offhand() == default)
                     {
-                        hand.Ent = player.Ent.HotBarSlots()[i];
+                        player.Ent.Offhand() = player.Ent.HotBarSlots()[i];
                         player.Ent.HotBarSlots()[i] = default;
                         added = true;
                     }
@@ -93,13 +93,15 @@ public class PlayerCreativeInventoryMenu(ModuleEnts ents, AppStyle s, PlayerHand
                 .OnClickF(() =>
                 {
                     if (!added)
-                        (hand.Ent, player.Ent.HotBarSlots()[i]) = (player.Ent.HotBarSlots()[i], hand.Ent);
+                    {
+                        (player.Ent.Offhand(), player.Ent.HotBarSlots()[i]) = (player.Ent.HotBarSlots()[i], player.Ent.Offhand());
+                    }
 
                     added = false;
                 })
                 .OnSecondaryPressF(square.OnPressF())
                 .OnSecondaryClickF(square.OnSecondaryClickF())
-                .TooltipF(() => hand.Ent == default ? player.Ent.HotBarSlots()[i].Name() : null);
+                .TooltipF(() => player.Ent.Offhand() == default ? player.Ent.HotBarSlots()[i].Name() : null);
         }
     }
 }

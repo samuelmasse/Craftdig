@@ -11,7 +11,7 @@ public class PlayerState(
     WorldTick tick,
     DimensionMetrics dimensionMetrics,
     DimensionContext dimension,
-    PlayerHand playerHand,
+    PlayerEnt ent,
     PlayerContext player,
     PlayerDebugMenu debugMenu,
     PlayerEscapeMenu escapeMenu,
@@ -78,7 +78,7 @@ public class PlayerState(
         {
             paused = false;
             inv = false;
-            playerHand.Ent = default;
+            ent.Ent.Offhand() = default;
             menus.Nodes().Remove(dark);
         }
 

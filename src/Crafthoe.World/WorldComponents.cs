@@ -5,5 +5,7 @@ file record WorldComponents(
     int WorldEntPtrBagIndex,
 
     HotBarSlots HotBarSlots,
-    int HotBarIndex
+    int HotBarIndex,
+
+    Ent Offhand
 );
