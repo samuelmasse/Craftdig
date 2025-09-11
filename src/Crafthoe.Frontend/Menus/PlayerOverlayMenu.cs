@@ -31,21 +31,50 @@ public class PlayerOverlayMenu(AppStyle s, PlayerEnt ent)
                 })
                 .TextColorF(() => s.TextColor * (1, 1, 1, Math.Clamp(3 - (float)sw.Elapsed.TotalSeconds * 4, 0, 1)));
 
-            Node(verticalList, out var bar)
-                .Mut(s.HorizontalList)
-                .PaddingV((s.ItemSpacingS, s.ItemSpacingS, s.ItemSpacingS, s.ItemSpacingS))
-                .ColorV(s.BoardColor)
-                .SizeInnerMaxRelativeV(s.Vertical)
-                .InnerSpacingV(s.ItemSpacingS);
+            Node(verticalList, out var barContainer)
+                .SizeInnerMaxRelativeV(s.Vertical + s.Horizontal);
             {
+                Node(barContainer, out var bar)
+                    .Mut(s.HorizontalList)
+                    .PaddingV((s.ItemSpacingS, s.ItemSpacingS, s.ItemSpacingS, s.ItemSpacingS))
+                    .ColorV(s.BoardColor)
+                    .SizeInnerMaxRelativeV(s.Vertical)
+                    .InnerSpacingV(s.ItemSpacingS);
                 for (int i = 0; i < HotBarSlots.Count; i++)
                 {
                     int k = i;
 
                     Node(bar, out var square)
-                        .SizeV((s.SlotSize, s.SlotSize))
-                        .SizeRelativeV((0, 0))
-                        .ColorF(() => ent.Ent.HotBarIndex() == k ? (0, 0, 1, 1) : (0, 1, 0, 1));
+                        .Mut(s.Slot)
+                        .GetSlotValueF(() => ent.Ent.HotBarSlots()[k])
+                        .ColorV((0, 1, 0, 1));
+                }
+
+                Node(barContainer, out var puck)
+                    .SizeV((s.SlotSize + s.ItemSpacingS * 2, s.SlotSize + s.ItemSpacingS * 2))
+                    .OffsetF(() => (ent.Ent.HotBarIndex() * (s.SlotSize + s.ItemSpacingS), 0));
+                {
+                    Node(puck, out var puckTop)
+                        .SizeRelativeV(s.Horizontal)
+                        .SizeV((0, s.ItemSpacingS))
+                        .ColorV((1, 1, 1, 1));
+
+                    Node(puck, out var puckBottom)
+                        .AlignmentV(Alignment.Bottom)
+                        .SizeRelativeV(s.Horizontal)
+                        .SizeV((0, s.ItemSpacingS))
+                        .ColorV((1, 1, 1, 1));
+
+                    Node(puck, out var puckLeft)
+                        .SizeRelativeV(s.Vertical)
+                        .SizeV((s.ItemSpacingS, 0))
+                        .ColorV((1, 1, 1, 1));
+
+                    Node(puck, out var puckRight)
+                        .AlignmentV(Alignment.Right)
+                        .SizeRelativeV(s.Vertical)
+                        .SizeV((s.ItemSpacingS, 0))
+                        .ColorV((1, 1, 1, 1));
                 }
             }
         }

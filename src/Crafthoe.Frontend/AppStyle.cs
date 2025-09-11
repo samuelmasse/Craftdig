@@ -61,4 +61,46 @@ public class AppStyle(AppMonocraft monocraft)
         .InnerLayoutV(InnerLayout.HorizontalList)
         .SizeInnerSumRelativeV(Horizontal)
         .SizeRelativeV((0, 0));
+
+    public void Slot(EntObj ent) => ent.TagV(nameof(Slot))
+        .SizeV((SlotSize, SlotSize))
+        .SizeRelativeV((0, 0))
+        .TextureF(() =>
+        {
+            var c = ent.GetSlotValueF()?.Invoke() ?? default;
+
+            if (c.IsBlock())
+                return c.Faces().Front.FaceTexture();
+
+            return null;
+        });
+
+    public void SlotTooltip(EntObj ent) => ent
+        .TooltipF(() => ent.SlotV().PlayerV().Offhand() == default ?
+            ent.SlotV().GetSlotValueF()?.Invoke().Name() : null);
+
+    public void SlotButton(EntObj ent) => ent
+        .TagV(nameof(SlotButton))
+        .IsSelectableV(true)
+        .ColorF(() => ent.IsHoveredR() ? (1, 1, 1, 0.5f) : default)
+        .OnPressF(() =>
+        {
+            if (ent.SlotV().PlayerV().Offhand() == default)
+            {
+                ent.SlotV().PlayerV().Offhand() = ent.SlotV().GetSlotValueF()?.Invoke() ?? default;
+                ent.SlotV().SetSlotValueF()?.Invoke(default);
+                ent.SlotAddedV() = true;
+            }
+        })
+        .OnClickF(() =>
+        {
+            if (!ent.SlotAddedV())
+            {
+                var val = ent.SlotV().GetSlotValueF()?.Invoke() ?? default;
+                ent.SlotV().SetSlotValueF()?.Invoke(ent.SlotV().PlayerV().Offhand());
+                ent.SlotV().PlayerV().Offhand() = val;
+            }
+        
+            ent.SlotAddedV() = false;
+        });
 }

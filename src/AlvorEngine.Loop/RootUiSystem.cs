@@ -299,6 +299,7 @@ public class RootUiSystem(RootScale rscale, RootSprites sprites)
     private void DrawNode(Vector2 o, EntObj n)
     {
         DrawFlatSurface(o, n);
+        DrawTexture(o, n);
         DrawText(o, n);
     }
 
@@ -312,6 +313,19 @@ public class RootUiSystem(RootScale rscale, RootSprites sprites)
             return;
 
         sprites.Batch.Draw(o, n.SizeR(), color);
+    }
+
+    private void DrawTexture(Vector2 o, EntObj n)
+    {
+        if (!n.HasTextureV() && !n.HasTextureF())
+            return;
+
+        var texture = Get(n.TextureV(), n.TextureF());
+        if (texture == null)
+            return;
+
+        var tint = Get(n.TintV(), n.TintF()) ?? Vector4.One;
+        sprites.Batch.Draw(texture, o, n.SizeR(), tint);
     }
 
     private void DrawText(Vector2 o, EntObj n)

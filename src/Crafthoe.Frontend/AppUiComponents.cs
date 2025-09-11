@@ -4,4 +4,9 @@ namespace Crafthoe.Frontend;
 file record AppUiComponents(
     string? TooltipV,
     Func<ReadOnlySpan<char>>? TooltipF,
-    EntObj StackRootV);
+    EntObj? StackRootV,
+    EntMut PlayerV,
+    Func<Ent>? GetSlotValueF,
+    Action<Ent>? SetSlotValueF,
+    EntObj SlotV,
+    bool SlotAddedV);

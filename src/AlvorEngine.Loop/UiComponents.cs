@@ -59,6 +59,12 @@ file record UiComponents(
     Vector4 ColorV,
     Func<Vector4>? ColorF,
 
+    Texture? TextureV,
+    Func<Texture?>? TextureF,
+
+    Vector4? TintV,
+    Func<Vector4?>? TintF,
+
     Font? FontV,
     Func<Font?>? FontF,
 

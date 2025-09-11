@@ -42,30 +42,18 @@ public class PlayerCreativeInventoryMenu(ModuleEnts ents, AppStyle s, PlayerEnt 
             for (int x = 0; x < HotBarSlots.Count; x++)
             {
                 Vector2i loc = (x, y);
-                bool added = false;
 
                 Node(blocksHor, out var square)
                     .Mut(s.Button)
-                    .SizeV((s.SlotSize, s.SlotSize))
-                    .OnPressF(() =>
-                    {
-                        if (player.Ent.Offhand() == default)
-                        {
-                            player.Ent.Offhand() = blocks[loc.Y * HotBarSlots.Count + loc.X];
-                            added = true;
-                        }
-                    })
-                    .OnClickF(() =>
-                    {
-                        if (!added)
-                            player.Ent.Offhand() = default;
-
-                        added = false;
-                    })
-                    .OnSecondaryPressF(square.OnPressF())
-                    .OnSecondaryClickF(square.OnClickF())
-                    .TooltipF(() => player.Ent.Offhand() == default ?
-                        blocks[loc.Y * HotBarSlots.Count + loc.X].Name() : null);
+                    .Mut(s.Slot)
+                    .PlayerV((EntMut)player.Ent)
+                    .GetSlotValueF(() => blocks[loc.Y * HotBarSlots.Count + loc.X]);
+                {
+                    Node(square)
+                        .Mut(s.SlotButton)
+                        .Mut(s.SlotTooltip)
+                        .SlotV(square);
+                }
             }
         }
 
@@ -75,33 +63,20 @@ public class PlayerCreativeInventoryMenu(ModuleEnts ents, AppStyle s, PlayerEnt 
             .InnerSpacingV(s.ItemSpacingS);
         for (int x = 0; x < HotBarSlots.Count; x++)
         {
-            bool added = false;
             int i = x;
 
             Node(hotbar, out var square)
                 .Mut(s.Button)
-                .SizeV((s.SlotSize, s.SlotSize))
-                .OnPressF(() =>
-                {
-                    if (player.Ent.Offhand() == default)
-                    {
-                        player.Ent.Offhand() = player.Ent.HotBarSlots()[i];
-                        player.Ent.HotBarSlots()[i] = default;
-                        added = true;
-                    }
-                })
-                .OnClickF(() =>
-                {
-                    if (!added)
-                    {
-                        (player.Ent.Offhand(), player.Ent.HotBarSlots()[i]) = (player.Ent.HotBarSlots()[i], player.Ent.Offhand());
-                    }
-
-                    added = false;
-                })
-                .OnSecondaryPressF(square.OnPressF())
-                .OnSecondaryClickF(square.OnSecondaryClickF())
-                .TooltipF(() => player.Ent.Offhand() == default ? player.Ent.HotBarSlots()[i].Name() : null);
+                .Mut(s.Slot)
+                .GetSlotValueF(() => player.Ent.HotBarSlots()[i])
+                .SetSlotValueF((v) => player.Ent.HotBarSlots()[i] = v)
+                .PlayerV((EntMut)player.Ent);
+            {
+                Node(square)
+                    .Mut(s.SlotButton)
+                    .Mut(s.SlotTooltip)
+                    .SlotV(square);
+            }
         }
     }
 }

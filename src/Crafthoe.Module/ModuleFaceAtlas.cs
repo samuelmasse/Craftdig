@@ -1,7 +1,7 @@
 namespace Crafthoe.Module;
 
 [Module]
-public class ModuleBlockAtlas(RootPngs pngs, AppFiles files, ModuleGlw gl)
+public class ModuleFaceAtlas(ModuleGlw gl, ModuleImages imgs)
 {
     private readonly Texture texture = new(gl, (0xF, 0xF), TextureTarget.Texture2DArray)
     {
@@ -22,8 +22,7 @@ public class ModuleBlockAtlas(RootPngs pngs, AppFiles files, ModuleGlw gl)
             if (indices.TryGetValue(file, out int val))
                 return val;
 
-            string fullName = Path.Combine("Textures", file) + ".png";
-            images.Add(pngs[files[fullName]]);
+            images.Add(imgs[file]);
             indices.Add(file, images.Count - 1);
 
             return images.Count - 1;

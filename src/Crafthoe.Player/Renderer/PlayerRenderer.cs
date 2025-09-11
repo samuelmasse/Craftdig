@@ -5,7 +5,7 @@ public class PlayerRenderer(
     RootCanvas canvas,
     RootQuadIndexBuffer quadIndexBuffer,
     RootBackbuffer backbuffer,
-    ModuleBlockAtlas blockAtlas,
+    ModuleFaceAtlas blockAtlas,
     WorldTick tick,
     DimensionBlockProgram blockProgram,
     DimensionChunks chunks,

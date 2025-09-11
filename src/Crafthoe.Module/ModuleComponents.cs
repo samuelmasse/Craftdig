@@ -14,5 +14,6 @@ file record ModuleComponents(
     // Face
     [ComponentToString] bool IsFace,
     [ComponentToString] string FaceFile,
-    [ComponentToString] int FaceIndex
+    [ComponentToString] int FaceIndex,
+    Texture2D? FaceTexture
 );
