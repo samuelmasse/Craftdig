@@ -63,6 +63,18 @@ public class AppStyle(AppMonocraft monocraft)
         .SizeRelativeV((0, 0));
 
     public void Slot(EntObj ent) => ent.TagV(nameof(Slot))
+        .Mut(Text)
+        .TextV("64")
+        .TextF(() =>
+        {
+            var c = ent.GetSlotValueF()?.Invoke() ?? default;
+
+            if (c == default)
+                return string.Empty;
+
+            return "1";
+        })
+        .TextAlignmentV(Alignment.Bottom | Alignment.Right)
         .SizeV((SlotSize, SlotSize))
         .SizeRelativeV((0, 0))
         .TextureF(() =>

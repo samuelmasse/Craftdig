@@ -17,12 +17,20 @@ public class PlayerState(
     PlayerEscapeMenu escapeMenu,
     PlayerOverlayMenu playerOverlayMenu,
     PlayerHandMenu playerHandMenu,
-    PlayerCreativeInventoryMenu creativeInventoryMenu) : State
+    PlayerCreativeInventoryMenu creativeInventoryMenu,
+    PlayerSurvivalInventoryMenu survivalInventoryMenu) : State
 {
+    private readonly Dictionary<Keys, Action<EntObj>> keyMenus = new()
+    {
+        [Keys.Tab] = creativeInventoryMenu.Create,
+        [Keys.E] = survivalInventoryMenu.Create,
+    };
     private readonly EntObj menus = Node(ui).OrderValueV(1);
     private readonly EntObj overlay = Node(ui).Mut(playerOverlayMenu.Create);
     private readonly EntObj hand = Node(ui).OrderValueV(1.5f).Mut(playerHandMenu.Create);
     private readonly EntObj dark = Node().ColorV((0.3f, 0.3f, 0.3f, 0.3f));
+
+    private Action<EntObj>? currentKeyMenu;
     private bool paused;
     private bool inv;
 
@@ -52,22 +60,26 @@ public class PlayerState(
             }
         }
 
-        if (keyboard.IsKeyPressed(Keys.E))
+        foreach (var key in keyMenus.Keys)
         {
-            if (menus.NodeStack().Count > 0)
+            if (keyboard.IsKeyPressed(key))
             {
-                if (inv)
+                if (menus.NodeStack().Count > 0)
                 {
-                    while (menus.NodeStack().Count > 0)
-                        menus.NodeStack().Pop();
+                    if (inv && currentKeyMenu == keyMenus[key])
+                    {
+                        while (menus.NodeStack().Count > 0)
+                            menus.NodeStack().Pop();
 
-                    inv = false;
+                        inv = false;
+                    }
                 }
-            }
-            else
-            {
-                inv = true;
-                menus.NodeStack().Push(Node().Mut(creativeInventoryMenu.Create));
+                else
+                {
+                    inv = true;
+                    currentKeyMenu = keyMenus[key];
+                    menus.NodeStack().Push(Node().Mut(keyMenus[key]));
+                }
             }
         }
 
@@ -78,6 +90,7 @@ public class PlayerState(
         {
             paused = false;
             inv = false;
+            currentKeyMenu = null;
             ent.Ent.Offhand() = default;
             menus.Nodes().Remove(dark);
         }

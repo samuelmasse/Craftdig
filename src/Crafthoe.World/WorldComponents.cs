@@ -4,6 +4,9 @@ namespace Crafthoe.World;
 file record WorldComponents(
     int WorldEntPtrBagIndex,
 
+    ArmorSlots ArmorSlots,
+    InventorySlots InventorySlots,
+
     HotBarSlots HotBarSlots,
     int HotBarIndex,
 

@@ -118,6 +118,19 @@ public class RootUiSystem(RootScale rscale, RootSprites sprites)
 
         SizeInnerMaxRelative(s, n);
         SizeInnerSumRelative(s, n);
+
+        foreach (var c in n.GetNodesR())
+        {
+            if (!c.HasIsPostSizedV() && !c.HasIsPostSizedF())
+                continue;
+
+            var isPostSized = Get(c.IsPostSizedV(), c.IsPostSizedF());
+            if (!isPostSized)
+                continue;
+
+            Size(n.SizeR() - n.PaddingR().Xy - n.PaddingR().Zw, c);
+        }
+
         SizeInnerSizing(s, n);
     }
 

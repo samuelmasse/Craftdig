@@ -20,6 +20,9 @@ file record UiComponents(
     bool IsDeletedV,
     Func<bool>? IsDeletedF,
 
+    bool IsPostSizedV,
+    Func<bool>? IsPostSizedF,
+
     InnerLayout InnerLayoutV,
     Func<InnerLayout>? InnerLayoutF,
 
