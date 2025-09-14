@@ -10,6 +10,7 @@ file record ModuleComponents(
     bool IsBuildable,
     BlockFaces Faces,
     bool IsSolid,
+    int MaxStack,
 
     // Face
     [ComponentToString] bool IsFace,

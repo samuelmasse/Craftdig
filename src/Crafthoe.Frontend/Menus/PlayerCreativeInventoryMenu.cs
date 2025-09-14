@@ -6,13 +6,13 @@ public class PlayerCreativeInventoryMenu(ModuleEnts ents, AppStyle s, PlayerEnt 
     public void Create(EntObj root)
     {
         int rows = 5;
-        var blocks = new Ent[(rows + 1) * HotBarSlots.Count];
+        var blocks = new ItemSlot[(rows + 1) * HotBarSlots.Count];
         int count = 0;
 
         foreach (var ent in ents.Span)
         {
             if (ent.IsBlock() && ent.IsBuildable())
-                blocks[count++] = ent;
+                blocks[count++] = new(ent, 1);
         }
 
         Node(root, out var vert)
@@ -50,7 +50,7 @@ public class PlayerCreativeInventoryMenu(ModuleEnts ents, AppStyle s, PlayerEnt 
                     .GetSlotValueF(() => blocks[loc.Y * HotBarSlots.Count + loc.X]);
                 {
                     Node(square)
-                        .Mut(s.SlotButton)
+                        .Mut(s.SlotButtonInfinity)
                         .Mut(s.SlotTooltip)
                         .SlotV(square);
                 }

@@ -63,7 +63,7 @@ public class PlayerSurvivalInventoryMenu(AppStyle s, PlayerEnt player)
                 for (int x = 0; x < 2; x++)
                 {
                     Vector2i loc = (x, y);
-                    Ent val = default;
+                    ItemSlot val = default;
 
                     Node(craftingHor, out var square)
                         .Mut(s.Button)
@@ -87,7 +87,7 @@ public class PlayerSurvivalInventoryMenu(AppStyle s, PlayerEnt player)
                 .IsPostSizedV(true)
                 .ColorV((0, 1, 1, 1));
 
-            Ent outputVal = default;
+            ItemSlot outputVal = default;
 
             Node(playerHor, out var output)
                 .Mut(s.Button)

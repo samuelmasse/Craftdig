@@ -21,13 +21,13 @@ public class PlayerOverlayMenu(AppStyle s, PlayerEnt ent)
                 {
                     var selected = ent.Ent.HotBarSlots()[ent.Ent.HotBarIndex()];
 
-                    if (lastSelected != selected)
+                    if (lastSelected != selected.Item)
                     {
-                        lastSelected = selected;
+                        lastSelected = selected.Item;
                         sw.Restart();
                     }
 
-                    return selected.Name() ?? string.Empty;
+                    return selected.Item.Name() ?? string.Empty;
                 })
                 .TextColorF(() => s.TextColor * (1, 1, 1, Math.Clamp(3 - (float)sw.Elapsed.TotalSeconds * 4, 0, 1)));
 

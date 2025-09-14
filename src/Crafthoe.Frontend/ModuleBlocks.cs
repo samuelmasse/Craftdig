@@ -16,6 +16,7 @@ public class ModuleBlocks
 
         Grass = entities["GrassBlock"]
             .Name("Grass")
+            .MaxStack(64)
             .IsBlock(true)
             .IsSolid(true)
             .IsBuildable(true)
@@ -31,6 +32,7 @@ public class ModuleBlocks
 
         Dirt = entities["DirtBlock"]
             .Name("Dirt")
+            .MaxStack(64)
             .IsBlock(true)
             .IsSolid(true)
             .IsBuildable(true)
@@ -38,6 +40,7 @@ public class ModuleBlocks
 
         Stone = entities["StoneBlock"]
             .Name("Stone")
+            .MaxStack(64)
             .IsBlock(true)
             .IsSolid(true)
             .IsBuildable(true)

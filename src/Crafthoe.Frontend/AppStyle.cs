@@ -1,7 +1,7 @@
 namespace Crafthoe.Frontend;
 
 [App]
-public class AppStyle(AppMonocraft monocraft)
+public class AppStyle(RootText text, AppMonocraft monocraft)
 {
     public int FontSize => 32;
     public int FontSizeTitle => 160;
@@ -69,10 +69,10 @@ public class AppStyle(AppMonocraft monocraft)
         {
             var c = ent.GetSlotValueF()?.Invoke() ?? default;
 
-            if (c == default)
+            if (c == default || c.Count == 1)
                 return string.Empty;
 
-            return "1";
+            return text.Format("{0}", c.Count);
         })
         .TextAlignmentV(Alignment.Bottom | Alignment.Right)
         .SizeV((SlotSize, SlotSize))
@@ -81,15 +81,15 @@ public class AppStyle(AppMonocraft monocraft)
         {
             var c = ent.GetSlotValueF()?.Invoke() ?? default;
 
-            if (c.IsBlock())
-                return c.Faces().Front.FaceTexture();
+            if (c.Item.IsBlock())
+                return c.Item.Faces().Front.FaceTexture();
 
             return null;
         });
 
     public void SlotTooltip(EntObj ent) => ent
         .TooltipF(() => ent.SlotV().PlayerV().Offhand() == default ?
-            ent.SlotV().GetSlotValueF()?.Invoke().Name() : null);
+            ent.SlotV().GetSlotValueF()?.Invoke().Item.Name() : null);
 
     public void SlotButton(EntObj ent) => ent
         .TagV(nameof(SlotButton))
@@ -97,10 +97,30 @@ public class AppStyle(AppMonocraft monocraft)
         .ColorF(() => ent.IsHoveredR() ? (1, 1, 1, 0.5f) : default)
         .OnPressF(() =>
         {
+            var val = ent.SlotV().GetSlotValueF()?.Invoke() ?? default;
+            ref var offhand = ref ent.SlotV().PlayerV().Offhand();
+
             if (ent.SlotV().PlayerV().Offhand() == default)
             {
-                ent.SlotV().PlayerV().Offhand() = ent.SlotV().GetSlotValueF()?.Invoke() ?? default;
+                offhand = val;
                 ent.SlotV().SetSlotValueF()?.Invoke(default);
+                ent.SlotAddedV() = true;
+            }
+        })
+        .OnSecondaryPressF(() =>
+        {
+            var val = ent.SlotV().GetSlotValueF()?.Invoke() ?? default;
+            ref var offhand = ref ent.SlotV().PlayerV().Offhand();
+
+            if (offhand == default && val.Count > 0)
+            {
+                int give = (int)Math.Ceiling(val.Count / 2f);
+                offhand = new(val.Item, give);
+
+                if (val.Count - give > 0)
+                    ent.SlotV().SetSlotValueF()?.Invoke(new(val.Item, val.Count - give));
+                else ent.SlotV().SetSlotValueF()?.Invoke(default);
+
                 ent.SlotAddedV() = true;
             }
         })
@@ -109,10 +129,107 @@ public class AppStyle(AppMonocraft monocraft)
             if (!ent.SlotAddedV())
             {
                 var val = ent.SlotV().GetSlotValueF()?.Invoke() ?? default;
-                ent.SlotV().SetSlotValueF()?.Invoke(ent.SlotV().PlayerV().Offhand());
-                ent.SlotV().PlayerV().Offhand() = val;
+                ref var offhand = ref ent.SlotV().PlayerV().Offhand();
+
+                if (val.Item == offhand.Item)
+                {
+                    int give = Math.Min(offhand.Count, val.Item.MaxStack() - val.Count);
+                    if (give > 0)
+                    {
+                        if (offhand.Count - give > 0)
+                            offhand = new(offhand.Item, offhand.Count - give);
+                        else offhand = default;
+
+                        ent.SlotV().SetSlotValueF()?.Invoke(new(val.Item, val.Count + give));
+                    }
+                }
+                else
+                {
+                    ent.SlotV().SetSlotValueF()?.Invoke(offhand);
+                    ent.SlotV().PlayerV().Offhand() = val;
+                }
             }
-        
+
+            ent.SlotAddedV() = false;
+        })
+        .OnSecondaryClickF(() =>
+        {
+            if (!ent.SlotAddedV())
+            {
+                var val = ent.SlotV().GetSlotValueF()?.Invoke() ?? default;
+                ref var offhand = ref ent.SlotV().PlayerV().Offhand();
+
+                if (offhand.Count == 0)
+                    return;
+
+                if (val.Item == default || val.Item == offhand.Item)
+                {
+                    if (val.Count < offhand.Item.MaxStack())
+                    {
+                        ent.SlotV().SetSlotValueF()?.Invoke(new(offhand.Item, val.Count + 1));
+
+                        if (offhand.Count == 1)
+                            offhand = default;
+                        else offhand = new(offhand.Item, offhand.Count - 1);
+                    }
+                }
+                else if (val.Item != offhand.Item)
+                {
+                    ent.SlotV().SetSlotValueF()?.Invoke(offhand);
+                    ent.SlotV().PlayerV().Offhand() = val;
+                }
+            }
+
+            ent.SlotAddedV() = false;
+        });
+
+    public void SlotButtonInfinity(EntObj ent) => ent
+        .Mut(SlotButton)
+        .OnPressF(() =>
+        {
+            var val = ent.SlotV().GetSlotValueF()?.Invoke() ?? default;
+
+            if (ent.SlotV().PlayerV().Offhand() == default)
+            {
+                ent.SlotV().PlayerV().Offhand() = val;
+                ent.SlotAddedV() = true;
+            }
+        })
+        .OnSecondaryPressF(ent.OnPressF())
+        .OnClickF(() =>
+        {
+            if (!ent.SlotAddedV())
+            {
+                var val = ent.SlotV().GetSlotValueF()?.Invoke() ?? default;
+                ref var offhand = ref ent.SlotV().PlayerV().Offhand();
+
+                if (val.Item == offhand.Item)
+                {
+                    if (offhand.Count < val.Item.MaxStack())
+                        offhand = new(offhand.Item, offhand.Count + 1);
+                }
+                else ent.SlotV().PlayerV().Offhand() = val;
+            }
+
+            ent.SlotAddedV() = false;
+        })
+        .OnSecondaryClickF(() =>
+        {
+            if (!ent.SlotAddedV())
+            {
+                var val = ent.SlotV().GetSlotValueF()?.Invoke() ?? default;
+                ref var offhand = ref ent.SlotV().PlayerV().Offhand();
+
+                if (offhand.Count == 0)
+                    offhand = val;
+                else
+                {
+                    if (offhand.Count == 1)
+                        offhand = default;
+                    else offhand = new(offhand.Item, offhand.Count - 1);
+                }
+            }
+
             ent.SlotAddedV() = false;
         });
 }

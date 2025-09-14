@@ -4,13 +4,13 @@ public struct ArmorSlots
 {
     public const int Count = 4;
 
-    private Ent[]? slots;
+    private ItemSlot[]? slots;
 
-    public ref Ent this[int index]
+    public ref ItemSlot this[int index]
     {
         get
         {
-            slots ??= new Ent[Count];
+            slots ??= new ItemSlot[Count];
             return ref slots[index];
         }
     }

@@ -41,7 +41,7 @@ public class PlayerContext(
                 mainCooldown = 5;
             }
 
-            var hand = ent.Ent.HotBarSlots()[ent.Ent.HotBarIndex()];
+            var hand = ent.Ent.HotBarSlots()[ent.Ent.HotBarIndex()].Item;
             if (selected.Normal != null && hand.IsBuildable() && mouse.IsSecondaryDown() && secondaryCooldown <= 0)
             {
                 blocks.TrySet(selected.Loc.Value + selected.Normal.Value, hand);

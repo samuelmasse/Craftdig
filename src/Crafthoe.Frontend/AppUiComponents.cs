@@ -6,7 +6,7 @@ file record AppUiComponents(
     Func<ReadOnlySpan<char>>? TooltipF,
     EntObj? StackRootV,
     EntMut PlayerV,
-    Func<Ent>? GetSlotValueF,
-    Action<Ent>? SetSlotValueF,
+    Func<ItemSlot>? GetSlotValueF,
+    Action<ItemSlot>? SetSlotValueF,
     EntObj SlotV,
     bool SlotAddedV);

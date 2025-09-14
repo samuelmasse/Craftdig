@@ -10,5 +10,5 @@ file record WorldComponents(
     HotBarSlots HotBarSlots,
     int HotBarIndex,
 
-    Ent Offhand
+    ItemSlot Offhand
 );
