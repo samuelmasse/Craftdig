@@ -23,6 +23,9 @@ file record UiComponents(
     bool IsPostSizedV,
     Func<bool>? IsPostSizedF,
 
+    bool IsFloatingV,
+    Func<bool> IsFloatingF,
+
     InnerLayout InnerLayoutV,
     Func<InnerLayout>? InnerLayoutF,
 
@@ -35,8 +38,17 @@ file record UiComponents(
     float? SizeWeightV,
     Func<float?>? SizeWeightF,
 
+    SizeWeightType SizeWeightTypeV,
+    Func<SizeWeightType> SizeWeightTypeF,
+
     Vector2 OffsetV,
     Func<Vector2>? OffsetF,
+
+    Vector2 OffsetTextRelativeV,
+    Func<Vector2>? OffsetTextRelativeF,
+
+    float OffsetMultiplierV,
+    Func<float>? OffsetMultiplierF,
 
     Alignment AlignmentV,
     Func<Alignment>? AlignmentF,

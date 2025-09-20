@@ -174,6 +174,9 @@ public class RootUiSystem(RootScale rscale, RootSprites sprites)
 
         foreach (var c in n.GetNodesR())
         {
+            if (IsFloating(c))
+                continue;
+
             sizeInnerMax.X = Math.Max(c.SizeR().X, sizeInnerMax.X);
             sizeInnerMax.Y = Math.Max(c.SizeR().Y, sizeInnerMax.Y);
         }
@@ -193,7 +196,12 @@ public class RootUiSystem(RootScale rscale, RootSprites sprites)
         var sizeInnerSum = Vector2.Zero;
 
         foreach (var c in n.GetNodesR())
+        {
+            if (IsFloating(c))
+                continue;
+
             sizeInnerSum += c.SizeR();
+        }
 
         sizeInnerSum.X += n.PaddingR().X + n.PaddingR().Z;
         sizeInnerSum.Y += n.PaddingR().Y + n.PaddingR().W;
@@ -213,7 +221,12 @@ public class RootUiSystem(RootScale rscale, RootSprites sprites)
         float totalWeight = 0;
 
         foreach (var c in n.GetNodesR())
+        {
+            if (IsSelfWeight(c))
+                continue;
+
             totalWeight += Get(n.SizeWeightV(), n.SizeWeightF()) ?? 1;
+        }
 
         var innerSpacing = Get(n.InnerSpacingV(), n.InnerSpacingF());
         var totalSpacing = innerSpacing * Math.Max(0, n.GetNodesR().Length - 1);
@@ -222,12 +235,34 @@ public class RootUiSystem(RootScale rscale, RootSprites sprites)
         if (innerSizing == InnerSizing.HorizontalWeight)
         {
             foreach (var c in n.GetNodesR())
+            {
+                if (IsSelfWeight(c))
+                    useableSize.X -= c.SizeR().X;
+            }
+
+            foreach (var c in n.GetNodesR())
+            {
+                if (IsSelfWeight(c))
+                    continue;
+
                 c.SizeR().X = (Get(n.SizeWeightV(), n.SizeWeightF()) ?? 1 / totalWeight) * useableSize.X;
+            }
         }
         else if (innerSizing == InnerSizing.VerticalWeight)
         {
             foreach (var c in n.GetNodesR())
+            {
+                if (IsSelfWeight(c))
+                    useableSize.Y -= c.SizeR().Y;
+            }
+
+            foreach (var c in n.GetNodesR())
+            {
+                if (IsSelfWeight(c))
+                    continue;
+
                 c.SizeR().Y = (Get(n.SizeWeightV(), n.SizeWeightF()) ?? 1 / totalWeight) * useableSize.Y;
+            }
         }
     }
 
@@ -254,6 +289,9 @@ public class RootUiSystem(RootScale rscale, RootSprites sprites)
 
             foreach (var c in n.GetNodesR())
             {
+                if (IsFloating(c))
+                    continue;
+
                 c.OffsetR().Y += y;
                 y += c.SizeR().Y;
                 y += innerSpacing;
@@ -265,6 +303,9 @@ public class RootUiSystem(RootScale rscale, RootSprites sprites)
 
             foreach (var c in n.GetNodesR())
             {
+                if (IsFloating(c))
+                    continue;
+
                 c.OffsetR().X += x;
                 x += c.SizeR().X;
                 x += innerSpacing;
@@ -276,13 +317,52 @@ public class RootUiSystem(RootScale rscale, RootSprites sprites)
     {
         n.OffsetR() = default;
         n.OffsetR() += Get(n.OffsetV(), n.OffsetF());
+        PositionTextRelative(n);
         PositionAlignement(s, n);
+        PositionMultiplier(n);
     }
 
     private void PositionAlignement(Vector2 s, EntObj n)
     {
         var alignment = GetAlignment(n);
         Align(ref n.OffsetR(), n.SizeR(), s, alignment);
+    }
+
+    private void PositionTextRelative(EntObj n)
+    {
+        if (!n.HasFontV() && !n.HasFontF())
+            return;
+
+        var font = Get(n.FontV(), n.FontF());
+        if (font == null)
+            return;
+
+        var fontSize = (int)(Get(n.FontSizeV(), n.FontSizeF()) * scale);
+        if (fontSize <= 0)
+            return;
+
+        var text = Get(n.TextV().AsSpan(), n.TextF());
+        if (text.IsEmpty)
+            return;
+
+        var textColor = Get(n.TextColorV(), n.TextColorF());
+        if (textColor.W == 0)
+            return;
+
+        var size = new Vector2(sprites.Batch.Measure(font.Size(fontSize), text), font.Size(fontSize).Metrics.Height) / scale;
+        n.OffsetR() += Get(n.OffsetTextRelativeV(), n.OffsetTextRelativeF()) * size;
+    }
+
+    private void PositionMultiplier(EntObj n)
+    {
+        if (!n.HasOffsetMultiplierV() && !n.HasOffsetMultiplierF())
+            return;
+
+        var multiplier = Get(n.OffsetMultiplierV(), n.OffsetMultiplierF());
+
+        n.OffsetR() = (
+            (float)Math.Round(n.OffsetR().X / multiplier) * multiplier,
+            (float)Math.Round(n.OffsetR().Y / multiplier) * multiplier);
     }
 
     private Alignment GetAlignment(EntObj n)
@@ -369,6 +449,22 @@ public class RootUiSystem(RootScale rscale, RootSprites sprites)
         Align(ref offset, size, n.SizeR(), alignment);
         offset.Y += size.Y / 2;
         sprites.Batch.Write(font.Size(fontSize), text, (o + offset) * scale, textColor, scale);
+    }
+
+    private bool IsFloating(EntObj n)
+    {
+        if (!n.HasIsFloatingV() && !n.HasIsFloatingF())
+            return false;
+
+        return Get(n.IsFloatingV(), n.IsFloatingF());
+    }
+
+    private bool IsSelfWeight(EntObj n)
+    {
+        if (!n.HasSizeWeightTypeV() && !n.HasSizeWeightTypeF())
+            return false;
+
+        return Get(n.SizeWeightTypeV(), n.SizeWeightTypeF()) == SizeWeightType.Self;
     }
 
     public T? Get<T>(T? value, Func<T>? func) where T : allows ref struct

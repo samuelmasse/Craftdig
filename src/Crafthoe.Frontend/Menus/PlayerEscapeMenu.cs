@@ -12,6 +12,7 @@ public class PlayerEscapeMenu(RootScope scope, RootState state, AppStyle s, Play
             .InnerSpacingV(s.ItemSpacing)
             .PaddingV((s.ItemSpacing, s.ItemSpacing, s.ItemSpacing, s.ItemSpacing))
             .AlignmentV(Alignment.Center)
+            .OffsetMultiplierV(s.ItemSpacingXS)
             .ColorV(s.BoardColor);
         {
             Node(list)

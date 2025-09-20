@@ -22,7 +22,8 @@ public class PlayerCreativeInventoryMenu(ModuleEnts ents, AppStyle s, PlayerEnt 
             .InnerSpacingV(s.ItemSpacing)
             .ColorV(s.BoardColor)
             .IsSelectableV(true)
-            .AlignmentV(Alignment.Center);
+            .AlignmentV(Alignment.Center)
+            .OffsetMultiplierV(s.ItemSpacingXS);
 
         Node(vert, out var title)
             .Mut(s.Label)
@@ -30,14 +31,12 @@ public class PlayerCreativeInventoryMenu(ModuleEnts ents, AppStyle s, PlayerEnt 
 
         Node(vert, out var blocksVert)
             .Mut(s.VerticalList)
-            .SizeInnerMaxRelativeV(s.Horizontal)
-            .InnerSpacingV(s.ItemSpacingS);
+            .SizeInnerMaxRelativeV(s.Horizontal);
         for (int y = 0; y < rows; y++)
         {
             Node(blocksVert, out var blocksHor)
                 .Mut(s.HorizontalList)
-                .SizeInnerMaxRelativeV(s.Vertical)
-                .InnerSpacingV(s.ItemSpacingS);
+                .SizeInnerMaxRelativeV(s.Vertical);
 
             for (int x = 0; x < HotBarSlots.Count; x++)
             {
@@ -59,8 +58,7 @@ public class PlayerCreativeInventoryMenu(ModuleEnts ents, AppStyle s, PlayerEnt 
 
         Node(vert, out var hotbar)
             .Mut(s.HorizontalList)
-            .SizeInnerMaxRelativeV(s.Vertical)
-            .InnerSpacingV(s.ItemSpacingS);
+            .SizeInnerMaxRelativeV(s.Vertical);
         for (int x = 0; x < HotBarSlots.Count; x++)
         {
             int i = x;

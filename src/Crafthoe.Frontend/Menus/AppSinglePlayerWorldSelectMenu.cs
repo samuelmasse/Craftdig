@@ -19,6 +19,7 @@ public class AppSinglePlayerWorldSelectMenu(AppStyle s, AppLoadWorldAction loadW
             Node(bottomBar, out var buttonsList)
                 .Mut(s.HorizontalList)
                 .AlignmentV(Alignment.Center)
+                .OffsetMultiplierV(s.ItemSpacingXS)
                 .SizeInnerMaxRelativeV(s.Vertical)
                 .InnerSpacingV(s.ItemSpacingL)
                 .ColorV(s.BoardColor2);

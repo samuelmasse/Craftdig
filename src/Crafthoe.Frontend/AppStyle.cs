@@ -1,8 +1,11 @@
 namespace Crafthoe.Frontend;
 
 [App]
-public class AppStyle(RootText text, AppMonocraft monocraft)
+public class AppStyle(RootText text, AppMenuTextures menuTextures, AppMonocraft monocraft)
 {
+    public readonly Texture ArrowTexture = menuTextures["MenuArrow"];
+    public readonly Texture SlotTexture = menuTextures["MenuSlot"];
+
     public int FontSize => 32;
     public int FontSizeTitle => 160;
 
@@ -16,13 +19,14 @@ public class AppStyle(RootText text, AppMonocraft monocraft)
     public float ItemWidth => 320;
     public float ItemWidthL => 512;
     public float BarHeight => 192;
-    public float SlotSize => 64;
+    public float SlotSize => 72;
 
     public Vector2 Horizontal => (1, 0);
     public Vector2 Vertical => (0, 1);
 
     public Vector4 BoardColor => (1, 0, 0, 1);
     public Vector4 BoardColor2 => (1, 1, 0, 1);
+
     public Vector4 TextColor => (1, 1, 1, 1);
     public Vector4 ButtonColor => (1, 0, 1, 1);
     public Vector4 ButtonColorHovered => (1, 1, 1, 1);
@@ -63,29 +67,32 @@ public class AppStyle(RootText text, AppMonocraft monocraft)
         .SizeRelativeV((0, 0));
 
     public void Slot(EntObj ent) => ent.TagV(nameof(Slot))
-        .Mut(Text)
-        .TextV("64")
-        .TextF(() =>
-        {
-            var c = ent.GetSlotValueF()?.Invoke() ?? default;
-
-            if (c == default || c.Count == 1)
-                return string.Empty;
-
-            return text.Format("{0}", c.Count);
-        })
-        .TextAlignmentV(Alignment.Bottom | Alignment.Right)
         .SizeV((SlotSize, SlotSize))
         .SizeRelativeV((0, 0))
-        .TextureF(() =>
-        {
-            var c = ent.GetSlotValueF()?.Invoke() ?? default;
+        .TextureV(SlotTexture)
+        .Nodes([Node()
+            .Mut(Text)
+            .OffsetV((ItemSpacingXS, ItemSpacingXS))
+            .SizeV((-ItemSpacingXS * 2, -ItemSpacingXS * 2))
+            .TextF(() =>
+            {
+                var c = ent.GetSlotValueF()?.Invoke() ?? default;
 
-            if (c.Item.IsBlock())
-                return c.Item.Faces().Front.FaceTexture();
+                if (c == default || c.Count == 1)
+                    return string.Empty;
 
-            return null;
-        });
+                return text.Format("{0}", c.Count);
+            })
+            .TextAlignmentV(Alignment.Bottom | Alignment.Right)
+            .TextureF(() =>
+            {
+                var c = ent.GetSlotValueF()?.Invoke() ?? default;
+
+                if (c.Item.IsBlock())
+                    return c.Item.Faces().Front.FaceTexture();
+
+                return null;
+            })]);
 
     public void SlotTooltip(EntObj ent) => ent
         .TooltipF(() => ent.SlotV().PlayerV().Offhand() == default ?

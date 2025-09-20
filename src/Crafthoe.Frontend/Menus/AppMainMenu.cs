@@ -11,6 +11,7 @@ public class AppMainMenu(
         Node(root, out var list)
             .Mut(s.VerticalList)
             .AlignmentV(Alignment.Center)
+            .OffsetMultiplierV(s.ItemSpacingXS)
             .InnerSpacingV(s.ItemSpacingXXL)
             .SizeInnerMaxRelativeV(s.Horizontal)
             .ColorV(s.BoardColor);

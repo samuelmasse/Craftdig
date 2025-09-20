@@ -38,8 +38,7 @@ public class PlayerOverlayMenu(AppStyle s, PlayerEnt ent)
                     .Mut(s.HorizontalList)
                     .PaddingV((s.ItemSpacingS, s.ItemSpacingS, s.ItemSpacingS, s.ItemSpacingS))
                     .ColorV(s.BoardColor)
-                    .SizeInnerMaxRelativeV(s.Vertical)
-                    .InnerSpacingV(s.ItemSpacingS);
+                    .SizeInnerMaxRelativeV(s.Vertical);
                 for (int i = 0; i < HotBarSlots.Count; i++)
                 {
                     int k = i;
@@ -52,29 +51,29 @@ public class PlayerOverlayMenu(AppStyle s, PlayerEnt ent)
 
                 Node(barContainer, out var puck)
                     .SizeV((s.SlotSize + s.ItemSpacingS * 2, s.SlotSize + s.ItemSpacingS * 2))
-                    .OffsetF(() => (ent.Ent.HotBarIndex() * (s.SlotSize + s.ItemSpacingS), 0));
+                    .OffsetF(() => (ent.Ent.HotBarIndex() * s.SlotSize, 0));
                 {
                     Node(puck, out var puckTop)
                         .SizeRelativeV(s.Horizontal)
                         .SizeV((0, s.ItemSpacingS))
-                        .ColorV((1, 1, 1, 1));
+                        .ColorV((0, 0, 1, 1));
 
                     Node(puck, out var puckBottom)
                         .AlignmentV(Alignment.Bottom)
                         .SizeRelativeV(s.Horizontal)
                         .SizeV((0, s.ItemSpacingS))
-                        .ColorV((1, 1, 1, 1));
+                        .ColorV((0, 0, 1, 1));
 
                     Node(puck, out var puckLeft)
                         .SizeRelativeV(s.Vertical)
                         .SizeV((s.ItemSpacingS, 0))
-                        .ColorV((1, 1, 1, 1));
+                        .ColorV((0, 0, 1, 1));
 
                     Node(puck, out var puckRight)
                         .AlignmentV(Alignment.Right)
                         .SizeRelativeV(s.Vertical)
                         .SizeV((s.ItemSpacingS, 0))
-                        .ColorV((1, 1, 1, 1));
+                        .ColorV((0, 0, 1, 1));
                 }
             }
         }
