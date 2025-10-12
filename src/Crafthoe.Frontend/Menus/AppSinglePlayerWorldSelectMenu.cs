@@ -1,7 +1,7 @@
 namespace Crafthoe.Frontend;
 
 [App]
-public class AppSinglePlayerWorldSelectMenu(AppStyle s, AppLoadWorldAction loadWorldAction)
+public class AppSinglePlayerWorldSelectMenu(AppStyle s, AppSinglePlayerNewWorldMenu newWorldMenu)
 {
     public void Create(EntObj root)
     {
@@ -56,7 +56,8 @@ public class AppSinglePlayerWorldSelectMenu(AppStyle s, AppLoadWorldAction loadW
                     .InnerSpacingV(s.ItemSpacing);
                 {
                     Node(rightButtonsVertical)
-                        .OnPressF(loadWorldAction.Run)
+                        .OnPressF(() => root.StackRootV()?.NodeStack().Push(
+                            new EntObj().StackRootV(root.StackRootV()).Mut(newWorldMenu.Create)))
                         .TextV("Create New World")
                         .Mut(s.Button);
 
@@ -72,7 +73,7 @@ public class AppSinglePlayerWorldSelectMenu(AppStyle s, AppLoadWorldAction loadW
                             .Mut(s.Button);
 
                         Node(rightButtonsHorizontal)
-                            .OnPressF(() => root.StackRootV().NodeStack().Pop())
+                            .OnPressF(() => root.StackRootV()?.NodeStack().Pop())
                             .TextV("Back")
                             .Mut(s.Button);
                     }

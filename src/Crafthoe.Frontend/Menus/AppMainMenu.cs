@@ -32,7 +32,7 @@ public class AppMainMenu(
             {
                 Node(list2)
                     .Mut(s.Button)
-                    .OnPressF(() => root.StackRootV().NodeStack().Push(
+                    .OnPressF(() => root.StackRootV()?.NodeStack().Push(
                         Node().StackRootV(root.StackRootV()).Mut(worldSelectMenu.Create)))
                     .TextV("Singleplayer");
 
