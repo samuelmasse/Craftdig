@@ -5,6 +5,12 @@ file record ModuleComponents(
     [ComponentToString] string ModuleName,
     [ComponentToString] string Name,
 
+    // Dimension
+    [ComponentToString] bool IsDimension,
+    Ent Air,
+    Type TerrainGeneratorType,
+    Type BiomeGeneraetorType,
+
     // Block
     [ComponentToString] bool IsBlock,
     bool IsBuildable,

@@ -1,11 +1,11 @@
 namespace Crafthoe.Frontend;
 
-[App]
-public class AppMenuState(
+[Module]
+public class ModuleMenuState(
     RootBackbuffer backbuffer,
     RootScreen screen,
     RootUi ui,
-    AppMainMenu mainMenu) : State
+    ModuleMainMenu mainMenu) : State
 {
     private readonly EntObj menus = Node(ui);
     private readonly Stopwatch watch = new();

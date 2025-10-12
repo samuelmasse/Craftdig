@@ -1,21 +1,23 @@
 namespace Crafthoe.Frontend;
 
-[App]
-public class AppLoadWorldAction(RootState state, AppScope scope)
+[Module]
+public class ModuleLoadWorldAction(RootState state, ModuleEnts ents, ModuleScope scope)
 {
     public void Run()
     {
-        var moduleScope = scope.Scope<ModuleScope>();
-        var worldScope = moduleScope.Scope<WorldScope>();
+        var worldScope = scope.Scope<WorldScope>();
         worldScope.Scope<WorldLoaderScope>().Get<WorldLoader>().Run();
 
         var dimensionScope = worldScope.Scope<DimensionScope>();
 
-        dimensionScope.Add(new DimensionAir(moduleScope.Get<ModuleBlocks>().Air));
+        // For now just find the first dimension
+        var dimension = ents.Set.First(x => x.IsDimension());
+
+        dimensionScope.Add(new DimensionAir(dimension.Air()));
         dimensionScope.Add(new DimensionTerrainGenerator(
-            dimensionScope.Get<DimensionOverworldTerrainGenerator>()));
+            (ITerrainGenerator)dimensionScope.Get(dimension.TerrainGeneratorType())));
         dimensionScope.Add(new DimensionBiomeGenerator(
-            dimensionScope.Get<DimensionOverworldBiomeGenerator>()));
+            (IBiomeGenerator)dimensionScope.Get(dimension.BiomeGeneraetorType())));
 
         var players = dimensionScope.Get<DimensionPlayerBag>();
         var player = new EntObj();

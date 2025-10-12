@@ -1,7 +1,7 @@
 namespace Crafthoe.Frontend;
 
-[App]
-public class AppSinglePlayerWorldSelectMenu(AppStyle s, AppSinglePlayerNewWorldMenu newWorldMenu)
+[Module]
+public class ModuleSinglePlayerWorldSelectMenu(AppStyle s, ModuleSinglePlayerNewWorldMenu newWorldMenu)
 {
     public void Create(EntObj root)
     {

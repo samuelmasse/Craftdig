@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <OutputType>WinExe</OutputType>
+        <OutputType>Exe</OutputType>
         <ServerGarbageCollection>true</ServerGarbageCollection>
     </PropertyGroup>
 
@@ -10,13 +10,14 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\Crafthoe.Frontend\Crafthoe.Frontend.csproj" />
+        <ProjectReference Include="..\Crafthoe.Native\Crafthoe.Native.csproj" />
     </ItemGroup>
 
     <ItemGroup>
         <Using Include="AlvorEngine.Loop" />
         <Using Include="Crafthoe.App" />
         <Using Include="Crafthoe.Frontend" />
+        <Using Include="Crafthoe.Native" />
         <Using Include="GlwLayer.Driver.OpenTK" />
     </ItemGroup>
 

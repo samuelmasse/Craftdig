@@ -1,25 +1,48 @@
 namespace Crafthoe.Module;
 
 [Module]
-public class ModuleEnts
+public class ModuleEnts(ModuleEntsMut entsMut)
 {
-    private readonly Dictionary<string, EntObj> entities = [];
-    private readonly List<Ent> list = [];
+    private readonly HashSet<EntMut> set = [];
+    private Ent[] array = [default];
+    private int count;
 
-    public ReadOnlySpan<Ent> Span => CollectionsMarshal.AsSpan(list);
-
-    public EntMut this[string name]
+    public ReadOnlySpan<Ent> Span
     {
         get
         {
-            if (entities.TryGetValue(name, out var val))
-                return (EntMut)val;
-
-            var ent = new EntObj().ModuleName(name);
-            entities.Add(name, ent);
-            list.Add((Ent)ent);
-
-            return (EntMut)ent;
+            Refresh();
+            return array.AsSpan()[..count];
         }
+    }
+
+    public HashSet<EntMut> Set
+    {
+        get
+        {
+            Refresh();
+            return set;
+        }
+    }
+
+    public Ent this[string name] => entsMut[name];
+
+    private void Refresh()
+    {
+        var mut = entsMut.Span;
+
+        if (count == mut.Length)
+            return;
+
+        if (array.Length <= mut.Length)
+            Array.Resize(ref array, (int)System.Numerics.BitOperations.RoundUpToPowerOf2((uint)mut.Length));
+
+        for (int i = 0; i < mut.Length; i++)
+        {
+            array[i] = mut[i];
+            set.Add(mut[i]);
+        }
+
+        count = mut.Length;
     }
 }

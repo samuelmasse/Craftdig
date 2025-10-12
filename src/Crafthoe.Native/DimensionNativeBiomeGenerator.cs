@@ -1,8 +1,7 @@
-
-namespace Crafthoe.Frontend;
+namespace Crafthoe.Native;
 
 [Dimension]
-public class DimensionOverworldBiomeGenerator(ModuleBlocks block, DimensionBlocksRaw blocksRaw) : IBiomeGenerator
+public class DimensionNativeBiomeGenerator(ModuleNative m, DimensionBlocksRaw blocksRaw) : IBiomeGenerator
 {
     public void Generate(Vector2i cloc)
     {
@@ -34,8 +33,8 @@ public class DimensionOverworldBiomeGenerator(ModuleBlocks block, DimensionBlock
 
     private void Generate(Vector3i loc)
     {
-        blocksRaw.TrySet(loc, (Ent)block.Grass);
-        blocksRaw.TrySet(loc - (0, 0, 1), (Ent)block.Dirt);
-        blocksRaw.TrySet(loc - (0, 0, 2), (Ent)block.Dirt);
+        blocksRaw.TrySet(loc, (Ent)m.GrassBlock);
+        blocksRaw.TrySet(loc - (0, 0, 1), (Ent)m.DirtBlock);
+        blocksRaw.TrySet(loc - (0, 0, 2), (Ent)m.DirtBlock);
     }
 }

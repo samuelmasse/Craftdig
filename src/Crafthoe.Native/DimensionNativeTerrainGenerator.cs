@@ -1,8 +1,7 @@
-
-namespace Crafthoe.Frontend;
+namespace Crafthoe.Native;
 
 [Dimension]
-public class DimensionOverworldTerrainGenerator(ModuleBlocks block, DimensionBlocksRaw blocksRaw) : ITerrainGenerator
+public class DimensionNativeTerrainGenerator(ModuleNative m, DimensionBlocksRaw blocksRaw) : ITerrainGenerator
 {
     private readonly FastNoiseLite noise = new();
 
@@ -22,16 +21,16 @@ public class DimensionOverworldTerrainGenerator(ModuleBlocks block, DimensionBlo
     private Ent Generate(Vector3i loc)
     {
         if (loc.X == 0 && loc.Y == 0)
-            return block.Stone;
+            return m.StoneBlock;
 
         float bias = ((loc.Z - 60) / 30f);
         if (bias >= 1.5f)
-            return loc.Z < 60 ? block.Stone : block.Air;
+            return loc.Z < 60 ? m.StoneBlock : m.AirBlock;
         float n = noise.GetNoise(loc.X, loc.Y, loc.Z) + 0.5f;
 
         if (n - bias > 0)
-            return block.Stone;
+            return m.StoneBlock;
 
-        return block.Air;
+        return m.AirBlock;
     }
 }

@@ -20,6 +20,10 @@ public class AppInitializeState(
         ui.Nodes().Add(Node().OrderValueV(2).Mut(tooltipMenu.Create));
         ui.Nodes().Add(Node().OrderValueV(5).Mut(zoomMenu.Create));
 
-        state.Current = scope.New<AppMenuState>();
+        var module = scope.Scope<ModuleScope>();
+        module.Handler(module.Get<ModuleEntMutInjector>());
+        module.Scope<ModuleLoaderScope>().Get<ModuleLoader>().Run();
+
+        state.Current = module.New<ModuleMenuState>();
     }
 }

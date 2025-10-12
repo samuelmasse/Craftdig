@@ -1,7 +1,7 @@
 namespace Crafthoe.Frontend;
 
 [Player]
-public class PlayerEscapeMenu(RootScope scope, RootState state, AppStyle s, PlayerUnloadWorldAction unloadWorldAction)
+public class PlayerEscapeMenu(RootState state, AppStyle s, ModuleScope scope, PlayerUnloadWorldAction unloadWorldAction)
 {
     public void Create(EntObj root)
     {
@@ -30,7 +30,7 @@ public class PlayerEscapeMenu(RootScope scope, RootState state, AppStyle s, Play
                 .OnPressF(() =>
                 {
                     unloadWorldAction.Run();
-                    state.Current = scope.Scope<AppScope>().New<AppMenuState>();
+                    state.Current = scope.New<ModuleMenuState>();
                 })
                 .TextV("Quit");
         }
