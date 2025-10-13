@@ -30,7 +30,8 @@ public class RootUiMouse(RootMouse mouse, RootUiSystem uiSystem)
             if (!prevMouseDown)
             {
                 pressed = hovered;
-                pressed?.OnPressF()?.Invoke();
+                if (pressed != null && !Get(pressed.IsInputDisabledV(), pressed.IsInputDisabledF()))
+                    pressed.OnPressF()?.Invoke();
             }
 
             prevMouseDown = true;
@@ -40,7 +41,10 @@ public class RootUiMouse(RootMouse mouse, RootUiSystem uiSystem)
             if (prevMouseDown)
             {
                 if (pressed == hovered)
-                    pressed?.OnClickF()?.Invoke();
+                {
+                    if (pressed != null && !Get(pressed.IsInputDisabledV(), pressed.IsInputDisabledF()))
+                        pressed.OnClickF()?.Invoke();
+                }
             }
 
             pressed = null;
@@ -52,7 +56,8 @@ public class RootUiMouse(RootMouse mouse, RootUiSystem uiSystem)
             if (!prevSecondaryMouseDown)
             {
                 secondaryPressed = hovered;
-                secondaryPressed?.OnSecondaryPressF()?.Invoke();
+                if (secondaryPressed != null && !Get(secondaryPressed.IsInputDisabledV(), secondaryPressed.IsInputDisabledF()))
+                    secondaryPressed.OnSecondaryPressF()?.Invoke();
             }
 
             prevSecondaryMouseDown = true;
@@ -62,7 +67,10 @@ public class RootUiMouse(RootMouse mouse, RootUiSystem uiSystem)
             if (prevSecondaryMouseDown)
             {
                 if (secondaryPressed == hovered)
-                    secondaryPressed?.OnSecondaryClickF()?.Invoke();
+                {
+                    if (secondaryPressed != null && !Get(secondaryPressed.IsInputDisabledV(), secondaryPressed.IsInputDisabledF()))
+                        secondaryPressed.OnSecondaryClickF()?.Invoke();
+                }
             }
 
             secondaryPressed = null;

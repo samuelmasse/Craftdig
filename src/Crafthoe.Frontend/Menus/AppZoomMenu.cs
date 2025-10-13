@@ -14,10 +14,10 @@ public class AppZoomMenu(RootKeyboard keyboard, RootText text, RootUiSystem uiSy
         Node(root)
             .OnUpdateF(() =>
             {
-                if (keyboard.IsKeyPressedRepeated(Keys.Equal) && zoom < 32)
+                if (keyboard.IsKeyDown(Keys.LeftControl) && keyboard.IsKeyPressedRepeated(Keys.Equal) && zoom < 32)
                     zoom++;
 
-                if (keyboard.IsKeyPressedRepeated(Keys.Minus) && zoom > 1)
+                if (keyboard.IsKeyDown(Keys.LeftControl) && keyboard.IsKeyPressedRepeated(Keys.Minus) && zoom > 1)
                     zoom--;
 
                 uiSystem.Scale = zoom / 8f;

@@ -20,6 +20,7 @@ public class ModuleMainMenu(
                 .Mut(s.Label)
                 .TextV("Crafthoe")
                 .FontSizeV(s.FontSizeTitle)
+                .FontPaddingV((s.ItemSpacing, 0, s.ItemSpacing, 0))
                 .ColorV(s.ButtonColor)
                 .AlignmentV(Alignment.Horizontal);
 
@@ -38,7 +39,8 @@ public class ModuleMainMenu(
 
                 Node(list2)
                     .Mut(s.Button)
-                    .TextV("Multiplayer");
+                    .TextV("Multiplayer")
+                    .IsInputDisabledV(true);
 
                 Node(list2)
                     .Mut(s.Button)

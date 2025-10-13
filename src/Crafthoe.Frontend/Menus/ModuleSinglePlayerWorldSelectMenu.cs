@@ -31,7 +31,8 @@ public class ModuleSinglePlayerWorldSelectMenu(AppStyle s, ModuleSinglePlayerNew
                 {
                     Node(leftButtonsVertical)
                         .TextV("Play Selected World")
-                        .Mut(s.Button);
+                        .Mut(s.Button)
+                        .IsInputDisabledV(true);
 
                     Node(leftButtonsVertical, out var leftButtonsHorizontal)
                         .SizeRelativeV(s.Horizontal)
@@ -42,11 +43,13 @@ public class ModuleSinglePlayerWorldSelectMenu(AppStyle s, ModuleSinglePlayerNew
                     {
                         Node(leftButtonsHorizontal)
                             .TextV("Edit")
-                            .Mut(s.Button);
+                            .Mut(s.Button)
+                            .IsInputDisabledV(true);
 
                         Node(leftButtonsHorizontal)
                             .TextV("Delete")
-                            .Mut(s.Button);
+                            .Mut(s.Button)
+                            .IsInputDisabledV(true);
                     }
                 }
 
@@ -70,7 +73,8 @@ public class ModuleSinglePlayerWorldSelectMenu(AppStyle s, ModuleSinglePlayerNew
                     {
                         Node(rightButtonsHorizontal)
                             .TextV("Re-Create")
-                            .Mut(s.Button);
+                            .Mut(s.Button)
+                            .IsInputDisabledV(true);
 
                         Node(rightButtonsHorizontal)
                             .OnPressF(() => root.StackRootV()?.NodeStack().Pop())

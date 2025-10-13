@@ -156,12 +156,16 @@ public class RootUiSystem(RootScale rscale, RootSprites sprites)
             return;
 
         var text = Get(n.TextV().AsSpan(), n.TextF());
-        if (text.IsEmpty)
-            return;
-
         var sizeTextRelative = Get(n.SizeTextRelativeV(), n.SizeTextRelativeF());
-        n.SizeR().X += sizeTextRelative.X * (sprites.Batch.Measure(font.Size(fontSize), text) / scale);
-        n.SizeR().Y += sizeTextRelative.Y * (font.Size(fontSize).Metrics.Height / scale);
+        var size = new Vector2(sprites.Batch.Measure(font.Size(fontSize), text) / scale, font.Size(fontSize).Metrics.Height / scale);
+
+        var fontPadding = Get(n.FontPaddingV(), n.FontPaddingF());
+        var textPadding = Get(n.TextPaddingV(), n.TextPaddingF());
+
+        size += fontPadding.Xy + fontPadding.Zw;
+        size += textPadding.Xy + textPadding.Zw;
+
+        n.SizeR() += sizeTextRelative * size;
     }
 
     private void SizeInnerMaxRelative(Vector2 s, EntObj n)
@@ -446,8 +450,17 @@ public class RootUiSystem(RootScale rscale, RootSprites sprites)
         var size = new Vector2(sprites.Batch.Measure(font.Size(fontSize), text), font.Size(fontSize).Metrics.Height) / scale;
         var offset = Vector2.Zero;
 
+        var fontPadding = Get(n.FontPaddingV(), n.FontPaddingF());
+        var textPadding = Get(n.TextPaddingV(), n.TextPaddingF());
+
+        if ((alignment & (Alignment.Right | Alignment.Horizontal)) == 0)
+            offset.X += fontPadding.X + textPadding.X;
+        if ((alignment & (Alignment.Bottom | Alignment.Vertical)) == 0)
+            offset.Y += fontPadding.Y + textPadding.Y;
+
         Align(ref offset, size, n.SizeR(), alignment);
         offset.Y += size.Y / 2;
+
         sprites.Batch.Write(font.Size(fontSize), text, (o + offset) * scale, textColor, scale);
     }
 
@@ -465,13 +478,6 @@ public class RootUiSystem(RootScale rscale, RootSprites sprites)
             return false;
 
         return Get(n.SizeWeightTypeV(), n.SizeWeightTypeF()) == SizeWeightType.Self;
-    }
-
-    public T? Get<T>(T? value, Func<T>? func) where T : allows ref struct
-    {
-        if (func != null)
-            return func.Invoke();
-        else return value;
     }
 
     private void Align(ref Vector2 val, Vector2 size, Vector2 parent, Alignment alignment)

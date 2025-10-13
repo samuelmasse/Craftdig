@@ -8,7 +8,8 @@ public class ModuleSinglePlayerNewWorldMenu(RootText text, AppStyle s, ModuleEnt
         var gameModes = ents.Set.Where(x => x.GetIsGameMode()).OrderBy(x => x.Order()).ToList();
         var difficulties = ents.Set.Where(x => x.GetIsDifficulty()).OrderBy(x => x.Order()).ToList();
 
-        string name = "New World";
+        var name = new StringBuilder("New World");
+        var seed = new StringBuilder(string.Empty);
         int gameModeIndex = 0;
         int difficultyIndex = 0;
 
@@ -23,9 +24,19 @@ public class ModuleSinglePlayerNewWorldMenu(RootText text, AppStyle s, ModuleEnt
                 .Mut(s.Label)
                 .TextV("World Name");
 
-            Node(form, out var nameTxt)
+            Node(form)
+                .Mut(s.Textbox)
+                .MaxLengthV(29)
+                .StringBuilderV(name);
+
+            Node(form)
                 .Mut(s.Label)
-                .TextF(() => name);
+                .TextV("Seed");
+
+            Node(form)
+                .Mut(s.Textbox)
+                .MaxLengthV(29)
+                .StringBuilderV(seed);
 
             Node(form)
                 .Mut(s.Button)
@@ -41,7 +52,8 @@ public class ModuleSinglePlayerNewWorldMenu(RootText text, AppStyle s, ModuleEnt
                 })
                 .TextF(() => text.Format("Difficulty: {0}", gameModes[gameModeIndex].LockedDifficulty() == default ?
                     difficulties[difficultyIndex].Name() :
-                    gameModes[gameModeIndex].LockedDifficulty().Name()));
+                    gameModes[gameModeIndex].LockedDifficulty().Name()))
+                .IsInputDisabledF(() => gameModes[gameModeIndex].LockedDifficulty() != default);
         }
 
         Node(root, out var bottomBar)

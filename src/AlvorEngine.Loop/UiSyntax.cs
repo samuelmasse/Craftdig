@@ -33,4 +33,11 @@ public static class UiSyntax
         action.Invoke(ent);
         return ent;
     }
+
+    public static T? Get<T>(T? value, Func<T>? func) where T : allows ref struct
+    {
+        if (func != null)
+            return func.Invoke();
+        else return value;
+    }
 }

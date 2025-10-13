@@ -26,6 +26,9 @@ file record UiComponents(
     bool IsFloatingV,
     Func<bool> IsFloatingF,
 
+    bool IsInputDisabledV,
+    Func<bool>? IsInputDisabledF,
+
     InnerLayout InnerLayoutV,
     Func<InnerLayout>? InnerLayoutF,
 
@@ -86,6 +89,9 @@ file record UiComponents(
     int FontSizeV,
     Func<int>? FontSizeF,
 
+    Vector4 FontPaddingV,
+    Func<Vector4>? FontPaddingF,
+
     [ComponentToString] string TextV,
     Func<ReadOnlySpan<char>>? TextF,
 
@@ -94,6 +100,9 @@ file record UiComponents(
 
     Vector4 TextColorV,
     Func<Vector4>? TextColorF,
+
+    Vector4 TextPaddingV,
+    Func<Vector4>? TextPaddingF,
 
     Action? OnUpdateF,
     Action? OnClickF,

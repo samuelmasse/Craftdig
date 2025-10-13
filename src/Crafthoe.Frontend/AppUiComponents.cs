@@ -8,5 +8,7 @@ file record AppUiComponents(
     EntMut PlayerV,
     Func<ItemSlot>? GetSlotValueF,
     Action<ItemSlot>? SetSlotValueF,
+    StringBuilder? StringBuilderV,
+    int MaxLengthV,
     EntObj SlotV,
     bool SlotAddedV);

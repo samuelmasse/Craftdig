@@ -8,4 +8,10 @@
         <EmbeddedResource Include="../../res/Fonts/RobotoMono-Regular.ttf" Visible="false" />
     </ItemGroup>
 
+    <ItemGroup>
+        <Using Include="AlvorEngine.Loop.UiSyntax">
+            <Static>True</Static>
+        </Using>
+    </ItemGroup>
+
 </Project>

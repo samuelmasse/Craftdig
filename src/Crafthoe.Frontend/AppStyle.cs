@@ -1,7 +1,7 @@
 namespace Crafthoe.Frontend;
 
 [App]
-public class AppStyle(RootText text, AppMenuTextures menuTextures, AppMonocraft monocraft)
+public class AppStyle(RootText text, RootKeyboard keyboard, AppMenuTextures menuTextures, AppMonocraft monocraft)
 {
     public readonly Texture ArrowTexture = menuTextures["MenuArrow"];
     public readonly Texture SlotTexture = menuTextures["MenuSlot"];
@@ -29,6 +29,7 @@ public class AppStyle(RootText text, AppMenuTextures menuTextures, AppMonocraft 
 
     public Vector4 TextColor => (1, 1, 1, 1);
     public Vector4 ButtonColor => (1, 0, 1, 1);
+    public Vector4 ButtonColorDisabled => (0.4f, 0, 0.4f, 1);
     public Vector4 ButtonColorHovered => (1, 0.7f, 1, 1);
     public Vector4 TooltipColor => (0.5f, 0.28f, 1, 1);
 
@@ -38,6 +39,7 @@ public class AppStyle(RootText text, AppMenuTextures menuTextures, AppMonocraft 
         .TagV(nameof(Text))
         .FontV(Font)
         .FontSizeV(FontSize)
+        .FontPaddingV((ItemSpacingXS, 0, ItemSpacingXS, 0))
         .TextColorV(TextColor);
 
     public void Label(EntObj ent) => ent
@@ -46,13 +48,46 @@ public class AppStyle(RootText text, AppMenuTextures menuTextures, AppMonocraft 
         .SizeTextRelativeV((1, 1))
         .SizeRelativeV((0, 0));
 
-    public void Button(EntObj ent) => ent
-        .Mut(Text)
-        .TagV(nameof(Button))
-        .ColorF(() => ent.IsHoveredR() ? ButtonColorHovered : ButtonColor)
+    public void InputItem(EntObj ent) => ent
         .SizeV((0, ItemHeight))
         .SizeRelativeV((1, 0))
         .IsSelectableV(true);
+
+    public void Textbox(EntObj ent) => ent
+        .Mut(InputItem)
+        .Mut(Text)
+        .TextAlignmentV(Alignment.Left | Alignment.Vertical)
+        .ColorV(ButtonColorDisabled)
+        .TextF(() => text.Format("{0}", ent.StringBuilderV()))
+        .TextPaddingV((ItemSpacingXS, ItemSpacingXS, ItemSpacingXS, ItemSpacingXS))
+        .OnUpdateF(() =>
+        {
+            var sb = ent.StringBuilderV();
+            if (sb == null)
+                return;
+
+            if (keyboard.IsKeyPressedRepeated(Keys.Backspace) && sb.Length > 0)
+                sb.Remove(sb.Length - 1, 1);
+
+            if (keyboard.Text.Count > 0)
+            {
+                foreach (var rune in keyboard.Text)
+                    sb.Append(rune);
+            }
+
+            if (ent.MaxLengthV() > 0)
+            {
+                while (sb.Length > ent.MaxLengthV())
+                    sb.Remove(sb.Length - 1, 1);
+            }
+        });
+
+    public void Button(EntObj ent) => ent
+        .Mut(InputItem)
+        .Mut(Text)
+        .TagV(nameof(Button))
+        .ColorF(() => Get(ent.IsInputDisabledV(), ent.IsInputDisabledF()) ? ButtonColorDisabled :
+            ent.IsHoveredR() ? ButtonColorHovered : ButtonColor);
 
     public void VerticalList(EntObj ent) => ent
         .TagV(nameof(VerticalList))

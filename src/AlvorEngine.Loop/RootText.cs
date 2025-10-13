@@ -5,6 +5,13 @@ public class RootText
 {
     static RootText()
     {
+        Fmt((StringBuilder sb, Span<char> dst, out int w, ReadOnlySpan<char> fmt) =>
+        {
+            sb.CopyTo(0, dst, sb.Length);
+            w = sb.Length;
+            return true;
+        });
+
         Fmt((ReadOnlyMemory<char> val, Span<char> dst, out int w, ReadOnlySpan<char> fmt) =>
         {
             val.Span.CopyTo(dst);
