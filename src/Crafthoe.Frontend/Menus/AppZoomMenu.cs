@@ -1,14 +1,14 @@
 namespace Crafthoe.Frontend;
 
 [App]
-public class AppZoomMenu(RootKeyboard keyboard, RootText text, RootUiSystem uiSystem, AppStyle s)
+public class AppZoomMenu(RootKeyboard keyboard, RootText text, RootUiScale scale, AppStyle s)
 {
     public void Create(EntObj root)
     {
-        int zoom = (int)(uiSystem.Scale * 8);
+        int zoom = (int)(scale.Scale * 8);
         var sw = Stopwatch.StartNew();
 
-        float last = uiSystem.Scale;
+        float last = scale.Scale;
         bool initial = true;
 
         Node(root)
@@ -20,19 +20,19 @@ public class AppZoomMenu(RootKeyboard keyboard, RootText text, RootUiSystem uiSy
                 if (keyboard.IsKeyDown(Keys.LeftControl) && keyboard.IsKeyPressedRepeated(Keys.Minus) && zoom > 1)
                     zoom--;
 
-                uiSystem.Scale = zoom / 8f;
+                scale.Scale = zoom / 8f;
             });
 
         Node(root)
             .Mut(s.Label)
             .AlignmentV(Alignment.Top | Alignment.Right)
-            .TextF(() => text.Format("{0}%", uiSystem.Scale * 100))
+            .TextF(() => text.Format("{0}%", scale.Scale * 100))
             .OnUpdateF(() =>
             {
-                if (uiSystem.Scale != last)
+                if (scale.Scale != last)
                 {
                     initial = false;
-                    last = uiSystem.Scale;
+                    last = scale.Scale;
                     sw.Restart();
                 }
             })

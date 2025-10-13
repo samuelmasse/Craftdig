@@ -31,7 +31,7 @@ public class RootUiFocus(RootKeyboard keyboard)
 
     private void CollectFocusables(EntObj n)
     {
-        var isFocusable = Get(n.GetIsFocuseableV(), n.GetIsFocuseableF());
+        var isFocusable = Get(n.GetIsFocusableV(), n.GetIsFocusableF());
         var isInputDisabled = Get(n.GetIsInputDisabledV(), n.GetIsInputDisabledF());
 
         if (isFocusable && !isInputDisabled)

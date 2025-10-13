@@ -1,7 +1,7 @@
 namespace TrogloUI;
 
 [Root]
-public class RootUiMouse(RootMouse mouse, RootUiSystem uiSystem, RootUiFocus focus)
+public class RootUiMouse(RootMouse mouse, RootUiScale scale, RootUiFocus focus)
 {
     private Vector2 position;
     private EntObj? prevHovered;
@@ -15,7 +15,7 @@ public class RootUiMouse(RootMouse mouse, RootUiSystem uiSystem, RootUiFocus foc
 
     public void Update(Vector2 o, EntObj n)
     {
-        position = mouse.Position / uiSystem.Scale;
+        position = mouse.Position / scale.Scale;
 
         var hovered = FindHovered(o, n);
 
@@ -32,7 +32,7 @@ public class RootUiMouse(RootMouse mouse, RootUiSystem uiSystem, RootUiFocus foc
                 pressed = hovered;
                 if (pressed != null && !Get(pressed.IsInputDisabledV(), pressed.IsInputDisabledF()))
                 {
-                    if (Get(pressed.IsFocuseableV(), pressed.IsFocuseableF()))
+                    if (Get(pressed.IsFocusableV(), pressed.IsFocusableF()))
                         focus.Focus(pressed);
                     pressed.OnPressF()?.Invoke();
                 }

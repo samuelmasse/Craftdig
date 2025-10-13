@@ -7,7 +7,7 @@ public class PlayerState(
     RootKeyboard keyboard,
     RootSprites sprites,
     RootUi ui,
-    RootUiSystem uiSystem,
+    RootUiScale scale,
     WorldTick tick,
     DimensionMetrics dimensionMetrics,
     DimensionContext dimension,
@@ -127,7 +127,7 @@ public class PlayerState(
 
     public override void Draw()
     {
-        float cht = 4 * uiSystem.Scale;
+        float cht = 4 * scale.Scale;
         float chl = cht * 9;
         var c = canvas.Size / 2;
 

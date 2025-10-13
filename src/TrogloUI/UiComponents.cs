@@ -2,17 +2,16 @@ namespace TrogloUI;
 
 [Components]
 file record UiComponents(
+    // Structure
     LazyList<EntObj> Nodes,
     LazyStack<EntObj> NodeStack,
 
+    // Flags
     bool IsDisabledV,
     Func<bool>? IsDisabledF,
 
     bool IsOrderedV,
     Func<bool>? IsOrderedF,
-
-    float OrderValueV,
-    Func<float>? OrderValueF,
 
     bool IsSelectableV,
     Func<bool>? IsSelectableF,
@@ -24,29 +23,37 @@ file record UiComponents(
     Func<bool>? IsPostSizedF,
 
     bool IsFloatingV,
-    Func<bool> IsFloatingF,
+    Func<bool>? IsFloatingF,
 
     bool IsInputDisabledV,
     Func<bool>? IsInputDisabledF,
 
-    bool IsFocuseableV,
-    Func<bool>? IsFocuseableF,
+    bool IsFocusableV,
+    Func<bool>? IsFocusableF,
 
+    // Layout
     InnerLayout InnerLayoutV,
     Func<InnerLayout>? InnerLayoutF,
+
+    InnerSizing InnerSizingV,
+    Func<InnerSizing>? InnerSizingF,
 
     float InnerSpacingV,
     Func<float>? InnerSpacingF,
 
-    InnerSizing InnerSizingV,
-    Func<InnerSizing>? InnerSizingF,
+    float OrderValueV,
+    Func<float>? OrderValueF,
 
     float? SizeWeightV,
     Func<float?>? SizeWeightF,
 
     SizeWeightType SizeWeightTypeV,
-    Func<SizeWeightType> SizeWeightTypeF,
+    Func<SizeWeightType>? SizeWeightTypeF,
 
+    Alignment AlignmentV,
+    Func<Alignment>? AlignmentF,
+
+    // Position
     Vector2 OffsetV,
     Func<Vector2>? OffsetF,
 
@@ -56,12 +63,10 @@ file record UiComponents(
     float OffsetMultiplierV,
     Func<float>? OffsetMultiplierF,
 
-    Alignment AlignmentV,
-    Func<Alignment>? AlignmentF,
-
     Vector4 PaddingV,
     Func<Vector4>? PaddingF,
 
+    // Size
     Vector2 SizeV,
     Func<Vector2>? SizeF,
 
@@ -77,6 +82,7 @@ file record UiComponents(
     Vector2 SizeTextRelativeV,
     Func<Vector2>? SizeTextRelativeF,
 
+    // Visual
     Vector4 ColorV,
     Func<Vector4>? ColorF,
 
@@ -86,6 +92,7 @@ file record UiComponents(
     Vector4? TintV,
     Func<Vector4?>? TintF,
 
+    // Text
     Font? FontV,
     Func<Font?>? FontF,
 
@@ -107,17 +114,21 @@ file record UiComponents(
     Vector4 TextPaddingV,
     Func<Vector4>? TextPaddingF,
 
+    // Cursor
     MouseCursor? CursorV,
     Func<MouseCursor?>? CursorF,
 
+    // Events
     Action? OnUpdateF,
     Action? OnClickF,
     Action? OnPressF,
     Action? OnSecondaryClickF,
     Action? OnSecondaryPressF,
 
+    // Tag
     [ComponentToString] string? TagV,
 
+    // Runtime
     [ComponentTryGet] EntObj? StackedNodeR,
     Vector2 OffsetR,
     Vector2 SizeR,

@@ -52,7 +52,7 @@ public class AppStyle(RootText text, RootKeyboard keyboard, AppMenuTextures menu
         .SizeV((0, ItemHeight))
         .SizeRelativeV((1, 0))
         .IsSelectableV(true)
-        .IsFocuseableV(true)
+        .IsFocusableV(true)
         .Nodes([
             Node()
                 .AlignmentV(Alignment.Top | Alignment.Left)

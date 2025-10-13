@@ -1,16 +1,8 @@
 namespace TrogloUI;
 
 [Root]
-public class RootUiSystem(RootScale rscale, RootSprites sprites)
+public class RootUiSystem(RootSprites sprites, RootUiScale scale)
 {
-    private float scale = rscale.Scale;
-
-    public float Scale
-    {
-        get => scale;
-        set => scale = value;
-    }
-
     public void Size(Vector2 s, EntObj n)
     {
         SizeNode(s, n);
@@ -61,13 +53,13 @@ public class RootUiSystem(RootScale rscale, RootSprites sprites)
         if (font == null)
             return;
 
-        var fontSize = (int)(Get(n.FontSizeV(), n.FontSizeF()) * scale);
+        var fontSize = (int)(Get(n.FontSizeV(), n.FontSizeF()) * scale.Scale);
         if (fontSize <= 0)
             return;
 
         var text = Get(n.TextV().AsSpan(), n.TextF());
         var sizeTextRelative = Get(n.SizeTextRelativeV(), n.SizeTextRelativeF());
-        var size = new Vector2(sprites.Batch.Measure(font.Size(fontSize), text) / scale, font.Size(fontSize).Metrics.Height / scale);
+        var size = new Vector2(sprites.Batch.Measure(font.Size(fontSize), text) / scale.Scale, font.Size(fontSize).Metrics.Height / scale.Scale);
 
         var fontPadding = Get(n.FontPaddingV(), n.FontPaddingF());
         var textPadding = Get(n.TextPaddingV(), n.TextPaddingF());
@@ -254,7 +246,7 @@ public class RootUiSystem(RootScale rscale, RootSprites sprites)
         if (font == null)
             return;
 
-        var fontSize = (int)(Get(n.FontSizeV(), n.FontSizeF()) * scale);
+        var fontSize = (int)(Get(n.FontSizeV(), n.FontSizeF()) * scale.Scale);
         if (fontSize <= 0)
             return;
 
@@ -266,7 +258,7 @@ public class RootUiSystem(RootScale rscale, RootSprites sprites)
         if (textColor.W == 0)
             return;
 
-        var size = new Vector2(sprites.Batch.Measure(font.Size(fontSize), text), font.Size(fontSize).Metrics.Height) / scale;
+        var size = new Vector2(sprites.Batch.Measure(font.Size(fontSize), text), font.Size(fontSize).Metrics.Height) / scale.Scale;
         n.OffsetR() += Get(n.OffsetTextRelativeV(), n.OffsetTextRelativeF()) * size;
     }
 
@@ -347,7 +339,7 @@ public class RootUiSystem(RootScale rscale, RootSprites sprites)
         if (font == null)
             return;
 
-        var fontSize = (int)(Get(n.FontSizeV(), n.FontSizeF()) * scale);
+        var fontSize = (int)(Get(n.FontSizeV(), n.FontSizeF()) * scale.Scale);
         if (fontSize <= 0)
             return;
 
@@ -360,7 +352,7 @@ public class RootUiSystem(RootScale rscale, RootSprites sprites)
             return;
 
         var alignment = Get(n.TextAlignmentV(), n.TextAlignmentF()) ?? Alignment.Center;
-        var size = new Vector2(sprites.Batch.Measure(font.Size(fontSize), text), font.Size(fontSize).Metrics.Height) / scale;
+        var size = new Vector2(sprites.Batch.Measure(font.Size(fontSize), text), font.Size(fontSize).Metrics.Height) / scale.Scale;
         var offset = Vector2.Zero;
 
         var fontPadding = Get(n.FontPaddingV(), n.FontPaddingF());
@@ -374,7 +366,7 @@ public class RootUiSystem(RootScale rscale, RootSprites sprites)
         Align(ref offset, size, n.SizeR(), alignment);
         offset.Y += size.Y / 2;
 
-        sprites.Batch.Write(font.Size(fontSize), text, (o + offset) * scale, textColor, scale);
+        sprites.Batch.Write(font.Size(fontSize), text, (o + offset) * scale.Scale, textColor, scale.Scale);
     }
 
     private bool IsFloating(EntObj n)
