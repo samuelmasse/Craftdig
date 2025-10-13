@@ -11,8 +11,52 @@ public class ModuleNativeLoader(ModuleNative m) : ModLoader
             .TerrainGeneratorType(typeof(DimensionNativeTerrainGenerator))
             .BiomeGeneraetorType(typeof(DimensionNativeBiomeGenerator));
 
+        LoadGameModes();
+        LoadDifficulties();
         LoadFaces();
         LoadBlocks();
+    }
+
+    private void LoadGameModes()
+    {
+        m.SurvivalGameMode
+            .IsGameMode(true)
+            .Name("Survival")
+            .Order(0);
+
+        m.CreativeGameMode
+            .IsGameMode(true)
+            .Name("Creative")
+            .Order(1);
+
+        m.HardcoreGameMode
+            .IsGameMode(true)
+            .Name("Hardcore")
+            .Order(2)
+            .LockedDifficulty(m.HardDifficulty);
+    }
+
+    private void LoadDifficulties()
+    {
+        m.NormalDifficulty
+            .IsDifficulty(true)
+            .Name("Normal")
+            .Order(0);
+
+        m.HardDifficulty
+            .IsDifficulty(true)
+            .Name("Hard")
+            .Order(1);
+
+        m.PeacefulDifficulty
+            .IsDifficulty(true)
+            .Name("Peaceful")
+            .Order(2);
+
+        m.EasyDifficulty
+            .IsDifficulty(true)
+            .Name("Easy")
+            .Order(3);
     }
 
     private void LoadFaces()

@@ -5,6 +5,13 @@ file record ModuleComponents(
     [ComponentToString] string ModuleName,
     [ComponentToString] string Name,
 
+    [ComponentToString] bool IsDifficulty,
+    float Order,
+
+    // Game mode
+    [ComponentToString] bool IsGameMode,
+    Ent LockedDifficulty,
+
     // Dimension
     [ComponentToString] bool IsDimension,
     Ent Air,

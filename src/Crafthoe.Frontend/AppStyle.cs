@@ -29,7 +29,7 @@ public class AppStyle(RootText text, AppMenuTextures menuTextures, AppMonocraft 
 
     public Vector4 TextColor => (1, 1, 1, 1);
     public Vector4 ButtonColor => (1, 0, 1, 1);
-    public Vector4 ButtonColorHovered => (1, 1, 1, 1);
+    public Vector4 ButtonColorHovered => (1, 0.7f, 1, 1);
     public Vector4 TooltipColor => (0.5f, 0.28f, 1, 1);
 
     public Font Font => monocraft.Font;

@@ -4,6 +4,15 @@ namespace Crafthoe.Native;
 public record class ModuleNative(
     EntMut OverworldDimension,
 
+    EntMut SurvivalGameMode,
+    EntMut CreativeGameMode,
+    EntMut HardcoreGameMode,
+
+    EntMut NormalDifficulty,
+    EntMut HardDifficulty,
+    EntMut PeacefulDifficulty,
+    EntMut EasyDifficulty,
+
     EntMut GrassFace,
     EntMut GrassSideFace,
     EntMut StoneFace,

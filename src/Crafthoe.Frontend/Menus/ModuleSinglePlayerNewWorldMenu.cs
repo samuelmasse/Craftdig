@@ -1,11 +1,16 @@
 namespace Crafthoe.Frontend;
 
 [Module]
-public class ModuleSinglePlayerNewWorldMenu(AppStyle s, ModuleLoadWorldAction loadWorldAction)
+public class ModuleSinglePlayerNewWorldMenu(RootText text, AppStyle s, ModuleEnts ents, ModuleLoadWorldAction loadWorldAction)
 {
     public void Create(EntObj root)
     {
+        var gameModes = ents.Set.Where(x => x.GetIsGameMode()).OrderBy(x => x.Order()).ToList();
+        var difficulties = ents.Set.Where(x => x.GetIsDifficulty()).OrderBy(x => x.Order()).ToList();
+
         string name = "New World";
+        int gameModeIndex = 0;
+        int difficultyIndex = 0;
 
         Node(root, out var form)
             .Mut(s.VerticalList)
@@ -24,11 +29,19 @@ public class ModuleSinglePlayerNewWorldMenu(AppStyle s, ModuleLoadWorldAction lo
 
             Node(form)
                 .Mut(s.Button)
-                .TextV("Game Mode: Survival");
+                .OnPressF(() => gameModeIndex = (gameModeIndex + 1) % gameModes.Count)
+                .TextF(() => text.Format("Game Mode: {0}", gameModes[gameModeIndex].Name()));
 
             Node(form)
                 .Mut(s.Button)
-                .TextV("Difficulty: Normal");
+                .OnPressF(() =>
+                {
+                    if (gameModes[gameModeIndex].LockedDifficulty() == default)
+                        difficultyIndex = (difficultyIndex + 1) % difficulties.Count;
+                })
+                .TextF(() => text.Format("Difficulty: {0}", gameModes[gameModeIndex].LockedDifficulty() == default ?
+                    difficulties[difficultyIndex].Name() :
+                    gameModes[gameModeIndex].LockedDifficulty().Name()));
         }
 
         Node(root, out var bottomBar)

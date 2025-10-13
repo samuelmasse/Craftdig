@@ -5,7 +5,7 @@ public class ModuleFaceLoader(ModuleEntsMut entsMut, ModuleFaceAtlas faceAtlas, 
 {
     public void Run()
     {
-        var faces = entsMut.Set.Where(x => x.IsFace()).ToList();
+        var faces = entsMut.Set.Where(x => x.GetIsFace()).ToList();
 
         faces.ForEach(x => x
             .FaceIndex(faceAtlas[x.FaceFile()])
