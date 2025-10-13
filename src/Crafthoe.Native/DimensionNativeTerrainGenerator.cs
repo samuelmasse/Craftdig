@@ -1,14 +1,10 @@
 namespace Crafthoe.Native;
 
 [Dimension]
-public class DimensionNativeTerrainGenerator(ModuleNative m, DimensionBlocksRaw blocksRaw) : ITerrainGenerator
+public class DimensionNativeTerrainGenerator(ModuleNative m, DimensionBlocksRaw blocksRaw, DimensionNativeNoise noise) : ITerrainGenerator
 {
-    private readonly FastNoiseLite noise = new();
-
     public void Generate(Vector2i cloc)
     {
-        noise.SetFractalType(FastNoiseLite.FractalType.FBm);
-
         var mem = blocksRaw.Span(cloc);
         var loc = cloc * SectionSize;
 
@@ -26,7 +22,7 @@ public class DimensionNativeTerrainGenerator(ModuleNative m, DimensionBlocksRaw 
         float bias = ((loc.Z - 60) / 30f);
         if (bias >= 1.5f)
             return loc.Z < 60 ? m.StoneBlock : m.AirBlock;
-        float n = noise.GetNoise(loc.X, loc.Y, loc.Z) + 0.5f;
+        float n = noise.Generator.GetNoise(loc.X, loc.Y, loc.Z) + 0.5f;
 
         if (n - bias > 0)
             return m.StoneBlock;

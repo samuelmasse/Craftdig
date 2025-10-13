@@ -1,14 +1,20 @@
 namespace Crafthoe.Frontend;
 
 [Module]
-public class ModuleSinglePlayerNewWorldMenu(RootText text, AppStyle s, ModuleEnts ents, ModuleLoadWorldAction loadWorldAction)
+public class ModuleSinglePlayerNewWorldMenu(
+    RootText text,
+    AppStyle s,
+    ModuleEnts ents,
+    ModuleCreateWorldAction createWorldAction,
+    ModuleLoadWorldAction loadWorldAction)
 {
     public void Create(EntObj root)
     {
-        var gameModes = ents.Set.Where(x => x.GetIsGameMode()).OrderBy(x => x.Order()).ToList();
-        var difficulties = ents.Set.Where(x => x.GetIsDifficulty()).OrderBy(x => x.Order()).ToList();
+        var gameModes = ents.Set.Where(x => x.IsGameMode()).OrderBy(x => x.Order()).ToList();
+        var difficulties = ents.Set.Where(x => x.IsDifficulty()).OrderBy(x => x.Order()).ToList();
 
-        var name = new StringBuilder("New World");
+        string defaultName = "New World";
+        var name = new StringBuilder(defaultName);
         var seed = new StringBuilder(string.Empty);
         int gameModeIndex = 0;
         int difficultyIndex = 0;
@@ -77,7 +83,29 @@ public class ModuleSinglePlayerNewWorldMenu(RootText text, AppStyle s, ModuleEnt
                     .InnerSpacingV(s.ItemSpacing);
                 {
                     Node(leftButtonsVertical)
-                        .OnPressF(loadWorldAction.Run)
+                        .OnPressF(() =>
+                        {
+                            string worldName = name.ToString();
+                            string worldSeed = seed.ToString();
+                            var gameMode = gameModes[gameModeIndex];
+                            var difficulty = difficulties[difficultyIndex];
+
+                            if (string.IsNullOrEmpty(worldName))
+                                worldName = defaultName;
+
+                            if (gameMode.LockedDifficulty() != default)
+                                difficulty = gameMode.LockedDifficulty();
+
+                            if (!int.TryParse(worldSeed, out int numberSeed))
+                            {
+                                if (string.IsNullOrEmpty(worldSeed))
+                                    numberSeed = new Random().Next();
+                                else numberSeed = worldSeed.GetHashCode();
+                            }
+
+                            var paths = createWorldAction.Run(new(worldName, numberSeed, gameMode, difficulty));
+                            loadWorldAction.Run(paths);
+                        })
                         .TextV("Create New World")
                         .Mut(s.Button);
                 }

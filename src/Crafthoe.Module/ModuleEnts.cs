@@ -3,7 +3,7 @@ namespace Crafthoe.Module;
 [Module]
 public class ModuleEnts(ModuleEntsMut entsMut)
 {
-    private readonly HashSet<EntMut> set = [];
+    private readonly HashSet<Ent> set = [];
     private Ent[] array = [default];
     private int count;
 
@@ -16,7 +16,7 @@ public class ModuleEnts(ModuleEntsMut entsMut)
         }
     }
 
-    public HashSet<EntMut> Set
+    public HashSet<Ent> Set
     {
         get
         {
