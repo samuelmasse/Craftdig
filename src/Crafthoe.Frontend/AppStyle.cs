@@ -51,7 +51,8 @@ public class AppStyle(RootText text, RootKeyboard keyboard, AppMenuTextures menu
     public void InputItem(EntObj ent) => ent
         .SizeV((0, ItemHeight))
         .SizeRelativeV((1, 0))
-        .IsSelectableV(true);
+        .IsSelectableV(true)
+        .IsFocuseableV(true);
 
     public void Textbox(EntObj ent) => ent
         .Mut(InputItem)
@@ -60,19 +61,26 @@ public class AppStyle(RootText text, RootKeyboard keyboard, AppMenuTextures menu
         .ColorV(ButtonColorDisabled)
         .TextF(() => text.Format("{0}", ent.StringBuilderV()))
         .TextPaddingV((ItemSpacingXS, ItemSpacingXS, ItemSpacingXS, ItemSpacingXS))
+        .CursorV(MouseCursor.IBeam)
         .OnUpdateF(() =>
         {
             var sb = ent.StringBuilderV();
             if (sb == null)
                 return;
 
-            if (keyboard.IsKeyPressedRepeated(Keys.Backspace) && sb.Length > 0)
-                sb.Remove(sb.Length - 1, 1);
-
-            if (keyboard.Text.Count > 0)
+            if (ent.IsFocusedR())
             {
-                foreach (var rune in keyboard.Text)
-                    sb.Append(rune);
+                if (keyboard.IsKeyPressedRepeated(Keys.Backspace) && sb.Length > 0)
+                    sb.Remove(sb.Length - 1, 1);
+
+                if (keyboard.Text.Count > 0)
+                {
+                    foreach (var rune in keyboard.Text)
+                        sb.Append(rune);
+                }
+
+                if (keyboard.IsKeyDown(Keys.LeftControl) && keyboard.IsKeyPressed(Keys.V))
+                    sb.Append(keyboard.Clipboard);
             }
 
             if (ent.MaxLengthV() > 0)
@@ -86,8 +94,23 @@ public class AppStyle(RootText text, RootKeyboard keyboard, AppMenuTextures menu
         .Mut(InputItem)
         .Mut(Text)
         .TagV(nameof(Button))
-        .ColorF(() => Get(ent.IsInputDisabledV(), ent.IsInputDisabledF()) ? ButtonColorDisabled :
-            ent.IsHoveredR() ? ButtonColorHovered : ButtonColor);
+        .OnUpdateF(() =>
+        {
+            if (ent.IsFocusedR() && keyboard.IsKeyPressedRepeated(Keys.Enter))
+                ent.OnPressF()?.Invoke();
+        })
+        .ColorF(() => {
+            if (Get(ent.IsInputDisabledV(), ent.IsInputDisabledF()))
+                return ButtonColorDisabled;
+
+            if (ent.IsHoveredR())
+                return ButtonColorHovered;
+
+            if (ent.IsFocusedR())
+                return (0.8f, 0.2f, 1, 1);
+
+            return ButtonColor;
+        });
 
     public void VerticalList(EntObj ent) => ent
         .TagV(nameof(VerticalList))

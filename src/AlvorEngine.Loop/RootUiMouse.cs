@@ -1,7 +1,7 @@
 namespace AlvorEngine.Loop;
 
 [Root]
-public class RootUiMouse(RootMouse mouse, RootUiSystem uiSystem)
+public class RootUiMouse(RootMouse mouse, RootUiSystem uiSystem, RootUiFocus focus)
 {
     private Vector2 position;
     private EntObj? prevHovered;
@@ -31,7 +31,11 @@ public class RootUiMouse(RootMouse mouse, RootUiSystem uiSystem)
             {
                 pressed = hovered;
                 if (pressed != null && !Get(pressed.IsInputDisabledV(), pressed.IsInputDisabledF()))
+                {
+                    if (Get(pressed.IsFocuseableV(), pressed.IsFocuseableF()))
+                        focus.Focus(pressed);
                     pressed.OnPressF()?.Invoke();
+                }
             }
 
             prevMouseDown = true;
@@ -78,6 +82,13 @@ public class RootUiMouse(RootMouse mouse, RootUiSystem uiSystem)
         }
 
         prevHovered = hovered;
+
+        if (hovered != null)
+        {
+            var cursor = Get(hovered.CursorV(), hovered.CursorF());
+            mouse.Cursor = cursor ?? MouseCursor.Default;
+        }
+        else mouse.Cursor = MouseCursor.Default;
     }
 
     public EntObj? FindHovered(Vector2 o, EntObj n)

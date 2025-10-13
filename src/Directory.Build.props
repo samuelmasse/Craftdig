@@ -24,6 +24,7 @@
         <Using Include="OpenTK.Graphics.OpenGL4" />
         <Using Include="OpenTK.Mathematics" />
         <Using Include="OpenTK.Windowing.Common" />
+        <Using Include="OpenTK.Windowing.Common.Input" />
         <Using Include="OpenTK.Windowing.Desktop" />
         <Using Include="OpenTK.Windowing.GraphicsLibraryFramework" />
         <Using Include="System.Collections.Concurrent" />

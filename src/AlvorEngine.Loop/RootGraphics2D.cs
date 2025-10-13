@@ -8,6 +8,7 @@ public class RootGraphics2D(
     RootFonts fonts,
     RootSprites sprites,
     RootUi ui,
+    RootUiTraverse uiTraverse,
     RootUiSystem uiSystem)
 {
     public void Unload() => fonts.Unload();
@@ -21,7 +22,7 @@ public class RootGraphics2D(
 
         sprites.Begin(canvas.Size / uiSystem.Scale);
         ui.SizeV() = canvas.Size / uiSystem.Scale;
-        uiSystem.Traverse(ui, 0);
+        uiTraverse.Traverse(ui, 0);
         uiSystem.Size(ui.SizeR(), ui);
         uiSystem.Position(ui.SizeR(), ui);
         uiSystem.Draw(ui.OffsetR(), ui);

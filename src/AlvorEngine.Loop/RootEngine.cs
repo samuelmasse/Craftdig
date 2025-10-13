@@ -8,9 +8,11 @@ public class RootEngine(
     RootMetrics metrics,
     RootText text,
     RootCanvas canvas,
+    RootUiTraverse uiTraverse,
     RootUiSystem uiSystem,
     RootUi ui,
-    RootUiMouse uiMouse)
+    RootUiMouse uiMouse,
+    RootUiFocus uiFocus)
 {
     public void Load()
     {
@@ -29,10 +31,11 @@ public class RootEngine(
         ui.IsOrderedV() = true;
         ui.SizeV() = canvas.Size / uiSystem.Scale;
         ui.SizeRelativeV() = (0, 0);
-        uiSystem.Traverse(ui, 0);
+        uiTraverse.Traverse(ui, 0);
         uiSystem.Size(ui.SizeR(), ui);
         uiSystem.Position(ui.SizeR(), ui);
         uiMouse.Update((0, 0), ui);
+        uiFocus.Update(ui);
         uiSystem.Update(ui);
 
         state.Current.Update(time);

@@ -29,6 +29,9 @@ file record UiComponents(
     bool IsInputDisabledV,
     Func<bool>? IsInputDisabledF,
 
+    bool IsFocuseableV,
+    Func<bool>? IsFocuseableF,
+
     InnerLayout InnerLayoutV,
     Func<InnerLayout>? InnerLayoutF,
 
@@ -104,6 +107,9 @@ file record UiComponents(
     Vector4 TextPaddingV,
     Func<Vector4>? TextPaddingF,
 
+    MouseCursor? CursorV,
+    Func<MouseCursor?>? CursorF,
+
     Action? OnUpdateF,
     Action? OnClickF,
     Action? OnPressF,
@@ -117,5 +123,6 @@ file record UiComponents(
     Vector2 SizeR,
     Vector4 PaddingR,
     bool IsHoveredR,
+    bool IsFocusedR,
     [ComponentReturnSpan] Memory<EntObj> NodesR
 );
