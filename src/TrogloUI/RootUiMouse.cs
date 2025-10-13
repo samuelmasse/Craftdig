@@ -1,4 +1,4 @@
-namespace AlvorEngine.Loop;
+namespace TrogloUI;
 
 [Root]
 public class RootUiMouse(RootMouse mouse, RootUiSystem uiSystem, RootUiFocus focus)

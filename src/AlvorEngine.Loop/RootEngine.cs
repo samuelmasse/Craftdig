@@ -7,12 +7,7 @@ public class RootEngine(
     RootGraphics2D graphics2D,
     RootMetrics metrics,
     RootText text,
-    RootCanvas canvas,
-    RootUiTraverse uiTraverse,
-    RootUiSystem uiSystem,
-    RootUi ui,
-    RootUiMouse uiMouse,
-    RootUiFocus uiFocus)
+    RootScripts scripts)
 {
     public void Load()
     {
@@ -28,25 +23,22 @@ public class RootEngine(
 
     public void Update(double time)
     {
-        ui.IsOrderedV() = true;
-        ui.SizeV() = canvas.Size / uiSystem.Scale;
-        ui.SizeRelativeV() = (0, 0);
-        uiTraverse.Traverse(ui, 0);
-        uiSystem.Size(ui.SizeR(), ui);
-        uiSystem.Position(ui.SizeR(), ui);
-        uiMouse.Update((0, 0), ui);
-        uiFocus.Update(ui);
-        uiSystem.Update(ui);
+        foreach (var script in scripts.Span)
+            script.Update(time);
 
         state.Current.Update(time);
     }
 
     public void Render()
     {
+        foreach (var script in scripts.Span)
+            script.Render();
+
         state.Current.Render();
         graphics2D.Render();
+        text.Clear();
+
         metrics.FrameMetric.End();
         metrics.FrameMetric.Start();
-        text.Clear();
     }
 }

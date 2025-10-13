@@ -1,4 +1,4 @@
-namespace AlvorEngine.Loop;
+namespace TrogloUI;
 
 [Flags]
 public enum Alignment

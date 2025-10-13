@@ -1,5 +1,3 @@
-using System.Runtime;
-
 namespace AlvorEngine.Loop;
 
 public class RootLoop(RootArgs args)

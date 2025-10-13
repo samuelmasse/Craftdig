@@ -1,4 +1,4 @@
-namespace AlvorEngine.Loop;
+namespace TrogloUI;
 
 public enum SizeWeightType
 {

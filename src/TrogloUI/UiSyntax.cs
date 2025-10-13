@@ -1,4 +1,4 @@
-namespace AlvorEngine.Loop;
+namespace TrogloUI;
 
 public static class UiSyntax
 {

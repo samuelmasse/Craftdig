@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <ItemGroup>
+        <ProjectReference Include="..\AlvorEngine.Loop\AlvorEngine.Loop.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <Using Include="AlvorEngine.Loop" />
+        <Using Include="TrogloUI.UiSyntax">
+            <Static>True</Static>
+        </Using>
+    </ItemGroup>
+
+</Project>

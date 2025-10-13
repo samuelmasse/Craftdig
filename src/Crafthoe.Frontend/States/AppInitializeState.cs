@@ -2,9 +2,11 @@ namespace Crafthoe.Frontend;
 
 [App]
 public class AppInitializeState(
+    RootScope root,
     RootState state,
     RootScreen screen,
     RootControlsToml controlsToml,
+    RootScripts scripts,
     RootUi ui,
     AppScope scope,
     AppFiles files,
@@ -17,6 +19,7 @@ public class AppInitializeState(
         screen.Title = "Crafthoe";
         screen.Size = screen.MonitorSize / 4 * 3;
 
+        scripts.Add(root.Get<RootUiScript>());
         ui.Nodes().Add(Node().OrderValueV(2).Mut(tooltipMenu.Create));
         ui.Nodes().Add(Node().OrderValueV(5).Mut(zoomMenu.Create));
 

@@ -7,26 +7,24 @@ public class RootGraphics2D(
     RootCanvas canvas,
     RootFonts fonts,
     RootSprites sprites,
-    RootUi ui,
-    RootUiTraverse uiTraverse,
-    RootUiSystem uiSystem)
+    RootScripts scripts)
 {
     public void Unload() => fonts.Unload();
 
     public void Render()
     {
         fonts.Pack();
+
         sprites.Begin(canvas.Size);
         state.Current.Draw();
         End();
 
-        sprites.Begin(canvas.Size / uiSystem.Scale);
-        ui.SizeV() = canvas.Size / uiSystem.Scale;
-        uiTraverse.Traverse(ui, 0);
-        uiSystem.Size(ui.SizeR(), ui);
-        uiSystem.Position(ui.SizeR(), ui);
-        uiSystem.Draw(ui.OffsetR(), ui);
-        End();
+        foreach (var script in scripts.Span)
+        {
+            sprites.Begin(script.DrawArea ?? canvas.Size);
+            script.Draw();
+            End();
+        }
     }
 
     private void End()
