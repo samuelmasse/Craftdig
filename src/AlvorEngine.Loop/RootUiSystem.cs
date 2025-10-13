@@ -14,6 +14,7 @@ public class RootUiSystem(RootScale rscale, RootSprites sprites)
     public void Size(Vector2 s, EntObj n)
     {
         SizeNode(s, n);
+        SizeInnerSizing(s, n);
         n.PaddingR() = Get(n.PaddingV(), n.PaddingF());
 
         foreach (var c in n.GetNodesR())
@@ -33,8 +34,6 @@ public class RootUiSystem(RootScale rscale, RootSprites sprites)
 
             Size(n.SizeR() - n.PaddingR().Xy - n.PaddingR().Zw, c);
         }
-
-        SizeInnerSizing(s, n);
     }
 
     private void SizeNode(Vector2 s, EntObj n)
@@ -43,6 +42,14 @@ public class RootUiSystem(RootScale rscale, RootSprites sprites)
         n.SizeR() += (Get(n.SizeRelativeV(), n.SizeRelativeF()) ?? (1, 1)) * s;
         n.SizeR() += Get(n.SizeV(), n.SizeF());
         SizeTextRelative(s, n);
+
+        var hor = n.GetHorizontalWeightSizeR();
+        if (hor != null)
+            n.SizeR().X = hor.GetValueOrDefault();
+
+        var ver = n.GetVerticalWeightSizeR();
+        if (ver != null)
+            n.SizeR().Y = ver.GetValueOrDefault();
     }
 
     private void SizeTextRelative(Vector2 s, EntObj n)
@@ -129,6 +136,9 @@ public class RootUiSystem(RootScale rscale, RootSprites sprites)
 
         foreach (var c in n.GetNodesR())
         {
+            c.UnsetHorizontalWeightSizeR();
+            c.UnsetVerticalWeightSizeR();
+
             if (IsSelfWeight(c))
                 continue;
 
@@ -152,7 +162,7 @@ public class RootUiSystem(RootScale rscale, RootSprites sprites)
                 if (IsSelfWeight(c))
                     continue;
 
-                c.SizeR().X = (Get(n.SizeWeightV(), n.SizeWeightF()) ?? 1 / totalWeight) * useableSize.X;
+                c.HorizontalWeightSizeR() = (Get(n.SizeWeightV(), n.SizeWeightF()) ?? 1 / totalWeight) * useableSize.X;
             }
         }
         else if (innerSizing == InnerSizing.VerticalWeight)
@@ -168,7 +178,7 @@ public class RootUiSystem(RootScale rscale, RootSprites sprites)
                 if (IsSelfWeight(c))
                     continue;
 
-                c.SizeR().Y = (Get(n.SizeWeightV(), n.SizeWeightF()) ?? 1 / totalWeight) * useableSize.Y;
+                c.VerticalWeightSizeR() = (Get(n.SizeWeightV(), n.SizeWeightF()) ?? 1 / totalWeight) * useableSize.Y;
             }
         }
     }

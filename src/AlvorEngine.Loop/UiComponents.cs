@@ -124,5 +124,7 @@ file record UiComponents(
     Vector4 PaddingR,
     bool IsHoveredR,
     bool IsFocusedR,
+    float? HorizontalWeightSizeR,
+    float? VerticalWeightSizeR,
     [ComponentReturnSpan] Memory<EntObj> NodesR
 );

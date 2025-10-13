@@ -52,7 +52,39 @@ public class AppStyle(RootText text, RootKeyboard keyboard, AppMenuTextures menu
         .SizeV((0, ItemHeight))
         .SizeRelativeV((1, 0))
         .IsSelectableV(true)
-        .IsFocuseableV(true);
+        .IsFocuseableV(true)
+        .Nodes([
+            Node()
+                .AlignmentV(Alignment.Top | Alignment.Left)
+                .ColorF(() => InputItemBorderColor(ent))
+                .SizeV((ItemSpacingXS, 0))
+                .SizeRelativeV((0, 1)),
+            Node()
+                .AlignmentV(Alignment.Top | Alignment.Right)
+                .ColorF(() => InputItemBorderColor(ent))
+                .SizeV((ItemSpacingXS, 0))
+                .SizeRelativeV((0, 1)),
+            Node()
+                .AlignmentV(Alignment.Top | Alignment.Left)
+                .ColorF(() => InputItemBorderColor(ent))
+                .SizeV((0, ItemSpacingXS))
+                .SizeRelativeV((1, 0)),
+            Node()
+                .AlignmentV(Alignment.Bottom | Alignment.Left)
+                .ColorF(() => InputItemBorderColor(ent))
+                .SizeV((0, ItemSpacingXS))
+                .SizeRelativeV((1, 0))]);
+
+    public Vector4 InputItemBorderColor(EntObj ent)
+    {
+        if (Get(ent.IsInputDisabledV(), ent.IsInputDisabledF()))
+            return (0.2f, 0.2f, 0.2f, 1f);
+
+        if ((ent.IsFocusedR() || ent.IsHoveredR()))
+            return (1, 1, 1, 1);
+
+        return (0, 0, 0, 1);
+    }
 
     public void Textbox(EntObj ent) => ent
         .Mut(InputItem)
@@ -99,15 +131,11 @@ public class AppStyle(RootText text, RootKeyboard keyboard, AppMenuTextures menu
             if (ent.IsFocusedR() && keyboard.IsKeyPressedRepeated(Keys.Enter))
                 ent.OnPressF()?.Invoke();
         })
-        .ColorF(() => {
+        .CursorF(() => Get(ent.IsInputDisabledV(), ent.IsInputDisabledF()) ? MouseCursor.Default : MouseCursor.PointingHand)
+        .ColorF(() =>
+        {
             if (Get(ent.IsInputDisabledV(), ent.IsInputDisabledF()))
                 return ButtonColorDisabled;
-
-            if (ent.IsHoveredR())
-                return ButtonColorHovered;
-
-            if (ent.IsFocusedR())
-                return (0.8f, 0.2f, 1, 1);
 
             return ButtonColor;
         });
