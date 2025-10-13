@@ -12,4 +12,7 @@ file record AppUiComponents(
     StringBuilder? StringBuilderV,
     int MaxLengthV,
     EntObj SlotV,
-    bool SlotAddedV);
+    bool SlotAddedV,
+    bool WasFocusedR,
+    DateTime FocusStartR,
+    string CarretR);

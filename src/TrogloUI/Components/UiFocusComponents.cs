@@ -8,4 +8,7 @@ file record UiFocusComponents(
     bool IsFocusableV,
     Func<bool>? IsFocusableF,
 
+    bool IsInitialFocusV,
+    Func<bool>? IsInitialFocusF,
+
     bool IsFocusedR);

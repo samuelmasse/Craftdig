@@ -27,7 +27,8 @@ public class ModuleSinglePlayerNewWorldMenu(RootText text, AppStyle s, ModuleEnt
             Node(form)
                 .Mut(s.Textbox)
                 .MaxLengthV(29)
-                .StringBuilderV(name);
+                .StringBuilderV(name)
+                .IsInitialFocusV(true);
 
             Node(form)
                 .Mut(s.Label)

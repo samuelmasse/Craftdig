@@ -92,17 +92,29 @@ public class AppStyle(RootText text, RootKeyboard keyboard, AppMenuTextures menu
         .TagV(nameof(Textbox))
         .TextAlignmentV(Alignment.Left | Alignment.Vertical)
         .ColorV(ButtonColorDisabled)
-        .TextF(() => text.Format("{0}", ent.StringBuilderV()))
+        .TextF(() => text.Format("{0}{1}", ent.StringBuilderV(), ent.CarretR()))
         .TextPaddingV((ItemSpacingXS, ItemSpacingXS, ItemSpacingXS, ItemSpacingXS))
         .CursorV(MouseCursor.IBeam)
         .OnUpdateF(() =>
         {
+            ent.CarretR() = string.Empty;
+
             var sb = ent.StringBuilderV();
             if (sb == null)
                 return;
 
             if (ent.IsFocusedR())
             {
+                if (!ent.WasFocusedR())
+                {
+                    ent.FocusStartR() = DateTime.UtcNow;
+                    ent.WasFocusedR() = true;
+                }
+
+                int dt = (int)(DateTime.UtcNow - ent.FocusStartR()).TotalMilliseconds;
+                if ((dt / 500) % 2 == 0)
+                    ent.CarretR() = "_";
+
                 if (keyboard.IsKeyPressedRepeated(Keys.Backspace) && sb.Length > 0)
                     sb.Remove(sb.Length - 1, 1);
 
@@ -115,6 +127,7 @@ public class AppStyle(RootText text, RootKeyboard keyboard, AppMenuTextures menu
                 if (keyboard.IsKeyDown(Keys.LeftControl) && keyboard.IsKeyPressed(Keys.V))
                     sb.Append(keyboard.Clipboard);
             }
+            else ent.WasFocusedR() = false;
 
             if (ent.MaxLengthV() > 0)
             {
