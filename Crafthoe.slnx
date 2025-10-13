@@ -1,0 +1,12 @@
+<Solution>
+    <Project Path="src/Crafthoe.Dev/Crafthoe.Dev.csproj" />
+    <Project Path="src/Crafthoe.App/Crafthoe.App.csproj" />
+    <Project Path="src/Crafthoe.Dimension/Crafthoe.Dimension.csproj" />
+    <Project Path="src/Crafthoe.Frontend/Crafthoe.Frontend.csproj" />
+    <Project Path="src/Crafthoe.Module/Crafthoe.Module.csproj" />
+    <Project Path="src/Crafthoe.Native/Crafthoe.Native.csproj" />
+    <Project Path="src/Crafthoe.Player/Crafthoe.Player.csproj" />
+    <Project Path="src/Crafthoe.World/Crafthoe.World.csproj" />
+    <Project Path="src/Crafthoe/Crafthoe.csproj" />
+    <Project Path="src/TrogloUI/TrogloUI.csproj" />
+</Solution>
