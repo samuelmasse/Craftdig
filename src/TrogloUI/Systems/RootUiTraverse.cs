@@ -9,7 +9,7 @@ public class RootUiTraverse
     private EntObj[] orderBufferKeys = new EntObj[16];
     private float[] orderBufferVals = new float[16];
 
-    public void Traverse(EntObj n, int depth)
+    internal void Traverse(EntObj n, int depth)
     {
         if (depth == 0)
             traverseBufferIndex = 0;
@@ -25,10 +25,7 @@ public class RootUiTraverse
 
     private void OrderNodes(EntObj n)
     {
-        if (!n.HasIsOrderedV() && !n.HasIsOrderedF())
-            return;
-
-        var ordered = Get(n.IsOrderedV(), n.IsOrderedF());
+        var ordered = Get(n.GetIsOrderedV(), n.GetIsOrderedF());
         if (!ordered)
             return;
 
@@ -59,10 +56,8 @@ public class RootUiTraverse
         for (int i = n.Nodes().Count - 1; i >= 0; i--)
         {
             var c = n.Nodes()[i];
-            if (!c.HasIsDeletedV() && !c.HasIsDeletedF())
-                continue;
 
-            var isDeleted = Get(c.IsDeletedV(), c.IsDeletedF());
+            var isDeleted = Get(c.GetIsDeletedV(), c.GetIsDeletedF());
             if (isDeleted)
                 n.Nodes().RemoveAt(i);
         }
@@ -73,7 +68,7 @@ public class RootUiTraverse
         if (n.TryGetStackedNodeR(out var stackedNode))
             n.Nodes().Remove(stackedNode);
 
-        if (n.NodeStack().TryPeek(out var topStack))
+        if (n.GetNodeStack().TryPeek(out var topStack))
         {
             n.Nodes().Add(topStack);
             n.StackedNodeR() = topStack;
@@ -85,7 +80,7 @@ public class RootUiTraverse
         int start = traverseBufferIndex;
         int count = 0;
 
-        foreach (var c in n.Nodes())
+        foreach (var c in n.GetNodes())
         {
             var disabled = Get(c.IsDisabledV(), c.IsDisabledF());
             if (disabled)

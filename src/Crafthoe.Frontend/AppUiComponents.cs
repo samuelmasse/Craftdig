@@ -2,6 +2,7 @@ namespace Crafthoe.Frontend;
 
 [Components]
 file record AppUiComponents(
+    [ComponentToString] string? TagV,
     string? TooltipV,
     Func<ReadOnlySpan<char>>? TooltipF,
     EntObj? StackRootV,

@@ -89,6 +89,7 @@ public class AppStyle(RootText text, RootKeyboard keyboard, AppMenuTextures menu
     public void Textbox(EntObj ent) => ent
         .Mut(InputItem)
         .Mut(Text)
+        .TagV(nameof(Textbox))
         .TextAlignmentV(Alignment.Left | Alignment.Vertical)
         .ColorV(ButtonColorDisabled)
         .TextF(() => text.Format("{0}", ent.StringBuilderV()))
@@ -152,7 +153,8 @@ public class AppStyle(RootText text, RootKeyboard keyboard, AppMenuTextures menu
         .SizeInnerSumRelativeV(Horizontal)
         .SizeRelativeV((0, 0));
 
-    public void Slot(EntObj ent) => ent.TagV(nameof(Slot))
+    public void Slot(EntObj ent) => ent
+        .TagV(nameof(Slot))
         .SizeV((SlotSize, SlotSize))
         .SizeRelativeV((0, 0))
         .TextureV(SlotTexture)

@@ -13,7 +13,7 @@ public class RootUiFocus(RootKeyboard keyboard)
         focused = ent;
     }
 
-    public void Update(EntObj n)
+    internal void Update(EntObj n)
     {
         focusables.Clear();
         CollectFocusables(n);
