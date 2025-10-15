@@ -8,6 +8,7 @@ public class DimensionContext(
     DimensionSectionRequester sectionRequester,
     DimensionSectionInvalidation sectionInvalidation,
     DimensionBlockChanges blockChanges,
+    DimensionRegionFileHandles regionFileHandles,
     DimensionRigids rigids)
 {
     private bool requesterType;
@@ -31,5 +32,6 @@ public class DimensionContext(
         requesterType = !requesterType;
 
         blockChanges.Clear();
+        regionFileHandles.Flush();
     }
 }

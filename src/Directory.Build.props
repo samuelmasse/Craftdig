@@ -21,6 +21,7 @@
         <Using Include="Glw2D.Fonts" />
         <Using Include="HadvarECS" />
         <Using Include="HadvarECS.Generator" />
+        <Using Include="Microsoft.Win32.SafeHandles" />
         <Using Include="OpenTK.Graphics.OpenGL4" />
         <Using Include="OpenTK.Mathematics" />
         <Using Include="OpenTK.Windowing.Common" />
@@ -31,6 +32,7 @@
         <Using Include="System.Diagnostics" />
         <Using Include="System.Diagnostics.CodeAnalysis" />
         <Using Include="System.Globalization" />
+        <Using Include="System.IO.Compression" />
         <Using Include="System.Reflection" />
         <Using Include="System.Runtime" />
         <Using Include="System.Runtime.CompilerServices" />

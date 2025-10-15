@@ -2,10 +2,6 @@ namespace Crafthoe.Dimension;
 
 public static class Unit
 {
-    public const int LevelBits = 9;
-    public const int LevelSize = 1 << LevelBits;
-    public const int LevelMask = LevelSize - 1;
-
     public const int SectionBits = 4;
     public const int SectionSize = 1 << SectionBits;
     public const int SectionMask = SectionSize - 1;
@@ -17,6 +13,11 @@ public static class Unit
     public const int HeightMask = HeightSize - 1;
 
     public const int ChunkVolume = HeightSize * SectionSize * SectionSize;
+
+    public const int RegionBits = 5;
+    public const int RegionSize = 1 << RegionBits;
+    public const int RegionMask = RegionSize - 1;
+    public const int RegionVolume = RegionSize * RegionSize * SectionHeight;
 
     [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
     public static Vector3d Swizzle(this Vector3d pos) => (pos.X, pos.Z, pos.Y);
@@ -35,6 +36,10 @@ public static class Unit
     [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
     public static Vector3i ToSloc(this Vector3i loc) =>
         (loc.X >> SectionBits, loc.Y >> SectionBits, loc.Z >> SectionBits);
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+    public static Vector2i ToRloc(this Vector2i cloc) =>
+        (cloc.X >> RegionBits, cloc.Y >> RegionBits);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
     public static int ToInnerIndex(this Vector3i loc) =>

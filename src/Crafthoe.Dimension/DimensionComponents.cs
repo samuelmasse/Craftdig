@@ -2,6 +2,13 @@ namespace Crafthoe.Dimension;
 
 [Components]
 file record DimensionComponents(
+    // Region
+    [ComponentToString] bool IsRegion,
+    [ComponentToString] Vector2i Rloc,
+    RegionIndex? RegionIndex,
+    RegionFiles RegionFiles,
+    RegionFreeMap RegionFreeMap,
+
     // Chunk
     [ComponentToString] bool IsChunk,
     [ComponentToString] Vector2i Cloc,
