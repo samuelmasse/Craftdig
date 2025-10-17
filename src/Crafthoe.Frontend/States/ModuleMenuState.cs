@@ -14,6 +14,7 @@ public class ModuleMenuState(
 
     public override void Load()
     {
+        GC.Collect(GC.MaxGeneration);
         Node(menus).Mut(mainBackgroundMenu.Create);
         menus.NodeStack().Push(Node().StackRootV(menus).Mut(mainMenu.Create));
         watch.Start();

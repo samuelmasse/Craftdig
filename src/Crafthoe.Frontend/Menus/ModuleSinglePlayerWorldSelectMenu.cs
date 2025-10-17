@@ -1,7 +1,12 @@
 namespace Crafthoe.Frontend;
 
 [Module]
-public class ModuleSinglePlayerWorldSelectMenu(AppStyle s, ModuleSinglePlayerNewWorldMenu newWorldMenu)
+public class ModuleSinglePlayerWorldSelectMenu(
+    AppStyle s,
+    AppPaths paths,
+    ModuleLoadWorldAction loadWorldAction,
+    ModuleReadWorldMeta readWorldMeta,
+    ModuleSinglePlayerNewWorldMenu newWorldMenu)
 {
     public void Create(EntObj root)
     {
@@ -9,6 +14,41 @@ public class ModuleSinglePlayerWorldSelectMenu(AppStyle s, ModuleSinglePlayerNew
             .SizeRelativeV(s.Horizontal)
             .SizeV((0, s.BarHeight))
             .ColorV(s.BoardColor);
+
+        Node(root, out var middle)
+            .SizeRelativeV((1, 1))
+            .SizeV((0, -s.BarHeight * 2))
+            .OffsetV((0, s.BarHeight));
+        {
+            var worlds = new List<(WorldPaths Paths, WorldMeta Meta)>();
+            var dirs = Directory.GetDirectories(paths.SavePath);
+
+            foreach (var dir in dirs)
+            {
+                try
+                {
+                    var paths = new WorldPaths(dir);
+                    var meta = readWorldMeta.Read(paths);
+                    worlds.Add((paths, meta));
+                }
+                catch { }
+            }
+
+            Node(middle, out var select)
+                .Mut(s.VerticalList)
+                .SizeInnerMaxRelativeV((1, 0))
+                .InnerSpacingV(s.ItemSpacing)
+                .AlignmentV(Alignment.Horizontal);
+            foreach (var (paths, meta) in worlds)
+            {
+                Node(select)
+                    .Mut(s.Button)
+                    .SizeV((s.ItemWidthL, s.ItemHeight) )
+                    .TextV(meta.Name)
+                    .TooltipV(Path.GetFileName(paths.Root))
+                    .OnPressF(() => loadWorldAction.Run(paths));
+            }
+        }
 
         Node(root, out var bottomBar)
             .SizeRelativeV(s.Horizontal)

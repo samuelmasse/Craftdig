@@ -1,11 +1,11 @@
 namespace Crafthoe.Frontend;
 
 [Module]
-public class ModuleLoadWorldAction(RootState state, ModuleEnts ents, ModuleScope scope, ModuleReadWorldMetadata readWorldMetadata)
+public class ModuleLoadWorldAction(RootState state, ModuleEnts ents, ModuleScope scope, ModuleReadWorldMeta readWorldMeta)
 {
     public void Run(WorldPaths paths)
     {
-        var metadata = readWorldMetadata.Read(paths);
+        var metadata = readWorldMeta.Read(paths);
 
         var worldScope = scope.Scope<WorldScope>();
         worldScope.Add(paths);
@@ -13,6 +13,10 @@ public class ModuleLoadWorldAction(RootState state, ModuleEnts ents, ModuleScope
         worldScope.Scope<WorldLoaderScope>().Get<WorldLoader>().Run();
 
         var dimensionScope = worldScope.Scope<DimensionScope>();
+
+        var dimensionEnt = new EntPtr()
+            .DimensionScope(dimensionScope);
+        worldScope.Get<WorldDimensionBag>().Add(dimensionEnt);
 
         // For now just find the first dimension
         var dimension = ents.Set.First(x => x.IsDimension());

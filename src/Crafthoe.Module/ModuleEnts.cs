@@ -25,7 +25,10 @@ public class ModuleEnts(ModuleEntsMut entsMut)
         }
     }
 
-    public Ent this[string name] => entsMut[name];
+    public Ent this[string name] => entsMut.Get(name);
+    public Ent this[int runtimeIndex] => entsMut[runtimeIndex];
+
+    public bool Contains(string name) => entsMut.Contains(name);
 
     private void Refresh()
     {

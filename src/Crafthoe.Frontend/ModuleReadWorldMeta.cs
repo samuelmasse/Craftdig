@@ -1,7 +1,7 @@
 namespace Crafthoe.Frontend;
 
 [Module]
-public class ModuleReadWorldMetadata(ModuleEnts ents)
+public class ModuleReadWorldMeta(ModuleEnts ents)
 {
     public WorldMeta Read(WorldPaths paths)
     {

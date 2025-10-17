@@ -2,7 +2,8 @@ namespace Crafthoe.Dimension;
 
 [Dimension]
 public class DimensionChunkReader(
-    DimensionRegionIndexLoader regionIndexLoader)
+    DimensionRegionIndexLoader regionIndexLoader,
+    DimensionRegionReader regionReader)
 {
     public bool TryRead(Vector2i cloc)
     {
@@ -16,15 +17,9 @@ public class DimensionChunkReader(
             return false;
 
         for (int sz = 0; sz < SectionHeight; sz++)
-        {
-            var alloc = index[new(offset, sz)];
-            if (alloc.Bucket == 0)
-                continue;
+            regionReader.Read(new(cloc, sz));
 
-
-        }
-
-        return false;
+        return true;
     }
 
     private bool IsFirstSectionBlank(RegionIndex index, Vector2i offset) =>

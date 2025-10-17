@@ -2,6 +2,7 @@ namespace Crafthoe.Dimension;
 
 [Dimension]
 public class DimensionRegionWriter(
+    WorldModuleIndices moduleIndices,
     DimensionBlocksRaw blocksRaw,
     DimensionRegions regions,
     DimensionRegionFileHandles regionFileHandles,
@@ -79,7 +80,7 @@ public class DimensionRegionWriter(
         void Flush()
         {
             if (run > 0)
-                buffer[count++] = new() { Value = prev.ModuleName().GetHashCode(), Count = run };
+                buffer[count++] = new() { Value = moduleIndices[prev], Count = run };
         }
     }
 }

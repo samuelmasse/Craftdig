@@ -4,6 +4,7 @@ namespace Crafthoe.Module;
 file record ModuleComponents(
     [ComponentToString] string ModuleName,
     [ComponentToString] string Name,
+    int RuntimeIndex,
 
     [ComponentToString] bool IsDifficulty,
     float Order,

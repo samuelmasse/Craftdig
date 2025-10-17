@@ -2,6 +2,8 @@ namespace Crafthoe.Dimension;
 
 [Components]
 file record DimensionComponents(
+    DimensionScope DimensionScope,
+
     // Region
     [ComponentToString] bool IsRegion,
     [ComponentToString] Vector2i Rloc,

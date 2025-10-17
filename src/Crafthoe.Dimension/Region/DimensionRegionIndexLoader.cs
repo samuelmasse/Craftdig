@@ -2,10 +2,10 @@ namespace Crafthoe.Dimension;
 
 [Dimension]
 public class DimensionRegionIndexLoader(
-    WorldPaths paths,
+    DimensionPaths paths,
     DimensionRegionBuckets regionBuckets,
     DimensionRegionFileHandles regionFileHandles,
-    DimensionRegions regions)
+    DimensionRegions regions) 
 {
     public RegionIndex EnsureLoaded(Vector2i rloc)
     {

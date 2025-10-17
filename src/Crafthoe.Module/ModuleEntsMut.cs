@@ -21,8 +21,14 @@ public class ModuleEntsMut
             entities.Add(name, ent);
             set.Add((EntMut)ent);
             list.Add((EntMut)ent);
+            ent.RuntimeIndex() = list.Count;
 
             return (EntMut)ent;
         }
     }
+
+    public EntMut this[int runtimeIndex] => list[runtimeIndex - 1];
+
+    public bool Contains(string name) => entities.ContainsKey(name);
+    internal EntMut Get(string name) => (EntMut)entities[name];
 }
