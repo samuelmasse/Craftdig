@@ -7,12 +7,16 @@ public class DimensionChunkUnloader(
     DimensionMeshTransferer meshTransferer,
     DimensionSections sections,
     DimensionBlocksRaw blocksRaw,
-    DimensionChunkRenderDescheduler chunkRenderDescheduler)
+    DimensionChunkRenderDescheduler chunkRenderDescheduler,
+    DimensionRegionInvalidation regionInvalidation)
 {
     public void Unload(Vector2i cloc)
     {
         if (!chunks.TryGet(cloc, out var chunk))
             return;
+
+        for (int sz = 0; sz < SectionHeight; sz++)
+            regionInvalidation.Drain(new(cloc, sz));
 
         foreach (var section in chunk.GetSections())
         {

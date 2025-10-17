@@ -7,6 +7,7 @@ public class DimensionContext(
     DimensionChunkCollector chunkCollector,
     DimensionSectionRequester sectionRequester,
     DimensionSectionInvalidation sectionInvalidation,
+    DimensionRegionInvalidation regionInvalidation,
     DimensionBlockChanges blockChanges,
     DimensionRegionFileHandles regionFileHandles,
     DimensionRigids rigids)
@@ -22,6 +23,7 @@ public class DimensionContext(
 
     public void Frame()
     {
+        regionInvalidation.Frame();
         sectionInvalidation.Frame();
         chunkCollector.Frame();
 

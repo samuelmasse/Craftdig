@@ -31,25 +31,24 @@ public class DimensionRegionWriter(
 
         EncodeIntoBuffer(blocks);
 
+        RandomAccess.Write(regionFileHandles[files.Buckets[alloc.Bucket]],
+            zeroes.AsSpan()[..alloc.Count],
+            alloc.Offset * regionBuckets.Sizes[alloc.Bucket]);
+
         if (regionBuckets.Sizes[alloc.Bucket] <= bytes)
         {
             if (alloc.Bucket != 0)
-            {
                 freeMap.Free(alloc.Bucket, alloc.Offset);
-
-                RandomAccess.Write(regionFileHandles[files.Buckets[alloc.Bucket]],
-                    zeroes.AsSpan()[..alloc.Count],
-                    alloc.Offset * regionBuckets.Sizes[alloc.Bucket]);
-            }
 
             alloc.Bucket = (byte)regionBuckets.BestFit(bytes);
             alloc.Offset = (ushort)freeMap.Alloc(alloc.Bucket);
-            alloc.Count = (ushort)bytes;
-
-            var findex = regionFileHandles[files.Index];
-            RandomAccess.Write(findex, MemoryMarshal.AsBytes(index.Span.Slice(index.Index(offset), 1)),
-                index.Index(offset) * Marshal.SizeOf<RegionIndexEntry>());
         }
+
+        alloc.Count = (ushort)bytes;
+
+        var findex = regionFileHandles[files.Index];
+        RandomAccess.Write(findex, MemoryMarshal.AsBytes(index.Span.Slice(index.Index(offset), 1)),
+            index.Index(offset) * RegionIndexEntry.Size);
 
         var bucket = regionFileHandles[files.Buckets[alloc.Bucket]];
         RandomAccess.Write(bucket, compressed.AsSpan()[..bytes],

@@ -21,6 +21,7 @@ public class ModuleSinglePlayerWorldSelectMenu(
             .OffsetV((0, s.BarHeight));
         {
             var worlds = new List<(WorldPaths Paths, WorldMeta Meta)>();
+            Directory.CreateDirectory(paths.SavePath);
             var dirs = Directory.GetDirectories(paths.SavePath);
 
             foreach (var dir in dirs)
