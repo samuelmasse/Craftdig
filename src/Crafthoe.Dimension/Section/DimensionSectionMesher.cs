@@ -3,21 +3,17 @@ namespace Crafthoe.Dimension;
 [Dimension]
 public class DimensionSectionMesher(RootCube cube, DimensionBlocks blocks)
 {
-    private readonly List<BlockVertex> vertices = [];
-
-    public ReadOnlySpan<BlockVertex> Vertices => CollectionsMarshal.AsSpan(vertices);
-
-    public void Render(Vector3i sloc)
+    public void Render(List<BlockVertex> vertices, Vector3i sloc)
     {
         var loc = sloc * SectionSize;
 
         for (int z = 0; z < SectionSize; z++)
             for (int y = 0; y < SectionSize; y++)
                 for (int x = 0; x < SectionSize; x++)
-                    RenderBlock(loc, loc + (x, y, z));
+                    RenderBlock(vertices, loc, loc + (x, y, z));
     }
 
-    public void RenderBlock(Vector3i origin, Vector3i loc)
+    public void RenderBlock(List<BlockVertex> vertices, Vector3i origin, Vector3i loc)
     {
         blocks.TryGet(loc, out var block);
         if (!block.IsSolid())
@@ -59,6 +55,4 @@ public class DimensionSectionMesher(RootCube cube, DimensionBlocks blocks)
             vertices.Add(new(quad.BottomRight + rloc, Vector3.One * shadow, (1, 0, texture)));
         }
     }
-
-    public void Reset() => vertices.Clear();
 }
