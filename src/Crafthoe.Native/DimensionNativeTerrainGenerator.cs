@@ -1,17 +1,16 @@
 namespace Crafthoe.Native;
 
 [Dimension]
-public class DimensionNativeTerrainGenerator(ModuleNative m, DimensionBlocksRaw blocksRaw, DimensionNativeNoise noise) : ITerrainGenerator
+public class DimensionNativeTerrainGenerator(ModuleNative m, DimensionNativeNoise noise) : ITerrainGenerator
 {
-    public void Generate(Vector2i cloc)
+    public void Generate(Span<Ent> blocks, Vector2i cloc)
     {
-        var mem = blocksRaw.Span(cloc);
         var loc = cloc * SectionSize;
 
         for (int y = 0; y < SectionSize; y++)
             for (int x = 0; x < SectionSize; x++)
                 for (int z = 0; z < HeightSize; z++)
-                    mem[new Vector3i(x, y, z).ToInnerIndex()] = Generate((loc.X + x, loc.Y + y, z));
+                    blocks[new Vector3i(x, y, z).ToInnerIndex()] = Generate((loc.X + x, loc.Y + y, z));
     }
 
     private Ent Generate(Vector3i loc)

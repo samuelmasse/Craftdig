@@ -3,7 +3,6 @@ namespace Crafthoe.Dimension;
 [Dimension]
 public class DimensionRegionWriter(
     WorldModuleIndices moduleIndices,
-    DimensionBlocksRaw blocksRaw,
     DimensionRegionFileHandles regionFileHandles,
     DimensionRegionStates regionStates,
     DimensionRegionBuckets regionBuckets)
@@ -13,13 +12,13 @@ public class DimensionRegionWriter(
     private readonly byte[] zeroes = new byte[SectionVolume * RegionBlockEntry.Size];
     private int bytes;
 
-    public void Write(Vector3i sloc)
+    public void Write(ReadOnlySpan<Ent> blocks, Vector3i sloc)
     {
         var state = regionStates[sloc.Xy.ToRloc()];
         var offset = sloc - state.Origin;
         ref var alloc = ref state.Index[offset];
 
-        EncodeIntoBuffer(blocksRaw.Slice(sloc));
+        EncodeIntoBuffer(blocks);
 
         RandomAccess.Write(regionFileHandles[state.Files.Buckets[alloc.Bucket]],
             zeroes.AsSpan()[..alloc.Count],

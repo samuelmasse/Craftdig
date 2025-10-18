@@ -5,7 +5,7 @@ public class DimensionRegionChunkReader(
     DimensionRegionStates regionStates,
     DimensionRegionReader regionReader)
 {
-    public bool TryRead(Vector2i cloc)
+    public bool TryRead(Span<Ent> blocks, Vector2i cloc)
     {
         var state = regionStates[cloc.ToRloc()];
         var offset = cloc - state.Origin.Xy;
@@ -14,7 +14,7 @@ public class DimensionRegionChunkReader(
             return false;
 
         for (int sz = 0; sz < SectionHeight; sz++)
-            regionReader.Read(new(cloc, sz));
+            regionReader.Read(blocks.Slice(sz * SectionVolume, SectionVolume), new(cloc, sz));
 
         return true;
     }

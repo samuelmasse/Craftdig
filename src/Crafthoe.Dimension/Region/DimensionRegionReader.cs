@@ -3,7 +3,6 @@ namespace Crafthoe.Dimension;
 [Dimension]
 public class DimensionRegionReader(
     WorldModuleIndices moduleIndices,
-    DimensionBlocksRaw blocksRaw,
     DimensionRegionFileHandles regionFileHandles,
     DimensionRegionStates regionStates,
     DimensionRegionBuckets regionBuckets)
@@ -11,7 +10,7 @@ public class DimensionRegionReader(
     private readonly RegionBlockEntry[] buffer = new RegionBlockEntry[SectionVolume];
     private readonly byte[] compressed = new byte[SectionVolume * RegionBlockEntry.Size];
 
-    public void Read(Vector3i sloc)
+    public void Read(Span<Ent> blocks, Vector3i sloc)
     {
         var state = regionStates[sloc.Xy.ToRloc()];
         var alloc = state.Index[sloc - state.Origin];
@@ -27,7 +26,6 @@ public class DimensionRegionReader(
 
         int count = bytes / RegionBlockEntry.Size;
         var entries = buffer.AsSpan()[..count];
-        var blocks = blocksRaw.Slice(sloc);
         int cur = 0;
 
         foreach (var entry in entries)

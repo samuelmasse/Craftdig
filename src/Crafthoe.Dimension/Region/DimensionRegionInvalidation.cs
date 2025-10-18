@@ -1,7 +1,10 @@
 namespace Crafthoe.Dimension;
 
 [Dimension]
-public class DimensionRegionInvalidation(DimensionBlockChanges blockChanges, DimensionRegionWriter regionWriter)
+public class DimensionRegionInvalidation(
+    DimensionBlockChanges blockChanges,
+    DimensionBlocksRaw blocksRaw,
+    DimensionRegionWriter regionWriter)
 {
     private readonly Dictionary<Vector3i, DateTime> dirty = [];
     private readonly HashSet<Vector3i> scheduled = [];
@@ -24,7 +27,7 @@ public class DimensionRegionInvalidation(DimensionBlockChanges blockChanges, Dim
 
         foreach (var sloc in scheduled)
         {
-            regionWriter.Write(sloc);
+            Write(sloc);
             dirty.Remove(sloc);
         }
 
@@ -34,7 +37,7 @@ public class DimensionRegionInvalidation(DimensionBlockChanges blockChanges, Dim
     public void Drain()
     {
         foreach (var d in dirty)
-            regionWriter.Write(d.Key);
+            Write(d.Key);
 
         dirty.Clear();
     }
@@ -42,6 +45,8 @@ public class DimensionRegionInvalidation(DimensionBlockChanges blockChanges, Dim
     public void Drain(Vector3i sloc)
     {
         if (dirty.Remove(sloc))
-            regionWriter.Write(sloc);
+            Write(sloc);
     }
+
+    private void Write(Vector3i sloc) => regionWriter.Write(blocksRaw.Slice(sloc), sloc);
 }

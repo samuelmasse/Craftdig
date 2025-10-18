@@ -3,9 +3,8 @@ namespace Crafthoe.Native;
 [Dimension]
 public class DimensionNativeBiomeGenerator(ModuleNative m, DimensionBlocksRaw blocksRaw) : IBiomeGenerator
 {
-    public void Generate(Vector2i cloc)
+    public void Generate(Span<Ent> blocks, Vector2i cloc)
     {
-        var mem = blocksRaw.Span(cloc);
         var loc = cloc * SectionSize;
 
         bool wasAir = true;
@@ -16,7 +15,7 @@ public class DimensionNativeBiomeGenerator(ModuleNative m, DimensionBlocksRaw bl
             {
                 for (int z = HeightSize - 1; z >= 0; z--)
                 {
-                    var block = mem[new Vector3i(x, y, z).ToInnerIndex()];
+                    var block = blocks[new Vector3i(x, y, z).ToInnerIndex()];
 
                     if (block.IsSolid())
                     {
