@@ -4,7 +4,7 @@ namespace Crafthoe.Dimension;
 public class DimensionChunkUnloader(
     DimensionChunks chunks,
     DimensionChunkBag chunkIndex,
-    DimensionMeshTransferer meshTransferer,
+    DimensionSectionMeshTransferer meshTransferer,
     DimensionSections sections,
     DimensionBlocksRaw blocksRaw,
     DimensionChunkRenderDescheduler chunkRenderDescheduler,

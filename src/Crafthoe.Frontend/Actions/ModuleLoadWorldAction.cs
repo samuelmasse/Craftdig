@@ -1,11 +1,11 @@
 namespace Crafthoe.Frontend;
 
 [Module]
-public class ModuleLoadWorldAction(RootState state, ModuleEnts ents, ModuleScope scope, ModuleReadWorldMeta readWorldMeta)
+public class ModuleLoadWorldAction(RootState state, ModuleEnts ents, ModuleScope scope, ModuleReadWorldMetaAction readWorldMetaAction)
 {
     public void Run(WorldPaths paths)
     {
-        var metadata = readWorldMeta.Read(paths);
+        var metadata = readWorldMetaAction.Read(paths);
 
         var worldScope = scope.Scope<WorldScope>();
         worldScope.Add(paths);

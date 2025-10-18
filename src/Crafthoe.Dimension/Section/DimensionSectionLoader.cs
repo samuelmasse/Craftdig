@@ -5,7 +5,7 @@ public class DimensionSectionLoader(
     DimensionBlockProgram blockProgram,
     DimensionMetrics metrics,
     DimensionSectionMesher sectionMesher,
-    DimensionMeshTransferer meshTransferer)
+    DimensionSectionMeshTransferer meshTransferer)
 {
     public void Load(EntMut section)
     {

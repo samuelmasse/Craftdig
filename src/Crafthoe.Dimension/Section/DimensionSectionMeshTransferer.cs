@@ -1,9 +1,9 @@
 namespace Crafthoe.Dimension;
 
 [Dimension]
-public class DimensionMeshTransferer(RootQuadIndexBuffer quadIndexBuffer, DimensionGlw gl)
+public class DimensionSectionMeshTransferer(RootQuadIndexBuffer quadIndexBuffer, DimensionGlw gl)
 {
-    public void Transfer<T>(IRenderProgram program, ReadOnlySpan<T> vertices, ref VaoVboCount dst) where T : unmanaged, IVertex
+    public void Transfer<T>(IRenderProgram program, ReadOnlySpan<T> vertices, ref SectionMesh dst) where T : unmanaged, IVertex
     {
         if (vertices.Length == 0)
         {
@@ -30,7 +30,7 @@ public class DimensionMeshTransferer(RootQuadIndexBuffer quadIndexBuffer, Dimens
         dst.Count = vertices.Length;
     }
 
-    public void Free(ref VaoVboCount dst)
+    public void Free(ref SectionMesh dst)
     {
         if (dst.Vbo != 0)
             gl.DeleteBuffer(dst.Vbo);

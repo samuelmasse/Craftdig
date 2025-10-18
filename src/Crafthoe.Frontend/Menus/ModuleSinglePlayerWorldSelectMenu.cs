@@ -5,7 +5,7 @@ public class ModuleSinglePlayerWorldSelectMenu(
     AppStyle s,
     AppPaths paths,
     ModuleLoadWorldAction loadWorldAction,
-    ModuleReadWorldMeta readWorldMeta,
+    ModuleReadWorldMetaAction readWorldMetaAction,
     ModuleSinglePlayerNewWorldMenu newWorldMenu)
 {
     public void Create(EntObj root)
@@ -29,7 +29,7 @@ public class ModuleSinglePlayerWorldSelectMenu(
                 try
                 {
                     var paths = new WorldPaths(dir);
-                    var meta = readWorldMeta.Read(paths);
+                    var meta = readWorldMetaAction.Read(paths);
                     worlds.Add((paths, meta));
                 }
                 catch { }

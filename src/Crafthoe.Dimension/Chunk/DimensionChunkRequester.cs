@@ -6,7 +6,7 @@ public class DimensionChunkRequester(
     DimensionChunks chunks,
     DimensionChunkLoader chunkLoader)
 {
-    private readonly int far = 5;
+    private readonly int far = 24;
     private readonly Stopwatch watch = new();
     private readonly Random rng = new();
 

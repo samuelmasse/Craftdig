@@ -25,7 +25,7 @@ file record DimensionComponents(
     // Section
     [ComponentToString] bool IsSection,
     [ComponentToString] Vector3i Sloc,
-    VaoVboCount TerrainMesh,
+    SectionMesh TerrainMesh,
     EntMut Chunk,
 
     // Rigid
