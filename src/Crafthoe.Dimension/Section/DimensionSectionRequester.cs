@@ -18,7 +18,7 @@ public class DimensionSectionRequester(
 
         watch.Restart();
         bool next;
-        do next = LoadNearestSection(RandomPlayerSectionLocation());
+        do next = LoadNearestChunk(RandomPlayerSectionLocation());
         while (next && watch.Elapsed.TotalMilliseconds < 1);
     }
 
@@ -28,15 +28,21 @@ public class DimensionSectionRequester(
         return (Vector3i)player.Position() / SectionSize;
     }
 
-    private bool LoadNearestSection(Vector3i sloc)
+    private bool LoadNearestChunk(Vector3i sloc)
     {
-        if (!TryGetNeareastChunkWithUnloadedSections(sloc.Xy, out var nearestChunk))
+        if (!TryGetNeareastChunkWithUnloadedSections(sloc.Xy, out var chunk))
             return false;
 
-        if (!TryGetNearestUnloadedSection(sloc, nearestChunk, out var nearestSection))
-            return false;
+        for (int sz = 0; sz < SectionHeight; sz++)
+        {
+            if (!chunk.Unrendered().ContainsKey(sz))
+                continue;
 
-        sectionLoader.Load(nearestSection);
+            var nsloc = new Vector3i(chunk.Cloc().X, chunk.Cloc().Y, sz);
+
+            sections.TryGet(nsloc, out var section);
+            sectionLoader.Load(section);
+        }
 
         return true;
     }
@@ -68,33 +74,6 @@ public class DimensionSectionRequester(
                 nearest = dist;
                 found = true;
             }
-        }
-
-        return found;
-    }
-
-    private bool TryGetNearestUnloadedSection(Vector3i center, EntMut chunk, out EntMut val)
-    {
-        val = default;
-
-        float nearest = float.PositiveInfinity;
-        bool found = false;
-
-        for (int i = 0; i < chunk.Unrendered().Count; i++)
-        {
-            var sz = chunk.Unrendered()[chunk.Unrendered().Keys[i]];
-            var nsloc = new Vector3i(chunk.Cloc().X, chunk.Cloc().Y, sz);
-
-            if (!sections.TryGet(nsloc, out var section))
-                continue;
-
-            float dist = Vector3.DistanceSquared(nsloc, center);
-            if (dist >= nearest)
-                continue;
-
-            val = section;
-            nearest = dist;
-            found = true;
         }
 
         return found;
