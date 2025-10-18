@@ -8,6 +8,7 @@ public class PlayerTeleporter(
 {
     private readonly Random rng = new(meta.Seed);
     private readonly List<Vector3d> history = [];
+    private readonly Stopwatch sw = Stopwatch.StartNew();
     private int index;
 
     public void Update()
@@ -15,8 +16,10 @@ public class PlayerTeleporter(
         if (history.Count == 0)
             history.Add(player.Ent.Position());
 
-        if (keyboard.IsKeyPressedRepeated(Keys.T))
+        if (keyboard.IsKeyPressedRepeated(Keys.T) || sw.Elapsed.TotalMilliseconds > 800)
         {
+            sw.Restart();
+
             while (history.Count > index + 1)
                 history.RemoveAt(history.Count - 1);
 

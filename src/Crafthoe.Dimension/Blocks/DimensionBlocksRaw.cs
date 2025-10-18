@@ -12,7 +12,7 @@ public class DimensionBlocksRaw(DimensionChunks chunks)
         }
 
         var cloc = loc.Xy.ToCloc();
-        var blocks = Span(cloc);
+        var blocks = Memory(cloc).Span;
         if (blocks.IsEmpty)
         {
             block = default;
@@ -29,7 +29,7 @@ public class DimensionBlocksRaw(DimensionChunks chunks)
             return false;
 
         var cloc = loc.Xy.ToCloc();
-        var blocks = Span(cloc);
+        var blocks = Memory(cloc).Span;
         if (blocks.IsEmpty)
             return false;
 
@@ -37,13 +37,13 @@ public class DimensionBlocksRaw(DimensionChunks chunks)
         return true;
     }
 
-    public Span<Ent> Span(Vector2i cloc)
+    public Memory<Ent> Slice(Vector3i sloc) => Memory(sloc.Xy).Slice(sloc.Z * SectionVolume, SectionVolume);
+
+    private Memory<Ent> Memory(Vector2i cloc)
     {
         if (!chunks.TryGet(cloc, out var chunk))
             return default;
 
-        return chunk.Blocks().Span;
+        return chunk.Blocks();
     }
-
-    public Span<Ent> Slice(Vector3i sloc) => Span(sloc.Xy).Slice(sloc.Z * SectionVolume, SectionVolume);
 }

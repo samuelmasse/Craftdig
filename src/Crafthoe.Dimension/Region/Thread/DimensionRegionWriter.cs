@@ -3,9 +3,9 @@ namespace Crafthoe.Dimension;
 [Dimension]
 public class DimensionRegionWriter(
     WorldModuleIndices moduleIndices,
-    DimensionRegionFileHandles regionFileHandles,
-    DimensionRegionStates regionStates,
-    DimensionRegionBuckets regionBuckets)
+    DimensionRegionThreadFileHandles regionFileHandles,
+    DimensionRegionThreadStates regionStates,
+    DimensionRegionThreadBuckets regionBuckets)
 {
     private readonly RegionBlockEntry[] buffer = new RegionBlockEntry[SectionVolume];
     private readonly byte[] compressed = new byte[SectionVolume * RegionBlockEntry.Size];

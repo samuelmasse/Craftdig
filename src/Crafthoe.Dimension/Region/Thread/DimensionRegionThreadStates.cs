@@ -1,21 +1,22 @@
 namespace Crafthoe.Dimension;
 
 [Dimension]
-public class DimensionRegionStates(
+public class DimensionRegionThreadStates(
     DimensionPaths paths,
-    DimensionRegionBuckets regionBuckets,
-    DimensionRegionFileHandles regionFileHandles,
-    DimensionRegions regions)
+    DimensionRegionThreadBuckets buckets,
+    DimensionRegionThreadFileHandles fileHandles)
 {
+    private readonly Dictionary<Vector2i, RegionState> dict = [];
+
     public RegionState this[Vector2i rloc]
     {
         get
         {
-            if (!regions.Contains(rloc))
-                regions.Alloc(rloc);
+            if (dict.TryGetValue(rloc, out var state))
+                return state;
 
-            ref var state = ref regions[rloc].RegionState();
-            state ??= InitializeState(rloc);
+            state = InitializeState(rloc);
+            dict.Add(rloc, state);
 
             return state;
         }
@@ -23,8 +24,8 @@ public class DimensionRegionStates(
 
     private RegionState InitializeState(Vector2i rloc)
     {
-        var state = new RegionState(paths.Regions, rloc, regionBuckets.Count);
-        var handle = regionFileHandles[state.Files.Index];
+        var state = new RegionState(paths.Regions, rloc, buckets.Count);
+        var handle = fileHandles[state.Files.Index];
 
         if (RandomAccess.GetLength(handle) != 0)
         {

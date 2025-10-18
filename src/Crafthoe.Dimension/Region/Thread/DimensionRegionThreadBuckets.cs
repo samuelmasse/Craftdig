@@ -1,7 +1,7 @@
 namespace Crafthoe.Dimension;
 
 [Dimension]
-public class DimensionRegionBuckets
+public class DimensionRegionThreadBuckets
 {
     private readonly int[] sizes;
     private readonly int unit;
@@ -10,7 +10,7 @@ public class DimensionRegionBuckets
     public ReadOnlySpan<int> Sizes => sizes;
     public int Unit => unit;
 
-    public DimensionRegionBuckets()
+    public DimensionRegionThreadBuckets()
     {
         unit = RegionBlockEntry.Size;
 

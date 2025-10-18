@@ -7,7 +7,7 @@ public class DimensionChunkReceiver(
     DimensionChunkPending chunkPending,
     DimensionChunkBag chunkBag,
     DimensionChunkRenderScheduler chunkRenderScheduler,
-    DimensionRegionWriter regionWriter)
+    DimensionRegionThreadWorkQueue regionThreadWorkQueue)
 {
     public void Frame()
     {
@@ -20,8 +20,16 @@ public class DimensionChunkReceiver(
         var cloc = output.Cloc;
         var blocks = output.Blocks;
 
-        for (int sz = 0; sz < SectionHeight; sz++)
-            regionWriter.Write(blocks.Span.Slice(sz * SectionVolume, SectionVolume), new(cloc, sz));
+        if (!output.Noop)
+        {
+            for (int sz = 0; sz < SectionHeight; sz++)
+            {
+                regionThreadWorkQueue.Enqeue(
+                    new(new(cloc, sz),
+                    RegionThreadInputType.WriteSection,
+                    blocks.Slice(sz * SectionVolume, SectionVolume)));
+            }
+        }
 
         chunks.Alloc(cloc);
         var chunk = chunks[cloc];

@@ -6,8 +6,8 @@ public class DimensionChunkUnloader(
     DimensionChunkBag chunkIndex,
     DimensionSectionMeshTransferer meshTransferer,
     DimensionSections sections,
-    DimensionBlocksPool blocksPool,
     DimensionChunkRenderDescheduler chunkRenderDescheduler,
+    DimensionRegionThreadWorkQueue regionThreadWorkQueue,
     DimensionRegionInvalidation regionInvalidation)
 {
     public void Unload(Vector2i cloc)
@@ -17,6 +17,9 @@ public class DimensionChunkUnloader(
 
         for (int sz = 0; sz < SectionHeight; sz++)
             regionInvalidation.Drain(new(cloc, sz));
+
+        if (!chunk.Blocks().IsEmpty)
+            regionThreadWorkQueue.Enqeue(new(new(cloc, 0), RegionThreadInputType.DisposeChunk, chunk.Blocks()));
 
         foreach (var section in chunk.GetSections())
         {
@@ -31,12 +34,6 @@ public class DimensionChunkUnloader(
 
         if (!chunk.Sections().IsEmpty)
             sections.ReturnSections(chunk.Sections());
-
-        if (!chunk.Blocks().IsEmpty)
-        {
-            chunk.Blocks().Span.Clear();
-            blocksPool.Add(chunk.Blocks());
-        }
 
         chunks.Free(cloc);
     }

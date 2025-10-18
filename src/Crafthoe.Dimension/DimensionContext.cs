@@ -8,10 +8,10 @@ public class DimensionContext(
     DimensionSectionRequester sectionRequester,
     DimensionSectionReceiver sectionReceiver,
     DimensionChunkReceiver chunkReceiver,
+    DimensionRegionReceiver regionReceiver,
     DimensionSectionInvalidation sectionInvalidation,
     DimensionRegionInvalidation regionInvalidation,
     DimensionBlockChanges blockChanges,
-    DimensionRegionFileHandles regionFileHandles,
     DimensionRigids rigids)
 {
     private bool requesterType;
@@ -35,10 +35,10 @@ public class DimensionContext(
 
         chunkReceiver.Frame();
         sectionReceiver.Frame();
+        regionReceiver.Frame();
 
         requesterType = !requesterType;
 
         blockChanges.Clear();
-        regionFileHandles.Flush();
     }
 }

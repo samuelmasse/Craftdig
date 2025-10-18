@@ -4,7 +4,7 @@ namespace Crafthoe.Dimension;
 public class DimensionRegionInvalidation(
     DimensionBlockChanges blockChanges,
     DimensionBlocksRaw blocksRaw,
-    DimensionRegionWriter regionWriter)
+    DimensionRegionThreadWorkQueue regionThreadWorkQueue)
 {
     private readonly Dictionary<Vector3i, DateTime> dirty = [];
     private readonly HashSet<Vector3i> scheduled = [];
@@ -48,5 +48,6 @@ public class DimensionRegionInvalidation(
             Write(sloc);
     }
 
-    private void Write(Vector3i sloc) => regionWriter.Write(blocksRaw.Slice(sloc), sloc);
+    private void Write(Vector3i sloc) => regionThreadWorkQueue.Enqeue(
+        new(sloc, RegionThreadInputType.WriteSection, blocksRaw.Slice(sloc)));
 }

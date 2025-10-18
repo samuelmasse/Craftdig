@@ -10,7 +10,7 @@ public class DimensionChunkThreads(
 
     public void Start()
     {
-        for (int i = 0; i < 4; i++)
+        for (int i = 0; i < 16; i++)
         {
             var t = new Thread(Loop);
             t.Start();

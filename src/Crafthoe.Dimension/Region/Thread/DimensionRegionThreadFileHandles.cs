@@ -1,13 +1,11 @@
 namespace Crafthoe.Dimension;
 
 [Dimension]
-public class DimensionRegionFileHandles
+public class DimensionRegionThreadFileHandles(DimensionRegionThreadFlusherBag flusherQueue)
 {
     private readonly Dictionary<string, SafeFileHandle> handles = [];
     private readonly HashSet<SafeFileHandle> set = [];
-    private readonly HashSet<SafeFileHandle> pending = [];
     private readonly Queue<(SafeFileHandle Handle, DateTime Time)> queue = [];
-    private readonly ConcurrentQueue<SafeFileHandle> flushed = [];
 
     public SafeFileHandle this[string file]
     {
@@ -32,43 +30,33 @@ public class DimensionRegionFileHandles
 
     public void Flush()
     {
-        while (flushed.TryDequeue(out var handle))
-            pending.Remove(handle);
-
         var now = DateTime.UtcNow;
 
-        while (queue.Count > 0 &&
-            (now - queue.Peek().Time).TotalSeconds > 1 &&
-            !pending.Contains(queue.Peek().Handle))
+        while (queue.Count > 0 && (now - queue.Peek().Time).TotalSeconds > 1)
         {
             var (handle, _) = queue.Dequeue();
             set.Remove(handle);
-
-            Task.Run(() =>
-            {
-                RandomAccess.FlushToDisk(handle);
-                flushed.Enqueue(handle);
-            });
+            flusherQueue.Flush((handle, false));
         }
+
+        flusherQueue.WaitAll();
+
+        Console.WriteLine($"{handles.Count} {(DateTime.UtcNow - now).TotalMilliseconds}");
     }
 
     public void Drain()
     {
+        var now = DateTime.UtcNow;
+
         while (queue.Count > 0)
             set.Remove(queue.Dequeue().Handle);
 
-        while (pending.Count > 0)
-        {
-            while (flushed.TryDequeue(out var handle))
-                pending.Remove(handle);
-        }
-
         foreach (var handle in handles.Values)
-        {
-            RandomAccess.FlushToDisk(handle);
-            handle.Dispose();
-        }
+            flusherQueue.Flush((handle, true));
 
+        flusherQueue.WaitAll();
         handles.Clear();
+
+        Console.Write($"Drain took {(DateTime.UtcNow - now).TotalMilliseconds}ms");
     }
 }

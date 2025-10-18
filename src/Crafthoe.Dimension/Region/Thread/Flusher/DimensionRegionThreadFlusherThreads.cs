@@ -1,16 +1,16 @@
 namespace Crafthoe.Dimension;
 
 [Dimension]
-public class DimensionSectionThreads(
-    DimensionSectionThreadWorkQueue queue,
-    DimensionSectionThreadWorker worker)
+public class DimensionRegionThreadFlusherThreads(
+    DimensionRegionThreadFlusherBag bag,
+    DimensionRegionThreadFlusherWorker worker)
 {
     private readonly List<Thread> threads = [];
     private bool stop;
 
     public void Start()
     {
-        for (int i = 0; i < 16; i++)
+        for (int i = 0; i < 64; i++)
         {
             var t = new Thread(Loop);
             t.Start();
@@ -21,7 +21,7 @@ public class DimensionSectionThreads(
     public void Stop()
     {
         stop = true;
-        queue.Release(threads.Count);
+        bag.Release(threads.Count);
 
         foreach (var t in threads)
             t.Join();
@@ -31,12 +31,17 @@ public class DimensionSectionThreads(
     {
         while (true)
         {
-            queue.Wait();
-            if (stop)
+            if (!stop)
+                bag.WaitConsumer();
+
+            if (stop && bag.Count == 0)
                 break;
 
-            if (queue.TryDequeue(out var sloc))
-                worker.Work(sloc);
+            if (bag.TryTake(out var op))
+            {
+                worker.Work(op);
+                bag.SignalProducer();
+            }
         }
     }
 }

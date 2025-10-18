@@ -1,23 +1,23 @@
 namespace Crafthoe.Dimension;
 
 [Dimension]
-public class DimensionRegionReader(
+public class DimensionRegionThreadReader(
     WorldModuleIndices moduleIndices,
-    DimensionRegionFileHandles regionFileHandles,
-    DimensionRegionStates regionStates,
-    DimensionRegionBuckets regionBuckets)
+    DimensionRegionThreadFileHandles fileHandles,
+    DimensionRegionThreadStates states,
+    DimensionRegionThreadBuckets buckets)
 {
     private readonly RegionBlockEntry[] buffer = new RegionBlockEntry[SectionVolume];
     private readonly byte[] compressed = new byte[SectionVolume * RegionBlockEntry.Size];
 
     public void Read(Span<Ent> blocks, Vector3i sloc)
     {
-        var state = regionStates[sloc.Xy.ToRloc()];
+        var state = states[sloc.Xy.ToRloc()];
         var alloc = state.Index[sloc - state.Origin];
 
-        RandomAccess.Read(regionFileHandles[state.Files.Buckets[alloc.Bucket]],
+        RandomAccess.Read(fileHandles[state.Files.Buckets[alloc.Bucket]],
             compressed.AsSpan()[..alloc.Count],
-            alloc.Offset * regionBuckets.Sizes[alloc.Bucket]);
+            alloc.Offset * buckets.Sizes[alloc.Bucket]);
 
         BrotliDecoder.TryDecompress(
             compressed.AsSpan()[..alloc.Count],
