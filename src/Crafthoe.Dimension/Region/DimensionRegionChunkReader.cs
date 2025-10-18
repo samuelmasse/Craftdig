@@ -1,7 +1,7 @@
 namespace Crafthoe.Dimension;
 
 [Dimension]
-public class DimensionChunkReader(
+public class DimensionRegionChunkReader(
     DimensionRegionIndexLoader regionIndexLoader,
     DimensionRegionReader regionReader)
 {

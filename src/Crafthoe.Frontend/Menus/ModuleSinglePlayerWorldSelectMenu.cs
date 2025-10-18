@@ -44,7 +44,7 @@ public class ModuleSinglePlayerWorldSelectMenu(
             {
                 Node(select)
                     .Mut(s.Button)
-                    .SizeV((s.ItemWidthL, s.ItemHeight) )
+                    .SizeV((s.ItemWidthL, s.ItemHeight))
                     .TextV(meta.Name)
                     .TooltipV(Path.GetFileName(paths.Root))
                     .OnPressF(() => loadWorldAction.Run(paths));

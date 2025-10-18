@@ -5,7 +5,7 @@ public class DimensionRegionIndexLoader(
     DimensionPaths paths,
     DimensionRegionBuckets regionBuckets,
     DimensionRegionFileHandles regionFileHandles,
-    DimensionRegions regions) 
+    DimensionRegions regions)
 {
     public RegionIndex EnsureLoaded(Vector2i rloc)
     {
