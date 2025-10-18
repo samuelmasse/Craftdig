@@ -51,6 +51,8 @@ public class DimensionBlocksRaw(DimensionChunks chunks)
         return blocks.Span;
     }
 
+    public Span<Ent> Slice(Vector3i sloc) => Span(sloc.Xy).Slice(sloc.Z * SectionVolume, SectionVolume);
+
     public void Return(Memory<Ent> blocks)
     {
         blocks.Span.Clear();

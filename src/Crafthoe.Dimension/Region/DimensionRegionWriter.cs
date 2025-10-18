@@ -4,9 +4,8 @@ namespace Crafthoe.Dimension;
 public class DimensionRegionWriter(
     WorldModuleIndices moduleIndices,
     DimensionBlocksRaw blocksRaw,
-    DimensionRegions regions,
     DimensionRegionFileHandles regionFileHandles,
-    DimensionRegionIndexLoader regionIndexLoader,
+    DimensionRegionStates regionStates,
     DimensionRegionBuckets regionBuckets)
 {
     private readonly RegionBlockEntry[] buffer = new RegionBlockEntry[SectionVolume];
@@ -16,41 +15,32 @@ public class DimensionRegionWriter(
 
     public void Write(Vector3i sloc)
     {
-        var cloc = sloc.Xy;
-        var rloc = cloc.ToRloc();
-        var index = regionIndexLoader.EnsureLoaded(rloc);
-        var files = regions.Get(rloc).RegionFiles();
-        var freeMap = regions.Get(rloc).RegionFreeMap();
+        var state = regionStates[sloc.Xy.ToRloc()];
+        var offset = sloc - state.Origin;
+        ref var alloc = ref state.Index[offset];
 
-        var origin = new Vector3i(rloc.X << RegionBits, rloc.Y << RegionBits, 0);
-        var offset = sloc - origin;
-        ref var alloc = ref index[offset];
+        EncodeIntoBuffer(blocksRaw.Slice(sloc));
 
-        var mem = blocksRaw.Span(cloc);
-        var blocks = mem.Slice(sloc.Z * SectionVolume, SectionVolume);
-
-        EncodeIntoBuffer(blocks);
-
-        RandomAccess.Write(regionFileHandles[files.Buckets[alloc.Bucket]],
+        RandomAccess.Write(regionFileHandles[state.Files.Buckets[alloc.Bucket]],
             zeroes.AsSpan()[..alloc.Count],
             alloc.Offset * regionBuckets.Sizes[alloc.Bucket]);
 
         if (regionBuckets.Sizes[alloc.Bucket] <= bytes)
         {
             if (alloc.Bucket != 0)
-                freeMap.Free(alloc.Bucket, alloc.Offset);
+                state.FreeMap.Free(alloc.Bucket, alloc.Offset);
 
             alloc.Bucket = (byte)regionBuckets.BestFit(bytes);
-            alloc.Offset = (ushort)freeMap.Alloc(alloc.Bucket);
+            alloc.Offset = (ushort)state.FreeMap.Alloc(alloc.Bucket);
         }
 
         alloc.Count = (ushort)bytes;
 
-        var findex = regionFileHandles[files.Index];
-        RandomAccess.Write(findex, MemoryMarshal.AsBytes(index.Span.Slice(index.Index(offset), 1)),
-            index.Index(offset) * RegionIndexEntry.Size);
+        var findex = regionFileHandles[state.Files.Index];
+        RandomAccess.Write(findex, MemoryMarshal.AsBytes(state.Index.Span.Slice(state.Index.Index(offset), 1)),
+            state.Index.Index(offset) * RegionIndexEntry.Size);
 
-        var bucket = regionFileHandles[files.Buckets[alloc.Bucket]];
+        var bucket = regionFileHandles[state.Files.Buckets[alloc.Bucket]];
         RandomAccess.Write(bucket, compressed.AsSpan()[..bytes],
             alloc.Offset * regionBuckets.Sizes[alloc.Bucket]);
     }

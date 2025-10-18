@@ -7,9 +7,7 @@ file record DimensionComponents(
     // Region
     [ComponentToString] bool IsRegion,
     [ComponentToString] Vector2i Rloc,
-    RegionIndex? RegionIndex,
-    RegionFiles RegionFiles,
-    RegionFreeMap RegionFreeMap,
+    RegionState? RegionState,
 
     // Chunk
     [ComponentToString] bool IsChunk,

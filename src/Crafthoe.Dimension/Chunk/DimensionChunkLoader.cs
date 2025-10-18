@@ -13,7 +13,8 @@ public class DimensionChunkLoader(
 {
     public void Load(Vector2i cloc)
     {
-        var chunk = chunks.Get(cloc);
+        chunks.Alloc(cloc);
+        var chunk = chunks[cloc];
 
         if (!chunkReader.TryRead(cloc))
         {

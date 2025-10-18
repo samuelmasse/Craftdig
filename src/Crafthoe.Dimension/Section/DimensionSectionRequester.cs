@@ -33,7 +33,7 @@ public class DimensionSectionRequester(
         if (!TryGetNeareastChunkWithUnloadedSections(sloc.Xy, out var cloc))
             return false;
 
-        var chunk = chunks.Get(cloc);
+        chunks.TryGet(cloc, out var chunk);
 
         for (int sz = 0; sz < SectionHeight; sz++)
         {
