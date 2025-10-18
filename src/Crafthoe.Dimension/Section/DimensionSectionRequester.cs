@@ -30,8 +30,10 @@ public class DimensionSectionRequester(
 
     private bool LoadNearestChunk(Vector3i sloc)
     {
-        if (!TryGetNeareastChunkWithUnloadedSections(sloc.Xy, out var chunk))
+        if (!TryGetNeareastChunkWithUnloadedSections(sloc.Xy, out var cloc))
             return false;
+
+        var chunk = chunks.Get(cloc);
 
         for (int sz = 0; sz < SectionHeight; sz++)
         {
@@ -47,35 +49,33 @@ public class DimensionSectionRequester(
         return true;
     }
 
-    private bool TryGetNeareastChunkWithUnloadedSections(Vector2i center, out EntMut val)
+    private bool TryGetNeareastChunkWithUnloadedSections(Vector2i center, out Vector2i cloc)
     {
-        val = default;
+        cloc = default;
 
-        float nearest = float.PositiveInfinity;
-        bool found = false;
-
-        for (int dy = -chunkRequester.Far; dy <= chunkRequester.Far; dy++)
+        for (int r = 0; r <= chunkRequester.Far; r++)
         {
-            for (int dx = -chunkRequester.Far; dx <= chunkRequester.Far; dx++)
+            for (int dx = -r; dx <= r; dx++)
             {
-                var ncloc = center + (dx, dy);
-                if (!chunks.TryGet(ncloc, out var chunk) || !chunk.IsReadyToRender() || chunk.Unrendered().Count == 0)
-                    continue;
+                int dy = r - Math.Abs(dx);
 
-                var delta = Vector2i.Abs(center - ncloc);
-                var dist = delta.X + delta.Y;
-                if (dist > chunkRequester.Far)
-                    continue;
+                if (Visit((dx, dy)))
+                {
+                    cloc = center + (dx, dy);
+                    return true;
+                }
 
-                if (dist >= nearest)
-                    continue;
+                if (Visit((dx, -dy)))
+                {
+                    cloc = center + (dx, -dy);
+                    return true;
+                }
 
-                val = chunk;
-                nearest = dist;
-                found = true;
+                bool Visit(Vector2i delta) =>
+                    chunks.TryGet(center + delta, out var chunk) && chunk.IsReadyToRender() && chunk.Unrendered().Count != 0;
             }
         }
 
-        return found;
+        return false;
     }
 }

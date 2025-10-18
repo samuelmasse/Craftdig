@@ -43,31 +43,31 @@ public class DimensionChunkRequester(
     {
         cloc = default;
 
-        float nearest = float.PositiveInfinity;
-        bool found = false;
-
-        for (int dy = -far; dy <= far; dy++)
+        for (int r = 0; r <= far; r++)
         {
-            for (int dx = -far; dx <= far; dx++)
+            for (int dx = -r; dx <= r; dx++)
             {
-                var ncloc = center + (dx, dy);
-                if (chunks.TryGet(ncloc, out _))
-                    continue;
+                int dy = r - Math.Abs(dx);
 
-                var delta = Vector2i.Abs(center - ncloc);
-                var dist = delta.X + delta.Y;
-                if (dist > far)
-                    continue;
+                if (Visit((dx, dy)))
+                {
+                    cloc = center + (dx, dy);
+                    return true;
+                }
 
-                if (dist >= nearest)
-                    continue;
+                if (Visit((dx, -dy)))
+                {
+                    cloc = center + (dx, -dy);
+                    return true;
+                }
 
-                cloc = ncloc;
-                nearest = dist;
-                found = true;
+                bool Visit(Vector2i delta)
+                {
+                    return !chunks.TryGet(center + delta, out _);
+                }
             }
         }
 
-        return found;
+        return false;
     }
 }
