@@ -18,7 +18,15 @@ public class DimensionMetrics
     public DimensionMetrics()
     {
         tickMetricWindow = new(tickMetric);
-        // TODO: start and stop on load and unload dimension
+    }
+
+    public void Start()
+    {
         tickMetricWindow.Start();
+    }
+
+    public void Stop()
+    {
+        tickMetricWindow.Stop();
     }
 }

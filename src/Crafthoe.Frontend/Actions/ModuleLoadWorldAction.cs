@@ -26,6 +26,7 @@ public class ModuleLoadWorldAction(RootState state, ModuleEnts ents, ModuleScope
             (ITerrainGenerator)dimensionScope.Get(dimension.TerrainGeneratorType())));
         dimensionScope.Add(new DimensionBiomeGenerator(
             (IBiomeGenerator)dimensionScope.Get(dimension.BiomeGeneraetorType())));
+        dimensionScope.Scope<DimensionLoaderScope>().Get<DimensionLoader>().Run();
 
         var players = dimensionScope.Get<DimensionPlayerBag>();
         var player = new EntObj();
