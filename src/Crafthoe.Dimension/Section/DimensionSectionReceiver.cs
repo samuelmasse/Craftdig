@@ -15,7 +15,7 @@ public class DimensionSectionReceiver(
             Receive(output);
 
             output.Buffer.Clear();
-            bag.Add(output.Buffer); 
+            bag.Add(output.Buffer);
         }
     }
 

@@ -25,7 +25,6 @@ public class PlayerDebugMenu(
             () => text.Format("Spike: {0}", metrics.Frame.Max),
             () => text.Format("Render: {0}", dimensionMetrics.RenderMetric.Value.Max),
             () => text.Format("Chunk: {0}", dimensionMetrics.ChunkMetric.Value.Max),
-            () => text.Format("Section: {0}", dimensionMetrics.SectionMetric.Value.Max),
             () => text.Format("Buffers: {0}", gl.BufferTotalUsage),
             () => text.Format("Selected Loc: {0}", selected.Loc.GetValueOrDefault()),
             () => text.Format("Selected Normal: {0}", selected.Normal.GetValueOrDefault()),
