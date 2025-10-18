@@ -4,6 +4,8 @@ namespace Crafthoe.Dimension;
 public class DimensionChunkRequester(
     DimensionPlayerBag playerBag,
     DimensionChunks chunks,
+    DimensionChunkThreadWorkQueue chunkThreadWorkQueue,
+    DimensionChunkPending chunkPending,
     DimensionChunkLoader chunkLoader)
 {
     private readonly int far = 24;
@@ -17,10 +19,16 @@ public class DimensionChunkRequester(
         if (playerBag.Ents.IsEmpty)
             return;
 
+        int credits = 32 - chunkThreadWorkQueue.Count;
+        bool next = true;
+
         watch.Restart();
-        bool next;
-        do next = LoadNearestChunk(RandomPlayerChunkLocation());
-        while (next && watch.Elapsed.TotalMilliseconds < 1);
+
+        while (next && credits > 0 && watch.Elapsed.TotalMilliseconds < 1)
+        {
+            next = LoadNearestChunk(RandomPlayerChunkLocation());
+            credits--;
+        }
     }
 
     private Vector2i RandomPlayerChunkLocation()
@@ -63,7 +71,7 @@ public class DimensionChunkRequester(
 
                 bool Visit(Vector2i delta)
                 {
-                    return !chunks.TryGet(center + delta, out _);
+                    return !chunks.TryGet(center + delta, out _) && !chunkPending.Contains(center + delta);
                 }
             }
         }

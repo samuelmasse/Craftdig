@@ -1,12 +1,10 @@
 namespace Crafthoe.Native;
 
 [Dimension]
-public class DimensionNativeBiomeGenerator(ModuleNative m, DimensionBlocksRaw blocksRaw) : IBiomeGenerator
+public class DimensionNativeBiomeGenerator(ModuleNative m) : IBiomeGenerator
 {
     public void Generate(Span<Ent> blocks, Vector2i cloc)
     {
-        var loc = cloc * SectionSize;
-
         bool wasAir = true;
 
         for (int y = 0; y < SectionSize; y++)
@@ -20,7 +18,7 @@ public class DimensionNativeBiomeGenerator(ModuleNative m, DimensionBlocksRaw bl
                     if (block.IsSolid())
                     {
                         if (wasAir)
-                            Generate((x + loc.X, y + loc.Y, z));
+                            Generate(blocks, (x, y, z));
 
                         wasAir = false;
                     }
@@ -30,10 +28,10 @@ public class DimensionNativeBiomeGenerator(ModuleNative m, DimensionBlocksRaw bl
         }
     }
 
-    private void Generate(Vector3i loc)
+    private void Generate(Span<Ent> blocks, Vector3i loc)
     {
-        blocksRaw.TrySet(loc, (Ent)m.GrassBlock);
-        blocksRaw.TrySet(loc - (0, 0, 1), (Ent)m.DirtBlock);
-        blocksRaw.TrySet(loc - (0, 0, 2), (Ent)m.DirtBlock);
+        blocks[loc.ToInnerIndex()] = m.GrassBlock;
+        blocks[(loc - (0, 0, 1)).ToInnerIndex()] = m.DirtBlock;
+        blocks[(loc - (0, 0, 2)).ToInnerIndex()] = m.DirtBlock;
     }
 }

@@ -7,6 +7,7 @@ public class DimensionContext(
     DimensionChunkCollector chunkCollector,
     DimensionSectionRequester sectionRequester,
     DimensionSectionReceiver sectionReceiver,
+    DimensionChunkReceiver chunkReceiver,
     DimensionSectionInvalidation sectionInvalidation,
     DimensionRegionInvalidation regionInvalidation,
     DimensionBlockChanges blockChanges,
@@ -32,6 +33,7 @@ public class DimensionContext(
             chunkRequester.Frame();
         else sectionRequester.Frame();
 
+        chunkReceiver.Frame();
         sectionReceiver.Frame();
 
         requesterType = !requesterType;

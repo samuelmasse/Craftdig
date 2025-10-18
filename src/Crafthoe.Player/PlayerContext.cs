@@ -12,7 +12,8 @@ public class PlayerContext(
     PlayerEnt ent,
     PlayerSelected selected,
     PlayerMovement movement,
-    PlayerRenderer renderer)
+    PlayerRenderer renderer,
+    PlayerTeleporter teleporter)
 {
     private int mainCooldown;
     private int secondaryCooldown;
@@ -21,7 +22,8 @@ public class PlayerContext(
 
     public void Load()
     {
-        ent.Ent.Position() = (15, 0, 100);
+        ent.Ent.Position() = (15, 0, 120);
+        ent.Ent.IsFlying() = true;
         ent.Ent.HitBox() = new Box3d((-0.3, -0.3, -1.62), (0.3, 0.3, 0.18));
         rigidBag.Add((EntMut)ent.Ent);
     }
@@ -81,6 +83,8 @@ public class PlayerContext(
             index = HotBarSlots.Count - 1;
         if (index >= HotBarSlots.Count)
             index = 0;
+
+        teleporter.Update();
     }
 
     public void Render() => renderer.Render();

@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <ItemGroup>
-        <PackageReference Include="AlvorEngine" Version="0.1" />
+        <PackageReference Include="AlvorEngine" Version="0.1.1" />
         <PackageReference Include="HadvarECS" Version="0.7" />
         <PackageReference Include="HadvarECS.Generator" Version="0.7" />
     </ItemGroup>
