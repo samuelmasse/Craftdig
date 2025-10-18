@@ -14,21 +14,24 @@ public class DimensionChunkLoader(
 {
     public void Load(Vector2i cloc)
     {
-        chunks.Alloc(cloc);
-        var chunk = chunks[cloc];
-        chunk.Blocks(blocksPool.Take());
+        var blocks = blocksPool.Take();
 
-        if (!chunkReader.TryRead(cloc))
+        if (!chunkReader.TryRead(blocks.Span, cloc))
         {
             metrics.ChunkMetric.Start();
-            chunkGenerator.Generate(cloc);
-            biomeGenerator.Generate(cloc);
+
+            chunkGenerator.Generate(blocks.Span, cloc);
+            biomeGenerator.Generate(blocks.Span, cloc);
 
             for (int sz = 0; sz < SectionHeight; sz++)
-                regionWriter.Write(new(cloc, sz));
+                regionWriter.Write(blocks.Span.Slice(sz * SectionVolume, SectionVolume), new(cloc, sz));
 
             metrics.ChunkMetric.End();
         }
+
+        chunks.Alloc(cloc);
+        var chunk = chunks[cloc];
+        chunk.Blocks(blocks);
 
         chunkRenderScheduler.Add(cloc);
         chunkBag.Add(chunk);
