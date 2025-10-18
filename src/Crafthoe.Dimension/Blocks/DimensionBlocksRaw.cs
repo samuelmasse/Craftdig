@@ -3,8 +3,6 @@ namespace Crafthoe.Dimension;
 [Dimension]
 public class DimensionBlocksRaw(DimensionChunks chunks)
 {
-    private readonly Queue<Memory<Ent>> pool = [];
-
     public bool TryGet(Vector3i loc, out Ent block)
     {
         if ((uint)loc.Z >= HeightSize)
@@ -44,18 +42,8 @@ public class DimensionBlocksRaw(DimensionChunks chunks)
         if (!chunks.TryGet(cloc, out var chunk))
             return default;
 
-        ref var blocks = ref chunk.Blocks();
-        if (blocks.Length == 0)
-            blocks = pool.Count > 0 ? pool.Dequeue() : new Ent[ChunkVolume];
-
-        return blocks.Span;
+        return chunk.Blocks().Span;
     }
 
     public Span<Ent> Slice(Vector3i sloc) => Span(sloc.Xy).Slice(sloc.Z * SectionVolume, SectionVolume);
-
-    public void Return(Memory<Ent> blocks)
-    {
-        blocks.Span.Clear();
-        pool.Enqueue(blocks);
-    }
 }

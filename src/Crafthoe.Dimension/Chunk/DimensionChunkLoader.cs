@@ -9,12 +9,14 @@ public class DimensionChunkLoader(
     DimensionMetrics metrics,
     DimensionChunkRenderScheduler chunkRenderScheduler,
     DimensionChunkBag chunkBag,
+    DimensionBlocksPool blocksPool,
     DimensionRegionWriter regionWriter)
 {
     public void Load(Vector2i cloc)
     {
         chunks.Alloc(cloc);
         var chunk = chunks[cloc];
+        chunk.Blocks(blocksPool.Take());
 
         if (!chunkReader.TryRead(cloc))
         {

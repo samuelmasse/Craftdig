@@ -6,7 +6,7 @@ public class DimensionChunkUnloader(
     DimensionChunkBag chunkIndex,
     DimensionSectionMeshTransferer meshTransferer,
     DimensionSections sections,
-    DimensionBlocksRaw blocksRaw,
+    DimensionBlocksPool blocksPool,
     DimensionChunkRenderDescheduler chunkRenderDescheduler,
     DimensionRegionInvalidation regionInvalidation)
 {
@@ -31,8 +31,12 @@ public class DimensionChunkUnloader(
 
         if (!chunk.Sections().IsEmpty)
             sections.ReturnSections(chunk.Sections());
+
         if (!chunk.Blocks().IsEmpty)
-            blocksRaw.Return(chunk.Blocks());
+        {
+            chunk.Blocks().Span.Clear();
+            blocksPool.Add(chunk.Blocks());
+        }
 
         chunks.Free(cloc);
     }
