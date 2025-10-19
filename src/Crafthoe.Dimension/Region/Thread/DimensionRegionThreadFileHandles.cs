@@ -48,8 +48,6 @@ public class DimensionRegionThreadFileHandles(DimensionRegionThreadFlusherBag fl
 
     public void Drain()
     {
-        var now = DateTime.UtcNow;
-
         while (queue.Count > 0)
             set.Remove(queue.Dequeue().Handle);
 

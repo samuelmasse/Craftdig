@@ -25,50 +25,43 @@ public class RootUiMouse(RootMouse mouse, RootUiScale scale, RootUiFocus focus)
             hovered?.IsHoveredR(true);
         }
 
-        HandleButton(
-            isDown: mouse.IsMainDown(),
-            ref prevMainDown,
-            ref pressedMain,
-            hovered,
-            onPress: e =>
+        if (mouse.IsMainDown())
+        {
+            if (!prevMainDown)
             {
-                if (!InputEnabled(e))
-                    return;
-
-                if (Get(e.IsFocusableV(), e.IsFocusableF()))
-                    focus.Focus(e);
-
-                e.OnPressF()?.Invoke();
-            },
-            onClick: e =>
-            {
-                if (!InputEnabled(e))
-                    return;
-
-                e.OnClickF()?.Invoke();
+                pressedMain = hovered;
+                if (pressedMain != null)
+                    OnLeftPress(pressedMain);
             }
-        );
 
-        HandleButton(
-            isDown: mouse.IsSecondaryDown(),
-            ref prevSecondaryDown,
-            ref pressedSecondary,
-            hovered,
-            onPress: e =>
+            prevMainDown = true;
+            return;
+        }
+
+        if (prevMainDown && pressedMain != null && pressedMain == hovered)
+            OnLeftClick(pressedMain);
+
+        pressedMain = null;
+        prevMainDown = false;
+
+        if (mouse.IsSecondaryDown())
+        {
+            if (!prevSecondaryDown)
             {
-                if (!InputEnabled(e))
-                    return;
-
-                e.OnSecondaryPressF()?.Invoke();
-            },
-            onClick: e =>
-            {
-                if (!InputEnabled(e))
-                    return;
-
-                e.OnSecondaryClickF()?.Invoke();
+                pressedSecondary = hovered;
+                if (pressedSecondary != null)
+                    OnRightPress(pressedSecondary);
             }
-        );
+
+            prevSecondaryDown = true;
+            return;
+        }
+
+        if (prevSecondaryDown && pressedSecondary != null && pressedSecondary == hovered)
+            OnRightClick(pressedSecondary);
+
+        pressedSecondary = null;
+        prevSecondaryDown = false;
 
         prevHovered = hovered;
 
@@ -77,32 +70,39 @@ public class RootUiMouse(RootMouse mouse, RootUiScale scale, RootUiFocus focus)
             : MouseCursor.Default;
     }
 
-    private void HandleButton(
-        bool isDown,
-        ref bool prevDown,
-        ref EntObj? pressed,
-        EntObj? hovered,
-        Action<EntObj> onPress,
-        Action<EntObj> onClick)
+    private void OnLeftPress(EntObj e)
     {
-        if (isDown)
-        {
-            if (!prevDown)
-            {
-                pressed = hovered;
-                if (pressed != null)
-                    onPress(pressed);
-            }
-
-            prevDown = true;
+        if (!InputEnabled(e))
             return;
-        }
 
-        if (prevDown && pressed != null && pressed == hovered)
-            onClick(pressed);
+        if (Get(e.IsFocusableV(), e.IsFocusableF()))
+            focus.Focus(e);
 
-        pressed = null;
-        prevDown = false;
+        e.OnPressF()?.Invoke();
+    }
+
+    private void OnLeftClick(EntObj e)
+    {
+        if (!InputEnabled(e))
+            return;
+
+        e.OnClickF()?.Invoke();
+    }
+
+    private void OnRightPress(EntObj e)
+    {
+        if (!InputEnabled(e))
+            return;
+
+        e.OnSecondaryPressF()?.Invoke();
+    }
+
+    private void OnRightClick(EntObj e)
+    {
+        if (!InputEnabled(e))
+            return;
+
+        e.OnSecondaryClickF()?.Invoke();
     }
 
     private EntObj? FindHovered(Vector2 o, EntObj n)

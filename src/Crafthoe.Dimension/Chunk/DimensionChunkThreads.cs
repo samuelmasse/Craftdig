@@ -21,7 +21,7 @@ public class DimensionChunkThreads(
     public void Stop()
     {
         stop = true;
-        queue.Release(threads.Count);
+        queue.Release(ushort.MaxValue);
 
         foreach (var t in threads)
             t.Join();
@@ -31,8 +31,7 @@ public class DimensionChunkThreads(
     {
         while (true)
         {
-            if (!stop)
-                queue.Wait();
+            queue.Wait();
 
             if (stop)
                 break;

@@ -25,7 +25,7 @@ public class DimensionRegionThread(
             return;
 
         stop = true;
-        queue.Release(1);
+        queue.Release(ushort.MaxValue);
         thread.Join();
 
         timer.Stop();
@@ -36,8 +36,7 @@ public class DimensionRegionThread(
     {
         while (true)
         {
-            if (!stop)
-                queue.Wait();
+            queue.Wait();
 
             if (stop && queue.Count == 0)
                 break;

@@ -29,7 +29,7 @@ public class DimensionRegionThreadStates(
 
     public void Drain()
     {
-        if (dict.Count < 64)
+        if (dict.Count < 8)
             return;
 
         var now = DateTime.UtcNow;

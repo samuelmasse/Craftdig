@@ -80,16 +80,19 @@ public class RootUiTraverse
         int start = traverseBufferIndex;
         int count = 0;
 
-        foreach (var c in n.GetNodes())
+        if (n.GetNodes().Count > 0)
         {
-            var disabled = Get(c.IsDisabledV(), c.IsDisabledF());
-            if (disabled)
-                continue;
+            foreach (var c in n.GetNodes())
+            {
+                var disabled = Get(c.IsDisabledV(), c.IsDisabledF());
+                if (disabled)
+                    continue;
 
-            if (traverseBufferIndex == traverseBuffer.Length)
-                Array.Resize(ref traverseBuffer, traverseBuffer.Length * 2);
-            traverseBuffer[traverseBufferIndex++] = c;
-            count++;
+                if (traverseBufferIndex == traverseBuffer.Length)
+                    Array.Resize(ref traverseBuffer, traverseBuffer.Length * 2);
+                traverseBuffer[traverseBufferIndex++] = c;
+                count++;
+            }
         }
 
         n.NodesR() = traverseBuffer.AsMemory().Slice(start, count);

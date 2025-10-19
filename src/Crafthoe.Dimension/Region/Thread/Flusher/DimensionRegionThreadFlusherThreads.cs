@@ -21,7 +21,7 @@ public class DimensionRegionThreadFlusherThreads(
     public void Stop()
     {
         stop = true;
-        bag.Release(threads.Count);
+        bag.Release(ushort.MaxValue);
 
         foreach (var t in threads)
             t.Join();

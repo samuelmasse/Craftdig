@@ -3,6 +3,7 @@ namespace Crafthoe.Dimension;
 [Dimension]
 public class DimensionSectionThreads(
     DimensionSectionThreadWorkQueue queue,
+    DimensionSectionThreadBufferBag bag,
     DimensionSectionThreadWorker worker)
 {
     private readonly List<Thread> threads = [];
@@ -21,7 +22,8 @@ public class DimensionSectionThreads(
     public void Stop()
     {
         stop = true;
-        queue.Release(threads.Count);
+        queue.Release(ushort.MaxValue);
+        bag.Release(ushort.MaxValue);
 
         foreach (var t in threads)
             t.Join();
@@ -31,8 +33,7 @@ public class DimensionSectionThreads(
     {
         while (true)
         {
-            if (!stop)
-                queue.Wait();
+            queue.Wait();
 
             if (stop)
                 break;

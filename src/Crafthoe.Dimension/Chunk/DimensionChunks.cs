@@ -18,30 +18,23 @@ public class DimensionChunks(WorldEntPtrBag entPtrBag)
 
     public bool TryGet(Vector2i cloc, out EntMut chunk)
     {
-        if (map.TryGet(cloc, out var ptr))
-        {
-            chunk = ptr;
-            return chunk != default;
-        }
-        else
-        {
-            chunk = default;
-            return false;
-        }
+        bool res = map.TryGetValue(cloc, out var val);
+        chunk = (EntMut)val;
+        return res;
     }
 
-    public bool Contains(Vector2i cloc) => TryGet(cloc, out _);
+    public bool Contains(Vector2i cloc) => map.ContainsKey(cloc);
 
     public void Alloc(Vector2i cloc)
     {
         if (Contains(cloc))
             return;
 
-        ref var chunk = ref map[cloc];
-        chunk = new EntPtr()
+        var chunk = new EntPtr()
             .IsChunk(true)
             .Cloc(cloc);
         entPtrBag.Add(chunk);
+        map.Add(cloc, chunk);
     }
 
     public void Free(Vector2i cloc)
@@ -49,9 +42,9 @@ public class DimensionChunks(WorldEntPtrBag entPtrBag)
         if (!Contains(cloc))
             return;
 
-        ref var chunk = ref map[cloc];
+        var chunk = map[cloc];
         entPtrBag.Remove(chunk);
         chunk.Dispose();
-        chunk = default;
+        map.Remove(cloc);
     }
 }
