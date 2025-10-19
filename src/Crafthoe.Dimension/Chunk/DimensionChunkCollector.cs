@@ -7,13 +7,16 @@ public class DimensionChunkCollector(
     DimensionPlayerBag playerBag,
     DimensionChunkUnloader chunkUnloader)
 {
+    private readonly Stopwatch watch = new();
     private long index;
 
     public void Frame()
     {
         var iters = Math.Min(chunkBag.Ents.Length, 200);
 
-        for (int i = 0; i < iters; i++)
+        watch.Restart();
+
+        while (watch.Elapsed.TotalMilliseconds < 0.25 && iters > 0)
         {
             var chunk = chunkBag.Ents[(int)(index % chunkBag.Ents.Length)];
 
@@ -21,6 +24,7 @@ public class DimensionChunkCollector(
                 Collect(chunk);
 
             index++;
+            iters--;
         }
     }
 

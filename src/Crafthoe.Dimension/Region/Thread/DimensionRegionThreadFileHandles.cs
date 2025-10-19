@@ -42,8 +42,6 @@ public class DimensionRegionThreadFileHandles(DimensionRegionThreadFlusherBag fl
         }
 
         flusherQueue.WaitAll();
-
-        Console.WriteLine($"flush {handles.Count} {(DateTime.UtcNow - now).TotalMilliseconds}ms");
     }
 
     public void Drain()
@@ -60,8 +58,6 @@ public class DimensionRegionThreadFileHandles(DimensionRegionThreadFlusherBag fl
 
     public void Drain(ReadOnlySpan<string> files)
     {
-        var now = DateTime.UtcNow;
-
         foreach (var file in files)
         {
             if (handles.TryGetValue(file, out var handle))
@@ -72,7 +68,5 @@ public class DimensionRegionThreadFileHandles(DimensionRegionThreadFlusherBag fl
 
         foreach (var file in files)
             handles.Remove(file);
-
-        Console.WriteLine($"drain {(DateTime.UtcNow - now).TotalMilliseconds}ms");
     }
 }

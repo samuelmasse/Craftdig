@@ -2,6 +2,7 @@ namespace Crafthoe.Dimension;
 
 [Dimension]
 public class DimensionSectionReceiver(
+    DimensionMetrics metrics,
     DimensionBlockProgram blockProgram,
     DimensionSectionMeshTransferer meshTransferer,
     DimensionSections sections,
@@ -10,6 +11,8 @@ public class DimensionSectionReceiver(
 {
     public void Frame()
     {
+        metrics.SectionMetric.Start();
+
         while (outputQueue.TryDequeue(out var output))
         {
             Receive(output);
@@ -17,6 +20,8 @@ public class DimensionSectionReceiver(
             output.Buffer.Clear();
             bag.Add(output.Buffer);
         }
+
+        metrics.SectionMetric.End();
     }
 
     private void Receive(SectionThreadOutput output)

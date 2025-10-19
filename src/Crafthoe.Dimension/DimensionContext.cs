@@ -14,8 +14,6 @@ public class DimensionContext(
     DimensionBlockChanges blockChanges,
     DimensionRigids rigids)
 {
-    private bool requesterType;
-
     public DimensionScope Scope => scope;
 
     public void Tick()
@@ -27,17 +25,20 @@ public class DimensionContext(
     {
         regionInvalidation.Frame();
         sectionInvalidation.Frame();
+
+        var now = DateTime.UtcNow;
         chunkCollector.Frame();
 
-        if (requesterType)
-            chunkRequester.Frame();
-        else sectionRequester.Frame();
+        var dt = DateTime.UtcNow - now;
+        if (dt.TotalMilliseconds > 0.5)
+            Console.WriteLine($"over {dt.TotalMilliseconds}");
+
+        chunkRequester.Frame();
+        sectionRequester.Frame();
 
         chunkReceiver.Frame();
         sectionReceiver.Frame();
         regionReceiver.Frame();
-
-        requesterType = !requesterType;
 
         blockChanges.Clear();
     }
