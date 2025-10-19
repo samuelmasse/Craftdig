@@ -11,6 +11,7 @@ public class PlayerState(
     WorldTick tick,
     DimensionMetrics dimensionMetrics,
     DimensionContext dimension,
+    DimensionSharedVertexBufferMenu dimensionSharedVertexBufferMenu,
     PlayerEnt ent,
     PlayerContext player,
     PlayerDebugMenu debugMenu,
@@ -39,6 +40,7 @@ public class PlayerState(
     {
         player.Load();
         Node(menus).Mut(debugMenu.Create);
+        Node(menus).Mut(dimensionSharedVertexBufferMenu.Create);
     }
 
     public override void Unload()

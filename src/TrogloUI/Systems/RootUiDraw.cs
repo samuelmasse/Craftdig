@@ -15,6 +15,9 @@ public class RootUiDraw(RootSprites sprites, RootUiScale scale, RootUiPosition p
         DrawFlatSurface(o, n);
         DrawTexture(o, n);
         DrawText(o, n);
+
+        if (n.HasOnDrawF())
+            n.OnDrawF()?.Invoke(o);
     }
 
     private void DrawFlatSurface(Vector2 o, EntObj n)
