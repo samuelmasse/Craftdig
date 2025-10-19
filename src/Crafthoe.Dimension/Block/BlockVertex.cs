@@ -3,6 +3,8 @@ namespace AlvorEngine;
 [StructLayout(LayoutKind.Sequential)]
 public readonly record struct BlockVertex(Vector3 Position, Vector3 Color, Vector3 TexCoord) : IVertex
 {
+    public static readonly int Size = Marshal.SizeOf<BlockVertex>();
+
     public static void SetAttributes(Glw gl)
     {
         gl.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, 9 * sizeof(float), 0);

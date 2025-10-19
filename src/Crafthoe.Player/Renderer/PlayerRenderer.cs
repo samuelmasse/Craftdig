@@ -7,11 +7,13 @@ public class PlayerRenderer(
     RootBackbuffer backbuffer,
     ModuleFaceAtlas blockAtlas,
     WorldTick tick,
+    DimensionSharedVertexBuffer svb,
     DimensionBlockProgram blockProgram,
     DimensionChunks chunks,
     DimensionSections sections,
     DimensionMetrics metrics,
     DimensionChunkRequester chunkRequester,
+    DimensionSectionSharedVertexArray sectionSharedVertexArray,
     PlayerGlw gl,
     PlayerPerspective perspective,
     PlayerCamera camera,
@@ -42,6 +44,7 @@ public class PlayerRenderer(
         (pos.Y, pos.Z) = (pos.Z, pos.Y);
 
         metrics.RenderMetric.Start();
+        gl.BindVertexArray(sectionSharedVertexArray.Vao);
 
         for (int dy = -chunkRequester.Far; dy <= chunkRequester.Far; dy++)
         {
@@ -67,14 +70,19 @@ public class PlayerRenderer(
                     blockProgram.Offset = (Vector3)(nsloc.Swizzle() * SectionSize - pos);
 
                     var mesh = section.TerrainMesh();
-                    gl.BindVertexArray(mesh.Vao);
-                    gl.DrawElements(BeginMode.Triangles,
-                        quadIndexBuffer.IndexCount(mesh.Count), DrawElementsType.UnsignedInt, 0);
-                    gl.UnbindVertexArray();
+                    int addr = (int)svb.Addr(mesh.Alloc);
+
+                    GL.DrawElementsBaseVertex(
+                        PrimitiveType.Triangles,
+                        quadIndexBuffer.IndexCount(mesh.Count),
+                        DrawElementsType.UnsignedInt,
+                        0,
+                        addr / BlockVertex.Size);
                 }
             }
         }
 
+        gl.UnbindVertexArray();
         metrics.RenderMetric.End();
 
         blockAtlas.Unbind(blockProgram.SamplerTexture);

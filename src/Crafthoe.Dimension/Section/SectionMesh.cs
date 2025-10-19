@@ -1,3 +1,7 @@
 namespace Crafthoe.Dimension;
 
-public record struct SectionMesh(int Vao, int Vbo, int Count);
+public struct SectionMesh
+{
+    public int Alloc;
+    public int Count;
+}

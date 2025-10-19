@@ -8,6 +8,7 @@ public class PlayerDebugMenu(
     RootKeyboard keyboard,
     AppStyle s,
     DimensionMetrics dimensionMetrics,
+    DimensionSharedVertexBuffer svb,
     PlayerEnt ent,
     PlayerCamera camera,
     PlayerSelected selected)
@@ -29,7 +30,8 @@ public class PlayerDebugMenu(
             () => text.Format("Buffers: {0}", gl.BufferTotalUsage),
             () => text.Format("Selected Loc: {0}", selected.Loc.GetValueOrDefault()),
             () => text.Format("Selected Normal: {0}", selected.Normal.GetValueOrDefault()),
-            () => text.Format("TPS: {0}", dimensionMetrics.TickMetricWindow.Value.Ticks)
+            () => text.Format("TPS: {0}", dimensionMetrics.TickMetricWindow.Value.Ticks),
+            () => text.Format("SVB: {0}", svb.Allocator.Used)
         ];
 
         Node(root, out var list)

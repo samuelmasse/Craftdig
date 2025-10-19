@@ -26,13 +26,7 @@ public class DimensionContext(
         regionInvalidation.Frame();
         sectionInvalidation.Frame();
 
-        var now = DateTime.UtcNow;
         chunkCollector.Frame();
-
-        var dt = DateTime.UtcNow - now;
-        if (dt.TotalMilliseconds > 0.5)
-            Console.WriteLine($"over {dt.TotalMilliseconds}");
-
         chunkRequester.Frame();
         sectionRequester.Frame();
 

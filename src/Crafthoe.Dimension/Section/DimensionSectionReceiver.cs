@@ -3,7 +3,6 @@ namespace Crafthoe.Dimension;
 [Dimension]
 public class DimensionSectionReceiver(
     DimensionMetrics metrics,
-    DimensionBlockProgram blockProgram,
     DimensionSectionMeshTransferer meshTransferer,
     DimensionSections sections,
     DimensionSectionThreadBufferBag bag,
@@ -30,8 +29,7 @@ public class DimensionSectionReceiver(
             return;
 
         meshTransferer.Transfer(
-            blockProgram,
-            (ReadOnlySpan<BlockVertex>)CollectionsMarshal.AsSpan(output.Buffer),
+            CollectionsMarshal.AsSpan(output.Buffer),
             ref section.TerrainMesh());
 
         if (section.TerrainMesh().Count > 0 && !section.Chunk().Rendered().ContainsKey(section.Sloc().Z))
