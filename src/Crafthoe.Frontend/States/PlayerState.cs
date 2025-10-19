@@ -18,7 +18,8 @@ public class PlayerState(
     PlayerOverlayMenu playerOverlayMenu,
     PlayerHandMenu playerHandMenu,
     PlayerCreativeInventoryMenu creativeInventoryMenu,
-    PlayerSurvivalInventoryMenu survivalInventoryMenu) : State
+    PlayerSurvivalInventoryMenu survivalInventoryMenu,
+    PlayerUnloadWorldAction unloadWorldAction) : State
 {
     private readonly Dictionary<Keys, Action<EntObj>> keyMenus = new()
     {
@@ -45,6 +46,7 @@ public class PlayerState(
         ui.Nodes().Remove(hand);
         ui.Nodes().Remove(menus);
         ui.Nodes().Remove(overlay);
+        unloadWorldAction.Run();
     }
 
     public override void Update(double time)

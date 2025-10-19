@@ -36,12 +36,14 @@ public class DimensionRegionThreadFileHandles(DimensionRegionThreadFlusherBag fl
         {
             var (handle, _) = queue.Dequeue();
             set.Remove(handle);
-            flusherQueue.Flush((handle, false));
+
+            if (!handle.IsClosed)
+                flusherQueue.Flush((handle, false));
         }
 
         flusherQueue.WaitAll();
 
-        Console.WriteLine($"{handles.Count} {(DateTime.UtcNow - now).TotalMilliseconds}");
+        Console.WriteLine($"flush {handles.Count} {(DateTime.UtcNow - now).TotalMilliseconds}ms");
     }
 
     public void Drain()
@@ -56,7 +58,23 @@ public class DimensionRegionThreadFileHandles(DimensionRegionThreadFlusherBag fl
 
         flusherQueue.WaitAll();
         handles.Clear();
+    }
 
-        Console.Write($"Drain took {(DateTime.UtcNow - now).TotalMilliseconds}ms");
+    public void Drain(ReadOnlySpan<string> files)
+    {
+        var now = DateTime.UtcNow;
+
+        foreach (var file in files)
+        {
+            if (handles.TryGetValue(file, out var handle))
+                flusherQueue.Flush((handle, true));
+        }
+
+        flusherQueue.WaitAll();
+
+        foreach (var file in files)
+            handles.Remove(file);
+
+        Console.WriteLine($"drain {(DateTime.UtcNow - now).TotalMilliseconds}ms");
     }
 }

@@ -31,7 +31,9 @@ public class DimensionSectionThreads(
     {
         while (true)
         {
-            queue.Wait();
+            if (!stop)
+                queue.Wait();
+
             if (stop)
                 break;
 

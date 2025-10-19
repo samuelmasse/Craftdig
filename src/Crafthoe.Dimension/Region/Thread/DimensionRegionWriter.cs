@@ -20,9 +20,12 @@ public class DimensionRegionWriter(
 
         EncodeIntoBuffer(blocks);
 
-        RandomAccess.Write(regionFileHandles[state.Files.Buckets[alloc.Bucket]],
-            zeroes.AsSpan()[..alloc.Count],
-            alloc.Offset * regionBuckets.Sizes[alloc.Bucket]);
+        if (alloc.Bucket != 0)
+        {
+            RandomAccess.Write(regionFileHandles[state.Files.Buckets[alloc.Bucket]],
+                zeroes.AsSpan()[..alloc.Count],
+                alloc.Offset * regionBuckets.Sizes[alloc.Bucket]);
+        }
 
         if (regionBuckets.Sizes[alloc.Bucket] <= bytes)
         {
