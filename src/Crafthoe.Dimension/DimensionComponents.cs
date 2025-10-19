@@ -9,10 +9,10 @@ file record DimensionComponents(
     [ComponentToString] Vector2i Cloc,
     [ComponentReturnSpan] Memory<Ent> Blocks,
     [ComponentReturnSpan] Memory<EntPtr> Sections,
-    LazySortedList<int, int> Unrendered,
+    SortedList<int, int> Unrendered,
     bool IsUnrenderedListBuilt,
     bool IsReadyToRender,
-    LazySortedList<int, int> Rendered,
+    SortedList<int, int> Rendered,
     int ChunkBagIndex,
 
     // Section

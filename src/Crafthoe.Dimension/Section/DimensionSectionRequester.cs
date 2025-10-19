@@ -35,11 +35,9 @@ public class DimensionSectionRequester(
 
         chunks.TryGet(cloc, out var chunk);
 
-        for (int sz = 0; sz < SectionHeight; sz++)
+        for (var i = 0; i < chunk.Unrendered().Count; i++)
         {
-            if (!chunk.Unrendered().ContainsKey(sz))
-                continue;
-
+            int sz = chunk.Unrendered().Values[i];
             var nsloc = new Vector3i(chunk.Cloc().X, chunk.Cloc().Y, sz);
 
             sections.TryGet(nsloc, out var section);

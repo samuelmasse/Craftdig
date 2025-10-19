@@ -7,6 +7,7 @@ public class DimensionChunkUnloader(
     DimensionSectionMeshTransferer meshTransferer,
     DimensionSections sections,
     DimensionChunkRenderDescheduler chunkRenderDescheduler,
+    DimensionChunkSortedLists chunkSortedLists,
     DimensionRegionThreadWorkQueue regionThreadWorkQueue,
     DimensionRegionInvalidation regionInvalidation)
 {
@@ -34,6 +35,9 @@ public class DimensionChunkUnloader(
 
         if (!chunk.Sections().IsEmpty)
             sections.ReturnSections(chunk.Sections());
+
+        chunkSortedLists.Return(chunk.Unrendered());
+        chunkSortedLists.Return(chunk.Rendered());
 
         chunks.Free(cloc);
     }
