@@ -2,25 +2,24 @@ namespace Crafthoe.Dimension;
 
 [Dimension]
 public class DimensionSectionReceiver(
-    DimensionMetrics metrics,
     DimensionSectionMeshTransferer meshTransferer,
     DimensionSections sections,
     DimensionSectionThreadBufferBag bag,
-    DimensionSectionThreadOutputQueue outputQueue)
+    DimensionSectionThreadOutputBag outputBag)
 {
     public void Frame()
     {
-        metrics.SectionMetric.Start();
+        int count = outputBag.Count;
 
-        while (outputQueue.TryDequeue(out var output))
+        while (count > 0 && outputBag.TryTake(out var output))
         {
             Receive(output);
 
             output.Buffer.Clear();
             bag.Add(output.Buffer);
-        }
 
-        metrics.SectionMetric.End();
+            count--;
+        }
     }
 
     private void Receive(SectionThreadOutput output)

@@ -33,25 +33,8 @@ public class DimensionChunkRenderScheduler(DimensionChunks chunks)
 
         if (!chunk.IsUnrenderedListBuilt())
         {
-            var mem = chunk.GetBlocks();
             for (int sz = 0; sz < SectionHeight; sz++)
-            {
-                int start = sz * SectionVolume;
-                var block = mem[start];
-                bool uniform = true;
-
-                for (int i = 1; i < SectionVolume; i++)
-                {
-                    if (mem[start + i] != block)
-                    {
-                        uniform = false;
-                        break;
-                    }
-                }
-
-                if (!uniform || block.IsSolid())
-                    chunk.Unrendered().Add(sz, sz);
-            }
+                chunk.Unrendered().Add(sz, sz);
 
             chunk.IsUnrenderedListBuilt() = true;
         }

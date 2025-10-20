@@ -12,8 +12,13 @@ public class DimensionChunkReceiver(
 {
     public void Frame()
     {
-        while (outputBag.TryTake(out var output))
+        int count = outputBag.Count;
+
+        while (count > 0 && outputBag.TryTake(out var output))
+        {
             Receive(output);
+            count--;
+        }
     }
 
     private void Receive(ChunkThreadInput output)
