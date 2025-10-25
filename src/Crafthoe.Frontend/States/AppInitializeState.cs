@@ -11,7 +11,8 @@ public class AppInitializeState(
     AppScope scope,
     AppFiles files,
     AppTooltipMenu tooltipMenu,
-    AppZoomMenu zoomMenu) : State
+    AppZoomMenu zoomMenu,
+    AppTestClientAction testClientAction) : State
 {
     public override void Load()
     {
@@ -28,5 +29,7 @@ public class AppInitializeState(
         module.Scope<ModuleLoaderScope>().Get<ModuleLoader>().Run();
 
         state.Current = module.New<ModuleMenuState>();
+
+        testClientAction.Run();
     }
 }

@@ -28,10 +28,13 @@
         <Using Include="OpenTK.Windowing.Common.Input" />
         <Using Include="OpenTK.Windowing.Desktop" />
         <Using Include="OpenTK.Windowing.GraphicsLibraryFramework" />
+        <Using Include="System.Buffers.Binary" />
         <Using Include="System.Collections.Concurrent" />
         <Using Include="System.Diagnostics" />
         <Using Include="System.Diagnostics.CodeAnalysis" />
         <Using Include="System.Globalization" />
+        <Using Include="System.Net" />
+        <Using Include="System.Net.Sockets" />
         <Using Include="System.IO.Compression" />
         <Using Include="System.Reflection" />
         <Using Include="System.Runtime" />

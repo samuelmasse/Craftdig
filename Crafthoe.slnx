@@ -6,6 +6,7 @@
     <Project Path="src/Crafthoe.Module/Crafthoe.Module.csproj" />
     <Project Path="src/Crafthoe.Native/Crafthoe.Native.csproj" />
     <Project Path="src/Crafthoe.Player/Crafthoe.Player.csproj" />
+    <Project Path="src/Crafthoe.Server/Crafthoe.Server.csproj" Id="1b1deb04-2f80-4688-ba54-f8f87630328d" />
     <Project Path="src/Crafthoe.World/Crafthoe.World.csproj" />
     <Project Path="src/Crafthoe/Crafthoe.csproj" />
     <Project Path="src/TrogloUI/TrogloUI.csproj" />
