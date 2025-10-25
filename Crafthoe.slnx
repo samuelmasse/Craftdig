@@ -1,13 +1,25 @@
 <Solution>
-    <Project Path="src/Crafthoe.Dev/Crafthoe.Dev.csproj" />
-    <Project Path="src/Crafthoe.App/Crafthoe.App.csproj" />
-    <Project Path="src/Crafthoe.Dimension/Crafthoe.Dimension.csproj" />
-    <Project Path="src/Crafthoe.Frontend/Crafthoe.Frontend.csproj" />
-    <Project Path="src/Crafthoe.Module/Crafthoe.Module.csproj" />
-    <Project Path="src/Crafthoe.Native/Crafthoe.Native.csproj" />
-    <Project Path="src/Crafthoe.Player/Crafthoe.Player.csproj" />
-    <Project Path="src/Crafthoe.Server/Crafthoe.Server.csproj" Id="1b1deb04-2f80-4688-ba54-f8f87630328d" />
-    <Project Path="src/Crafthoe.World/Crafthoe.World.csproj" />
-    <Project Path="src/Crafthoe/Crafthoe.csproj" />
+    <Folder Name="/Client/">
+        <Project Path="src/Crafthoe.Dimension.Client/Crafthoe.Dimension.Client.csproj" Id="d96f12fa-cadd-4044-968c-2e55a31a9980" />
+        <Project Path="src/Crafthoe.Frontend/Crafthoe.Frontend.csproj" />
+        <Project Path="src/Crafthoe.Module.Client/Crafthoe.Module.Client.csproj" Id="73053e3e-6f5f-44d3-95af-49f83c9fda0b" />
+        <Project Path="src/Crafthoe.Native/Crafthoe.Native.csproj" />
+        <Project Path="src/Crafthoe.Player.Client/Crafthoe.Player.Client.csproj" Id="11e61da7-83e7-4f25-b84c-103f0c92100f" />
+        <Project Path="src/Crafthoe/Crafthoe.csproj" />
+    </Folder>
+    <Folder Name="/Common/">
+        <Project Path="src/Crafthoe.App/Crafthoe.App.csproj" />
+        <Project Path="src/Crafthoe.Dimension/Crafthoe.Dimension.csproj" />
+        <Project Path="src/Crafthoe.Module/Crafthoe.Module.csproj" />
+        <Project Path="src/Crafthoe.Player/Crafthoe.Player.csproj" />
+        <Project Path="src/Crafthoe.World/Crafthoe.World.csproj" />
+    </Folder>
+    <Folder Name="/Scripts/">
+        <Project Path="src/Crafthoe.Dev.Server/Crafthoe.Dev.Server.csproj" Id="33843de9-783f-44d5-a71d-0ea813d958d2" />
+        <Project Path="src/Crafthoe.Dev/Crafthoe.Dev.csproj" />
+    </Folder>
+    <Folder Name="/Server/">
+        <Project Path="src/Crafthoe.Server/Crafthoe.Server.csproj" Id="1b1deb04-2f80-4688-ba54-f8f87630328d" />
+    </Folder>
     <Project Path="src/TrogloUI/TrogloUI.csproj" />
 </Solution>

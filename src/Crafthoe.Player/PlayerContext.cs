@@ -12,7 +12,6 @@ public class PlayerContext(
     PlayerEnt ent,
     PlayerSelected selected,
     PlayerMovement movement,
-    PlayerRenderer renderer,
     PlayerTeleporter teleporter)
 {
     private int mainCooldown;
@@ -86,6 +85,4 @@ public class PlayerContext(
 
         teleporter.Update();
     }
-
-    public void Render() => renderer.Render();
 }

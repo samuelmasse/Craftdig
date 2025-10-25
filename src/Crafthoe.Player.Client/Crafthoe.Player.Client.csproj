@@ -1,23 +1,18 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <ItemGroup>
-        <ProjectReference Include="..\Crafthoe.Player.Client\Crafthoe.Player.Client.csproj" />
-        <ProjectReference Include="..\TrogloUI\TrogloUI.csproj" />
+        <ProjectReference Include="..\Crafthoe.Dimension.Client\Crafthoe.Dimension.Client.csproj" />
+        <ProjectReference Include="..\Crafthoe.Player\Crafthoe.Player.csproj" />
     </ItemGroup>
 
     <ItemGroup>
         <Using Include="AlvorEngine" />
-        <Using Include="AlvorEngine.Loop" />
         <Using Include="Crafthoe.App" />
         <Using Include="Crafthoe.Dimension" />
         <Using Include="Crafthoe.Module" />
         <Using Include="Crafthoe.Player" />
         <Using Include="Crafthoe.World" />
         <Using Include="Crafthoe.Dimension.Unit">
-            <Static>True</Static>
-        </Using>
-        <Using Include="TrogloUI" />
-        <Using Include="TrogloUI.UiSyntax">
             <Static>True</Static>
         </Using>
     </ItemGroup>

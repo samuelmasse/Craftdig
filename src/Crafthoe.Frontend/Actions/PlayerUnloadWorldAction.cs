@@ -7,7 +7,9 @@ public class PlayerUnloadWorldAction(WorldScope worldScope, WorldDimensionBag di
     {
         foreach (var dimension in dimensionBag.Ents)
         {
-            dimension.DimensionScope().Scope<DimensionLoaderScope>().Get<DimensionUnloader>().Run();
+            var dimensionLoaderScope = dimension.DimensionScope().Scope<DimensionLoaderScope>();
+            dimensionLoaderScope.Get<DimensionClientUnloader>().Run();
+            dimensionLoaderScope.Get<DimensionUnloader>().Run();
             dimension.Dispose();
         }
 

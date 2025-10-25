@@ -1,7 +1,7 @@
 namespace Crafthoe.Frontend;
 
 [Module]
-public class ModuleCreateWorldAction(AppPaths paths)
+public class ModuleCreateWorldAction(AppPaths paths, ModuleWriteWorldMetaAction writeWorldMetaAction)
 {
     public WorldPaths Run(WorldMeta args)
     {
@@ -9,18 +9,9 @@ public class ModuleCreateWorldAction(AppPaths paths)
         string unusedName = BumpUsedName(sanitizedName);
         string folder = Path.Join(paths.SavePath, unusedName);
 
-        var metadata = Toml.FromModel(new WorldMetadataFile()
-        {
-            Name = args.Name,
-            Seed = args.Seed,
-            GameMode = args.GameMode.ModuleName(),
-            Difficulty = args.Difficulty.ModuleName()
-        }, new() { ConvertPropertyName = (s) => s });
-
-        Directory.CreateDirectory(folder);
-        File.WriteAllText(Path.Join(folder, "Metadata.toml"), metadata);
-
-        return new(folder);
+        var worldPaths = new WorldPaths(folder);
+        writeWorldMetaAction.Write(args, worldPaths);
+        return worldPaths;
     }
 
     private string SanitizeFolderName(string name)

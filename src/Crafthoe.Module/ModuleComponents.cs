@@ -22,13 +22,6 @@ file record ModuleComponents(
     // Block
     [ComponentToString] bool IsBlock,
     bool IsBuildable,
-    BlockFaces Faces,
     bool IsSolid,
-    int MaxStack,
-
-    // Face
-    [ComponentToString] bool IsFace,
-    [ComponentToString] string FaceFile,
-    [ComponentToString] int FaceIndex,
-    Texture2D? FaceTexture
+    int MaxStack
 );

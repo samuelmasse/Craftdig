@@ -5,6 +5,7 @@ public class AppTestClientAction
 {
     public void Run()
     {
+        return;
         Console.WriteLine("Connecting");
         var s = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp) { NoDelay = true };
         var ns = new NetSocket(s);

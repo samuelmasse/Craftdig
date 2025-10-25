@@ -1,0 +1,17 @@
+namespace Crafthoe.Dimension;
+
+[Components]
+file record DimensionClientComponents(
+    // Chunk
+    [ComponentReturnSpan] Memory<EntPtr> Sections,
+    SortedList<int, int> Unrendered,
+    bool IsUnrenderedListBuilt,
+    bool IsReadyToRender,
+    SortedList<int, int> Rendered,
+
+    // Section
+    [ComponentToString] bool IsSection,
+    [ComponentToString] Vector3i Sloc,
+    SectionMesh TerrainMesh,
+    EntMut Chunk
+);

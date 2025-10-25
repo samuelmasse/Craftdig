@@ -26,7 +26,10 @@ public class AppInitializeState(
 
         var module = scope.Scope<ModuleScope>();
         module.Handler(module.Get<ModuleEntMutInjector>());
-        module.Scope<ModuleLoaderScope>().Get<ModuleLoader>().Run();
+
+        var moduleLoaderScope = module.Scope<ModuleLoaderScope>();
+        moduleLoaderScope.Get<ModuleLoader>().Run();
+        moduleLoaderScope.Get<ModuleClientLoader>().Run();
 
         state.Current = module.New<ModuleMenuState>();
 

@@ -16,9 +16,4 @@
         </Using>
     </ItemGroup>
 
-
-    <PropertyGroup>
-        <OutputType>Exe</OutputType>
-    </PropertyGroup>
-
 </Project>

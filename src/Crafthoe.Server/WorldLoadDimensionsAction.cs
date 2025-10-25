@@ -1,21 +1,14 @@
-namespace Crafthoe.Frontend;
+namespace Crafthoe.Server;
 
-[Module]
-public class ModuleLoadWorldAction(RootState state, ModuleEnts ents, ModuleScope scope, ModuleReadWorldMetaAction readWorldMetaAction)
+[World]
+public class WorldLoadDimensionsAction(ModuleEnts ents, WorldScope worldScope)
 {
-    public void Run(WorldPaths paths)
+    public void Run()
     {
-        var metadata = readWorldMetaAction.Read(paths);
-
-        var worldScope = scope.Scope<WorldScope>();
-        worldScope.Add(paths);
-        worldScope.Add(metadata);
         worldScope.Scope<WorldLoaderScope>().Get<WorldLoader>().Run();
 
         var dimensionScope = worldScope.Scope<DimensionScope>();
-
-        var dimensionEnt = new EntPtr()
-            .DimensionScope(dimensionScope);
+        var dimensionEnt = new EntPtr().DimensionScope(dimensionScope);
         worldScope.Get<WorldDimensionBag>().Add(dimensionEnt);
 
         // For now just find the first dimension
@@ -29,15 +22,9 @@ public class ModuleLoadWorldAction(RootState state, ModuleEnts ents, ModuleScope
 
         var dimensionLoaderScope = dimensionScope.Scope<DimensionLoaderScope>();
         dimensionLoaderScope.Get<DimensionLoader>().Run();
-        dimensionLoaderScope.Get<DimensionClientLoader>().Run();
 
         var players = dimensionScope.Get<DimensionPlayerBag>();
         var player = new EntObj();
         players.Add((EntMut)player);
-
-        var playerScope = dimensionScope.Scope<PlayerScope>();
-        playerScope.Add(new PlayerEnt(player));
-
-        state.Current = playerScope.New<PlayerState>();
     }
 }

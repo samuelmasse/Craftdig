@@ -5,11 +5,8 @@ public class DimensionContext(
     DimensionScope scope,
     DimensionChunkRequester chunkRequester,
     DimensionChunkCollector chunkCollector,
-    DimensionSectionRequester sectionRequester,
-    DimensionSectionReceiver sectionReceiver,
     DimensionChunkReceiver chunkReceiver,
     DimensionRegionReceiver regionReceiver,
-    DimensionSectionInvalidation sectionInvalidation,
     DimensionRegionInvalidation regionInvalidation,
     DimensionBlockChanges blockChanges,
     DimensionRigids rigids)
@@ -24,16 +21,10 @@ public class DimensionContext(
     public void Frame()
     {
         regionInvalidation.Frame();
-        sectionInvalidation.Frame();
-
         chunkCollector.Frame();
         chunkRequester.Frame();
-        sectionRequester.Frame();
-
         chunkReceiver.Frame();
-        sectionReceiver.Frame();
         regionReceiver.Frame();
-
         blockChanges.Clear();
     }
 }

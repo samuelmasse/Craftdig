@@ -6,9 +6,8 @@ public class DimensionChunkReceiver(
     DimensionChunks chunks,
     DimensionChunkPending chunkPending,
     DimensionChunkBag chunkBag,
-    DimensionChunkRenderScheduler chunkRenderScheduler,
-    DimensionChunkSortedLists chunkSortedLists,
-    DimensionRegionThreadWorkQueue regionThreadWorkQueue)
+    DimensionRegionThreadWorkQueue regionThreadWorkQueue,
+    DimensionChunkReceiverHandlers chunkReceiverHandlers)
 {
     public void Frame()
     {
@@ -40,12 +39,9 @@ public class DimensionChunkReceiver(
         chunks.Alloc(cloc);
         var chunk = chunks[cloc];
         chunk.Blocks() = output.Blocks;
-        chunk.Unrendered() = chunkSortedLists.Take();
-        chunk.Rendered() = chunkSortedLists.Take();
-
-        chunkRenderScheduler.Add(cloc);
         chunkBag.Add(chunk);
-
         chunkPending.Remove(cloc);
+        chunkReceiverHandlers.Run(chunk);
+        Console.WriteLine(chunk.Cloc());
     }
 }

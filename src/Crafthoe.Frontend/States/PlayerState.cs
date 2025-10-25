@@ -11,9 +11,11 @@ public class PlayerState(
     WorldTick tick,
     DimensionMetrics dimensionMetrics,
     DimensionContext dimension,
+    DimensionClientContext dimensionClient,
     DimensionSharedVertexBufferMenu dimensionSharedVertexBufferMenu,
     PlayerEnt ent,
     PlayerContext player,
+    PlayerRenderer playerRenderer,
     PlayerDebugMenu debugMenu,
     PlayerEscapeMenu escapeMenu,
     PlayerOverlayMenu playerOverlayMenu,
@@ -125,8 +127,9 @@ public class PlayerState(
 
     public override void Render()
     {
+        dimensionClient.Frame();
         dimension.Frame();
-        player.Render();
+        playerRenderer.Render();
     }
 
     public override void Draw()

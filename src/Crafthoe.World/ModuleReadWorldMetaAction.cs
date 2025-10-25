@@ -1,4 +1,4 @@
-namespace Crafthoe.Frontend;
+namespace Crafthoe.World;
 
 [Module]
 public class ModuleReadWorldMetaAction(ModuleEnts ents)

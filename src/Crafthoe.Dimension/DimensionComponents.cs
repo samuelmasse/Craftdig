@@ -8,18 +8,7 @@ file record DimensionComponents(
     [ComponentToString] bool IsChunk,
     [ComponentToString] Vector2i Cloc,
     [ComponentReturnSpan] Memory<Ent> Blocks,
-    [ComponentReturnSpan] Memory<EntPtr> Sections,
-    SortedList<int, int> Unrendered,
-    bool IsUnrenderedListBuilt,
-    bool IsReadyToRender,
-    SortedList<int, int> Rendered,
     int ChunkBagIndex,
-
-    // Section
-    [ComponentToString] bool IsSection,
-    [ComponentToString] Vector3i Sloc,
-    SectionMesh TerrainMesh,
-    EntMut Chunk,
 
     // Rigid
     Vector3d Position,

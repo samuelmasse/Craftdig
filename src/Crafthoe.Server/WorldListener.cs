@@ -1,12 +1,10 @@
 namespace Crafthoe.Server;
 
-[App]
-public class AppServer(NetLoop nloop, NetEcho necho)
+[World]
+public class WorldListener(NetLoop nloop, NetEcho necho)
 {
-    public void Run()
+    public void Start()
     {
-        nloop.Register(NetEcho.Type, necho.Receive);
-
         using var listener = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
         var addr = IPAddress.Parse("127.0.0.1");
         int port = 8080;
