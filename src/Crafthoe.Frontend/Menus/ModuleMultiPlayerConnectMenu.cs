@@ -3,7 +3,8 @@ namespace Crafthoe.Frontend;
 [Module]
 public class ModuleMultiPlayerConnectMenu(
     AppStyle s,
-    ModuleMultiPlayerConnectAction multiPlayerConnectAction)
+    ModuleMultiPlayerConnectAction multiPlayerConnectAction,
+    ModuleMultiPlayerConnectingMenu moduleMultiPlayerConnectingMenu)
 {
     public void Create(EntObj root)
     {
@@ -26,7 +27,7 @@ public class ModuleMultiPlayerConnectMenu(
 
             Node(form)
                 .Mut(s.Textbox)
-                .MaxLengthV(29)
+                .MaxLengthV(120)
                 .StringBuilderV(host)
                 .IsInitialFocusV(true);
 
@@ -36,7 +37,7 @@ public class ModuleMultiPlayerConnectMenu(
 
             Node(form)
                 .Mut(s.Textbox)
-                .MaxLengthV(29)
+                .MaxLengthV(6)
                 .StringBuilderV(port);
         }
 
@@ -59,14 +60,23 @@ public class ModuleMultiPlayerConnectMenu(
                     .SizeV((s.ItemWidthL, 0))
                     .InnerSpacingV(s.ItemSpacing);
                 {
+                    var portChars = new char[byte.MaxValue];
+
                     Node(leftButtonsVertical)
                         .OnPressF(() =>
                         {
                             string connHost = host.ToString();
-                            string connPort = port.ToString();
-                            int.TryParse(connPort, out int numberPort);
+                            int connPort = int.Parse(port.ToString());
 
-                            multiPlayerConnectAction.Run(connHost, numberPort);
+                            multiPlayerConnectAction.Start(connHost, connPort);
+
+                            root.StackRootV()?.NodeStack().Push(
+                                Node().StackRootV(root.StackRootV()).Mut(moduleMultiPlayerConnectingMenu.Create));
+                        })
+                        .IsInputDisabledF(() =>
+                        {
+                            port.CopyTo(0, portChars, port.Length);
+                            return !int.TryParse(portChars.AsSpan()[..port.Length], out _);
                         })
                         .TextV("Connect")
                         .Mut(s.Button);

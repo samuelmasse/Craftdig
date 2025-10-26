@@ -3,10 +3,9 @@ namespace Crafthoe.Player;
 [Player]
 public class PlayerTeleporter(
     RootKeyboard keyboard,
-    WorldMeta meta,
     PlayerEnt player)
 {
-    private readonly Random rng = new(meta.Seed);
+    private readonly Random rng = new();
     private readonly List<Vector3d> history = [];
     private int index;
 

@@ -1,7 +1,7 @@
 namespace Crafthoe.Frontend;
 
 [Player]
-public class PlayerUnloadWorldAction(WorldScope worldScope, WorldDimensionBag dimensionBag)
+public class PlayerSinglePlayerUnloadWorldAction(WorldScope worldScope, WorldDimensionBag dimensionBag)
 {
     public void Run()
     {

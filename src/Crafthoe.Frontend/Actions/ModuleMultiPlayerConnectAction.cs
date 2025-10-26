@@ -3,20 +3,56 @@ namespace Crafthoe.Frontend;
 [Module]
 public class ModuleMultiPlayerConnectAction
 {
-    public void Run(string host, int port)
+    private string? host;
+    private int port;
+    private Thread? thread;
+    private Socket? socket;
+    private Exception? exception;
+
+    public string? Host => host;
+    public int Port => port;
+    public bool Connecting => thread != null;
+    public Socket? Socket => socket;
+    public Exception? Exception => exception;
+
+    public void Start(string host, int port)
     {
-        Console.WriteLine("Connecting");
-        var s = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp) { NoDelay = true };
-        var ns = new NetSocket(s);
-        s.Connect(host, port);
-        Console.WriteLine("Connected");
+        while (thread != null)
+            Thread.Sleep(10);
 
-        var nloop = new NetLoop();
-        var necho = new NetEcho();
-        nloop.Register(NetEcho.Type, necho.Receive);
-        new Thread(() => nloop.Run(ns)).Start();
+        this.host = host;
+        this.port = port;
 
-        ns.Send(necho.Wrap("Hello this is the client"));
-        ns.Send(necho.Wrap("Please give me some chunks"));
+        socket = null;
+        exception = null;
+
+        thread = new Thread(() =>
+        {
+            try
+            {
+                socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp) { NoDelay = true };
+                socket.Connect(host, port);
+            }
+            catch (Exception e)
+            {
+                try { socket?.Dispose(); } catch { }
+                socket = null;
+                exception = e;
+            }
+            finally
+            {
+                thread = null;
+            }
+        });
+
+        thread.Start();
+    }
+
+    public void Cancel()
+    {
+        if (thread == null)
+            return;
+
+        try { socket?.Dispose(); } catch { }
     }
 }

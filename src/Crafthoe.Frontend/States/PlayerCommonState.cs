@@ -1,7 +1,7 @@
 namespace Crafthoe.Frontend;
 
 [Player]
-public class PlayerState(
+public class PlayerCommonState(
     RootCanvas canvas,
     RootMouse mouse,
     RootKeyboard keyboard,
@@ -11,7 +11,6 @@ public class PlayerState(
     WorldTick tick,
     DimensionMetrics dimensionMetrics,
     DimensionContext dimension,
-    DimensionServerContext dimensionServer,
     DimensionClientContext dimensionClient,
     DimensionSharedVertexBufferMenu dimensionSharedVertexBufferMenu,
     PlayerEnt ent,
@@ -22,8 +21,7 @@ public class PlayerState(
     PlayerOverlayMenu playerOverlayMenu,
     PlayerHandMenu playerHandMenu,
     PlayerCreativeInventoryMenu creativeInventoryMenu,
-    PlayerSurvivalInventoryMenu survivalInventoryMenu,
-    PlayerUnloadWorldAction unloadWorldAction) : State
+    PlayerSurvivalInventoryMenu survivalInventoryMenu) : State
 {
     private readonly Dictionary<Keys, Action<EntObj>> keyMenus = new()
     {
@@ -51,7 +49,6 @@ public class PlayerState(
         ui.Nodes().Remove(hand);
         ui.Nodes().Remove(menus);
         ui.Nodes().Remove(overlay);
-        unloadWorldAction.Run();
     }
 
     public override void Update(double time)
@@ -129,7 +126,6 @@ public class PlayerState(
     public override void Render()
     {
         dimensionClient.Frame();
-        dimensionServer.Frame();
         dimension.Frame();
         playerRenderer.Render();
     }
