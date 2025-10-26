@@ -2,17 +2,10 @@ namespace Crafthoe.Dimension;
 
 [DimensionLoader]
 public class DimensionUnloader(
-    DimensionChunkThreads chunkThreads,
-    DimensionRegionThread regionThread,
-    DimensionMetrics metrics,
-    DimensionRegionInvalidation regionInvalidation)
+    DimensionMetrics metrics)
 {
     public void Run()
     {
-        chunkThreads.Stop();
-        regionInvalidation.Drain();
-        regionThread.Stop();
-
         metrics.Stop();
     }
 }

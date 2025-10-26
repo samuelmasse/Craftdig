@@ -1,10 +1,10 @@
 namespace Crafthoe.World;
 
 [WorldLoader]
-public class WorldLoader(WorldModuleIndicesLoader moduleIndicesLoader)
+public class WorldLoader
 {
     public void Run()
     {
-        moduleIndicesLoader.Run();
+
     }
 }

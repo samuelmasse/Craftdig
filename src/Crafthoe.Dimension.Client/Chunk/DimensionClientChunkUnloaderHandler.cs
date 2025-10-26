@@ -7,7 +7,7 @@ public class DimensionClientChunkUnloaderHandler(
     DimensionChunkSortedLists chunkSortedLists,
     DimensionChunkRenderDescheduler chunkRenderDescheduler)
 {
-    public void Handler(EntMut chunk)
+    public void Handle(EntMut chunk)
     {
         foreach (var section in chunk.GetSections())
         {

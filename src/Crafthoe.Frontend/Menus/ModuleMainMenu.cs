@@ -4,7 +4,8 @@ namespace Crafthoe.Frontend;
 public class ModuleMainMenu(
     RootScreen screen,
     AppStyle s,
-    ModuleSinglePlayerWorldSelectMenu worldSelectMenu)
+    ModuleSinglePlayerWorldSelectMenu worldSelectMenu,
+    ModuleMultiPlayerConnectMenu connectMenu)
 {
     public void Create(EntObj root)
     {
@@ -40,7 +41,8 @@ public class ModuleMainMenu(
                 Node(list2)
                     .Mut(s.Button)
                     .TextV("Multiplayer")
-                    .IsInputDisabledV(true);
+                    .OnPressF(() => root.StackRootV()?.NodeStack().Push(
+                        Node().StackRootV(root.StackRootV()).Mut(connectMenu.Create)));
 
                 Node(list2)
                     .Mut(s.Button)

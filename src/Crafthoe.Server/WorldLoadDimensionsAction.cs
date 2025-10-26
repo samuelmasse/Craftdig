@@ -5,7 +5,9 @@ public class WorldLoadDimensionsAction(ModuleEnts ents, WorldScope worldScope)
 {
     public void Run()
     {
-        worldScope.Scope<WorldLoaderScope>().Get<WorldLoader>().Run();
+        var worldLoaderScope = worldScope.Scope<WorldLoaderScope>();
+        worldLoaderScope.Get<WorldLoader>().Run();
+        worldLoaderScope.Get<WorldServerLoader>().Run();
 
         var dimensionScope = worldScope.Scope<DimensionScope>();
         var dimensionEnt = new EntPtr().DimensionScope(dimensionScope);
@@ -22,6 +24,7 @@ public class WorldLoadDimensionsAction(ModuleEnts ents, WorldScope worldScope)
 
         var dimensionLoaderScope = dimensionScope.Scope<DimensionLoaderScope>();
         dimensionLoaderScope.Get<DimensionLoader>().Run();
+        dimensionLoaderScope.Get<DimensionServerLoader>().Run();
 
         var players = dimensionScope.Get<DimensionPlayerBag>();
         var player = new EntObj();

@@ -2,14 +2,10 @@ namespace Crafthoe.Dimension;
 
 [DimensionLoader]
 public class DimensionLoader(
-    DimensionMetrics metrics,
-    DimensionChunkThreads chunkThreads,
-    DimensionRegionThread regionThread)
+    DimensionMetrics metrics)
 {
     public void Run()
     {
         metrics.Start();
-        chunkThreads.Start();
-        regionThread.Start();
     }
 }

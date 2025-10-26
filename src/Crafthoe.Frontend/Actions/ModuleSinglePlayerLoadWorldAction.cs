@@ -1,7 +1,7 @@
 namespace Crafthoe.Frontend;
 
 [Module]
-public class ModuleLoadWorldAction(RootState state, ModuleEnts ents, ModuleScope scope, ModuleReadWorldMetaAction readWorldMetaAction)
+public class ModuleSinglePlayerLoadWorldAction(RootState state, ModuleEnts ents, ModuleScope scope, ModuleReadWorldMetaAction readWorldMetaAction)
 {
     public void Run(WorldPaths paths)
     {
@@ -10,7 +10,10 @@ public class ModuleLoadWorldAction(RootState state, ModuleEnts ents, ModuleScope
         var worldScope = scope.Scope<WorldScope>();
         worldScope.Add(paths);
         worldScope.Add(metadata);
-        worldScope.Scope<WorldLoaderScope>().Get<WorldLoader>().Run();
+
+        var worldLoaderScope = worldScope.Scope<WorldLoaderScope>();
+        worldLoaderScope.Get<WorldLoader>().Run();
+        worldLoaderScope.Get<WorldServerLoader>().Run();
 
         var dimensionScope = worldScope.Scope<DimensionScope>();
 
@@ -29,7 +32,12 @@ public class ModuleLoadWorldAction(RootState state, ModuleEnts ents, ModuleScope
 
         var dimensionLoaderScope = dimensionScope.Scope<DimensionLoaderScope>();
         dimensionLoaderScope.Get<DimensionLoader>().Run();
+        dimensionLoaderScope.Get<DimensionServerLoader>().Run();
         dimensionLoaderScope.Get<DimensionClientLoader>().Run();
+
+        dimensionScope.Get<DimensionDrawDistance>().Far = dimensionScope.Get<DimensionChunkRequester>().Far;
+        dimensionScope.Get<DimensionChunkReceiverHandlers>().Add(dimensionScope.Get<DimensionClientChunkReceiverHandler>().Handle);
+        dimensionScope.Get<DimensionChunkUnloaderHandlers>().Add(dimensionScope.Get<DimensionClientChunkUnloaderHandler>().Handle);
 
         var players = dimensionScope.Get<DimensionPlayerBag>();
         var player = new EntObj();

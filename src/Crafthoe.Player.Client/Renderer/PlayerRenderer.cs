@@ -12,7 +12,7 @@ public class PlayerRenderer(
     DimensionChunks chunks,
     DimensionSections sections,
     DimensionMetrics metrics,
-    DimensionChunkRequester chunkRequester,
+    DimensionDrawDistance drawDistance,
     DimensionSectionSharedVertexArray sectionSharedVertexArray,
     PlayerGlw gl,
     PlayerPerspective perspective,
@@ -46,15 +46,15 @@ public class PlayerRenderer(
         metrics.RenderMetric.Start();
         gl.BindVertexArray(sectionSharedVertexArray.Vao);
 
-        for (int dy = -chunkRequester.Far; dy <= chunkRequester.Far; dy++)
+        for (int dy = -drawDistance.Far; dy <= drawDistance.Far; dy++)
         {
-            for (int dx = -chunkRequester.Far; dx <= chunkRequester.Far; dx++)
+            for (int dx = -drawDistance.Far; dx <= drawDistance.Far; dx++)
             {
                 var ncloc = cloc + (dx, dy);
 
                 var delta = Vector2i.Abs(cloc - ncloc);
                 var dist = delta.X + delta.Y;
-                if (dist > chunkRequester.Far)
+                if (dist > drawDistance.Far)
                     continue;
 
                 if (!chunks.TryGet(ncloc, out var chunk))

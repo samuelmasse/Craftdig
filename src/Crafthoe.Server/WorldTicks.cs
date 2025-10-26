@@ -22,6 +22,9 @@ public class WorldTicks(WorldTick tick, WorldDimensionBag dimensions)
                     var ctx = dimension.DimensionScope().Get<DimensionContext>();
                     ctx.Tick();
                     ctx.Frame();
+
+                    var sctx = dimension.DimensionScope().Get<DimensionServerContext>();
+                    sctx.Frame();
                 }
 
                 ticks--;

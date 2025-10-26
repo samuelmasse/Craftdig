@@ -4,7 +4,7 @@ namespace Crafthoe.Frontend;
 public class ModuleSinglePlayerWorldSelectMenu(
     AppStyle s,
     AppPaths paths,
-    ModuleLoadWorldAction loadWorldAction,
+    ModuleSinglePlayerLoadWorldAction singlePlayerLoadWorldAction,
     ModuleReadWorldMetaAction readWorldMetaAction,
     ModuleSinglePlayerNewWorldMenu newWorldMenu)
 {
@@ -47,7 +47,7 @@ public class ModuleSinglePlayerWorldSelectMenu(
                     .SizeV((s.ItemWidthL, s.ItemHeight))
                     .TextV(meta.Name)
                     .TooltipV(Path.GetFileName(paths.Root))
-                    .OnPressF(() => loadWorldAction.Run(paths));
+                    .OnPressF(() => singlePlayerLoadWorldAction.Run(paths));
             }
         }
 

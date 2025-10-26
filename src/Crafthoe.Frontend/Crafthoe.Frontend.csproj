@@ -1,6 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <ItemGroup>
+        <ProjectReference Include="..\Crafthoe.Dimension.Server\Crafthoe.Dimension.Server.csproj" />
         <ProjectReference Include="..\Crafthoe.Player.Client\Crafthoe.Player.Client.csproj" />
         <ProjectReference Include="..\TrogloUI\TrogloUI.csproj" />
     </ItemGroup>

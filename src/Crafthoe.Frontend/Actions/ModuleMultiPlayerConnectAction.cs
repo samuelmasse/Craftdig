@@ -1,17 +1,14 @@
 namespace Crafthoe.Frontend;
 
-[App]
-public class AppTestClientAction
+[Module]
+public class ModuleMultiPlayerConnectAction
 {
-    public void Run()
+    public void Run(string host, int port)
     {
-        return;
         Console.WriteLine("Connecting");
         var s = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp) { NoDelay = true };
         var ns = new NetSocket(s);
-        var addr = IPAddress.Parse("127.0.0.1");
-        int port = 8080;
-        s.Connect(addr, port);
+        s.Connect(host, port);
         Console.WriteLine("Connected");
 
         var nloop = new NetLoop();

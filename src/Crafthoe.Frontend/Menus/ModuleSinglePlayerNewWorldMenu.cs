@@ -5,8 +5,8 @@ public class ModuleSinglePlayerNewWorldMenu(
     RootText text,
     AppStyle s,
     ModuleEnts ents,
-    ModuleCreateWorldAction createWorldAction,
-    ModuleLoadWorldAction loadWorldAction)
+    ModuleSinglePlayerCreateWorldAction singlePlayerCreateWorldAction,
+    ModuleSinglePlayerLoadWorldAction singlePlayerLoadWorldAction)
 {
     public void Create(EntObj root)
     {
@@ -103,8 +103,8 @@ public class ModuleSinglePlayerNewWorldMenu(
                                 else numberSeed = worldSeed.GetHashCode();
                             }
 
-                            var paths = createWorldAction.Run(new(worldName, numberSeed, gameMode, difficulty));
-                            loadWorldAction.Run(paths);
+                            var paths = singlePlayerCreateWorldAction.Run(new(worldName, numberSeed, gameMode, difficulty));
+                            singlePlayerLoadWorldAction.Run(paths);
                         })
                         .TextV("Create New World")
                         .Mut(s.Button);

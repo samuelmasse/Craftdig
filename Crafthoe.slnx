@@ -19,7 +19,9 @@
         <Project Path="src/Crafthoe.Dev/Crafthoe.Dev.csproj" />
     </Folder>
     <Folder Name="/Server/">
+        <Project Path="src/Crafthoe.Dimension.Server/Crafthoe.Dimension.Server.csproj" Id="df3681b8-c06c-4a1f-96bb-f3b87bc54d39" />
         <Project Path="src/Crafthoe.Server/Crafthoe.Server.csproj" Id="1b1deb04-2f80-4688-ba54-f8f87630328d" />
+        <Project Path="src/Crafthoe.World.Server/Crafthoe.World.Server.csproj" Id="02209b5e-aa61-496f-a283-70c390a40707" />
     </Folder>
     <Project Path="src/TrogloUI/TrogloUI.csproj" />
 </Solution>

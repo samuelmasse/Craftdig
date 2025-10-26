@@ -1,7 +1,7 @@
 namespace Crafthoe.Frontend;
 
 [Module]
-public class ModuleCreateWorldAction(AppPaths paths, ModuleWriteWorldMetaAction writeWorldMetaAction)
+public class ModuleSinglePlayerCreateWorldAction(AppPaths paths, ModuleWriteWorldMetaAction writeWorldMetaAction)
 {
     public WorldPaths Run(WorldMeta args)
     {

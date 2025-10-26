@@ -11,6 +11,7 @@ public class PlayerState(
     WorldTick tick,
     DimensionMetrics dimensionMetrics,
     DimensionContext dimension,
+    DimensionServerContext dimensionServer,
     DimensionClientContext dimensionClient,
     DimensionSharedVertexBufferMenu dimensionSharedVertexBufferMenu,
     PlayerEnt ent,
@@ -128,6 +129,7 @@ public class PlayerState(
     public override void Render()
     {
         dimensionClient.Frame();
+        dimensionServer.Frame();
         dimension.Frame();
         playerRenderer.Render();
     }
