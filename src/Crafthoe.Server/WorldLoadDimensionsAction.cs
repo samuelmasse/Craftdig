@@ -25,9 +25,5 @@ public class WorldLoadDimensionsAction(ModuleEnts ents, WorldScope worldScope)
         var dimensionLoaderScope = dimensionScope.Scope<DimensionLoaderScope>();
         dimensionLoaderScope.Get<DimensionLoader>().Run();
         dimensionLoaderScope.Get<DimensionServerLoader>().Run();
-
-        var players = dimensionScope.Get<DimensionPlayerBag>();
-        var player = new EntObj();
-        players.Add((EntMut)player);
     }
 }

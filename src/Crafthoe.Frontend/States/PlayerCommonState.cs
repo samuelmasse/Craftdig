@@ -8,13 +8,10 @@ public class PlayerCommonState(
     RootSprites sprites,
     RootUi ui,
     RootUiScale scale,
-    WorldTick tick,
-    DimensionMetrics dimensionMetrics,
     DimensionContext dimension,
     DimensionClientContext dimensionClient,
     DimensionSharedVertexBufferMenu dimensionSharedVertexBufferMenu,
     PlayerEnt ent,
-    PlayerContext player,
     PlayerRenderer playerRenderer,
     PlayerDebugMenu debugMenu,
     PlayerEscapeMenu escapeMenu,
@@ -37,9 +34,11 @@ public class PlayerCommonState(
     private bool paused;
     private bool inv;
 
+    public bool Paused => paused;
+    public bool Inv => inv;
+
     public override void Load()
     {
-        player.Load();
         Node(menus).Mut(debugMenu.Create);
         Node(menus).Mut(dimensionSharedVertexBufferMenu.Create);
     }
@@ -99,27 +98,7 @@ public class PlayerCommonState(
             menus.Nodes().Remove(dark);
         }
 
-        mouse.Track = false;
-        if (!paused)
-        {
-            int ticks = tick.Update(time);
-            while (ticks > 0)
-            {
-                dimensionMetrics.TickMetric.Start();
-
-                if (!inv)
-                    player.Tick();
-
-                dimension.Tick();
-                ticks--;
-
-                dimensionMetrics.TickMetric.End();
-            }
-
-            if (!inv)
-                player.Update(time);
-        }
-
+        mouse.Track = !paused && !inv;
         mouse.CursorState = mouse.Track ? CursorState.Grabbed : CursorState.Normal;
     }
 

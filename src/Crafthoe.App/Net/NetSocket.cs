@@ -2,7 +2,11 @@ namespace Crafthoe.App;
 
 public class NetSocket(Socket socket)
 {
+    private readonly EntObj ent = new();
     private byte[] buffer = [];
+
+    public EntMut Ent => (EntMut)ent;
+    public Socket Raw => socket;
 
     public bool TryGet(out NetMessage msg)
     {
@@ -21,7 +25,7 @@ public class NetSocket(Socket socket)
             return false;
 
         int size = BinaryPrimitives.ReadInt32BigEndian(sb);
-        if (size <= 0)
+        if (size < 0)
             throw new Exception("Message size is invalid");
 
         if (buffer.Length < size)
@@ -43,9 +47,13 @@ public class NetSocket(Socket socket)
         Span<byte> sb = stackalloc byte[4];
         BinaryPrimitives.WriteInt32BigEndian(sb, msg.Data.Length);
 
-        socket.Send(tb);
-        socket.Send(sb);
-        socket.Send(msg.Data);
+        try
+        {
+            socket.Send(tb);
+            socket.Send(sb);
+            socket.Send(msg.Data);
+        }
+        catch { }
     }
 
     private bool Read(Span<byte> dst)

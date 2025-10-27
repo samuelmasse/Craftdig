@@ -32,8 +32,9 @@ public class ModuleMultiPlayerJoinAction(RootState state, ModuleEnts ents, Modul
 
         var playerScope = dimensionScope.Scope<PlayerScope>();
         playerScope.Add(new PlayerEnt(player));
-        playerScope.Add(new PlayerSocket(socket, new(socket), host, port));
+        playerScope.Add(new PlayerSocket(socket));
         playerScope.Get<PlayerSocketLoop>().Start();
+        playerScope.Get<PlayerMultiPlayerSpawnAction>().Run();
 
         state.Current = playerScope.New<PlayerMultiPlayerState>();
     }

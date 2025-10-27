@@ -1,4 +1,4 @@
 namespace Crafthoe.Frontend;
 
 [Player]
-public record class PlayerSocket(Socket Raw, NetSocket Socket, string Host, int Port);
+public class PlayerSocket(Socket socket) : NetSocket(socket);

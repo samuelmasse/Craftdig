@@ -6,7 +6,8 @@ public class WorldServer(
     WorldLoadOrCreateMetaAction loadOrCreateMetaAction,
     WorldLoadDimensionsAction loadDimensionsAction,
     WorldRegisterHandlersAction registerHandlersAction,
-    WorldTicks ticks,
+    WorldServerTickTimer tickTimer,
+    WorldServerTicks ticks,
     WorldListener listener)
 {
     public void Run()
@@ -15,6 +16,7 @@ public class WorldServer(
         loadOrCreateMetaAction.Run();
         loadDimensionsAction.Run();
         registerHandlersAction.Run();
+        tickTimer.Start();
         new Thread(ticks.Run).Start();
         listener.Start();
     }

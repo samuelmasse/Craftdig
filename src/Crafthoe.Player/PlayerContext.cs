@@ -6,8 +6,6 @@ public class PlayerContext(
     RootKeyboard keyboard,
     DimensionAir air,
     DimensionBlocks blocks,
-    DimensionRigidBag rigidBag,
-    PlayerScope scope,
     PlayerCamera camera,
     PlayerEnt ent,
     PlayerSelected selected,
@@ -16,16 +14,6 @@ public class PlayerContext(
 {
     private int mainCooldown;
     private int secondaryCooldown;
-
-    public PlayerScope Scope => scope;
-
-    public void Load()
-    {
-        ent.Ent.Position() = (15, 0, 120);
-        ent.Ent.IsFlying() = true;
-        ent.Ent.HitBox() = new Box3d((-0.3, -0.3, -1.62), (0.3, 0.3, 0.18));
-        rigidBag.Add((EntMut)ent.Ent);
-    }
 
     public void Tick()
     {
@@ -54,7 +42,6 @@ public class PlayerContext(
     public void Update(double delta)
     {
         movement.Update(delta);
-        mouse.Track = true;
         camera.Rotate(-mouse.Delta / 300);
         camera.PreventBackFlipsAndFrontFlips();
 

@@ -1,7 +1,7 @@
 namespace Crafthoe.Server;
 
 [World]
-public class WorldListener(NetLoop nloop, NetEcho necho)
+public class WorldListener(NetLoop nloop)
 {
     public void Start()
     {
@@ -21,7 +21,6 @@ public class WorldListener(NetLoop nloop, NetEcho necho)
 
             try
             {
-                new Thread(() => EchoLoop(new(s))).Start();
                 new Thread(() => ClientLoop(new(s))).Start();
             }
             catch (Exception e)
@@ -51,18 +50,5 @@ public class WorldListener(NetLoop nloop, NetEcho necho)
         }
 
         Console.WriteLine($"Socket disconnected");
-    }
-
-    private void EchoLoop(NetSocket ns)
-    {
-        try
-        {
-            while (true)
-            {
-                ns.Send(necho.Wrap($"This is the server! It is {DateTime.UtcNow.Ticks}"));
-                Thread.Sleep(100);
-            }
-        }
-        catch { }
     }
 }

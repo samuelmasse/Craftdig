@@ -8,7 +8,7 @@ public class DimensionChunkThreadWorkQueue
 
     public int Count => q.Count;
 
-    public void Enqeue(ChunkThreadInput input)
+    public void Enqueue(ChunkThreadInput input)
     {
         q.Enqueue(input);
         semaphore.Release();

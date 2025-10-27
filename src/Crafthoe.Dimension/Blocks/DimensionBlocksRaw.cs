@@ -39,7 +39,7 @@ public class DimensionBlocksRaw(DimensionChunks chunks)
 
     public Memory<Ent> Slice(Vector3i sloc) => Memory(sloc.Xy).Slice(sloc.Z * SectionVolume, SectionVolume);
 
-    private Memory<Ent> Memory(Vector2i cloc)
+    public Memory<Ent> Memory(Vector2i cloc)
     {
         if (!chunks.TryGet(cloc, out var chunk))
             return default;

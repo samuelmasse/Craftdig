@@ -4,7 +4,7 @@ public class NetEcho
 {
     public const int Type = 1;
 
-    public void Receive(NetMessage msg)
+    public void Receive(NetSocket ns, NetMessage msg)
     {
         Console.WriteLine($"Echo {Encoding.UTF8.GetString(msg.Data)}");
     }

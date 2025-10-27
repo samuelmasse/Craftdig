@@ -15,7 +15,7 @@ public class DimensionChunkCollector(
         var iters = Math.Min(chunkBag.Ents.Length, 200);
 
         watch.Restart();
-
+         
         while (watch.Elapsed.TotalMilliseconds < 0.25 && iters > 0)
         {
             var chunk = chunkBag.Ents[(int)(index % chunkBag.Ents.Length)];
