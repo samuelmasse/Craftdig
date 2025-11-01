@@ -1,24 +1,24 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <ItemGroup>
-        <ProjectReference Include="..\Crafthoe.Frontend\Crafthoe.Frontend.csproj" />
+        <Using Include="Crafthoe" />
+        <Using Include="Crafthoe.App" />
+        <Using Include="Crafthoe.App.Frontend" />
+        <Using Include="Crafthoe.Dimension" />
+        <Using Include="Crafthoe.Dimension.Backend" />
+        <Using Include="Crafthoe.Dimension.Unit">
+            <Static>true</Static>
+        </Using>
+        <Using Include="Crafthoe.Module" />
+        <Using Include="Crafthoe.Module.Frontend" />
+        <Using Include="Crafthoe.Native" />
+        <Using Include="Crafthoe.World" />
+        <Using Include="Crafthoe.World.Backend" />
     </ItemGroup>
 
     <ItemGroup>
-        <Using Include="AlvorEngine" />
-        <Using Include="AlvorEngine.Loop" />
-        <Using Include="Crafthoe.App" />
-        <Using Include="Crafthoe.Dimension" />
-        <Using Include="Crafthoe.Module" />
-        <Using Include="Crafthoe.Player" />
-        <Using Include="Crafthoe.World" />
-        <Using Include="Crafthoe.Dimension.Unit">
-            <Static>True</Static>
-        </Using>
-        <Using Include="TrogloUI" />
-        <Using Include="TrogloUI.UiSyntax">
-            <Static>True</Static>
-        </Using>
+        <ProjectReference Include="..\Crafthoe.Dimension.Backend\Crafthoe.Dimension.Backend.csproj" />
+        <ProjectReference Include="..\Crafthoe.Module.Frontend\Crafthoe.Module.Frontend.csproj" />
     </ItemGroup>
 
 </Project>

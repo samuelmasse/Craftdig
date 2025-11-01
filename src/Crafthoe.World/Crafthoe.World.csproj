@@ -1,13 +1,14 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <ItemGroup>
-        <ProjectReference Include="..\Crafthoe.Module\Crafthoe.Module.csproj" />
+        <Using Include="Crafthoe" />
+        <Using Include="Crafthoe.App" />
+        <Using Include="Crafthoe.Module" />
+        <Using Include="Crafthoe.World" />
     </ItemGroup>
 
     <ItemGroup>
-        <Using Include="AlvorEngine" />
-        <Using Include="Crafthoe.App" />
-        <Using Include="Crafthoe.Module" />
+        <ProjectReference Include="..\Crafthoe.Module\Crafthoe.Module.csproj" />
     </ItemGroup>
 
 </Project>

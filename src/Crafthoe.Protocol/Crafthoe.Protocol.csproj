@@ -1,6 +1,12 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <ItemGroup>
+        <Using Include="Crafthoe" />
+        <Using Include="Crafthoe.App" />
+        <Using Include="Crafthoe.Protocol" />
+    </ItemGroup>
+
+    <ItemGroup>
         <ProjectReference Include="..\Crafthoe.App\Crafthoe.App.csproj" />
     </ItemGroup>
 

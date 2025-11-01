@@ -1,4 +1,5 @@
 <Project>
+
     <PropertyGroup>
         <TargetFramework>net9.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
@@ -15,13 +16,14 @@
         <Using Include="AlvorEngine" />
         <Using Include="BigGustave" />
         <Using Include="Cysharp.Text" />
-        <Using Include="GlwLayer" />
-        <Using Include="GlwLayer.Driver" />
         <Using Include="Glw2D" />
         <Using Include="Glw2D.Fonts" />
+        <Using Include="GlwLayer" />
+        <Using Include="GlwLayer.Driver" />
         <Using Include="HadvarECS" />
         <Using Include="HadvarECS.Generator" />
         <Using Include="Microsoft.Win32.SafeHandles" />
+        <Using Include="NeedlerDI" />
         <Using Include="OpenTK.Graphics.OpenGL4" />
         <Using Include="OpenTK.Mathematics" />
         <Using Include="OpenTK.Windowing.Common" />
@@ -33,9 +35,9 @@
         <Using Include="System.Diagnostics" />
         <Using Include="System.Diagnostics.CodeAnalysis" />
         <Using Include="System.Globalization" />
+        <Using Include="System.IO.Compression" />
         <Using Include="System.Net" />
         <Using Include="System.Net.Sockets" />
-        <Using Include="System.IO.Compression" />
         <Using Include="System.Reflection" />
         <Using Include="System.Runtime" />
         <Using Include="System.Runtime.CompilerServices" />
@@ -46,6 +48,6 @@
         <Using Include="Tomlyn.Model" />
         <Using Include="Tomlyn.Syntax" />
         <Using Include="Wigdow" />
-        <Using Include="NeedlerDI" />
     </ItemGroup>
+
 </Project>

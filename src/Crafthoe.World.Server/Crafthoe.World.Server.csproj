@@ -1,15 +1,17 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <ItemGroup>
-        <ProjectReference Include="..\Crafthoe.Protocol\Crafthoe.Protocol.csproj" />
-        <ProjectReference Include="..\Crafthoe.World\Crafthoe.World.csproj" />
+        <Using Include="Crafthoe" />
+        <Using Include="Crafthoe.App" />
+        <Using Include="Crafthoe.Module" />
+        <Using Include="Crafthoe.Protocol" />
+        <Using Include="Crafthoe.World" />
+        <Using Include="Crafthoe.World.Server" />
     </ItemGroup>
 
     <ItemGroup>
-        <Using Include="AlvorEngine" />
-        <Using Include="Crafthoe.App" />
-        <Using Include="Crafthoe.Module" />
-        <Using Include="Crafthoe.World" />
+        <ProjectReference Include="..\Crafthoe.Protocol\Crafthoe.Protocol.csproj" />
+        <ProjectReference Include="..\Crafthoe.World\Crafthoe.World.csproj" />
     </ItemGroup>
 
 </Project>

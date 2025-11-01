@@ -1,4 +1,4 @@
-namespace Crafthoe.Dimension;
+namespace Crafthoe.Dimension.Backend;
 
 [StructLayout(LayoutKind.Sequential)]
 public struct RegionIndexEntry

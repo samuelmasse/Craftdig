@@ -1,11 +1,10 @@
 <Solution>
     <Folder Name="/Backend/">
         <Project Path="src/Crafthoe.Dimension.Backend/Crafthoe.Dimension.Backend.csproj" Id="e8279f1a-3a9c-4d8a-8e15-7dbdc72f30bb" />
-        <Project Path="src/Crafthoe.Module.Backend/Crafthoe.Module.Backend.csproj" Id="4baf2b47-e8bb-49d9-953d-6917f5c89a43" />
         <Project Path="src/Crafthoe.World.Backend/Crafthoe.World.Backend.csproj" Id="856d74b0-a6dc-4b22-9d2f-a0021a1f3f4e" />
     </Folder>
     <Folder Name="/Client/">
-        <Project Path="src/Crafthoe.Frontend/Crafthoe.Frontend.csproj" />
+        <Project Path="src/Crafthoe.Menus/Crafthoe.Menus.csproj" />
         <Project Path="src/Crafthoe.Native/Crafthoe.Native.csproj" />
         <Project Path="src/Crafthoe/Crafthoe.csproj" />
     </Folder>
@@ -17,11 +16,11 @@
         <Project Path="src/Crafthoe.World/Crafthoe.World.csproj" />
     </Folder>
     <Folder Name="/Frontend/">
-        <Project Path="src/Crafthoe.App.Client/Crafthoe.App.Client.csproj" Id="8be24ca5-85cd-405e-8330-34825128e5fc" />
-        <Project Path="src/Crafthoe.Dimension.Client/Crafthoe.Dimension.Client.csproj" Id="d96f12fa-cadd-4044-968c-2e55a31a9980" />
-        <Project Path="src/Crafthoe.Module.Client/Crafthoe.Module.Client.csproj" Id="73053e3e-6f5f-44d3-95af-49f83c9fda0b" />
-        <Project Path="src/Crafthoe.Player.Client/Crafthoe.Player.Client.csproj" Id="11e61da7-83e7-4f25-b84c-103f0c92100f" />
-        <Project Path="src/Crafthoe.World.Client/Crafthoe.World.Client.csproj" Id="e359e76e-5a40-49e4-bfda-25d105f9b475" />
+        <Project Path="src/Crafthoe.App.Frontend/Crafthoe.App.Frontend.csproj" Id="8be24ca5-85cd-405e-8330-34825128e5fc" />
+        <Project Path="src/Crafthoe.Dimension.Frontend/Crafthoe.Dimension.Frontend.csproj" Id="d96f12fa-cadd-4044-968c-2e55a31a9980" />
+        <Project Path="src/Crafthoe.Module.Frontend/Crafthoe.Module.Frontend.csproj" Id="73053e3e-6f5f-44d3-95af-49f83c9fda0b" />
+        <Project Path="src/Crafthoe.Player.Frontend/Crafthoe.Player.Frontend.csproj" Id="11e61da7-83e7-4f25-b84c-103f0c92100f" />
+        <Project Path="src/Crafthoe.World.Frontend/Crafthoe.World.Frontend.csproj" Id="e359e76e-5a40-49e4-bfda-25d105f9b475" />
     </Folder>
     <Folder Name="/Scripts/">
         <Project Path="src/Crafthoe.Dev.Server/Crafthoe.Dev.Server.csproj" Id="33843de9-783f-44d5-a71d-0ea813d958d2" />

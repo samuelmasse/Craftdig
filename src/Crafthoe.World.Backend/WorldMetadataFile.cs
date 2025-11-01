@@ -1,4 +1,4 @@
-namespace Crafthoe.World;
+namespace Crafthoe.World.Backend;
 
 public class WorldMetadataFile
 {

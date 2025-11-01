@@ -1,19 +1,21 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <ItemGroup>
-        <ProjectReference Include="..\Crafthoe.Dimension\Crafthoe.Dimension.csproj" />
-        <ProjectReference Include="..\Crafthoe.World.Backend\Crafthoe.World.Backend.csproj" />
+        <Using Include="Crafthoe" />
+        <Using Include="Crafthoe.App" />
+        <Using Include="Crafthoe.Dimension" />
+        <Using Include="Crafthoe.Dimension.Backend" />
+        <Using Include="Crafthoe.Dimension.Unit">
+            <Static>true</Static>
+        </Using>
+        <Using Include="Crafthoe.Module" />
+        <Using Include="Crafthoe.World" />
+        <Using Include="Crafthoe.World.Backend" />
     </ItemGroup>
 
     <ItemGroup>
-        <Using Include="AlvorEngine" />
-        <Using Include="Crafthoe.App" />
-        <Using Include="Crafthoe.Module" />
-        <Using Include="Crafthoe.World" />
-        <Using Include="Crafthoe.Dimension" />
-        <Using Include="Crafthoe.Dimension.Unit">
-            <Static>True</Static>
-        </Using>
+        <ProjectReference Include="..\Crafthoe.Dimension\Crafthoe.Dimension.csproj" />
+        <ProjectReference Include="..\Crafthoe.World.Backend\Crafthoe.World.Backend.csproj" />
     </ItemGroup>
 
 </Project>

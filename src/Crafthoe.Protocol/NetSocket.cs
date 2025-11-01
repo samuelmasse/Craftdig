@@ -1,4 +1,4 @@
-namespace Crafthoe.World;
+namespace Crafthoe.Protocol;
 
 public class NetSocket(Socket socket)
 {

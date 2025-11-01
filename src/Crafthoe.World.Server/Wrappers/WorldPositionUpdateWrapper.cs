@@ -1,4 +1,4 @@
-namespace Crafthoe.World;
+namespace Crafthoe.World.Server;
 
 [World]
 public class WorldPositionUpdateWrapper

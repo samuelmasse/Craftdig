@@ -1,4 +1,4 @@
-namespace Crafthoe.Dimension;
+namespace Crafthoe.Dimension.Backend;
 
 public class RegionFreeMap
 {

@@ -1,4 +1,4 @@
-namespace Crafthoe.Server;
+namespace Crafthoe.Dimension.Server;
 
 [Components]
 file record DimensionServerComponents(

@@ -1,13 +1,14 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <ItemGroup>
-        <PackageReference Include="AlvorEngine" Version="0.2" />
-        <PackageReference Include="HadvarECS" Version="0.7" />
-        <PackageReference Include="HadvarECS.Generator" Version="0.7" />
+        <Using Include="Crafthoe" />
+        <Using Include="Crafthoe.App" />
     </ItemGroup>
 
     <ItemGroup>
-        <Using Include="AlvorEngine" />
+        <PackageReference Include="AlvorEngine" Version="0.2" />
+        <PackageReference Include="HadvarECS" Version="0.7" />
+        <PackageReference Include="HadvarECS.Generator" Version="0.7" />
     </ItemGroup>
 
 </Project>

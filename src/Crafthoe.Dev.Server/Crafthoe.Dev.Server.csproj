@@ -6,19 +6,27 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\Crafthoe.Native\Crafthoe.Native.csproj" />
-        <ProjectReference Include="..\Crafthoe.Server\Crafthoe.Server.csproj" />
+        <Using Include="Crafthoe" />
+        <Using Include="Crafthoe.App" />
+        <Using Include="Crafthoe.App.Frontend" />
+        <Using Include="Crafthoe.Dimension" />
+        <Using Include="Crafthoe.Dimension.Backend" />
+        <Using Include="Crafthoe.Dimension.Server" />
+        <Using Include="Crafthoe.Dimension.Unit">
+            <Static>true</Static>
+        </Using>
+        <Using Include="Crafthoe.Module" />
+        <Using Include="Crafthoe.Native" />
+        <Using Include="Crafthoe.Protocol" />
+        <Using Include="Crafthoe.Server" />
+        <Using Include="Crafthoe.World" />
+        <Using Include="Crafthoe.World.Backend" />
+        <Using Include="Crafthoe.World.Server" />
     </ItemGroup>
 
     <ItemGroup>
-        <Using Include="AlvorEngine" />
-        <Using Include="Crafthoe.App" />
-        <Using Include="Crafthoe.Dimension" />
-        <Using Include="Crafthoe.Native" />
-        <Using Include="Crafthoe.Module" />
-        <Using Include="Crafthoe.Player" />
-        <Using Include="Crafthoe.Server" />
-        <Using Include="Crafthoe.World" />
+        <ProjectReference Include="..\Crafthoe.Native\Crafthoe.Native.csproj" />
+        <ProjectReference Include="..\Crafthoe.Server\Crafthoe.Server.csproj" />
     </ItemGroup>
 
 </Project>

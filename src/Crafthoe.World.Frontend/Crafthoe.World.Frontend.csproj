@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <ItemGroup>
+        <Using Include="Crafthoe" />
+        <Using Include="Crafthoe.App" />
+        <Using Include="Crafthoe.App.Frontend" />
+        <Using Include="Crafthoe.Module" />
+        <Using Include="Crafthoe.Module.Frontend" />
+        <Using Include="Crafthoe.World" />
+        <Using Include="Crafthoe.World.Frontend" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\Crafthoe.Module.Frontend\Crafthoe.Module.Frontend.csproj" />
+        <ProjectReference Include="..\Crafthoe.World\Crafthoe.World.csproj" />
+    </ItemGroup>
+
+</Project>
