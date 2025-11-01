@@ -4,8 +4,8 @@ namespace Crafthoe.Menus;
 public class ModuleMainMenu(
     RootScreen screen,
     AppStyle s,
-    ModuleSinglePlayerWorldSelectMenu worldSelectMenu,
-    ModuleMultiPlayerConnectMenu connectMenu)
+    ModuleSingleplayerWorldSelectMenu worldSelectMenu,
+    ModuleMultiplayerConnectMenu connectMenu)
 {
     public void Create(EntObj root)
     {

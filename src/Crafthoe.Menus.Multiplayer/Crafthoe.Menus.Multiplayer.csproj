@@ -14,8 +14,6 @@
         </Using>
         <Using Include="Crafthoe.Menus" />
         <Using Include="Crafthoe.Menus.Common" />
-        <Using Include="Crafthoe.Menus.Singleplayer" />
-        <Using Include="Crafthoe.Menus.Multiplayer" />
         <Using Include="Crafthoe.Module" />
         <Using Include="Crafthoe.Module.Frontend" />
         <Using Include="Crafthoe.Player.Frontend" />
@@ -30,8 +28,9 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\Crafthoe.Menus.Multiplayer\Crafthoe.Menus.Multiplayer.csproj" />
-        <ProjectReference Include="..\Crafthoe.Menus.Singleplayer\Crafthoe.Menus.Singleplayer.csproj" />
+        <ProjectReference Include="..\Crafthoe.Client\Crafthoe.Client.csproj" />
+        <ProjectReference Include="..\Crafthoe.Menus.Common\Crafthoe.Menus.Common.csproj" />
+        <ProjectReference Include="..\Crafthoe.Protocol\Crafthoe.Protocol.csproj" />
     </ItemGroup>
 
 </Project>

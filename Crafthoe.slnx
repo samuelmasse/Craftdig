@@ -5,6 +5,9 @@
     </Folder>
     <Folder Name="/Client/">
         <Project Path="src/Crafthoe.Client/Crafthoe.Client.csproj" Id="127bfd8d-6aa3-40fa-967e-847cd54d1d1c" />
+        <Project Path="src/Crafthoe.Menus.Common/Crafthoe.Menus.Common.csproj" Id="317ffeaf-aec2-483d-ab9e-39266488c513" />
+        <Project Path="src/Crafthoe.Menus.Multiplayer/Crafthoe.Menus.Multiplayer.csproj" Id="1460f010-6f53-4d89-99d1-ab16d365feef" />
+        <Project Path="src/Crafthoe.Menus.Singleplayer/Crafthoe.Menus.Singleplayer.csproj" Id="1c85507b-bf01-4bb5-824e-7d88337a46b0" />
         <Project Path="src/Crafthoe.Menus/Crafthoe.Menus.csproj" />
         <Project Path="src/Crafthoe.Native/Crafthoe.Native.csproj" />
         <Project Path="src/Crafthoe/Crafthoe.csproj" />
