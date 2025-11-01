@@ -3,6 +3,7 @@ namespace Crafthoe.Dimension.Backend;
 [Dimension]
 public class DimensionBackend(
     DimensionRigids rigids,
+    DimensionMovement movement,
     DimensionChunkRequester chunkRequester,
     DimensionChunkCollector chunkCollector,
     DimensionChunkReceiver chunkReceiver,
@@ -11,6 +12,7 @@ public class DimensionBackend(
 {
     public void Tick()
     {
+        movement.Tick();
         rigids.Tick();
     }
 

@@ -30,6 +30,9 @@ public class DimensionPlayerSpawner(
         var player = ns.Ent.SocketPlayer();
         player.HitBox() = new Box3d((-0.3, -0.3, -1.62), (0.3, 0.3, 0.18));
         player.Position() = (15, 0, 120);
+        player.CanMove() = true;
+        player.CanSprint() = true;
+        player.CanJump() = true;
         playerBag.Add(player);
         rigidBag.Add(player);
         sockets.Add(ns);

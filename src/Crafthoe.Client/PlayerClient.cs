@@ -6,12 +6,20 @@ public class PlayerClient(
     DimensionClientChunkReceiverHandler chunkReceiverHandler,
     PlayerEnt ent,
     PlayerPositionUpdateReceiver positionUpdateReceiver,
-    PlayerChunkUpdateQueue chunkUpdateQueue)
+    PlayerChunkUpdateQueue chunkUpdateQueue,
+    PlayerSocket socket)
 {
     public void Tick()
     {
         ent.Ent.PrevPosition() = ent.Ent.Position();
-        ent.Ent.Position() = positionUpdateReceiver.Latest;
+        ent.Ent.Position() = positionUpdateReceiver.Latest.Position;
+        ent.Ent.IsFlying() = positionUpdateReceiver.Latest.IsFlying;
+        ent.Ent.IsSprinting() = positionUpdateReceiver.Latest.IsSprinting;
+
+        socket.Send(new((int)ServerCommand.MovePlayer,
+            MemoryMarshal.AsBytes(MemoryMarshal.CreateSpan(ref ent.Ent.Movement(), 1))));
+
+        ent.Ent.Movement() = default;
     }
 
     public void Frame()

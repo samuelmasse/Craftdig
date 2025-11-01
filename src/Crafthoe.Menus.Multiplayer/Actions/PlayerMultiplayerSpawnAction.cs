@@ -7,6 +7,6 @@ public class PlayerMultiplayerSpawnAction(NetEcho netEcho, PlayerSocket socket)
     {
         socket.Send(new((int)CommonCommand.Echo, netEcho.Wrap("Hello this is the client")));
         socket.Send(new((int)CommonCommand.Echo, netEcho.Wrap("Please give me some chunks")));
-        socket.Send(new((int)ServerCommand.Spawn, []));
+        socket.Send(new((int)ServerCommand.SpawnPlayer, []));
     }
 }

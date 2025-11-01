@@ -2,7 +2,7 @@ namespace Crafthoe.Protocol;
 
 public class NetLoop
 {
-    private Action<NetSocket, NetMessage>?[] handlers = [];
+    private readonly Dictionary<int, Action<NetSocket, NetMessage>> handlers = [];
 
     public void Run(NetSocket ns)
     {
@@ -18,11 +18,6 @@ public class NetLoop
         }
     }
 
-    public void Register(int type, Action<NetSocket, NetMessage> handler)
-    {
-        if (handlers.Length <= type)
-            Array.Resize(ref handlers, (int)System.Numerics.BitOperations.RoundUpToPowerOf2((uint)type + 1));
-
+    public void Register(int type, Action<NetSocket, NetMessage> handler) =>
         handlers[type] = handler;
-    }
 }

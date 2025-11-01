@@ -4,6 +4,7 @@ namespace Crafthoe.Dimension.Server;
 public class DimensionServer(
     DimensionContext context,
     DimensionBackend backend,
+    DimensionPendingMovement pendingMovement,
     DimensionSocketCleaner socketCleaner,
     DimensionPlayerSpawner playerSpawner,
     DimensionPositionStreamer positionStreamer,
@@ -15,6 +16,7 @@ public class DimensionServer(
         backend.Frame();
         socketCleaner.Tick();
         chunkStreamerRequester.Tick();
+        pendingMovement.Tick();
         backend.Tick();
         playerSpawner.Tick();
         positionStreamer.Tick();

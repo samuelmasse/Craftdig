@@ -11,13 +11,8 @@ public class DimensionChunkStreamer(
 
     public void Stream(NetSocket ns, Vector2i cloc)
     {
-        var start = DateTime.UtcNow;
-
         EncodeIntoBuffer(cloc, blocksRaw.Memory(cloc).Span);
         ns.Send(new((int)ClientCommand.ChunkUpdate, data.AsSpan()[..bytes]));
-
-        var dt = DateTime.UtcNow - start;
-        Console.WriteLine($"Sent {cloc} {dt.TotalMilliseconds}");
     }
 
     private void EncodeIntoBuffer(Vector2i cloc, ReadOnlySpan<Ent> blocks)

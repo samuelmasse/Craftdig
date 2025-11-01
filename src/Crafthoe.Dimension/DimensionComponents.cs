@@ -18,7 +18,10 @@ file record DimensionComponents(
     Box3d HitBox,
     [ComponentToString] bool IsRigid,
     bool IsFlying,
+    bool IsRunning,
+    bool IsSprinting,
     int RigidBagIndex,
+    MovementStep Movement,
 
     // Player
     int PlayerBagIndex
