@@ -1,7 +1,7 @@
 namespace Crafthoe.Dimension.Frontend;
 
 [Dimension]
-public class DimensionClientContext(
+public class DimensionFrontend(
     DimensionSectionRequester sectionRequester,
     DimensionSectionReceiver sectionReceiver,
     DimensionSectionInvalidation sectionInvalidation)

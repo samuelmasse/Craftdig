@@ -24,7 +24,7 @@ public class ModuleMultiPlayerJoinAction(RootState state, ModuleEnts ents, Modul
 
         var dimensionLoaderScope = dimensionScope.Scope<DimensionLoaderScope>();
         dimensionLoaderScope.Get<DimensionLoader>().Run();
-        dimensionLoaderScope.Get<DimensionClientLoader>().Run();
+        dimensionLoaderScope.Get<DimensionFrontendLoader>().Run();
 
         var players = dimensionScope.Get<DimensionPlayerBag>();
         var player = new EntObj();

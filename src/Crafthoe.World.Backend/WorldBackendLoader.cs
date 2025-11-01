@@ -1,7 +1,7 @@
 namespace Crafthoe.World.Backend;
 
 [WorldLoader]
-public class WorldServerLoader(WorldModuleIndicesLoader moduleIndicesLoader)
+public class WorldBackendLoader(WorldModuleIndicesLoader moduleIndicesLoader)
 {
     public void Run()
     {

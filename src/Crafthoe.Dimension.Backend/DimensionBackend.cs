@@ -1,7 +1,7 @@
 namespace Crafthoe.Dimension.Backend;
 
 [Dimension]
-public class DimensionServerContext(
+public class DimensionBackend(
     DimensionRigids rigids,
     DimensionChunkRequester chunkRequester,
     DimensionChunkCollector chunkCollector,

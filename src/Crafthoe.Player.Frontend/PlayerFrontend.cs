@@ -1,7 +1,7 @@
 namespace Crafthoe.Player.Frontend;
 
 [Player]
-public class PlayerContext(
+public class PlayerFrontend(
     RootMouse mouse,
     RootKeyboard keyboard,
     DimensionAir air,

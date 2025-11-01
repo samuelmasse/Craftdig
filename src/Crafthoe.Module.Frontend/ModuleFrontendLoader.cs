@@ -1,7 +1,7 @@
 namespace Crafthoe.Module.Frontend;
 
 [ModuleLoader]
-public class ModuleClientLoader(ModuleFaceLoader faceLoader)
+public class ModuleFrontendLoader(ModuleFaceLoader faceLoader)
 {
     public void Run()
     {

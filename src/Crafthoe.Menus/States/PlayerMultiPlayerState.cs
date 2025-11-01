@@ -6,7 +6,7 @@ public class PlayerMultiPlayerState(
     DimensionChunks chunks,
     DimensionClientChunkReceiverHandler chunkReceiverHandler,
     PlayerEnt ent,
-    PlayerContext player,
+    PlayerFrontend player,
     PlayerCommonState commonState,
     PlayerMultiPlayerDisconnectAction multiPlayerDisconnectAction,
     PlayerChunkUpdateQueue chunkUpdateQueue,

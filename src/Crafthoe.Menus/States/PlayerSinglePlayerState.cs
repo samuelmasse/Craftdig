@@ -3,11 +3,11 @@ namespace Crafthoe.Menus;
 [Player]
 public class PlayerSinglePlayerState(
     WorldTick tick,
-    DimensionServerContext dimensionServer,
+    DimensionBackend dimensionServer,
     DimensionRigidBag rigidBag,
     DimensionMetrics dimensionMetrics,
     PlayerEnt ent,
-    PlayerContext player,
+    PlayerFrontend player,
     PlayerCommonState commonState,
     PlayerSinglePlayerUnloadWorldAction singlePlayerUnloadWorldAction) : State
 {

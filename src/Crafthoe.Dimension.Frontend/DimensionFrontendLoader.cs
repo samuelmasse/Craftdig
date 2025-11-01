@@ -1,7 +1,7 @@
 namespace Crafthoe.Dimension.Frontend;
 
 [DimensionLoader]
-public class DimensionClientLoader(
+public class DimensionFrontendLoader(
     DimensionSectionThreads sectionThreads)
 {
     public void Run()

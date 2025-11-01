@@ -1,7 +1,7 @@
 namespace Crafthoe.Module.Frontend;
 
 [Components]
-file record ModuleClientComponents(
+file record ModuleFrontendComponents(
     // Block
     BlockFaces Faces,
 

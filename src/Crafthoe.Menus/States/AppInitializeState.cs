@@ -28,7 +28,7 @@ public class AppInitializeState(
 
         var moduleLoaderScope = module.Scope<ModuleLoaderScope>();
         moduleLoaderScope.Get<ModuleLoader>().Run();
-        moduleLoaderScope.Get<ModuleClientLoader>().Run();
+        moduleLoaderScope.Get<ModuleFrontendLoader>().Run();
 
         state.Current = module.New<ModuleMenuState>();
     }

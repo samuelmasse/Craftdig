@@ -3,7 +3,7 @@ namespace Crafthoe.Dimension.Server;
 [Dimension]
 public class DimensionServer(
     DimensionContext context,
-    DimensionServerContext serverContext,
+    DimensionBackend backend,
     DimensionSocketCleaner socketCleaner,
     DimensionPlayerSpawner playerSpawner,
     DimensionPositionStreamer positionStreamer,
@@ -12,10 +12,10 @@ public class DimensionServer(
     public void Tick()
     {
         context.Frame();
-        serverContext.Frame();
+        backend.Frame();
         socketCleaner.Tick();
         chunkStreamerRequester.Tick();
-        serverContext.Tick();
+        backend.Tick();
         playerSpawner.Tick();
         positionStreamer.Tick();
     }

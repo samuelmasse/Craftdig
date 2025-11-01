@@ -1,7 +1,7 @@
 namespace Crafthoe.World.Frontend;
 
 [WorldLoader]
-public class WorldClientUnloader(WorldGlw gl)
+public class WorldFrontendUnloader(WorldGlw gl)
 {
     public void Run()
     {

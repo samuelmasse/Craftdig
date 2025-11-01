@@ -1,7 +1,7 @@
 namespace Crafthoe.Dimension.Frontend;
 
 [Components]
-file record DimensionClientComponents(
+file record DimensionFrontendComponents(
     // Chunk
     [ComponentReturnSpan] Memory<EntPtr> Sections,
     SortedList<int, int> Unrendered,

@@ -1,7 +1,7 @@
 namespace Crafthoe.Dimension.Backend;
 
 [DimensionLoader]
-public class DimensionServerLoader(
+public class DimensionBackendLoader(
     DimensionChunkThreads chunkThreads,
     DimensionRegionThread regionThread)
 {

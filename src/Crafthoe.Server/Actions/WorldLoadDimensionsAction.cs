@@ -7,7 +7,7 @@ public class WorldLoadDimensionsAction(ModuleEnts ents, WorldScope worldScope)
     {
         var worldLoaderScope = worldScope.Scope<WorldLoaderScope>();
         worldLoaderScope.Get<WorldLoader>().Run();
-        worldLoaderScope.Get<WorldServerLoader>().Run();
+        worldLoaderScope.Get<WorldBackendLoader>().Run();
 
         var dimensionScope = worldScope.Scope<DimensionScope>();
         var dimensionEnt = new EntPtr().DimensionScope(dimensionScope);
@@ -24,6 +24,6 @@ public class WorldLoadDimensionsAction(ModuleEnts ents, WorldScope worldScope)
 
         var dimensionLoaderScope = dimensionScope.Scope<DimensionLoaderScope>();
         dimensionLoaderScope.Get<DimensionLoader>().Run();
-        dimensionLoaderScope.Get<DimensionServerLoader>().Run();
+        dimensionLoaderScope.Get<DimensionBackendLoader>().Run();
     }
 }

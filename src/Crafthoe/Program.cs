@@ -1,5 +1,3 @@
-using Crafthoe;
-
 new RootLoop(new()
 {
     Window = new WindowOpenTK(new(new(), new() { StartVisible = false })),

@@ -9,7 +9,7 @@ public class PlayerCommonState(
     RootUi ui,
     RootUiScale scale,
     DimensionContext dimension,
-    DimensionClientContext dimensionClient,
+    DimensionFrontend dimensionFrontend,
     DimensionSharedVertexBufferMenu dimensionSharedVertexBufferMenu,
     PlayerEnt ent,
     PlayerRenderer playerRenderer,
@@ -104,7 +104,7 @@ public class PlayerCommonState(
 
     public override void Render()
     {
-        dimensionClient.Frame();
+        dimensionFrontend.Frame();
         dimension.Frame();
         playerRenderer.Render();
     }

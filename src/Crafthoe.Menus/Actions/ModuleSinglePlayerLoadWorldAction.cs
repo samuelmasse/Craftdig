@@ -13,7 +13,7 @@ public class ModuleSinglePlayerLoadWorldAction(RootState state, ModuleEnts ents,
 
         var worldLoaderScope = worldScope.Scope<WorldLoaderScope>();
         worldLoaderScope.Get<WorldLoader>().Run();
-        worldLoaderScope.Get<WorldServerLoader>().Run();
+        worldLoaderScope.Get<WorldBackendLoader>().Run();
 
         var dimensionScope = worldScope.Scope<DimensionScope>();
 
@@ -32,8 +32,8 @@ public class ModuleSinglePlayerLoadWorldAction(RootState state, ModuleEnts ents,
 
         var dimensionLoaderScope = dimensionScope.Scope<DimensionLoaderScope>();
         dimensionLoaderScope.Get<DimensionLoader>().Run();
-        dimensionLoaderScope.Get<DimensionServerLoader>().Run();
-        dimensionLoaderScope.Get<DimensionClientLoader>().Run();
+        dimensionLoaderScope.Get<DimensionBackendLoader>().Run();
+        dimensionLoaderScope.Get<DimensionFrontendLoader>().Run();
 
         dimensionScope.Get<DimensionDrawDistance>().Far = dimensionScope.Get<DimensionChunkRequester>().Far;
         dimensionScope.Get<DimensionChunkReceiverHandlers>().Add(dimensionScope.Get<DimensionClientChunkReceiverHandler>().Handle);
