@@ -4,6 +4,7 @@
         <Project Path="src/Crafthoe.World.Backend/Crafthoe.World.Backend.csproj" Id="856d74b0-a6dc-4b22-9d2f-a0021a1f3f4e" />
     </Folder>
     <Folder Name="/Client/">
+        <Project Path="src/Crafthoe.Client/Crafthoe.Client.csproj" Id="127bfd8d-6aa3-40fa-967e-847cd54d1d1c" />
         <Project Path="src/Crafthoe.Menus/Crafthoe.Menus.csproj" />
         <Project Path="src/Crafthoe.Native/Crafthoe.Native.csproj" />
         <Project Path="src/Crafthoe/Crafthoe.csproj" />

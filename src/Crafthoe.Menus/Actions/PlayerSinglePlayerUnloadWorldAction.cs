@@ -1,10 +1,12 @@
 namespace Crafthoe.Menus;
 
 [Player]
-public class PlayerSinglePlayerUnloadWorldAction(WorldScope worldScope, WorldDimensionBag dimensionBag)
+public class PlayerSinglePlayerUnloadWorldAction(WorldScope worldScope, WorldDimensionBag dimensionBag, PlayerMetrics metrics)
 {
     public void Run()
     {
+        metrics.Stop();
+
         foreach (var dimension in dimensionBag.Ents)
         {
             var dimensionLoaderScope = dimension.DimensionScope().Scope<DimensionLoaderScope>();

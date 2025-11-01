@@ -1,4 +1,4 @@
-namespace Crafthoe.Menus;
+namespace Crafthoe.Client;
 
 [Player]
 public class PlayerSocketLoop(
@@ -7,7 +7,7 @@ public class PlayerSocketLoop(
     PlayerSocket socket,
     PlayerPositionUpdateReceiver positionUpdateReceiver,
     PlayerChunkUpdateReceiver chunkUpdateReceiver,
-    PlayerIndicesReceiver indicesReceiver)
+    PlayerWorldIndicesUpdateReceiver worldIndicesUpdateReceiver)
 {
     private bool stopping;
 
@@ -16,7 +16,7 @@ public class PlayerSocketLoop(
         netLoop.Register((int)CommonCommand.Echo, netEcho.Receive);
         netLoop.Register((int)ClientCommand.PositionUpdate, positionUpdateReceiver.Receive);
         netLoop.Register((int)ClientCommand.ChunkUpdate, chunkUpdateReceiver.Receive);
-        netLoop.Register((int)ClientCommand.WorldIndicesUpdate, indicesReceiver.Receive);
+        netLoop.Register((int)ClientCommand.WorldIndicesUpdate, worldIndicesUpdateReceiver.Receive);
         new Thread(Loop).Start();
     }
 

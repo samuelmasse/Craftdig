@@ -3,14 +3,10 @@ namespace Crafthoe.Menus;
 [Player]
 public class PlayerMultiPlayerState(
     WorldTick tick,
-    DimensionChunks chunks,
-    DimensionClientChunkReceiverHandler chunkReceiverHandler,
-    PlayerEnt ent,
     PlayerFrontend player,
     PlayerCommonState commonState,
     PlayerMultiPlayerDisconnectAction multiPlayerDisconnectAction,
-    PlayerChunkUpdateQueue chunkUpdateQueue,
-    PlayerPositionUpdateReceiver positionUpdateReceiver) : State
+    PlayerClient client) : State
 {
     public override void Load()
     {
@@ -33,8 +29,7 @@ public class PlayerMultiPlayerState(
             if (!commonState.Inv)
                 player.Tick();
 
-            ent.Ent.PrevPosition() = ent.Ent.Position();
-            ent.Ent.Position() = positionUpdateReceiver.Latest;
+            client.Tick();
 
             ticks--;
         }
@@ -45,17 +40,7 @@ public class PlayerMultiPlayerState(
 
     public override void Render()
     {
-        int count = chunkUpdateQueue.Count;
-        while (count > 0 && chunkUpdateQueue.TryDequeue(out var item))
-        {
-            var (cloc, blocks) = item;
-
-            chunks.Alloc(cloc);
-            var chunk = chunks[cloc];
-            chunk.Blocks() = blocks;
-            chunkReceiverHandler.Handle(chunk);
-        }
-
+        client.Frame();
         commonState.Render();
     }
 

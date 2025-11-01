@@ -44,6 +44,7 @@ public class ModuleSinglePlayerLoadWorldAction(RootState state, ModuleEnts ents,
         players.Add(player);
 
         var playerScope = dimensionScope.Scope<PlayerScope>();
+        playerScope.Get<PlayerMetrics>().Start();
         playerScope.Add(new PlayerEnt(player));
 
         state.Current = playerScope.New<PlayerSinglePlayerState>();

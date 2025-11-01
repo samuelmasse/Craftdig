@@ -3,9 +3,9 @@ namespace Crafthoe.Menus;
 [Player]
 public class PlayerSinglePlayerState(
     WorldTick tick,
-    DimensionBackend dimensionServer,
+    DimensionBackend dimensionBackend,
     DimensionRigidBag rigidBag,
-    DimensionMetrics dimensionMetrics,
+    PlayerMetrics playerMetrics,
     PlayerEnt ent,
     PlayerFrontend player,
     PlayerCommonState commonState,
@@ -38,9 +38,9 @@ public class PlayerSinglePlayerState(
                 if (!commonState.Inv)
                     player.Tick();
 
-                dimensionMetrics.TickMetric.Start();
-                dimensionServer.Tick();
-                dimensionMetrics.TickMetric.End();
+                playerMetrics.TickMetric.Start();
+                dimensionBackend.Tick();
+                playerMetrics.TickMetric.End();
 
                 ticks--;
             }
@@ -52,7 +52,7 @@ public class PlayerSinglePlayerState(
 
     public override void Render()
     {
-        dimensionServer.Frame();
+        dimensionBackend.Frame();
         commonState.Render();
     }
 

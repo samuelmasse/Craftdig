@@ -1,11 +1,10 @@
 namespace Crafthoe.Dimension;
 
 [DimensionLoader]
-public class DimensionLoader(
-    DimensionMetrics metrics)
+public class DimensionLoader
 {
     public void Run()
     {
-        metrics.Start();
+
     }
 }

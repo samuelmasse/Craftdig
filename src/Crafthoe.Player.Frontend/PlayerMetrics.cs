@@ -1,19 +1,17 @@
 namespace Crafthoe.Dimension;
 
-[Dimension]
-public class DimensionMetrics
+[Player]
+public class PlayerMetrics
 {
-    private readonly TickMetric sectionMetric = new(TimeSpan.FromSeconds(1));
     private readonly TickMetric renderMetric = new(TimeSpan.FromSeconds(1));
     private readonly TickMetric tickMetric = new(TimeSpan.FromSeconds(1));
     private readonly TickMetricWindow tickMetricWindow;
 
-    public TickMetric SectionMetric => sectionMetric;
     public TickMetric RenderMetric => renderMetric;
     public TickMetric TickMetric => tickMetric;
     public TickMetricWindow TickMetricWindow => tickMetricWindow;
 
-    public DimensionMetrics()
+    public PlayerMetrics()
     {
         tickMetricWindow = new(tickMetric);
     }

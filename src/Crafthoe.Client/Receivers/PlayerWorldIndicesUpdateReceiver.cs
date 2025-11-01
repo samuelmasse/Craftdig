@@ -1,7 +1,7 @@
-namespace Crafthoe.Menus;
+namespace Crafthoe.Client;
 
 [Player]
-public class PlayerIndicesReceiver(WorldModuleIndices moduleIndices)
+public class PlayerWorldIndicesUpdateReceiver(WorldModuleIndices moduleIndices)
 {
     public void Receive(NetSocket ns, NetMessage msg)
     {

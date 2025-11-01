@@ -7,7 +7,7 @@ public class PlayerDebugMenu(
     RootMetrics metrics,
     RootKeyboard keyboard,
     AppStyle s,
-    DimensionMetrics dimensionMetrics,
+    PlayerMetrics playerMetrics,
     DimensionSharedVertexBuffer svb,
     PlayerEnt ent,
     PlayerCamera camera,
@@ -24,12 +24,12 @@ public class PlayerDebugMenu(
             () => text.Format("Collision: {0}", ent.Ent.CollisionNormal()),
             () => text.Format("Rotation: {0:F3}", camera.Rotation),
             () => text.Format("Spike: {0}", metrics.Frame.Max),
-            () => text.Format("Tick: {0}", dimensionMetrics.TickMetric.Value.Max),
-            () => text.Format("Render: {0}", dimensionMetrics.RenderMetric.Value.Max),
+            () => text.Format("Tick: {0}", playerMetrics.TickMetric.Value.Max),
+            () => text.Format("Render: {0}", playerMetrics.RenderMetric.Value.Max),
             () => text.Format("Buffers: {0}", gl.BufferTotalUsage),
             () => text.Format("Selected Loc: {0}", selected.Loc.GetValueOrDefault()),
             () => text.Format("Selected Normal: {0}", selected.Normal.GetValueOrDefault()),
-            () => text.Format("TPS: {0}", dimensionMetrics.TickMetricWindow.Value.Ticks),
+            () => text.Format("TPS: {0}", playerMetrics.TickMetricWindow.Value.Ticks),
             () => text.Format("SVB: {0}", svb.Allocator.Used)
         ];
 
