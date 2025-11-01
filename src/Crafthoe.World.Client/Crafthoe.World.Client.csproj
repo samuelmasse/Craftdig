@@ -1,8 +1,8 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <ItemGroup>
-        <ProjectReference Include="..\Crafthoe.App.Client\Crafthoe.App.Client.csproj" />
-        <ProjectReference Include="..\Crafthoe.Module\Crafthoe.Module.csproj" />
+        <ProjectReference Include="..\Crafthoe.Module.Client\Crafthoe.Module.Client.csproj" />
+        <ProjectReference Include="..\Crafthoe.World\Crafthoe.World.csproj" />
     </ItemGroup>
 
     <ItemGroup>

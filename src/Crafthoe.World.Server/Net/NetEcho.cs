@@ -1,4 +1,4 @@
-namespace Crafthoe.App;
+namespace Crafthoe.World;
 
 public class NetEcho
 {

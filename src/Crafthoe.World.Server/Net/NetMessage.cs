@@ -1,4 +1,4 @@
-namespace Crafthoe.App;
+namespace Crafthoe.World;
 
 public readonly ref struct NetMessage(int type, Span<byte> data)
 {

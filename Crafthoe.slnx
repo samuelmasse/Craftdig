@@ -1,10 +1,12 @@
 <Solution>
     <Folder Name="/Client/">
+        <Project Path="src/Crafthoe.App.Client/Crafthoe.App.Client.csproj" Id="8be24ca5-85cd-405e-8330-34825128e5fc" />
         <Project Path="src/Crafthoe.Dimension.Client/Crafthoe.Dimension.Client.csproj" Id="d96f12fa-cadd-4044-968c-2e55a31a9980" />
         <Project Path="src/Crafthoe.Frontend/Crafthoe.Frontend.csproj" />
         <Project Path="src/Crafthoe.Module.Client/Crafthoe.Module.Client.csproj" Id="73053e3e-6f5f-44d3-95af-49f83c9fda0b" />
         <Project Path="src/Crafthoe.Native/Crafthoe.Native.csproj" />
         <Project Path="src/Crafthoe.Player.Client/Crafthoe.Player.Client.csproj" Id="11e61da7-83e7-4f25-b84c-103f0c92100f" />
+        <Project Path="src/Crafthoe.World.Client/Crafthoe.World.Client.csproj" Id="e359e76e-5a40-49e4-bfda-25d105f9b475" />
         <Project Path="src/Crafthoe/Crafthoe.csproj" />
     </Folder>
     <Folder Name="/Common/">
