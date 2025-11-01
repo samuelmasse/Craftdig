@@ -10,6 +10,6 @@ public class WorldServerTickTimer(WorldServerTickCheck tickCheckQueue)
         timer = new Timer((e) =>
         {
             tickCheckQueue.Signal();
-        }, null, TimeSpan.Zero, TimeSpan.FromMilliseconds(20));
+        }, null, TimeSpan.Zero, TimeSpan.FromMilliseconds(4));
     }
 }

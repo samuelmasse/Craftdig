@@ -41,7 +41,7 @@ public class ModuleSinglePlayerLoadWorldAction(RootState state, ModuleEnts ents,
 
         var players = dimensionScope.Get<DimensionPlayerBag>();
         var player = new EntObj();
-        players.Add((EntMut)player);
+        players.Add(player);
 
         var playerScope = dimensionScope.Scope<PlayerScope>();
         playerScope.Add(new PlayerEnt(player));

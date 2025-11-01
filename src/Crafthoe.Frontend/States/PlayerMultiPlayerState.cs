@@ -27,23 +27,20 @@ public class PlayerMultiPlayerState(
     {
         commonState.Update(time);
 
-        if (!commonState.Paused)
+        int ticks = tick.Update(time);
+        while (ticks > 0)
         {
-            int ticks = tick.Update(time);
-            while (ticks > 0)
-            {
-                if (!commonState.Inv)
-                    player.Tick();
-
-                ent.Ent.PrevPosition() = ent.Ent.Position();
-                ent.Ent.Position() = positionUpdateReceiver.Latest;
-
-                ticks--;
-            }
-
             if (!commonState.Inv)
-                player.Update(time);
+                player.Tick();
+
+            ent.Ent.PrevPosition() = ent.Ent.Position();
+            ent.Ent.Position() = positionUpdateReceiver.Latest;
+
+            ticks--;
         }
+
+        if (!commonState.Inv)
+            player.Update(time);
     }
 
     public override void Render()

@@ -42,6 +42,5 @@ public class DimensionChunkReceiver(
         chunkBag.Add(chunk);
         chunkPending.Remove(cloc);
         chunkReceiverHandlers.Run(chunk);
-        Console.WriteLine(chunk.Cloc());
     }
 }

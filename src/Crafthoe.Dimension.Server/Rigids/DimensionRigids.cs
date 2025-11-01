@@ -9,7 +9,7 @@ public class DimensionRigids(DimensionBlocks blocks, DimensionRigidBag rigidBag)
         {
             ent.PrevPosition() = ent.Position();
             ent.CollisionNormal() = default;
-            Collide(ent);
+            Collide((EntMut)ent);
             ent.Position() += ent.Velocity();
 
             if (ent.GetIsFlying())

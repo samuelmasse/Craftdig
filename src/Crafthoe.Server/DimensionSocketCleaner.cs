@@ -1,7 +1,7 @@
 namespace Crafthoe.Server;
 
 [Dimension]
-public class DimensionSocketCleaner(DimensionSockets sockets, DimensionPlayerBag playerBag)
+public class DimensionSocketCleaner(DimensionSockets sockets, DimensionPlayerBag playerBag, DimensionRigidBag rigidBag)
 {
     private readonly List<NetSocket> remove = [];
 
@@ -15,7 +15,8 @@ public class DimensionSocketCleaner(DimensionSockets sockets, DimensionPlayerBag
 
         foreach (var ns in remove)
         {
-            playerBag.Remove((EntMut)ns.Ent.SocketPlayer());
+            playerBag.Remove(ns.Ent.SocketPlayer());
+            rigidBag.Remove(ns.Ent.SocketPlayer());
             sockets.Remove(ns);
         }
 

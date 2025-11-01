@@ -16,7 +16,7 @@ public class PlayerSinglePlayerState(
         ent.Ent.HitBox() = new Box3d((-0.3, -0.3, -1.62), (0.3, 0.3, 0.18));
         ent.Ent.Position() = (15, 0, 120);
         ent.Ent.IsFlying() = true;
-        rigidBag.Add((EntMut)ent.Ent);
+        rigidBag.Add(ent.Ent);
         commonState.Load();
     }
 

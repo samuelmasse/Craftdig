@@ -27,7 +27,7 @@ public class DimensionPlayerSpawner(
 
     private void Spawn(NetSocket ns)
     {
-        var player = (EntMut)ns.Ent.SocketPlayer();
+        var player = ns.Ent.SocketPlayer();
         player.HitBox() = new Box3d((-0.3, -0.3, -1.62), (0.3, 0.3, 0.18));
         player.Position() = (15, 0, 120);
         playerBag.Add(player);
