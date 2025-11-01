@@ -7,7 +7,8 @@ public class DimensionPositionStreamer(DimensionSockets sockets, WorldPositionUp
     {
         foreach (var ns in sockets.Span)
         {
-            ns.Send(positionUpdateWrapper.Wrap(ns.Ent.SocketPlayer().Position()));
+            ns.Send(new((int)ClientCommand.PositionUpdate,
+                positionUpdateWrapper.Wrap(ns.Ent.SocketPlayer().Position())));
         }
     }
 }

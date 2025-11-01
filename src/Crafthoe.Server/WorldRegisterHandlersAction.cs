@@ -5,7 +5,7 @@ public class WorldRegisterHandlersAction(NetLoop netLoop, NetEcho netEcho, World
 {
     public void Run()
     {
-        netLoop.Register(NetEcho.Type, netEcho.Receive);
-        netLoop.Register(WorldSpawnWrapper.Type, spawnReceiver.Receive);
+        netLoop.Register((int)CommonCommand.Echo, netEcho.Receive);
+        netLoop.Register((int)ServerCommand.Spawn, spawnReceiver.Receive);
     }
 }

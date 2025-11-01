@@ -1,0 +1,7 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <ItemGroup>
+        <ProjectReference Include="..\Crafthoe.Module\Crafthoe.Module.csproj" />
+    </ItemGroup>
+
+</Project>

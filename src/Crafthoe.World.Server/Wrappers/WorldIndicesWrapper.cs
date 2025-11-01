@@ -3,12 +3,10 @@ namespace Crafthoe.World;
 [World]
 public class WorldIndicesWrapper(WorldModuleIndices moduleIndices)
 {
-    public const int Type = 5;
-
     private int cacheCount;
     private byte[] cache = [];
 
-    public NetMessage Wrap()
+    public Span<byte> Wrap()
     {
         if (moduleIndices.Names.Length != cacheCount)
         {
@@ -28,6 +26,6 @@ public class WorldIndicesWrapper(WorldModuleIndices moduleIndices)
             cache = Encoding.UTF8.GetBytes(csv);
         }
 
-        return new(Type, cache);
+        return cache;
     }
 }

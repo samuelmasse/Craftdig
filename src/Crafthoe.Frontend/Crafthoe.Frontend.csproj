@@ -1,8 +1,9 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <ItemGroup>
-        <ProjectReference Include="..\Crafthoe.Dimension.Server\Crafthoe.Dimension.Server.csproj" />
+        <ProjectReference Include="..\Crafthoe.Dimension.Backend\Crafthoe.Dimension.Backend.csproj" />
         <ProjectReference Include="..\Crafthoe.Player.Client\Crafthoe.Player.Client.csproj" />
+        <ProjectReference Include="..\Crafthoe.Protocol\Crafthoe.Protocol.csproj" />
         <ProjectReference Include="..\TrogloUI\TrogloUI.csproj" />
     </ItemGroup>
 
@@ -13,6 +14,7 @@
         <Using Include="Crafthoe.Dimension" />
         <Using Include="Crafthoe.Module" />
         <Using Include="Crafthoe.Player" />
+        <Using Include="Crafthoe.Protocol" />
         <Using Include="Crafthoe.World" />
         <Using Include="Crafthoe.Dimension.Unit">
             <Static>True</Static>

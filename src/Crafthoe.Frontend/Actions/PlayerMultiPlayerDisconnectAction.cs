@@ -21,6 +21,7 @@ public class PlayerMultiPlayerDisconnectAction(
             dimension.Dispose();
         }
 
+        worldScope.Scope<WorldLoaderScope>().Get<WorldClientUnloader>().Run();
         worldScope.Scope<WorldLoaderScope>().Get<WorldUnloader>().Run();
     }
 }

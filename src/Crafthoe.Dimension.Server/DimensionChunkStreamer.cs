@@ -3,7 +3,6 @@ namespace Crafthoe.Server;
 [Dimension]
 public class DimensionChunkStreamer(
     WorldModuleIndices moduleIndices,
-    WorldChunkUpdateWrapper chunkUpdateWrapper,
     DimensionBlocksRaw blocksRaw)
 {
     private readonly RegionBlockEntry[] buffer = new RegionBlockEntry[ChunkVolume];
@@ -15,7 +14,7 @@ public class DimensionChunkStreamer(
         var start = DateTime.UtcNow;
 
         EncodeIntoBuffer(cloc, blocksRaw.Memory(cloc).Span);
-        ns.Send(chunkUpdateWrapper.Wrap(data.AsSpan()[..bytes]));
+        ns.Send(new((int)ClientCommand.ChunkUpdate, data.AsSpan()[..bytes]));
 
         var dt = DateTime.UtcNow - start;
         Console.WriteLine($"Sent {cloc} {dt.TotalMilliseconds}");

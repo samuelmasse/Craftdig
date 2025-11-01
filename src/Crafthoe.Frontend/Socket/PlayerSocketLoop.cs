@@ -13,10 +13,10 @@ public class PlayerSocketLoop(
 
     public void Start()
     {
-        netLoop.Register(NetEcho.Type, netEcho.Receive);
-        netLoop.Register(WorldPositionUpdateWrapper.Type, positionUpdateReceiver.Receive);
-        netLoop.Register(WorldChunkUpdateWrapper.Type, chunkUpdateReceiver.Receive);
-        netLoop.Register(WorldIndicesWrapper.Type, indicesReceiver.Receive);
+        netLoop.Register((int)CommonCommand.Echo, netEcho.Receive);
+        netLoop.Register((int)ClientCommand.PositionUpdate, positionUpdateReceiver.Receive);
+        netLoop.Register((int)ClientCommand.ChunkUpdate, chunkUpdateReceiver.Receive);
+        netLoop.Register((int)ClientCommand.WorldIndicesUpdate, indicesReceiver.Receive);
         new Thread(Loop).Start();
     }
 

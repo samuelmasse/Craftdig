@@ -1,7 +1,7 @@
 namespace Crafthoe.Server;
 
 [Components]
-file record ServerComponents(
+file record DimensionServerComponents(
     EntObj SocketPlayer,
     HashSet<Vector2i>? SocketStreamedChunks
 );
