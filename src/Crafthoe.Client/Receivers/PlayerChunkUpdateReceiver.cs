@@ -6,7 +6,7 @@ public class PlayerChunkUpdateReceiver(
     DimensionBlocksPool blocksPool,
     PlayerChunkUpdateQueue chunkUpdateQueue)
 {
-    private readonly RegionBlockEntry[] buffer = new RegionBlockEntry[ChunkVolume];
+    private readonly ChunkUpdateBlockEntry[] buffer = new ChunkUpdateBlockEntry[ChunkVolume];
 
     public void Receive(NetSocket ns, NetMessage msg)
     {
@@ -20,7 +20,7 @@ public class PlayerChunkUpdateReceiver(
             MemoryMarshal.AsBytes(buffer.AsSpan()),
             out var bytes);
 
-        int count = bytes / RegionBlockEntry.Size;
+        int count = bytes / ChunkUpdateBlockEntry.Size;
         var entries = buffer.AsSpan()[..count];
         int cur = 0;
 

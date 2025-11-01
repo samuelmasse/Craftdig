@@ -5,8 +5,8 @@ public class DimensionChunkStreamer(
     WorldModuleIndices moduleIndices,
     DimensionBlocksRaw blocksRaw)
 {
-    private readonly RegionBlockEntry[] buffer = new RegionBlockEntry[ChunkVolume];
-    private readonly byte[] data = new byte[ChunkVolume * RegionBlockEntry.Size + Marshal.SizeOf<Vector2i>()];
+    private readonly ChunkUpdateBlockEntry[] buffer = new ChunkUpdateBlockEntry[ChunkVolume];
+    private readonly byte[] data = new byte[ChunkVolume * ChunkUpdateBlockEntry.Size + Marshal.SizeOf<Vector2i>()];
     private int bytes;
 
     public void Stream(NetSocket ns, Vector2i cloc)

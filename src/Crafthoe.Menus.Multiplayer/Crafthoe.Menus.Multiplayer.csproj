@@ -7,7 +7,6 @@
         <Using Include="Crafthoe.App.Frontend" />
         <Using Include="Crafthoe.Client" />
         <Using Include="Crafthoe.Dimension" />
-        <Using Include="Crafthoe.Dimension.Backend" />
         <Using Include="Crafthoe.Dimension.Frontend" />
         <Using Include="Crafthoe.Dimension.Unit">
             <Static>true</Static>
@@ -19,7 +18,6 @@
         <Using Include="Crafthoe.Player.Frontend" />
         <Using Include="Crafthoe.Protocol" />
         <Using Include="Crafthoe.World" />
-        <Using Include="Crafthoe.World.Backend" />
         <Using Include="Crafthoe.World.Frontend" />
         <Using Include="TrogloUI" />
         <Using Include="TrogloUI.UiSyntax">
@@ -30,7 +28,6 @@
     <ItemGroup>
         <ProjectReference Include="..\Crafthoe.Client\Crafthoe.Client.csproj" />
         <ProjectReference Include="..\Crafthoe.Menus.Common\Crafthoe.Menus.Common.csproj" />
-        <ProjectReference Include="..\Crafthoe.Protocol\Crafthoe.Protocol.csproj" />
     </ItemGroup>
 
 </Project>

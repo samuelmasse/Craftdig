@@ -5,7 +5,6 @@
         <Using Include="Crafthoe.App" />
         <Using Include="Crafthoe.App.Frontend" />
         <Using Include="Crafthoe.Dimension" />
-        <Using Include="Crafthoe.Dimension.Backend" />
         <Using Include="Crafthoe.Dimension.Frontend" />
         <Using Include="Crafthoe.Dimension.Unit">
             <Static>true</Static>
@@ -15,12 +14,10 @@
         <Using Include="Crafthoe.Player.Frontend" />
         <Using Include="Crafthoe.Protocol" />
         <Using Include="Crafthoe.World" />
-        <Using Include="Crafthoe.World.Backend" />
         <Using Include="Crafthoe.World.Frontend" />
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\Crafthoe.Dimension.Backend\Crafthoe.Dimension.Backend.csproj" />
         <ProjectReference Include="..\Crafthoe.Player.Frontend\Crafthoe.Player.Frontend.csproj" />
         <ProjectReference Include="..\Crafthoe.Protocol\Crafthoe.Protocol.csproj" />
     </ItemGroup>
