@@ -2,7 +2,6 @@
 
     <ItemGroup>
         <ProjectReference Include="..\Crafthoe.Dimension.Client\Crafthoe.Dimension.Client.csproj" />
-        <ProjectReference Include="..\Crafthoe.Player\Crafthoe.Player.csproj" />
     </ItemGroup>
 
     <ItemGroup>

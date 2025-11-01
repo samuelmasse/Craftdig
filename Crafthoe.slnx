@@ -11,7 +11,6 @@
         <Project Path="src/Crafthoe.App/Crafthoe.App.csproj" />
         <Project Path="src/Crafthoe.Dimension/Crafthoe.Dimension.csproj" />
         <Project Path="src/Crafthoe.Module/Crafthoe.Module.csproj" />
-        <Project Path="src/Crafthoe.Player/Crafthoe.Player.csproj" />
         <Project Path="src/Crafthoe.World/Crafthoe.World.csproj" />
     </Folder>
     <Folder Name="/Scripts/">
