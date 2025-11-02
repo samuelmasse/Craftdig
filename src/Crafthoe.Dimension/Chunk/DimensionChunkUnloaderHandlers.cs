@@ -1,4 +1,4 @@
-namespace Crafthoe.Dimension.Backend;
+namespace Crafthoe.Dimension;
 
 [Dimension]
 public class DimensionChunkUnloaderHandlers

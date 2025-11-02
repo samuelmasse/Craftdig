@@ -1,13 +1,13 @@
 namespace Crafthoe.Dimension.Frontend;
 
 [Dimension]
-public class DimensionClientChunkUnloaderHandler(
+public class DimensionChunkFrontendUnloader(
     DimensionSectionMeshTransferer meshTransferer,
     DimensionSections sections,
     DimensionChunkSortedLists chunkSortedLists,
     DimensionChunkRenderDescheduler chunkRenderDescheduler)
 {
-    public void Handle(EntMut chunk)
+    public void Unload(EntMut chunk)
     {
         foreach (var section in chunk.GetSections())
         {

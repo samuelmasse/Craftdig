@@ -8,7 +8,10 @@ public class DimensionBlocksPool
     public Memory<Ent> Take()
     {
         if (pool.TryTake(out var mem))
+        {
+            mem.Span.Clear();
             return mem;
+        }
 
         return new Ent[ChunkVolume];
     }

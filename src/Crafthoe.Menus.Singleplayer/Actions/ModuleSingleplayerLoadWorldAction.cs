@@ -30,14 +30,14 @@ public class ModuleSingleplayerLoadWorldAction(RootState state, ModuleEnts ents,
         dimensionScope.Add(new DimensionBiomeGenerator(
             (IBiomeGenerator)dimensionScope.Get(dimension.BiomeGeneraetorType())));
 
+        dimensionScope.Get<DimensionChunkReceiverHandlers>().Add(dimensionScope.Get<DimensionChunkFrontendReceiver>().Receive);
+        dimensionScope.Get<DimensionChunkUnloaderHandlers>().Add(dimensionScope.Get<DimensionChunkBackendUnloader>().Unload);
+        dimensionScope.Get<DimensionChunkUnloaderHandlers>().Add(dimensionScope.Get<DimensionChunkFrontendUnloader>().Unload);
+
         var dimensionLoaderScope = dimensionScope.Scope<DimensionLoaderScope>();
         dimensionLoaderScope.Get<DimensionLoader>().Run();
         dimensionLoaderScope.Get<DimensionBackendLoader>().Run();
         dimensionLoaderScope.Get<DimensionFrontendLoader>().Run();
-
-        dimensionScope.Get<DimensionDrawDistance>().Far = dimensionScope.Get<DimensionChunkRequester>().Far;
-        dimensionScope.Get<DimensionChunkReceiverHandlers>().Add(dimensionScope.Get<DimensionClientChunkReceiverHandler>().Handle);
-        dimensionScope.Get<DimensionChunkUnloaderHandlers>().Add(dimensionScope.Get<DimensionClientChunkUnloaderHandler>().Handle);
 
         var players = dimensionScope.Get<DimensionPlayerBag>();
         var player = new EntObj();

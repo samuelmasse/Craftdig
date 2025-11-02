@@ -20,7 +20,7 @@ public class ModuleMultiplayerJoinAction(RootState state, ModuleEnts ents, Modul
         var dimension = ents.Set.First(x => x.IsDimension());
 
         dimensionScope.Add(new DimensionAir(dimension.Air()));
-        dimensionScope.Get<DimensionDrawDistance>().Far = 24;
+        dimensionScope.Get<DimensionChunkUnloaderHandlers>().Add(dimensionScope.Get<DimensionChunkFrontendUnloader>().Unload);
 
         var dimensionLoaderScope = dimensionScope.Scope<DimensionLoaderScope>();
         dimensionLoaderScope.Get<DimensionLoader>().Run();
@@ -33,6 +33,7 @@ public class ModuleMultiplayerJoinAction(RootState state, ModuleEnts ents, Modul
         var playerScope = dimensionScope.Scope<PlayerScope>();
         playerScope.Add(new PlayerEnt(player));
         playerScope.Add(new PlayerSocket(socket));
+        dimensionScope.Get<DimensionChunkUnloaderHandlers>().Add(playerScope.Get<PlayerChunkClientUnloader>().Unload);
         playerScope.Get<PlayerSocketLoop>().Start();
         playerScope.Get<PlayerMultiplayerSpawnAction>().Run();
 

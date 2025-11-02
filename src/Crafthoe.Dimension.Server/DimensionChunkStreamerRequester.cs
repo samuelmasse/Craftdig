@@ -2,10 +2,10 @@ namespace Crafthoe.Dimension.Server;
 
 [Dimension]
 public class DimensionChunkStreamerRequester(
+    DimensionDrawDistance drawDistance,
     DimensionSockets sockets,
     DimensionChunks chunks,
     DimensionChunkBag chunkBag,
-    DimensionChunkRequester chunkRequester,
     DimensionChunkStreamer chunkStreamer)
 {
     private readonly Stopwatch watch = new();
@@ -45,7 +45,7 @@ public class DimensionChunkStreamerRequester(
     {
         cloc = default;
 
-        for (int r = 0; r <= chunkRequester.Far; r++)
+        for (int r = 0; r <= drawDistance.Far; r++)
         {
             for (int dx = -r; dx <= r; dx++)
             {

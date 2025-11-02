@@ -2,17 +2,15 @@ namespace Crafthoe.Dimension.Backend;
 
 [Dimension]
 public class DimensionChunkRequester(
+    DimensionDrawDistance drawDistance,
     DimensionPlayerBag playerBag,
     DimensionChunks chunks,
     DimensionChunkThreadWorkQueue chunkThreadWorkQueue,
     DimensionChunkPending chunkPending,
     DimensionChunkLoader chunkLoader)
 {
-    private readonly int far = 24;
     private readonly Stopwatch watch = new();
     private readonly Random rng = new();
-
-    public int Far => far;
 
     public void Frame()
     {
@@ -51,7 +49,7 @@ public class DimensionChunkRequester(
     {
         cloc = default;
 
-        for (int r = 0; r <= far; r++)
+        for (int r = 0; r <= drawDistance.Far; r++)
         {
             for (int dx = -r; dx <= r; dx++)
             {

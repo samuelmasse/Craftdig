@@ -1,11 +1,11 @@
 namespace Crafthoe.Dimension.Frontend;
 
 [Dimension]
-public class DimensionClientChunkReceiverHandler(
+public class DimensionChunkFrontendReceiver(
     DimensionChunkRenderScheduler chunkRenderScheduler,
     DimensionChunkSortedLists chunkSortedLists)
 {
-    public void Handle(EntMut chunk)
+    public void Receive(EntMut chunk)
     {
         chunk.Unrendered() = chunkSortedLists.Take();
         chunk.Rendered() = chunkSortedLists.Take();

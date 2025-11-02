@@ -22,6 +22,8 @@ public class WorldLoadDimensionsAction(ModuleEnts ents, WorldScope worldScope)
         dimensionScope.Add(new DimensionBiomeGenerator(
             (IBiomeGenerator)dimensionScope.Get(dimension.BiomeGeneraetorType())));
 
+        dimensionScope.Get<DimensionChunkUnloaderHandlers>().Add(dimensionScope.Get<DimensionChunkBackendUnloader>().Unload);
+
         var dimensionLoaderScope = dimensionScope.Scope<DimensionLoaderScope>();
         dimensionLoaderScope.Get<DimensionLoader>().Run();
         dimensionLoaderScope.Get<DimensionBackendLoader>().Run();

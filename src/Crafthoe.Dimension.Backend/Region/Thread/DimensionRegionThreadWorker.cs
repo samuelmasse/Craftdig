@@ -24,9 +24,6 @@ public class DimensionRegionThreadWorker(
             output.Add(new(input, noop));
         }
         else if (input.Type == RegionThreadInputType.DisposeChunk)
-        {
-            input.Blocks.Span.Clear();
             blocksPool.Add(input.Blocks);
-        }
     }
 }

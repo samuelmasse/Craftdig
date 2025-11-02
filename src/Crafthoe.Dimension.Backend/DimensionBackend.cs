@@ -5,7 +5,6 @@ public class DimensionBackend(
     DimensionRigids rigids,
     DimensionMovement movement,
     DimensionChunkRequester chunkRequester,
-    DimensionChunkCollector chunkCollector,
     DimensionChunkReceiver chunkReceiver,
     DimensionRegionReceiver regionReceiver,
     DimensionRegionInvalidation regionInvalidation)
@@ -19,7 +18,6 @@ public class DimensionBackend(
     public void Frame()
     {
         regionInvalidation.Frame();
-        chunkCollector.Frame();
         chunkRequester.Frame();
         chunkReceiver.Frame();
         regionReceiver.Frame();

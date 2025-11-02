@@ -116,6 +116,6 @@ public class DimensionMovement(DimensionPlayerBag bag)
 
         var vec = ent.Movement().Vector;
         vec.NormalizeFast();
-        ent.Velocity() += vec * speed;
+        ent.Velocity() += vec * speed * 10;
     }
 }

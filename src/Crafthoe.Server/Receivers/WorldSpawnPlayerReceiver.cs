@@ -10,7 +10,9 @@ public class WorldSpawnPlayerReceiver(WorldDimensionBag dimensionBag)
 
         Console.WriteLine("Was asked to spawn");
 
+        var dimensionScope = dimensionBag.Ents[0].DimensionScope();
+        ns.Ent.DimensionScope() = dimensionScope;
         ns.Ent.SocketPlayer() = new EntObj();
-        dimensionBag.Ents[0].DimensionScope().Get<DimensionPlayerSpawner>().Add(ns);
+        dimensionScope.Get<DimensionPlayerSpawner>().Add(ns);
     }
 }

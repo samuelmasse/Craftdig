@@ -1,8 +1,8 @@
-namespace Crafthoe.Dimension.Backend;
+namespace Crafthoe.Dimension;
 
 [Dimension]
 public class DimensionChunkCollector(
-    DimensionChunkRequester chunkRequester,
+    DimensionDrawDistance drawDistance,
     DimensionChunkBag chunkBag,
     DimensionPlayerBag playerBag,
     DimensionChunkUnloader chunkUnloader)
@@ -30,7 +30,7 @@ public class DimensionChunkCollector(
 
     private bool ShouldCollect(Ent chunk)
     {
-        var far = chunkRequester.Far;
+        var far = drawDistance.Far;
 
         foreach (var player in playerBag.Ents)
         {

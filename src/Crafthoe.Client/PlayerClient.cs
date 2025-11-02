@@ -3,7 +3,8 @@ namespace Crafthoe.Client;
 [Player]
 public class PlayerClient(
     DimensionChunks chunks,
-    DimensionClientChunkReceiverHandler chunkReceiverHandler,
+    DimensionChunkBag chunkBag,
+    DimensionChunkFrontendReceiver chunkReceiverHandler,
     PlayerEnt ent,
     PlayerPositionUpdateReceiver positionUpdateReceiver,
     PlayerChunkUpdateQueue chunkUpdateQueue,
@@ -32,7 +33,8 @@ public class PlayerClient(
             chunks.Alloc(cloc);
             var chunk = chunks[cloc];
             chunk.Blocks() = blocks;
-            chunkReceiverHandler.Handle(chunk);
+            chunkBag.Add(chunk);
+            chunkReceiverHandler.Receive(chunk);
         }
     }
 }

@@ -8,7 +8,8 @@ public class DimensionServer(
     DimensionSocketCleaner socketCleaner,
     DimensionPlayerSpawner playerSpawner,
     DimensionPositionStreamer positionStreamer,
-    DimensionChunkStreamerRequester chunkStreamerRequester)
+    DimensionChunkStreamerRequester chunkStreamerRequester,
+    DimensionForgottenChunks forgottenChunks)
 {
     public void Tick()
     {
@@ -16,6 +17,7 @@ public class DimensionServer(
         backend.Frame();
         socketCleaner.Tick();
         chunkStreamerRequester.Tick();
+        forgottenChunks.Tick();
         pendingMovement.Tick();
         backend.Tick();
         playerSpawner.Tick();
