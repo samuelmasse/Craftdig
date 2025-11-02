@@ -49,6 +49,9 @@ public class WorldListener(NetLoop nloop)
             Console.ResetColor();
         }
 
+        try { ns.Raw.Disconnect(false); } catch { }
+        try { ns.Raw.Dispose(); } catch { }
+
         Console.WriteLine($"Socket disconnected");
     }
 }

@@ -1,9 +1,9 @@
 namespace Crafthoe.Server;
 
-[World]
-public class WorldMovePlayerReceiver
+[Dimension]
+public class DimensionMovePlayerReceiver : DimensionReceiver
 {
-    public void Receive(NetSocket ns, NetMessage msg)
+    public override void Receive(NetSocket ns, NetMessage msg)
     {
         ref var pending = ref ns.Ent.SocketPlayer().PendingMovement();
         pending ??= [];

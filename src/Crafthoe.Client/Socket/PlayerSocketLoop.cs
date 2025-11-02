@@ -35,12 +35,8 @@ public class PlayerSocketLoop(
         {
             if (!stopping)
             {
-                try
-                {
-                    socket.Raw.Disconnect(false);
-                    socket.Raw.Dispose();
-                }
-                catch { }
+                try { socket.Raw.Disconnect(false); } catch { }
+                try { socket.Raw.Dispose(); } catch { }
 
                 throw;
             }

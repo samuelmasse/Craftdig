@@ -6,7 +6,10 @@ public class WorldSpawnPlayerReceiver(WorldDimensionBag dimensionBag)
     public void Receive(NetSocket ns, NetMessage msg)
     {
         if (ns.Ent.SocketPlayer() != null)
+        {
+            ns.Raw.Disconnect(false);
             return;
+        }
 
         Console.WriteLine("Was asked to spawn");
 
