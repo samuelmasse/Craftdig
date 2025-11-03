@@ -1,4 +1,4 @@
 namespace Crafthoe.Client;
 
 [Player]
-public class PlayerSocket(Socket socket) : NetSocket(socket);
+public class PlayerSocket(TcpClient tcp, SslStream ssl) : NetSocket(tcp, ssl);

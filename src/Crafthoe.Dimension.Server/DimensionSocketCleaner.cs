@@ -9,7 +9,7 @@ public class DimensionSocketCleaner(DimensionSockets sockets, DimensionPlayerBag
     {
         foreach (var ns in sockets.Span)
         {
-            if (!ns.Raw.Connected)
+            if (!ns.Connected)
                 remove.Add(ns);
         }
 

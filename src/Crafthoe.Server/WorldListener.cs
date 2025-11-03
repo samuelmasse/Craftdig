@@ -1,27 +1,35 @@
 namespace Crafthoe.Server;
 
 [World]
-public class WorldListener(NetLoop nloop)
+public class WorldListener(NetLoop nloop, WorldCreateDevCertificateAction createDevCertificateAction)
 {
     public void Start()
     {
-        using var listener = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-        var addr = IPAddress.Parse("127.0.0.1");
-        int port = 8080;
+        int port = 36676;
+        var cert = createDevCertificateAction.Run();
+        using var listener = new TcpListener(IPAddress.Any, port);
+        listener.Start(10);
 
-        listener.Bind(new IPEndPoint(addr, port));
-        listener.Listen(10);
-
-        Console.WriteLine($"Listening on {addr}:{port}...");
+        Console.WriteLine($"Listening on port {port}...");
 
         while (true)
         {
-            var s = listener.Accept();
-            s.NoDelay = true;
+            var tcp = listener.AcceptTcpClient();
+            var ssl = new SslStream(tcp.GetStream(), false);
+            var opt = new SslServerAuthenticationOptions
+            {
+                ServerCertificate = cert,
+                EnabledSslProtocols = SslProtocols.Tls13 | SslProtocols.Tls12,
+                ClientCertificateRequired = false,
+                CertificateRevocationCheckMode = X509RevocationMode.Online
+            };
+
+            ssl.AuthenticateAsServer(opt);
 
             try
             {
-                new Thread(() => ClientLoop(new(s))).Start();
+                tcp.NoDelay = true;
+                new Thread(() => ClientLoop(new(tcp, ssl))).Start();
             }
             catch (Exception e)
             {
@@ -33,13 +41,13 @@ public class WorldListener(NetLoop nloop)
         }
     }
 
-    private void ClientLoop(NetSocket ns)
+    private void ClientLoop(NetSocket socket)
     {
         Console.WriteLine($"Socket connected");
 
         try
         {
-            nloop.Run(ns);
+            nloop.Run(socket);
         }
         catch (Exception e)
         {
@@ -49,8 +57,7 @@ public class WorldListener(NetLoop nloop)
             Console.ResetColor();
         }
 
-        try { ns.Raw.Disconnect(false); } catch { }
-        try { ns.Raw.Dispose(); } catch { }
+        socket.Disconnect();
 
         Console.WriteLine($"Socket disconnected");
     }

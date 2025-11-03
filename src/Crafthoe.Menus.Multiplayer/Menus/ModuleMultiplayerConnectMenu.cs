@@ -9,7 +9,7 @@ public class ModuleMultiplayerConnectMenu(
     public void Create(EntObj root)
     {
         string defaultName = "localhost";
-        string defaultPort = "8080";
+        string defaultPort = "36676";
 
         var host = new StringBuilder(defaultName);
         var port = new StringBuilder(defaultPort);

@@ -20,8 +20,7 @@ public class PlayerSocketLoop(
 
     public void Stop()
     {
-        try { socket.Raw.Disconnect(false); } catch { }
-        try { socket.Raw.Dispose(); } catch { }
+        try { socket.Disconnect(); } catch { }
     }
 
     private void Loop()
@@ -30,9 +29,10 @@ public class PlayerSocketLoop(
         {
             netLoop.Run(socket);
         }
-        catch (SocketException)
+        catch
         {
-            Stop();
+            if (socket.Connected)
+                throw;
         }
     }
 }

@@ -6,13 +6,15 @@ public class ModuleMultiplayerConnectAction
     private string? host;
     private int port;
     private Thread? thread;
-    private Socket? socket;
+    private TcpClient? tcp;
+    private SslStream? ssl;
     private Exception? exception;
 
     public string? Host => host;
     public int Port => port;
     public bool Connecting => thread != null;
-    public Socket? Socket => socket;
+    public TcpClient? Tcp => tcp;
+    public SslStream? Ssl => ssl;
     public Exception? Exception => exception;
 
     public void Start(string host, int port)
@@ -23,20 +25,32 @@ public class ModuleMultiplayerConnectAction
         this.host = host;
         this.port = port;
 
-        socket = null;
+        tcp = null;
+        ssl = null;
         exception = null;
 
         thread = new Thread(() =>
         {
             try
             {
-                socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp) { NoDelay = true };
-                socket.Connect(host, port);
+                tcp = new TcpClient();
+                tcp.Connect(host, port);
+
+                ssl = new SslStream(tcp.GetStream(), false,
+                    host == "localhost" ? (sender, certificate, chain, sslPolicyErrors) => true : null);
+
+                var opt = new SslClientAuthenticationOptions
+                {
+                    TargetHost = host,
+                    EnabledSslProtocols = SslProtocols.Tls13 | SslProtocols.Tls12,
+                    CertificateRevocationCheckMode = X509RevocationMode.Online
+                };
+                ssl.AuthenticateAsClient(opt);
             }
             catch (Exception e)
             {
-                try { socket?.Dispose(); } catch { }
-                socket = null;
+                try { ssl?.Dispose(); } catch { }
+                try { tcp?.Dispose(); } catch { }
                 exception = e;
             }
             finally
@@ -53,6 +67,7 @@ public class ModuleMultiplayerConnectAction
         if (thread == null)
             return;
 
-        try { socket?.Dispose(); } catch { }
+        try { ssl?.Dispose(); } catch { }
+        try { tcp?.Dispose(); } catch { }
     }
 }

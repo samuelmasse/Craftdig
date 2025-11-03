@@ -3,7 +3,7 @@ namespace Crafthoe.Menus.Multiplayer;
 [Module]
 public class ModuleMultiplayerJoinAction(RootState state, ModuleEnts ents, ModuleScope scope)
 {
-    public void Run(string host, int port, Socket socket)
+    public void Run(PlayerSocket socket)
     {
         var worldScope = scope.Scope<WorldScope>();
 
@@ -32,7 +32,7 @@ public class ModuleMultiplayerJoinAction(RootState state, ModuleEnts ents, Modul
 
         var playerScope = dimensionScope.Scope<PlayerScope>();
         playerScope.Add(new PlayerEnt(player));
-        playerScope.Add(new PlayerSocket(socket));
+        playerScope.Add(socket);
         dimensionScope.Get<DimensionChunkUnloaderHandlers>().Add(playerScope.Get<PlayerChunkClientUnloader>().Unload);
         playerScope.Get<PlayerSocketLoop>().Start();
         playerScope.Get<PlayerMultiplayerSpawnAction>().Run();

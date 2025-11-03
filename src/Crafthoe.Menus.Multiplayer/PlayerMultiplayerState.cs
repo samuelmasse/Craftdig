@@ -40,7 +40,7 @@ public class PlayerMultiplayerState(
         if (!commonState.Inv)
             player.Update(time);
 
-        if (!socket.Raw.Connected)
+        if (!socket.Connected)
             state.Current = scope.New<PlayerMultiplayerDisconnectedState>();
     }
 

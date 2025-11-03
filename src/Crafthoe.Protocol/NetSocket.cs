@@ -1,12 +1,12 @@
 namespace Crafthoe.Protocol;
 
-public class NetSocket(Socket socket)
+public class NetSocket(TcpClient tcp, SslStream ssl)
 {
     private readonly EntObj ent = new();
     private byte[] buffer = [];
 
     public EntMut Ent => (EntMut)ent;
-    public Socket Raw => socket;
+    public bool Connected => tcp.Connected;
 
     public bool TryGet(out NetMessage msg)
     {
@@ -49,9 +49,9 @@ public class NetSocket(Socket socket)
 
         try
         {
-            socket.Send(tb);
-            socket.Send(sb);
-            socket.Send(msg.Data);
+            ssl.Write(tb);
+            ssl.Write(sb);
+            ssl.Write(msg.Data);
         }
         catch { }
     }
@@ -61,11 +61,17 @@ public class NetSocket(Socket socket)
         int r = 0;
         while (r < dst.Length)
         {
-            int n = socket.Receive(dst[r..]);
+            int n = ssl.Read(dst[r..]);
             if (n == 0)
                 return false;
             r += n;
         }
         return true;
+    }
+
+    public void Disconnect()
+    {
+        try { ssl.Dispose(); } catch { }
+        try { tcp.Dispose(); } catch { }
     }
 }

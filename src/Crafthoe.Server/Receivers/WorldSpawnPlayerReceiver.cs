@@ -7,7 +7,7 @@ public class WorldSpawnPlayerReceiver(WorldDimensionBag dimensionBag)
     {
         if (ns.Ent.SocketPlayer() != null)
         {
-            ns.Raw.Disconnect(false);
+            ns.Disconnect();
             return;
         }
 

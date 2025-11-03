@@ -29,12 +29,11 @@ public class ModuleMultiplayerConnectingMenu(
                     if (multiplayerConnectAction.Connecting)
                         return;
 
-                    if (multiplayerConnectAction.Socket != null)
+                    if (multiplayerConnectAction.Tcp != null && multiplayerConnectAction.Ssl != null)
                     {
-                        multiplayerJoinAction.Run(
-                            multiplayerConnectAction.Host!,
-                            multiplayerConnectAction.Port,
-                            multiplayerConnectAction.Socket);
+                        multiplayerJoinAction.Run(new(
+                            multiplayerConnectAction.Tcp,
+                            multiplayerConnectAction.Ssl));
                     }
                 });
 
