@@ -9,8 +9,8 @@
 
     <ItemGroup>
         <PackageReference Include="AlvorEngine.Loop" Version="0.1.2" />
-        <PackageReference Include="HadvarECS" Version="0.7" />
-        <PackageReference Include="HadvarECS.Generator" Version="0.7" />
+        <PackageReference Include="HadvarECS" Version="0.8" />
+        <PackageReference Include="HadvarECS.Generator" Version="0.8" />
     </ItemGroup>
 
 </Project>
