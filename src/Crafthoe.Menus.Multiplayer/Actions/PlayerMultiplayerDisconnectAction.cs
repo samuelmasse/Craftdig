@@ -4,14 +4,11 @@ namespace Crafthoe.Menus.Multiplayer;
 public class PlayerMultiplayerDisconnectAction(
     WorldScope worldScope,
     WorldDimensionBag dimensionBag,
-    PlayerSocket socket,
     PlayerSocketLoop socketLoop)
 {
     public void Run()
     {
         socketLoop.Stop();
-        socket.Raw.Disconnect(false);
-        socket.Raw.Dispose();
 
         foreach (var dimension in dimensionBag.Ents)
         {

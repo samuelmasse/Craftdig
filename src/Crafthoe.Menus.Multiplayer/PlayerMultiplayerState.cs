@@ -2,7 +2,10 @@ namespace Crafthoe.Menus.Multiplayer;
 
 [Player]
 public class PlayerMultiplayerState(
+    RootState state,
     WorldTick tick,
+    PlayerScope scope,
+    PlayerSocket socket,
     PlayerFrontend player,
     PlayerCommonState commonState,
     PlayerMultiplayerDisconnectAction multiplayerDisconnectAction,
@@ -36,6 +39,9 @@ public class PlayerMultiplayerState(
 
         if (!commonState.Inv)
             player.Update(time);
+
+        if (!socket.Raw.Connected)
+            state.Current = scope.New<PlayerMultiplayerDisconnectedState>();
     }
 
     public override void Render()

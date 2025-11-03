@@ -1,4 +1,4 @@
-namespace Crafthoe.Menus;
+namespace Crafthoe.Menus.Common;
 
 [Module]
 public class ModuleMainBackgroundMenu

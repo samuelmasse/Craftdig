@@ -9,8 +9,6 @@ public class PlayerSocketLoop(
     PlayerChunkUpdateReceiver chunkUpdateReceiver,
     PlayerWorldIndicesUpdateReceiver worldIndicesUpdateReceiver)
 {
-    private bool stopping;
-
     public void Start()
     {
         netLoop.Register((int)CommonCommand.Echo, netEcho.Receive);
@@ -22,7 +20,8 @@ public class PlayerSocketLoop(
 
     public void Stop()
     {
-        stopping = true;
+        try { socket.Raw.Disconnect(false); } catch { }
+        try { socket.Raw.Dispose(); } catch { }
     }
 
     private void Loop()
@@ -31,15 +30,9 @@ public class PlayerSocketLoop(
         {
             netLoop.Run(socket);
         }
-        catch
+        catch (SocketException)
         {
-            if (!stopping)
-            {
-                try { socket.Raw.Disconnect(false); } catch { }
-                try { socket.Raw.Dispose(); } catch { }
-
-                throw;
-            }
+            Stop();
         }
     }
 }
