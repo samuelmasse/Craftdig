@@ -5,6 +5,8 @@ public class WorldCreateDevCertificateAction
 {
     public X509Certificate2 Run()
     {
+        Console.WriteLine("Generating dev certificate");
+
         using var ca = CreateCACertificate();
         using var leaf = CreateLeaftCertificate(ca);
 

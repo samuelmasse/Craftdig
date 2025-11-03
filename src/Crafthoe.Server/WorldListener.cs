@@ -1,12 +1,12 @@
 namespace Crafthoe.Server;
 
 [World]
-public class WorldListener(NetLoop nloop, WorldCreateDevCertificateAction createDevCertificateAction)
+public class WorldListener(NetLoop nloop, WorldLoadCertificateAction loadCertificateAction)
 {
     public void Start()
     {
         int port = 36676;
-        var cert = createDevCertificateAction.Run();
+        var cert = loadCertificateAction.Run();
         using var listener = new TcpListener(IPAddress.Any, port);
         listener.Start(10);
 

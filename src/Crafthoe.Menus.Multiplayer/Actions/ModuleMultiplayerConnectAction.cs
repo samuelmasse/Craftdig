@@ -36,14 +36,34 @@ public class ModuleMultiplayerConnectAction
                 tcp = new TcpClient();
                 tcp.Connect(host, port);
 
-                ssl = new SslStream(tcp.GetStream(), false,
-                    host == "localhost" ? (sender, certificate, chain, sslPolicyErrors) => true : null);
+                ssl = new SslStream(tcp.GetStream(), false, (sender, certificate, chain, errors) =>
+                {
+                    if (host == "localhost")
+                        return true;
+
+                    if (errors == SslPolicyErrors.None)
+                        return true;
+
+                    if (errors == SslPolicyErrors.RemoteCertificateChainErrors && chain != null)
+                    {
+                        foreach (var s in chain.ChainStatus)
+                        {
+                            if (s.Status != X509ChainStatusFlags.NoError &&
+                                s.Status != X509ChainStatusFlags.RevocationStatusUnknown)
+                                return false;
+                        }
+
+                        return true;
+                    }
+
+                    return false;
+                });
 
                 var opt = new SslClientAuthenticationOptions
                 {
                     TargetHost = host,
                     EnabledSslProtocols = SslProtocols.Tls13 | SslProtocols.Tls12,
-                    CertificateRevocationCheckMode = X509RevocationMode.Online
+                    CertificateRevocationCheckMode = X509RevocationMode.NoCheck
                 };
                 ssl.AuthenticateAsClient(opt);
             }
