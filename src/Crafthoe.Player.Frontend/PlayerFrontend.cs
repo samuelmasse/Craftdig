@@ -10,7 +10,8 @@ public class PlayerFrontend(
     PlayerEnt ent,
     PlayerSelected selected,
     PlayerMovement movement,
-    PlayerTeleporter teleporter)
+    PlayerTeleporter teleporter,
+    PlayerFov fov)
 {
     private int mainCooldown;
     private int secondaryCooldown;
@@ -39,9 +40,19 @@ public class PlayerFrontend(
         }
     }
 
+    public void NoTick()
+    {
+        movement.NoTick();
+    }
+
     public void Update(double delta)
     {
-        movement.Update(delta);
+        fov.Update(delta);
+    }
+
+    public void Input()
+    {
+        movement.Input();
         camera.Rotate(-mouse.Delta / 300);
         camera.PreventBackFlipsAndFrontFlips();
 

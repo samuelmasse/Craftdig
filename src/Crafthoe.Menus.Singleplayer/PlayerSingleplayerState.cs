@@ -41,16 +41,18 @@ public class PlayerSingleplayerState(
             {
                 if (!commonState.Inv)
                     player.Tick();
+                else player.NoTick();
 
-                playerMetrics.TickMetric.Start();
+                    playerMetrics.TickMetric.Start();
                 dimensionBackend.Tick();
                 playerMetrics.TickMetric.End();
 
                 ticks--;
             }
 
+            player.Update(time);
             if (!commonState.Inv)
-                player.Update(time);
+                player.Input();
         }
     }
 

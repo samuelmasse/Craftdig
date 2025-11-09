@@ -31,14 +31,16 @@ public class PlayerMultiplayerState(
         {
             if (!commonState.Inv)
                 player.Tick();
+            else player.NoTick();
 
             client.Tick();
 
             ticks--;
         }
 
+        player.Update(time);
         if (!commonState.Inv)
-            player.Update(time);
+            player.Input();
 
         if (!socket.Connected)
             state.Current = scope.New<PlayerMultiplayerDisconnectedState>();

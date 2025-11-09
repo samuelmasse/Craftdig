@@ -3,26 +3,17 @@ namespace Crafthoe.Player.Frontend;
 [Player]
 public class PlayerMovement(
     AppDoublePress doublePress,
-    PlayerPerspective perspective,
     PlayerCamera camera,
     PlayerControls controls,
     PlayerEnt ent)
 {
-    public void Update(double delta)
+    public void Input()
     {
         if (doublePress.IsDoublePressed(Keys.W))
             ent.Ent.Movement().Sprint = MovementAction.Start;
 
         if (doublePress.IsDoublePressed(Keys.Space))
             ent.Ent.Movement().Fly = MovementAction.Toggle;
-
-        float fov = 70;
-        if (ent.Ent.IsFlying())
-            fov += 10;
-        if (ent.Ent.IsSprinting())
-            fov += 10;
-
-        perspective.Fov = (float)MathHelper.Lerp(perspective.Fov, fov, delta * 10);
     }
 
     public void Tick()
@@ -52,5 +43,10 @@ public class PlayerMovement(
             mov += camera.Right;
 
         ent.Ent.Movement().Vector += (Vector3)mov.Swizzle();
+    }
+
+    public void NoTick()
+    {
+        ent.Ent.Movement().Sprint = MovementAction.Stop;
     }
 }
