@@ -2,11 +2,16 @@ namespace Crafthoe.Dimension;
 
 [Dimension]
 public class DimensionContext(
-    DimensionScope scope,
+    DimensionRigids rigids,
+    DimensionMovement movement,
     DimensionBlockChanges blockChanges,
     DimensionChunkCollector chunkCollector)
 {
-    public DimensionScope Scope => scope;
+    public void Tick()
+    {
+        movement.Tick();
+        rigids.Tick();
+    }
 
     public void Frame()
     {

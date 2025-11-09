@@ -4,6 +4,7 @@ namespace Crafthoe.Menus.Multiplayer;
 public class PlayerMultiplayerState(
     RootState state,
     WorldTick tick,
+    DimensionContext context,
     PlayerScope scope,
     PlayerSocket socket,
     PlayerFrontend player,
@@ -33,6 +34,8 @@ public class PlayerMultiplayerState(
                 player.Tick();
             else player.NoTick();
 
+            client.Stream();
+            context.Tick();
             client.Tick();
 
             ticks--;

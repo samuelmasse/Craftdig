@@ -4,6 +4,7 @@ namespace Crafthoe.Protocol;
 public struct PositionUpdateCommand
 {
     public Vector3d Position;
+    public Vector3d Velocity;
     public bool IsFlying;
     public bool IsSprinting;
 }

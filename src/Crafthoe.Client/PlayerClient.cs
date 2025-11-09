@@ -10,17 +10,54 @@ public class PlayerClient(
     PlayerChunkUpdateQueue chunkUpdateQueue,
     PlayerSocket socket)
 {
+    private readonly List<PositionUpdateCommand> expected = [];
+
     public void Tick()
     {
-        ent.Ent.PrevPosition() = ent.Ent.Position();
-        ent.Ent.Position() = positionUpdateReceiver.Latest.Position;
-        ent.Ent.IsFlying() = positionUpdateReceiver.Latest.IsFlying;
-        ent.Ent.IsSprinting() = positionUpdateReceiver.Latest.IsSprinting;
+        expected.Add(new()
+        {
+            Position = ent.Ent.Position(),
+            Velocity = ent.Ent.Velocity(),
+            IsFlying = ent.Ent.IsFlying(),
+            IsSprinting = ent.Ent.IsSprinting()
+        });
 
+        if (expected.Count > 4)
+            expected.RemoveAt(0);
+
+        if (expected.Count >= 4)
+        {
+            var latest = positionUpdateReceiver.Latest;
+
+            if (!HasMatchingCommand(latest))
+            {
+                expected.Clear();
+
+                ent.Ent.Position() = latest.Position;
+                ent.Ent.Velocity() = latest.Velocity;
+                ent.Ent.IsFlying() = latest.IsFlying;
+                ent.Ent.IsSprinting() = latest.IsSprinting;
+
+                Console.WriteLine("Corrected");
+            }
+        }
+    }
+
+    public void Stream()
+    {
         socket.Send(new((int)ServerCommand.MovePlayer,
             MemoryMarshal.AsBytes(MemoryMarshal.CreateSpan(ref ent.Ent.Movement(), 1))));
+    }
 
-        ent.Ent.Movement() = default;
+    private bool HasMatchingCommand(PositionUpdateCommand command)
+    {
+        foreach (var ex in expected)
+        {
+            if (Vector3d.DistanceSquared(command.Position, ex.Position) < 1)
+                return true;
+        }
+
+        return false;
     }
 
     public void Frame()

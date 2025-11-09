@@ -32,7 +32,6 @@ public class PlayerChunkUpdateReceiver(
                 blocks.Span[cur++] = block;
         }
 
-        Console.WriteLine($"Chunk {cloc} {msg.Data.Length}");
         chunkUpdateQueue.Enqueue((cloc, blocks));
     }
 }

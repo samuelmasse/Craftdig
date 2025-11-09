@@ -1,4 +1,4 @@
-namespace Crafthoe.Dimension.Backend;
+namespace Crafthoe.Dimension;
 
 [Dimension]
 public class DimensionMovement(DimensionPlayerBag bag)
@@ -116,6 +116,6 @@ public class DimensionMovement(DimensionPlayerBag bag)
 
         var vec = ent.Movement().Vector;
         vec.NormalizeFast();
-        ent.Velocity() += vec * speed * 10;
+        ent.Velocity() += vec * speed;
     }
 }

@@ -11,6 +11,7 @@ public class PlayerCommonState(
     DimensionContext dimension,
     DimensionFrontend dimensionFrontend,
     DimensionSharedVertexBufferMenu dimensionSharedVertexBufferMenu,
+    DimensionRigidBag rigidBag,
     PlayerEnt ent,
     PlayerRenderer playerRenderer,
     PlayerDebugMenu debugMenu,
@@ -39,6 +40,15 @@ public class PlayerCommonState(
 
     public override void Load()
     {
+        ent.Ent.HitBox() = new Box3d((-0.3, -0.3, -1.62), (0.3, 0.3, 0.18));
+        ent.Ent.Position() = (15, 0, 120);
+        ent.Ent.IsFlying() = true;
+        ent.Ent.CanMove() = true;
+        ent.Ent.CanFly() = true;
+        ent.Ent.CanJump() = true;
+        ent.Ent.CanSprint() = true;
+        rigidBag.Add(ent.Ent);
+
         Node(menus).Mut(debugMenu.Create);
         Node(menus).Mut(dimensionSharedVertexBufferMenu.Create);
     }

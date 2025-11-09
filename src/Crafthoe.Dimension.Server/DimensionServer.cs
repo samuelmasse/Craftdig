@@ -19,7 +19,7 @@ public class DimensionServer(
         chunkStreamerRequester.Tick();
         forgottenChunks.Tick();
         pendingMovement.Tick();
-        backend.Tick();
+        context.Tick();
         playerSpawner.Tick();
         positionStreamer.Tick();
     }

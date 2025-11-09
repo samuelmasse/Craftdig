@@ -10,6 +10,7 @@ public class DimensionPositionStreamer(DimensionSockets sockets)
             var cmd = new PositionUpdateCommand()
             {
                 Position = ns.Ent.SocketPlayer().Position(),
+                Velocity = ns.Ent.SocketPlayer().Velocity(),
                 IsFlying = ns.Ent.SocketPlayer().IsFlying(),
                 IsSprinting = ns.Ent.SocketPlayer().IsSprinting()
             };

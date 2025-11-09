@@ -22,6 +22,11 @@ file record DimensionComponents(
     bool IsSprinting,
     int RigidBagIndex,
     MovementStep Movement,
+    bool CanFly,
+    bool CanSprint,
+    bool CanJump,
+    bool CanMove,
+    bool CanMoveVertically,
 
     // Player
     int PlayerBagIndex

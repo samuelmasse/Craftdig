@@ -18,7 +18,16 @@ public class DimensionPendingMovement(DimensionPlayerBag bag)
         ref var mov = ref ent.Movement();
 
         int count = pending.Count;
-        while (count > 0 && pending.TryDequeue(out var step))
+
+        Console.WriteLine(count);
+
+        while (count > 4)
+        {
+            pending.TryDequeue(out _);
+            count--;
+        }
+
+        if (pending.TryDequeue(out var step))
         {
             if (step.Sprint != MovementAction.None)
                 mov.Sprint = step.Sprint;
@@ -30,8 +39,6 @@ public class DimensionPendingMovement(DimensionPlayerBag bag)
             mov.FlyUp = step.FlyUp;
             mov.FlyDown = step.FlyDown;
             mov.Vector = step.Vector;
-
-            count--;
         }
     }
 }
