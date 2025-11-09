@@ -1,7 +1,7 @@
 namespace Crafthoe.Server;
 
-[World]
-public class WorldLoadCertificateAction(WorldCreateDevCertificateAction createDevCertificateAction)
+[Server]
+public class ServerLoadCertificateAction(ServerCreateDevCertificateAction createDevCertificateAction)
 {
     public X509Certificate2 Run()
     {

@@ -1,10 +1,10 @@
 namespace Crafthoe.Server;
 
-[World]
-public class WorldRegisterHandlersAction(
+[Server]
+public class ServerRegisterHandlersAction(
     NetLoop netLoop,
     NetEcho netEcho,
-    WorldSpawnPlayerReceiver spawnPlayerReceiver)
+    ServerSpawnPlayerReceiver spawnPlayerReceiver)
 {
     public void Run()
     {

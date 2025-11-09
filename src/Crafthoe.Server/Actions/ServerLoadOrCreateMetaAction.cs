@@ -1,11 +1,11 @@
 namespace Crafthoe.Server;
 
-[World]
-public class WorldLoadOrCreateMetaAction(
+[Server]
+public class ServerLoadOrCreateMetaAction(
     ModuleWriteWorldMetaAction writeWorldMetaAction,
     ModuleReadWorldMetaAction readWorldMetaAction,
     WorldScope scope,
-    WorldDefaults defaults,
+    ServerDefaults defaults,
     WorldPaths paths)
 {
     public void Run()

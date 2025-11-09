@@ -1,7 +1,7 @@
 namespace Crafthoe.Server;
 
-[World]
-public class WorldServerTickTimer(WorldServerTickCheck tickCheckQueue)
+[Server]
+public class ServerTickTimer(ServerTickCheck tickCheck)
 {
     private Timer? timer;
 
@@ -9,7 +9,9 @@ public class WorldServerTickTimer(WorldServerTickCheck tickCheckQueue)
     {
         timer = new Timer((e) =>
         {
-            tickCheckQueue.Signal();
+            tickCheck.Signal();
         }, null, TimeSpan.Zero, TimeSpan.FromMilliseconds(4));
     }
+
+    public void Stop() => timer?.Dispose();
 }

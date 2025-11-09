@@ -1,7 +1,7 @@
 namespace Crafthoe.Server;
 
-[World]
-public class WorldSpawnPlayerReceiver(WorldDimensionBag dimensionBag)
+[Server]
+public class ServerSpawnPlayerReceiver(WorldDimensionBag dimensionBag)
 {
     public void Receive(NetSocket ns, NetMessage msg)
     {

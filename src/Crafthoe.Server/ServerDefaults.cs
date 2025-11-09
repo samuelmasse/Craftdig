@@ -1,7 +1,7 @@
 namespace Crafthoe.Server;
 
-[World]
-public record class WorldDefaults
+[Server]
+public record class ServerDefaults
 {
     public required string Name { get; init; }
     public required Ent GameMode { get; init; }

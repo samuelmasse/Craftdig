@@ -1,7 +1,7 @@
 namespace Crafthoe.Server;
 
-[World]
-public class WorldApplyGlobalSettingsAction
+[Server]
+public class ServerApplyGlobalSettingsAction
 {
     public void Run()
     {

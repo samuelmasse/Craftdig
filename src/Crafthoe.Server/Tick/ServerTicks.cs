@@ -1,8 +1,18 @@
 namespace Crafthoe.Server;
 
-[World]
-public class WorldServerTicks(WorldTick tick, WorldDimensionBag dimensions, WorldServerTickCheck tickCheck)
+[Server]
+public class ServerTicks(WorldTick tick, WorldDimensionBag dimensions, ServerTickCheck tickCheck)
 {
+    private Thread? thread;
+
+    public void Start()
+    {
+        thread = new(Run);
+        thread.Start();
+    }
+
+    public void Join() => thread?.Join();
+
     public void Run()
     {
         var sw = Stopwatch.StartNew();

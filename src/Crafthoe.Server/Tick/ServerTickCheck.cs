@@ -1,7 +1,7 @@
 namespace Crafthoe.Server;
 
-[World]
-public class WorldServerTickCheck
+[Server]
+public class ServerTickCheck
 {
     private readonly SemaphoreSlim semaphore = new(0);
 

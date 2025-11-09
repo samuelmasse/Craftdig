@@ -1,7 +1,7 @@
 namespace Crafthoe.Server;
 
-[World]
-public class WorldLoadDimensionsAction(ModuleEnts ents, WorldScope worldScope)
+[Server]
+public class ServerLoadDimensionsAction(ModuleEnts ents, WorldScope worldScope)
 {
     public void Run()
     {

@@ -14,10 +14,12 @@ var exe = Assembly.GetExecutingAssembly().Location;
 var exeDir = Path.GetDirectoryName(exe)!;
 var worldDir = Path.Join(exeDir, "Data", "World");
 worldScope.Add(new WorldPaths(worldDir));
-worldScope.Add(new WorldDefaults()
+
+var serverScope = worldScope.Scope<ServerScope>();
+serverScope.Add(new ServerDefaults()
 {
     Name = "Server",
     Difficulty = native.NormalDifficulty,
     GameMode = native.SurvivalGameMode
 });
-worldScope.Get<WorldServer>().Run();
+serverScope.Get<Server>().Run();

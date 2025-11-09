@@ -1,6 +1,6 @@
 namespace Crafthoe.Protocol;
 
-public class NetSocket(TcpClient tcp, SslStream ssl)
+public class NetSocket(TcpClient tcp, Stream ssl)
 {
     private readonly EntObj ent = new();
     private byte[] buffer = [];
