@@ -8,7 +8,6 @@ public class PlayerPongReceiver
         var pong = MemoryMarshal.AsRef<PongCommand>(msg.Data);
 
         var dt = Stopwatch.GetTimestamp() - pong.Ping.Timestamp;
-        Console.WriteLine(dt);
         var ms = dt * 1000 / (double)Stopwatch.Frequency;
 
         Console.WriteLine($"Pong! {ms}");

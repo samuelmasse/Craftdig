@@ -3,7 +3,7 @@ namespace Crafthoe.Client;
 [Player]
 public class PlayerPositionUpdateReceiver
 {
-    private readonly PositionUpdateCommand[] latest = new PositionUpdateCommand[16];
+    private readonly PositionUpdateCommand[] latest = new PositionUpdateCommand[64];
     private int index;
 
     public PositionUpdateCommand Latest => latest[index % latest.Length];

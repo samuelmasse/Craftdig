@@ -7,6 +7,7 @@ public class PlayerPosition(
     PlayerPositionUpdateReceiver positionUpdateReceiver)
 {
     private readonly List<PositionUpdateCommand> expected = [];
+    private readonly int tolerance = 12;
     private int c;
 
     public void Tick()
@@ -19,10 +20,10 @@ public class PlayerPosition(
             IsSprinting = ent.Ent.IsSprinting()
         });
 
-        if (expected.Count > 12)
+        if (expected.Count > tolerance)
             expected.RemoveAt(0);
 
-        if (expected.Count >= 12)
+        if (expected.Count >= tolerance)
         {
             var latest = positionUpdateReceiver.Latest;
 
@@ -38,22 +39,35 @@ public class PlayerPosition(
                 Console.WriteLine($"Corrected {c++}");
             }
         }
+        else ApplyServerPosition(positionUpdateReceiver.Latest);
     }
 
     public void Stream()
     {
+        ref var movement = ref ent.Ent.Movement();
+        if (expected.Count < tolerance)
+            movement = default;
+
         socket.Send(new((int)ServerCommand.MovePlayer,
-            MemoryMarshal.AsBytes(MemoryMarshal.CreateSpan(ref ent.Ent.Movement(), 1))));
+            MemoryMarshal.AsBytes(MemoryMarshal.CreateSpan(ref movement, 1))));
     }
 
     private bool HasMatchingCommand(PositionUpdateCommand command)
     {
         foreach (var ex in expected)
         {
-            if (Vector3d.DistanceSquared(command.Position, ex.Position) < 1)
+            if (Vector3d.Distance(command.Position, ex.Position) < 0.1)
                 return true;
         }
 
         return false;
+    }
+
+    private void ApplyServerPosition(PositionUpdateCommand server)
+    {
+        ent.Ent.Position() = server.Position;
+        ent.Ent.Velocity() = server.Velocity;
+        ent.Ent.IsFlying() = server.IsFlying;
+        ent.Ent.IsSprinting() = server.IsSprinting;
     }
 }
