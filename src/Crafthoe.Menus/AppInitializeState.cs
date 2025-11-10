@@ -10,6 +10,7 @@ public class AppInitializeState(
     RootUi ui,
     AppScope scope,
     AppFiles files,
+    AppMouseTrackMenu mouseTrackMenu,
     AppTooltipMenu tooltipMenu,
     AppReset reset,
     AppZoomMenu zoomMenu) : State
@@ -21,6 +22,7 @@ public class AppInitializeState(
         screen.Size = screen.MonitorSize / 4 * 3;
 
         scripts.Add(root.Get<RootUiScript>());
+        ui.Nodes().Add(Node().Mut(mouseTrackMenu.Create));
         ui.Nodes().Add(Node().OrderValueV(2).Mut(tooltipMenu.Create));
         ui.Nodes().Add(Node().OrderValueV(5).Mut(zoomMenu.Create));
 

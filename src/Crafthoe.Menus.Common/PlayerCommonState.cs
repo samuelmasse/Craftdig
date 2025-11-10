@@ -109,7 +109,6 @@ public class PlayerCommonState(
         }
 
         mouse.Track = !paused && !inv;
-        mouse.CursorState = mouse.Track ? CursorState.Grabbed : CursorState.Normal;
     }
 
     public override void Render()
