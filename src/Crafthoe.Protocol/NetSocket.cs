@@ -41,19 +41,22 @@ public class NetSocket(TcpClient tcp, Stream ssl)
 
     public void Send(NetMessage msg)
     {
-        Span<byte> tb = stackalloc byte[4];
-        BinaryPrimitives.WriteInt32BigEndian(tb, msg.Type);
-
-        Span<byte> sb = stackalloc byte[4];
-        BinaryPrimitives.WriteInt32BigEndian(sb, msg.Data.Length);
-
-        try
+        lock (this)
         {
-            ssl.Write(tb);
-            ssl.Write(sb);
-            ssl.Write(msg.Data);
+            Span<byte> tb = stackalloc byte[4];
+            BinaryPrimitives.WriteInt32BigEndian(tb, msg.Type);
+
+            Span<byte> sb = stackalloc byte[4];
+            BinaryPrimitives.WriteInt32BigEndian(sb, msg.Data.Length);
+
+            try
+            {
+                ssl.Write(tb);
+                ssl.Write(sb);
+                ssl.Write(msg.Data);
+            }
+            catch { }
         }
-        catch { }
     }
 
     private bool Read(Span<byte> dst)
