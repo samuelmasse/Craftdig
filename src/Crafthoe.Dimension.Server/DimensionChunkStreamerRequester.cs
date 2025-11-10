@@ -9,22 +9,40 @@ public class DimensionChunkStreamerRequester(
     DimensionChunkStreamer chunkStreamer)
 {
     private readonly Stopwatch watch = new();
-    private readonly Random rng = new();
+    private readonly List<bool> next = [];
 
     public void Tick()
     {
         if (sockets.Span.IsEmpty)
             return;
 
-        bool next = true;
+        var sockSpan = sockets.Span;
+        for (int i = 0; i < sockSpan.Length; i++)
+        {
+            if (next.Count <= i)
+                next.Add(true);
+            else next[i] = true;
+        }
 
         watch.Restart();
+        bool anyNext = true;
 
-        while (next && watch.Elapsed.TotalMilliseconds < 1)
-            next = StreamNearestChunk(RandomSocket());
+        while (anyNext && !TimeExceeded())
+        {
+            anyNext = false;
+
+            for (int i = 0; i < sockSpan.Length && !TimeExceeded(); i++)
+            {
+                if (!next[i])
+                    continue;
+
+                anyNext = true;
+                next[i] = StreamNearestChunk(sockSpan[i]);
+            }
+        }
+
+        bool TimeExceeded() => watch.Elapsed.TotalMilliseconds >= 1;
     }
-
-    private NetSocket RandomSocket() => sockets.Span[rng.Next(sockets.Span.Length)];
 
     private bool StreamNearestChunk(NetSocket ns)
     {
