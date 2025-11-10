@@ -4,17 +4,23 @@ namespace Crafthoe.Server;
 public class ServerListener(ServerListenerLoop listenerLoop)
 {
     private Thread? thread;
+    private Action? stop;
 
     public void Start()
     {
         int port = 36677;
 
-        thread = listenerLoop.Run(port, (tcp) => new(tcp, tcp.GetStream()));
+        (thread, stop) = listenerLoop.Run(port, (tcp) => new(tcp, tcp.GetStream()));
         thread.Start();
 
         Console.WriteLine($"Listening on port {port}...");
     }
 
+    public void Stop() => stop?.Invoke();
 
-    public void Join() => thread?.Join();
+    public void Join()
+    {
+        Console.WriteLine("Listener stopped");
+        thread?.Join();
+    }
 }

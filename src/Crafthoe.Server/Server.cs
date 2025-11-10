@@ -6,10 +6,13 @@ public class Server(
     ServerLoadOrCreateMetaAction loadOrCreateMetaAction,
     ServerLoadDimensionsAction loadDimensionsAction,
     ServerRegisterHandlersAction registerHandlersAction,
+    ServerRegisterShutdownHandlersAction registerShutdownHandlersAction,
     ServerTickTimer tickTimer,
     ServerTicks ticks,
     ServerListener listener,
-    ServerListenerTls listenerTls)
+    ServerListenerTls listenerTls,
+    ServerDrainSocketsAction drainSocketsAction,
+    ServerUnloadDimensionsAction unloadDimensionsAction)
 {
     public void Run()
     {
@@ -20,13 +23,16 @@ public class Server(
 
         listener.Start();
         listenerTls.Start();
-
         tickTimer.Start();
         ticks.Start();
+        registerShutdownHandlersAction.Run();
+
         ticks.Join();
         tickTimer.Stop();
-
         listener.Join();
         listenerTls.Join();
+
+        drainSocketsAction.Run();
+        unloadDimensionsAction.Run();
     }
 }

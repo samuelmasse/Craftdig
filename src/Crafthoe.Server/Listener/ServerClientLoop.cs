@@ -1,11 +1,14 @@
 namespace Crafthoe.Server;
 
 [Server]
-public class ServerClientLoop(NetLoop nloop)
+public class ServerClientLoop(NetLoop nloop, ServerSockets sockets)
 {
     public void Start(NetSocket socket)
     {
-        new Thread(() => Loop(socket)).Start();
+        var thread = new Thread(() => Loop(socket));
+        socket.Ent.SocketThread() = thread;
+        thread.Start();
+        sockets.Add(socket);
     }
 
     private void Loop(NetSocket socket)
@@ -18,12 +21,16 @@ public class ServerClientLoop(NetLoop nloop)
         }
         catch (Exception e)
         {
-            Console.Error.WriteLine("Error in socket");
-            Console.Error.WriteLine(e);
+            if (socket.Connected)
+            {
+                Console.Error.WriteLine("Error in socket");
+                Console.Error.WriteLine(e);
+            }
         }
 
         socket.Disconnect();
-
         Console.WriteLine($"Socket disconnected");
+
+        sockets.Remove(socket);
     }
 }

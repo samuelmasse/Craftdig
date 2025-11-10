@@ -4,13 +4,14 @@ namespace Crafthoe.Server;
 public class ServerListenerTls(ServerListenerLoop listenerLoop, ServerLoadCertificateAction loadCertificateAction)
 {
     private Thread? thread;
+    private Action? stop;
 
     public void Start()
     {
         var cert = loadCertificateAction.Run();
         int port = 36676;
 
-        thread = listenerLoop.Run(port, (tcp) =>
+        (thread, stop) = listenerLoop.Run(port, (tcp) =>
         {
             var ssl = new SslStream(tcp.GetStream(), false);
             var opt = new SslServerAuthenticationOptions
@@ -30,5 +31,11 @@ public class ServerListenerTls(ServerListenerLoop listenerLoop, ServerLoadCertif
         Console.WriteLine($"Listening on TLS port {port}...");
     }
 
-    public void Join() => thread?.Join();
+    public void Stop() => stop?.Invoke();
+
+    public void Join()
+    {
+        Console.WriteLine("Listener TLS stopped");
+        thread?.Join();
+    }
 }
