@@ -15,7 +15,7 @@ public class DimensionPositionStreamer(DimensionSockets sockets)
                 IsSprinting = ns.Ent.SocketPlayer().IsSprinting()
             };
 
-            ns.Send(new((int)ClientCommand.PositionUpdate, MemoryMarshal.AsBytes(MemoryMarshal.CreateSpan(ref cmd, 1))));
+            ns.Send((int)ClientCommand.PositionUpdate, cmd);
         }
     }
 }

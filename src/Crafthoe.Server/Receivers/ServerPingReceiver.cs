@@ -7,7 +7,6 @@ public class ServerPingReceiver
     {
         var pong = new PongCommand() { Ping = cmd };
 
-        ns.Send(new((int)CommonCommand.Pong,
-            MemoryMarshal.AsBytes(MemoryMarshal.CreateSpan(ref pong, 1))));
+        ns.Send((int)CommonCommand.Pong, pong);
     }
 }

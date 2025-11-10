@@ -48,9 +48,7 @@ public class PlayerPosition(
         if (expected.Count < tolerance)
             movement = default;
 
-        var cmd = new MovePlayerCommand() { Step = movement };
-        var bytes = MemoryMarshal.AsBytes(MemoryMarshal.CreateSpan(ref cmd, 1));
-        socket.Send(new((int)ServerCommand.MovePlayer, bytes));
+        socket.Send((int)ServerCommand.MovePlayer, new MovePlayerCommand() { Step = movement });
     }
 
     private bool HasMatchingCommand(PositionUpdateCommand command)

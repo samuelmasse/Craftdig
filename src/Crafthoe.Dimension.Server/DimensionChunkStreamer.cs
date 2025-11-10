@@ -6,16 +6,18 @@ public class DimensionChunkStreamer(
     DimensionBlocksRaw blocksRaw)
 {
     private readonly ChunkUpdateBlockEntry[] buffer = new ChunkUpdateBlockEntry[ChunkVolume];
-    private readonly byte[] data = new byte[ChunkVolume * ChunkUpdateBlockEntry.Size + Marshal.SizeOf<Vector2i>()];
+    private readonly byte[] data = new byte[ChunkVolume * ChunkUpdateBlockEntry.Size];
     private int bytes;
 
     public void Stream(NetSocket ns, Vector2i cloc)
     {
-        EncodeIntoBuffer(cloc, blocksRaw.Memory(cloc).Span);
-        ns.Send(new((int)ClientCommand.ChunkUpdate, data.AsSpan()[..bytes]));
+        EncodeIntoBuffer(blocksRaw.Memory(cloc).Span);
+
+        ns.Send<ChunkUpdateCommand, byte>(
+            (int)ClientCommand.ChunkUpdate, new ChunkUpdateCommand() { Cloc = cloc }, data.AsSpan()[..bytes]);
     }
 
-    private void EncodeIntoBuffer(Vector2i cloc, ReadOnlySpan<Ent> blocks)
+    private void EncodeIntoBuffer(ReadOnlySpan<Ent> blocks)
     {
         int count = 0;
         Ent prev = default;
@@ -34,15 +36,12 @@ public class DimensionChunkStreamer(
 
         Flush();
 
-        MemoryMarshal.Cast<byte, Vector2i>(data.AsSpan())[0] = cloc;
-        bytes = Marshal.SizeOf<Vector2i>();
-
         BrotliEncoder.TryCompress(
             MemoryMarshal.AsBytes(buffer.AsSpan()[..count]),
-            data.AsSpan()[bytes..],
+            data,
             out var compressedBytes);
 
-        bytes += compressedBytes;
+        bytes = compressedBytes;
 
         void Flush()
         {

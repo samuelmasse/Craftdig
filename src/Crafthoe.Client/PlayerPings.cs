@@ -14,8 +14,7 @@ public class PlayerPings(PlayerSocket socket)
         {
             var ping = new PingCommand() { Timestamp = Stopwatch.GetTimestamp() };
 
-            socket.Send(new((int)CommonCommand.Ping,
-                MemoryMarshal.AsBytes(MemoryMarshal.CreateSpan(ref ping, 1))));
+            socket.Send((int)CommonCommand.Ping, ping);
 
             lastPing = now;
         }

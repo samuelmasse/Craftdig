@@ -39,6 +39,6 @@ public class DimensionPlayerSpawner(
         rigidBag.Add(player);
         sockets.Add(ns);
 
-        ns.Send(new((int)ClientCommand.WorldIndicesUpdate, indicesWrapper.Wrap()));
+        ns.Send((int)ClientCommand.WorldIndicesUpdate, indicesWrapper.Wrap());
     }
 }

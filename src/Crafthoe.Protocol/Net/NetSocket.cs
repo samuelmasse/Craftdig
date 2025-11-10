@@ -1,6 +1,6 @@
 namespace Crafthoe.Protocol;
 
-public class NetSocket(TcpClient tcp, Stream ssl)
+public class NetSocket(TcpClient tcp, Stream stream)
 {
     private readonly EntObj ent = new();
     private byte[] buffer = [];
@@ -39,24 +39,43 @@ public class NetSocket(TcpClient tcp, Stream ssl)
         return true;
     }
 
-    public void Send(NetMessage msg)
+    public void Send(int type, ReadOnlySpan<byte> cmd, ReadOnlySpan<byte> data)
     {
         lock (this)
         {
             Span<byte> tb = stackalloc byte[4];
-            BinaryPrimitives.WriteInt32BigEndian(tb, msg.Type);
+            BinaryPrimitives.WriteInt32BigEndian(tb, type);
 
             Span<byte> sb = stackalloc byte[4];
-            BinaryPrimitives.WriteInt32BigEndian(sb, msg.Data.Length);
+            BinaryPrimitives.WriteInt32BigEndian(sb, cmd.Length + data.Length);
 
             try
             {
-                ssl.Write(tb);
-                ssl.Write(sb);
-                ssl.Write(msg.Data);
+                stream.Write(tb);
+                stream.Write(sb);
+                stream.Write(cmd);
+                stream.Write(data);
             }
             catch { }
         }
+    }
+
+    public void Send(int type, ReadOnlySpan<byte> data) =>
+        Send(type, data, []);
+
+    public void Send(int type) =>
+        Send(type, [], []);
+
+    public void Send<C, D>(int type, C cmd, ReadOnlySpan<D> data) where C : unmanaged where D : unmanaged
+    {
+        Send(type,
+            MemoryMarshal.AsBytes(MemoryMarshal.CreateSpan(ref cmd, 1)),
+            MemoryMarshal.AsBytes(data));
+    }
+
+    public void Send<C>(int type, in C cmd) where C : unmanaged
+    {
+        Send<C, byte>(type, cmd, []);
     }
 
     private bool Read(Span<byte> dst)
@@ -64,7 +83,7 @@ public class NetSocket(TcpClient tcp, Stream ssl)
         int r = 0;
         while (r < dst.Length)
         {
-            int n = ssl.Read(dst[r..]);
+            int n = stream.Read(dst[r..]);
             if (n == 0)
                 return false;
             r += n;
@@ -74,7 +93,7 @@ public class NetSocket(TcpClient tcp, Stream ssl)
 
     public void Disconnect()
     {
-        try { ssl.Dispose(); } catch { }
+        try { stream.Dispose(); } catch { }
         try { tcp.Dispose(); } catch { }
     }
 }
