@@ -30,7 +30,7 @@ public class PlayerMultiplayerState(
         int ticks = tick.Update(time);
         while (ticks > 0)
         {
-            if (!commonState.Inv)
+            if (!commonState.Inv && !commonState.Paused)
                 player.Tick();
             else player.NoTick();
 
@@ -42,7 +42,7 @@ public class PlayerMultiplayerState(
         }
 
         player.Update(time);
-        if (!commonState.Inv)
+        if (!commonState.Inv && !commonState.Paused)
             player.Input();
 
         if (!socket.Connected)
