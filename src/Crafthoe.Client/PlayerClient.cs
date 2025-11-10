@@ -11,6 +11,7 @@ public class PlayerClient(
     PlayerSocket socket)
 {
     private readonly List<PositionUpdateCommand> expected = [];
+    private int c;
 
     public void Tick()
     {
@@ -22,10 +23,10 @@ public class PlayerClient(
             IsSprinting = ent.Ent.IsSprinting()
         });
 
-        if (expected.Count > 4)
+        if (expected.Count > 12)
             expected.RemoveAt(0);
 
-        if (expected.Count >= 4)
+        if (expected.Count >= 12)
         {
             var latest = positionUpdateReceiver.Latest;
 
@@ -38,7 +39,7 @@ public class PlayerClient(
                 ent.Ent.IsFlying() = latest.IsFlying;
                 ent.Ent.IsSprinting() = latest.IsSprinting;
 
-                Console.WriteLine("Corrected");
+                Console.WriteLine($"Corrected {c++}");
             }
         }
     }

@@ -21,7 +21,7 @@ public class DimensionPendingMovement(DimensionPlayerBag bag)
 
         Console.WriteLine(count);
 
-        while (count > 4)
+        while (count > 12)
         {
             pending.TryDequeue(out _);
             count--;
