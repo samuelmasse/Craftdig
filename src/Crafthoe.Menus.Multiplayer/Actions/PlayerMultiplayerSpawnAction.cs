@@ -5,6 +5,6 @@ public class PlayerMultiplayerSpawnAction(PlayerSocket socket)
 {
     public void Run()
     {
-        socket.Send((int)ServerCommand.SpawnPlayer);
+        socket.Send<SpawnPlayerCommand>();
     }
 }

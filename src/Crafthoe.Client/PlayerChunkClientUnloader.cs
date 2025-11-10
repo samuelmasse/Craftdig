@@ -5,7 +5,7 @@ public class PlayerChunkClientUnloader(DimensionBlocksPool blocksPool, PlayerSoc
 {
     public void Unload(EntMut ent)
     {
-        socket.Send((int)ServerCommand.ForgetChunk, new ForgetChunkCommand() { Cloc = ent.Cloc() });
+        socket.Send(new ForgetChunkCommand() { Cloc = ent.Cloc() });
 
         if (!ent.Blocks().IsEmpty)
             blocksPool.Add(ent.Blocks());

@@ -17,7 +17,7 @@ public class PlayerChunkUpdateReceiver(
             MemoryMarshal.AsBytes(buffer.AsSpan()),
             out var bytes);
 
-        int count = bytes / ChunkUpdateBlockEntry.Size;
+        int count = bytes / Marshal.SizeOf<ChunkUpdateBlockEntry>();
         var entries = buffer.AsSpan()[..count];
         int cur = 0;
 

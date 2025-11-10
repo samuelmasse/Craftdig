@@ -8,17 +8,10 @@ public class ServerRegisterHandlersAction(
 {
     public void Run()
     {
-        loop.Register<PingCommand>(
-            (int)CommonCommand.Ping, pingReceiver.Receive);
-
-        loop.Register((int)ServerCommand.SpawnPlayer,
-            spawnPlayerReceiver.Receive);
-
-        loop.Register((int)ServerCommand.MovePlayer,
-            DimensionHandler<DimensionMovePlayerReceiver, MovePlayerCommand>());
-
-        loop.Register((int)ServerCommand.ForgetChunk,
-            DimensionHandler<DimensionForgetChunkReceiver, ForgetChunkCommand>());
+        loop.Register<PingCommand>(pingReceiver.Receive);
+        loop.Register<SpawnPlayerCommand>(spawnPlayerReceiver.Receive);
+        loop.Register(DimensionHandler<DimensionMovePlayerReceiver, MovePlayerCommand>());
+        loop.Register(DimensionHandler<DimensionForgetChunkReceiver, ForgetChunkCommand>());
     }
 
     private Action<NetSocket, C> DimensionHandler<T, C>()

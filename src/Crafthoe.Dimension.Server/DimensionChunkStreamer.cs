@@ -6,15 +6,13 @@ public class DimensionChunkStreamer(
     DimensionBlocksRaw blocksRaw)
 {
     private readonly ChunkUpdateBlockEntry[] buffer = new ChunkUpdateBlockEntry[ChunkVolume];
-    private readonly byte[] data = new byte[ChunkVolume * ChunkUpdateBlockEntry.Size];
+    private readonly byte[] data = new byte[ChunkVolume * Marshal.SizeOf<ChunkUpdateBlockEntry>()];
     private int bytes;
 
     public void Stream(NetSocket ns, Vector2i cloc)
     {
         EncodeIntoBuffer(blocksRaw.Memory(cloc).Span);
-
-        ns.Send<ChunkUpdateCommand, byte>(
-            (int)ClientCommand.ChunkUpdate, new ChunkUpdateCommand() { Cloc = cloc }, data.AsSpan()[..bytes]);
+        ns.Send(new ChunkUpdateCommand() { Cloc = cloc }, data.AsSpan()[..bytes]);
     }
 
     private void EncodeIntoBuffer(ReadOnlySpan<Ent> blocks)

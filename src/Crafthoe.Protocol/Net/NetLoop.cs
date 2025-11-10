@@ -21,14 +21,12 @@ public class NetLoop
     public void Register(int type, Action<NetSocket, NetMessage> handler) =>
         handlers[type] = handler;
 
-    public void Register(int type, Action<NetSocket> handler) =>
-        Register(type, (ns, msg) => handler(ns));
-
-    public void Register<C, D>(int type, Action<NetSocket, C, ReadOnlySpan<D>> handler) where C : unmanaged where D : unmanaged
+    public void Register<C, D>(Action<NetSocket, C, ReadOnlySpan<D>> handler)
+        where C : unmanaged, ICommand where D : unmanaged
     {
         int header = Marshal.SizeOf<C>();
 
-        Register(type, (ns, msg) =>
+        Register(C.CommandId, (ns, msg) =>
         {
             var cmd = MemoryMarshal.AsRef<C>(msg.Data[..header]);
             var data = msg.Data[header..];
@@ -37,24 +35,27 @@ public class NetLoop
         });
     }
 
-    public void Register<C>(int type, Action<NetSocket, C> handler) where C : unmanaged =>
-        Register<C, byte>(type, (ns, cmd, data) => handler(ns, cmd));
+    public void Register<C>(Action<NetSocket> handler)
+        where C : unmanaged, ICommand =>
+        Register<C, byte>((ns, cmd, data) => handler(ns));
 
-    public void Register<C, D>(int type, Action<C, ReadOnlySpan<D>> handler) where C : unmanaged where D : unmanaged =>
-        Register<C, D>(type, (ns, cmd, data) => handler(cmd, data));
+    public void Register<C>(Action<NetSocket, C> handler)
+        where C : unmanaged, ICommand =>
+        Register<C, byte>((ns, cmd, data) => handler(ns, cmd));
 
-    public void Register<C>(int type, Action<C> handler) where C : unmanaged =>
-        Register<C, byte>(type, (ns, cmd, data) => handler(cmd));
+    public void Register<C, D>(Action<NetSocket, ReadOnlySpan<D>> handler)
+        where C : unmanaged, ICommand where D : unmanaged =>
+        Register<C, D>((ns, cmd, items) => handler(ns, items));
 
-    public void Register<D>(int type, Action<NetSocket, ReadOnlySpan<D>> handler) where D : unmanaged
-    {
-        Register(type, (ns, msg) =>
-        {
-            var items = MemoryMarshal.Cast<byte, D>(msg.Data);
-            handler(ns, items);
-        });
-    }
+    public void Register<C>(Action<C> handler)
+        where C : unmanaged, ICommand =>
+        Register<C, byte>((ns, cmd, data) => handler(cmd));
 
-    public void Register<D>(int type, Action<ReadOnlySpan<D>> handler) where D : unmanaged =>
-        Register<D>(type, (ns, data) => handler(data));
+    public void Register<C, D>(Action<C, ReadOnlySpan<D>> handler)
+        where C : unmanaged, ICommand where D : unmanaged =>
+        Register<C, D>((ns, cmd, data) => handler(cmd, data));
+
+    public void Register<C, D>(Action<ReadOnlySpan<D>> handler)
+        where C : unmanaged, ICommand where D : unmanaged =>
+        Register<C, D>((NetSocket ns, ReadOnlySpan<D> data) => handler(data));
 }

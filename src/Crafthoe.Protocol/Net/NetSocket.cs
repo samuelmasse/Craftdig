@@ -60,23 +60,33 @@ public class NetSocket(TcpClient tcp, Stream stream)
         }
     }
 
-    public void Send(int type, ReadOnlySpan<byte> data) =>
-        Send(type, data, []);
-
-    public void Send(int type) =>
-        Send(type, [], []);
-
-    public void Send<C, D>(int type, C cmd, ReadOnlySpan<D> data) where C : unmanaged where D : unmanaged
+    public void Send<C, D>(C cmd, ReadOnlySpan<D> data)
+        where C : unmanaged, ICommand where D : unmanaged
     {
-        Send(type,
+        Send(C.CommandId,
             MemoryMarshal.AsBytes(MemoryMarshal.CreateSpan(ref cmd, 1)),
             MemoryMarshal.AsBytes(data));
     }
 
-    public void Send<C>(int type, in C cmd) where C : unmanaged
-    {
-        Send<C, byte>(type, cmd, []);
-    }
+    public void Send<C, D>(in C cmd, Span<D> data)
+        where C : unmanaged, ICommand where D : unmanaged =>
+        Send(cmd, (ReadOnlySpan<D>)data);
+
+    public void Send<C>(in C cmd)
+        where C : unmanaged, ICommand =>
+        Send<C, byte>(cmd, []);
+
+    public void Send<C, D>(ReadOnlySpan<D> data)
+        where C : unmanaged, ICommand where D : unmanaged =>
+        Send<C, D>(default, data);
+
+    public void Send<C, D>(Span<D> data)
+        where C : unmanaged, ICommand where D : unmanaged =>
+        Send<C, D>(default, (ReadOnlySpan<D>)data);
+
+    public void Send<C>()
+        where C : unmanaged, ICommand =>
+        Send<C, byte>(default, []);
 
     private bool Read(Span<byte> dst)
     {

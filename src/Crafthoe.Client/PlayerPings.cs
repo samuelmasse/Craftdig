@@ -12,9 +12,7 @@ public class PlayerPings(PlayerSocket socket)
 
         if (delta.TotalMilliseconds > 500)
         {
-            var ping = new PingCommand() { Timestamp = Stopwatch.GetTimestamp() };
-
-            socket.Send((int)CommonCommand.Ping, ping);
+            socket.Send(new PingCommand() { Timestamp = Stopwatch.GetTimestamp() });
 
             lastPing = now;
         }

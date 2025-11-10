@@ -14,20 +14,11 @@ public class PlayerSocketLoop(
 
     public void Start()
     {
-        loop.Register<PingCommand>(
-            (int)CommonCommand.Ping, pingReceiver.Receive);
-
-        loop.Register<PongCommand>(
-            (int)CommonCommand.Pong, pongReceiver.Receive);
-
-        loop.Register<PositionUpdateCommand>(
-            (int)ClientCommand.PositionUpdate, positionUpdateReceiver.Receive);
-
-        loop.Register<ChunkUpdateCommand, byte>(
-            (int)ClientCommand.ChunkUpdate, chunkUpdateReceiver.Receive);
-
-        loop.Register<byte>(
-            (int)ClientCommand.WorldIndicesUpdate, worldIndicesUpdateReceiver.Receive);
+        loop.Register<PingCommand>(pingReceiver.Receive);
+        loop.Register<PongCommand>(pongReceiver.Receive);
+        loop.Register<PositionUpdateCommand>(positionUpdateReceiver.Receive);
+        loop.Register<ChunkUpdateCommand, byte>(chunkUpdateReceiver.Receive);
+        loop.Register<WorldIndicesUpdateCommand, byte>(worldIndicesUpdateReceiver.Receive);
 
         thread = new Thread(Loop);
         thread.Start();

@@ -7,15 +7,13 @@ public class DimensionPositionStreamer(DimensionSockets sockets)
     {
         foreach (var ns in sockets.Span)
         {
-            var cmd = new PositionUpdateCommand()
+            ns.Send(new PositionUpdateCommand()
             {
                 Position = ns.Ent.SocketPlayer().Position(),
                 Velocity = ns.Ent.SocketPlayer().Velocity(),
                 IsFlying = ns.Ent.SocketPlayer().IsFlying(),
                 IsSprinting = ns.Ent.SocketPlayer().IsSprinting()
-            };
-
-            ns.Send((int)ClientCommand.PositionUpdate, cmd);
+            });
         }
     }
 }
