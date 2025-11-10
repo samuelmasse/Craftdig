@@ -1,7 +1,7 @@
 namespace Crafthoe.Protocol;
 
-public readonly ref struct NetMessage(int type, Span<byte> data)
+public readonly ref struct NetMessage(ushort type, ReadOnlySpan<byte> data)
 {
-    public readonly int Type = type;
-    public readonly Span<byte> Data = data;
+    public readonly ushort Type = type;
+    public readonly ReadOnlySpan<byte> Data = data;
 }

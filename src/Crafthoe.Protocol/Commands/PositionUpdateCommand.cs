@@ -3,7 +3,7 @@ namespace Crafthoe.Protocol;
 [StructLayout(LayoutKind.Sequential, Pack = 1)]
 public struct PositionUpdateCommand : ICommand
 {
-    public static int CommandId => (int)Commands.PositionUpdate;
+    public static ushort CommandId => (ushort)Commands.PositionUpdate;
 
     public Vector3d Position;
     public Vector3d Velocity;

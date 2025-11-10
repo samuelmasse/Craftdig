@@ -12,11 +12,11 @@ public class NetSocket(TcpClient tcp, Stream stream)
     {
         msg = default;
 
-        Span<byte> tb = stackalloc byte[4];
+        Span<byte> tb = stackalloc byte[2];
         if (!Read(tb))
             return false;
 
-        int type = BinaryPrimitives.ReadInt32BigEndian(tb);
+        ushort type = BinaryPrimitives.ReadUInt16BigEndian(tb);
         if (type <= 0)
             throw new Exception("Message type is invalid");
 
@@ -39,12 +39,12 @@ public class NetSocket(TcpClient tcp, Stream stream)
         return true;
     }
 
-    public void Send(int type, ReadOnlySpan<byte> cmd, ReadOnlySpan<byte> data)
+    public void Send(ushort type, ReadOnlySpan<byte> cmd, ReadOnlySpan<byte> data)
     {
         lock (this)
         {
-            Span<byte> tb = stackalloc byte[4];
-            BinaryPrimitives.WriteInt32BigEndian(tb, type);
+            Span<byte> tb = stackalloc byte[2];
+            BinaryPrimitives.WriteUInt16BigEndian(tb, type);
 
             Span<byte> sb = stackalloc byte[4];
             BinaryPrimitives.WriteInt32BigEndian(sb, cmd.Length + data.Length);

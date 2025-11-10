@@ -2,5 +2,5 @@ namespace Crafthoe.Protocol;
 
 public interface ICommand
 {
-    static abstract int CommandId { get; }
+    static abstract ushort CommandId { get; }
 }

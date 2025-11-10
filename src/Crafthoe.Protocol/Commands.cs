@@ -1,17 +1,17 @@
 namespace Crafthoe.Protocol;
 
-public enum Commands
+public enum Commands : ushort
 {
-    CommonStart = 1000000,
+    CommonStart = 10000,
     Ping,
     Pong,
 
-    ServerStart = 2000000,
+    ServerStart = 20000,
     SpawnPlayer,
     MovePlayer,
     ForgetChunk,
 
-    ClientStart = 3000000,
+    ClientStart = 30000,
     ChunkUpdate,
     WorldIndicesUpdate,
     PositionUpdate,
