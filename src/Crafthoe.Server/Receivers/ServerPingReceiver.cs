@@ -3,10 +3,9 @@ namespace Crafthoe.Server;
 [Server]
 public class ServerPingReceiver
 {
-    public void Receive(NetSocket ns, NetMessage msg)
+    public void Receive(NetSocket ns, PingCommand cmd)
     {
-        var ping = MemoryMarshal.AsRef<PingCommand>(msg.Data);
-        var pong = new PongCommand() { Ping = ping };
+        var pong = new PongCommand() { Ping = cmd };
 
         ns.Send(new((int)CommonCommand.Pong,
             MemoryMarshal.AsBytes(MemoryMarshal.CreateSpan(ref pong, 1))));

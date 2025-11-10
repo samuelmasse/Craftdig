@@ -2,8 +2,7 @@ namespace Crafthoe.Client;
 
 [Player]
 public class PlayerSocketLoop(
-    NetLoop netLoop,
-    NetEcho netEcho,
+    PlayerNetLoop loop,
     PlayerSocket socket,
     PlayerPingReceiver pingReceiver,
     PlayerPongReceiver pongReceiver,
@@ -11,27 +10,40 @@ public class PlayerSocketLoop(
     PlayerChunkUpdateReceiver chunkUpdateReceiver,
     PlayerWorldIndicesUpdateReceiver worldIndicesUpdateReceiver)
 {
+    private Thread? thread;
+
     public void Start()
     {
-        netLoop.Register((int)CommonCommand.Echo, netEcho.Receive);
-        netLoop.Register((int)CommonCommand.Ping, pingReceiver.Receive);
-        netLoop.Register((int)CommonCommand.Pong, pongReceiver.Receive);
-        netLoop.Register((int)ClientCommand.PositionUpdate, positionUpdateReceiver.Receive);
-        netLoop.Register((int)ClientCommand.ChunkUpdate, chunkUpdateReceiver.Receive);
-        netLoop.Register((int)ClientCommand.WorldIndicesUpdate, worldIndicesUpdateReceiver.Receive);
-        new Thread(Loop).Start();
+        loop.Register<PingCommand>(
+            (int)CommonCommand.Ping, pingReceiver.Receive);
+
+        loop.Register<PongCommand>(
+            (int)CommonCommand.Pong, pongReceiver.Receive);
+
+        loop.Register<PositionUpdateCommand>(
+            (int)ClientCommand.PositionUpdate, positionUpdateReceiver.Receive);
+
+        loop.Register<ChunkUpdateCommand, byte>(
+            (int)ClientCommand.ChunkUpdate, chunkUpdateReceiver.Receive);
+
+        loop.Register<byte>(
+            (int)ClientCommand.WorldIndicesUpdate, worldIndicesUpdateReceiver.Receive);
+
+        thread = new Thread(Loop);
+        thread.Start();
     }
 
     public void Stop()
     {
-        try { socket.Disconnect(); } catch { }
+        socket.Disconnect();
+        thread?.Join();
     }
 
     private void Loop()
     {
         try
         {
-            netLoop.Run(socket);
+            loop.Run(socket);
         }
         catch
         {

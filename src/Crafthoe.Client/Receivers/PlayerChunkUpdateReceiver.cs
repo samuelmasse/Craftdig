@@ -8,15 +8,12 @@ public class PlayerChunkUpdateReceiver(
 {
     private readonly ChunkUpdateBlockEntry[] buffer = new ChunkUpdateBlockEntry[ChunkVolume];
 
-    public void Receive(NetSocket ns, NetMessage msg)
+    public void Receive(ChunkUpdateCommand cmd, ReadOnlySpan<byte> data)
     {
-        var cloc = MemoryMarshal.Cast<byte, Vector2i>(msg.Data)[0];
-        var compressed = msg.Data[Marshal.SizeOf<Vector2i>()..];
-
         var blocks = blocksPool.Take();
 
         BrotliDecoder.TryDecompress(
-            compressed,
+            data,
             MemoryMarshal.AsBytes(buffer.AsSpan()),
             out var bytes);
 
@@ -32,6 +29,6 @@ public class PlayerChunkUpdateReceiver(
                 blocks.Span[cur++] = block;
         }
 
-        chunkUpdateQueue.Enqueue((cloc, blocks));
+        chunkUpdateQueue.Enqueue((cmd.Cloc, blocks));
     }
 }

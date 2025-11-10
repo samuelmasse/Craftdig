@@ -3,7 +3,7 @@ namespace Crafthoe.Server;
 [Server]
 public class ServerSpawnPlayerReceiver(WorldDimensionBag dimensionBag)
 {
-    public void Receive(NetSocket ns, NetMessage msg)
+    public void Receive(NetSocket ns)
     {
         if (ns.Ent.SocketPlayer() != null)
         {

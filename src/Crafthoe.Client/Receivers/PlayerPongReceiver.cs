@@ -3,11 +3,9 @@ namespace Crafthoe.Client;
 [Player]
 public class PlayerPongReceiver
 {
-    public void Receive(NetSocket ns, NetMessage msg)
+    public void Receive(PongCommand cmd)
     {
-        var pong = MemoryMarshal.AsRef<PongCommand>(msg.Data);
-
-        var dt = Stopwatch.GetTimestamp() - pong.Ping.Timestamp;
+        var dt = Stopwatch.GetTimestamp() - cmd.Ping.Timestamp;
         var ms = dt * 1000 / (double)Stopwatch.Frequency;
 
         Console.WriteLine($"Pong! {ms}");

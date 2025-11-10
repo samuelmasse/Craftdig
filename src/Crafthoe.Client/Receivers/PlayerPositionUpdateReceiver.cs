@@ -8,9 +8,9 @@ public class PlayerPositionUpdateReceiver
 
     public PositionUpdateCommand Latest => latest[index % latest.Length];
 
-    public void Receive(NetSocket ns, NetMessage msg)
+    public void Receive(PositionUpdateCommand cmd)
     {
-        latest[(index + 1) % latest.Length] = MemoryMarshal.AsRef<PositionUpdateCommand>(msg.Data);
+        latest[(index + 1) % latest.Length] = cmd;
         index++;
     }
 }

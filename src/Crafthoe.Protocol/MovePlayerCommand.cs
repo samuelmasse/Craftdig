@@ -1,8 +1,7 @@
 namespace Crafthoe.Protocol;
 
 [StructLayout(LayoutKind.Sequential, Pack = 1)]
-public struct PingCommand
+public struct MovePlayerCommand
 {
-    public long Timestamp;
-    public long Id;
+    public MovementStep Step;
 }

@@ -2,21 +2,27 @@ namespace Crafthoe.Server;
 
 [Server]
 public class ServerRegisterHandlersAction(
-    NetLoop netLoop,
-    NetEcho netEcho,
+    ServerNetLoop loop,
     ServerPingReceiver pingReceiver,
     ServerSpawnPlayerReceiver spawnPlayerReceiver)
 {
     public void Run()
     {
-        netLoop.Register((int)CommonCommand.Echo, netEcho.Receive);
-        netLoop.Register((int)CommonCommand.Ping, pingReceiver.Receive);
-        netLoop.Register((int)ServerCommand.SpawnPlayer, spawnPlayerReceiver.Receive);
-        netLoop.Register((int)ServerCommand.MovePlayer, DimensionHandler<DimensionMovePlayerReceiver>());
-        netLoop.Register((int)ServerCommand.ForgetChunk, DimensionHandler<DimensionForgetChunkReceiver>());
+        loop.Register<PingCommand>(
+            (int)CommonCommand.Ping, pingReceiver.Receive);
+
+        loop.Register((int)ServerCommand.SpawnPlayer,
+            spawnPlayerReceiver.Receive);
+
+        loop.Register((int)ServerCommand.MovePlayer,
+            DimensionHandler<DimensionMovePlayerReceiver, MovePlayerCommand>());
+
+        loop.Register((int)ServerCommand.ForgetChunk,
+            DimensionHandler<DimensionForgetChunkReceiver, ForgetChunkCommand>());
     }
 
-    private Action<NetSocket, NetMessage> DimensionHandler<T>() where T : DimensionReceiver => (ns, msg) =>
+    private Action<NetSocket, C> DimensionHandler<T, C>()
+        where T : DimensionReceiver<C> where C : unmanaged => (ns, cmd) =>
     {
         if (ns.Ent.SocketPlayer() == null)
         {
@@ -24,6 +30,6 @@ public class ServerRegisterHandlersAction(
             return;
         }
 
-        ns.Ent.DimensionScope().Get<T>().Receive(ns, msg);
+        ns.Ent.DimensionScope().Get<T>().Receive(ns, cmd);
     };
 }

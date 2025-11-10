@@ -1,7 +1,7 @@
 namespace Crafthoe.Server;
 
 [Server]
-public class ServerClientLoop(NetLoop nloop, ServerSockets sockets)
+public class ServerClientLoop(ServerNetLoop loop, ServerSockets sockets)
 {
     public void Start(NetSocket socket)
     {
@@ -17,7 +17,7 @@ public class ServerClientLoop(NetLoop nloop, ServerSockets sockets)
 
         try
         {
-            nloop.Run(socket);
+            loop.Run(socket);
         }
         catch (Exception e)
         {

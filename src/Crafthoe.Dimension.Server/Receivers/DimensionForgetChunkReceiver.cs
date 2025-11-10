@@ -1,12 +1,12 @@
 namespace Crafthoe.Server;
 
 [Dimension]
-public class DimensionForgetChunkReceiver(DimensionForgottenChunks forgottenChunks) : DimensionReceiver
+public class DimensionForgetChunkReceiver(DimensionForgottenChunks forgottenChunks) : DimensionReceiver<ForgetChunkCommand>
 {
-    public override void Receive(NetSocket ns, NetMessage msg)
+    public override void Receive(NetSocket ns, ForgetChunkCommand cmd)
     {
         forgottenChunks.Add(
             ns.Ent,
-            MemoryMarshal.AsRef<Vector2i>(msg.Data));
+            cmd.Cloc);
     }
 }
