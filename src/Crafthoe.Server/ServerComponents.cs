@@ -2,5 +2,6 @@ namespace Crafthoe.Server;
 
 [Components]
 file record ServerComponents(
-    Thread? SocketThread
+    Thread? SocketThread,
+    bool IsAuthenticated
 );

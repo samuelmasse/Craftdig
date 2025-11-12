@@ -3,6 +3,7 @@ namespace Crafthoe.Protocol;
 public enum Commands : ushort
 {
     CommonStart = 10000,
+    Auth,
     Ping,
     Pong,
 

@@ -48,7 +48,9 @@ public class PlayerPosition(
         if (expected.Count < tolerance)
             movement = default;
 
-        socket.Send(new MovePlayerCommand() { Step = movement });
+        if (positionUpdateReceiver.Count > tolerance)
+            socket.Send(new MovePlayerCommand() { Step = movement });
+        else movement = default;
     }
 
     private bool HasMatchingCommand(PositionUpdateCommand command)

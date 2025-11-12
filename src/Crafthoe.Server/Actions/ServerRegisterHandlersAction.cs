@@ -3,16 +3,32 @@ namespace Crafthoe.Server;
 [Server]
 public class ServerRegisterHandlersAction(
     ServerNetLoop loop,
+    ServerAuthReceiver authReceiver,
     ServerPingReceiver pingReceiver,
     ServerSpawnPlayerReceiver spawnPlayerReceiver)
 {
     public void Run()
     {
-        loop.Register<PingCommand>(pingReceiver.Receive);
-        loop.Register<SpawnPlayerCommand>(spawnPlayerReceiver.Receive);
-        loop.Register(DimensionHandler<DimensionMovePlayerReceiver, MovePlayerCommand>());
-        loop.Register(DimensionHandler<DimensionForgetChunkReceiver, ForgetChunkCommand>());
+        loop.Register<AuthCommand, byte>(authReceiver.Receive);
+        loop.Register(Authenticated<PingCommand>(pingReceiver.Receive));
+        loop.Register(Authenticated<SpawnPlayerCommand>(spawnPlayerReceiver.Receive));
+        loop.Register(Authenticated(DimensionHandler<DimensionMovePlayerReceiver, MovePlayerCommand>()));
+        loop.Register(Authenticated(DimensionHandler<DimensionForgetChunkReceiver, ForgetChunkCommand>()));
     }
+
+    private Action<NetSocket, C> Authenticated<C>(Action<NetSocket, C> handler) where C : unmanaged => (ns, cmd) =>
+    {
+        if (!ns.Ent.IsAuthenticated())
+        {
+            ns.Disconnect();
+            return;
+        }
+
+        handler(ns, cmd);
+    };
+
+    private Action<NetSocket, C> Authenticated<C>(Action<NetSocket> handler) where C : unmanaged =>
+        Authenticated<C>((ns, cmd) => handler(ns));
 
     private Action<NetSocket, C> DimensionHandler<T, C>()
         where T : DimensionReceiver<C> where C : unmanaged => (ns, cmd) =>
