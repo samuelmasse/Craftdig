@@ -3,7 +3,10 @@ namespace Crafthoe.Server;
 using Google.Apis.Auth;
 
 [Server]
-public class ServerAuthReceiver
+public class ServerAuthReceiver(
+    ServerIdentities identities,
+    SeverAllowlist allowlist,
+    ServerSockets sockets)
 {
     private readonly GoogleJsonWebSignature.ValidationSettings settings = new()
     {
@@ -26,8 +29,28 @@ public class ServerAuthReceiver
 
     private void AuthJwt(NetSocket ns, string token)
     {
-        var payload = GoogleJsonWebSignature.ValidateAsync(token, settings);
-        payload.Wait();
+        var task = GoogleJsonWebSignature.ValidateAsync(token, settings);
+        task.Wait();
+        var payload = task.Result;
+
+        if (!payload.EmailVerified)
+            throw new Exception();
+
+        var email = payload.Email;
+        var iss = payload.Issuer;
+        var sub = payload.Subject;
+        var uid = $"{iss}|{sub}";
+
+        identities.Verify(email, uid);
+        allowlist.Allow(email);
+
+        sockets.ForEach(ns =>
+        {
+            if (ns.Ent.AuthenticatedUid() == uid)
+                ns.Disconnect();
+        });
+
+        ns.Ent.AuthenticatedUid() = uid;
         ns.Ent.IsAuthenticated() = true;
     }
 }

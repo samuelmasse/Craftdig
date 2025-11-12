@@ -3,13 +3,13 @@ namespace Crafthoe.Server;
 [Server]
 public class ServerSockets
 {
-    private readonly HashSet<NetSocket> set = [];
+    private readonly List<NetSocket> list = [];
 
     public void Add(NetSocket ns)
     {
         lock (this)
         {
-            set.Add(ns);
+            list.Add(ns);
         }
     }
 
@@ -17,15 +17,16 @@ public class ServerSockets
     {
         lock (this)
         {
-            set.Remove(ns);
+            list.Remove(ns);
         }
     }
 
-    public List<NetSocket> ToList()
+    public void ForEach(Action<NetSocket> handler)
     {
         lock (this)
         {
-            return [.. set];
+            foreach (var item in list)
+                handler(item);
         }
     }
 }

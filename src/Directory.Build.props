@@ -47,6 +47,7 @@
         <Using Include="System.Security.Cryptography" />
         <Using Include="System.Security.Cryptography.X509Certificates" />
         <Using Include="System.Text" />
+        <Using Include="System.Text.Json" />
         <Using Include="System.Text.RegularExpressions" />
         <Using Include="Tomlyn" />
         <Using Include="Tomlyn.Model" />

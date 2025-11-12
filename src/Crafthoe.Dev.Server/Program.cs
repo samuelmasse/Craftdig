@@ -12,14 +12,17 @@ var native = moduleScope.Get<ModuleNative>();
 var worldScope = moduleScope.Scope<WorldScope>();
 var exe = Assembly.GetExecutingAssembly().Location;
 var exeDir = Path.GetDirectoryName(exe)!;
-var worldDir = Path.Join(exeDir, "Data", "World");
+var serverDir = Path.Join(exeDir, "Data");
+var worldDir = Path.Join(serverDir, "World");
 worldScope.Add(new WorldPaths(worldDir));
 
 var serverScope = worldScope.Scope<ServerScope>();
+serverScope.Add(new ServerPaths(serverDir));
 serverScope.Add(new ServerDefaults()
 {
     Name = "Server",
     Difficulty = native.NormalDifficulty,
-    GameMode = native.SurvivalGameMode
+    GameMode = native.SurvivalGameMode,
+    Allowlist = ["samuelmasse4@gmail.com"]
 });
 serverScope.Get<Server>().Run();
