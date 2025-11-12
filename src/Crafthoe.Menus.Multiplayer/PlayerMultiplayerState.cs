@@ -44,15 +44,15 @@ public class PlayerMultiplayerState(
         player.Update(time);
         if (!commonState.Inv && !commonState.Paused)
             player.Input();
-
-        if (!socket.Connected)
-            state.Current = scope.New<PlayerMultiplayerDisconnectedState>();
     }
 
     public override void Render()
     {
         client.Frame();
         commonState.Render();
+
+        if (!socket.Connected)
+            state.Current = scope.New<PlayerMultiplayerDisconnectedState>();
     }
 
     public override void Draw()

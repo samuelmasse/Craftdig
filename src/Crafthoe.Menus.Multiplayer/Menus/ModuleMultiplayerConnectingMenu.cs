@@ -24,7 +24,7 @@ public class ModuleMultiplayerConnectingMenu(
 
                     return "Connecting...";
                 })
-                .OnUpdateF(() =>
+                .OnFrameF(() =>
                 {
                     if (multiplayerConnectAction.Connecting)
                         return;

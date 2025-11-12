@@ -17,5 +17,6 @@ file record UiDrawComponents(
     Vector4 TextColorV,
     Func<Vector4>? TextColorF,
 
-    Action<Vector2>? OnDrawF
+    Action<Vector2>? OnDrawF,
+    Action? OnFrameF
 );

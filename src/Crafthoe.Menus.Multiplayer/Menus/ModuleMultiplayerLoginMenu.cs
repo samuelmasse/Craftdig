@@ -18,7 +18,7 @@ public class ModuleMultiplayerLoginMenu(
                 .Mut(s.Label)
                 .AlignmentV(Alignment.Horizontal)
                 .TextV("Google Login")
-                .OnUpdateF(() =>
+                .OnFrameF(() =>
                 {
                     if (multiplayerCredentials.Email == null)
                         return;
