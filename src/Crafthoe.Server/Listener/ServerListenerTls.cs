@@ -35,7 +35,7 @@ public class ServerListenerTls(ServerListenerLoop listenerLoop, ServerLoadCertif
 
     public void Join()
     {
-        Console.WriteLine("Listener TLS stopped");
         thread?.Join();
+        Console.WriteLine("Listener TLS stopped");
     }
 }

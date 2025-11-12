@@ -20,7 +20,7 @@ public class ServerListener(ServerListenerLoop listenerLoop)
 
     public void Join()
     {
-        Console.WriteLine("Listener stopped");
         thread?.Join();
+        Console.WriteLine("Listener stopped");
     }
 }

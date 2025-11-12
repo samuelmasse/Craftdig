@@ -3,6 +3,8 @@ namespace Crafthoe.Menus.Multiplayer;
 [Module]
 public class ModuleMultiplayerConnectMenu(
     AppStyle s,
+    ModuleScope module,
+    ModuleMultiplayerCredentials multiplayerCredentials,
     ModuleMultiplayerConnectAction multiplayerConnectAction,
     ModuleMultiplayerConnectingMenu multiplayerConnectingMenu)
 {
@@ -21,6 +23,22 @@ public class ModuleMultiplayerConnectMenu(
             .InnerSpacingV(s.ItemSpacing)
             .AlignmentV(Alignment.Horizontal);
         {
+            Node(form)
+                .Mut(s.Label)
+                .TextV(multiplayerCredentials.Email ?? string.Empty);
+
+            Node(form)
+                .OnPressF(() =>
+                {
+                    multiplayerCredentials.Logout();
+
+                    root.StackRootV()?.NodeStack().Pop();
+                    root.StackRootV()?.NodeStack().Push(
+                        Node().StackRootV(root.StackRootV()).Mut(module.Get<ModuleMultiplayerLoginMenu>().Create));
+                })
+                .TextV("Logout")
+                .Mut(s.Button);
+
             Node(form)
                 .Mut(s.Label)
                 .TextV("Host");

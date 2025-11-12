@@ -5,7 +5,9 @@ public class ModuleMainMenu(
     RootScreen screen,
     AppStyle s,
     ModuleSingleplayerWorldSelectMenu worldSelectMenu,
-    ModuleMultiplayerConnectMenu connectMenu)
+    ModuleMultiplayerConnectMenu connectMenu,
+    ModuleMultiplayerLoginMenu loginMenu,
+    ModuleMultiplayerCredentials multiplayerCredentials)
 {
     public void Create(EntObj root)
     {
@@ -41,8 +43,20 @@ public class ModuleMainMenu(
                 Node(list2)
                     .Mut(s.Button)
                     .TextV("Multiplayer")
-                    .OnPressF(() => root.StackRootV()?.NodeStack().Push(
-                        Node().StackRootV(root.StackRootV()).Mut(connectMenu.Create)));
+                    .OnPressF(() =>
+                    {
+                        var node = Node().StackRootV(root.StackRootV());
+
+                        if (!multiplayerCredentials.NeedLogin)
+                        {
+                            multiplayerCredentials.StartLogin();
+                            multiplayerCredentials.WaitLogin();
+                            node.Mut(connectMenu.Create);
+                        }
+                        else node.Mut(loginMenu.Create);
+
+                        root.StackRootV()?.NodeStack().Push(node);
+                    });
 
                 Node(list2)
                     .Mut(s.Button)
