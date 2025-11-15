@@ -27,6 +27,12 @@ public class PlayerMultiplayerState(
     {
         commonState.Update(time);
 
+        if (!commonState.Inv && !commonState.Paused)
+            player.Input();
+    }
+
+    public override void Frame(double time)
+    {
         int ticks = tick.Update(time);
         while (ticks > 0)
         {
@@ -42,8 +48,6 @@ public class PlayerMultiplayerState(
         }
 
         player.Update(time);
-        if (!commonState.Inv && !commonState.Paused)
-            player.Input();
     }
 
     public override void Render()
