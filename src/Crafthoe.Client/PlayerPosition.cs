@@ -14,12 +14,6 @@ public class PlayerPosition(
 
     public void Tick()
     {
-        if (slowDownReceiver.ShouldSlowDown())
-        {
-            expected.Clear();
-            slowdown = tolerance;
-        }
-
         expected.Add(new()
         {
             Position = ent.Ent.Position(),
@@ -31,20 +25,20 @@ public class PlayerPosition(
         if (expected.Count > tolerance)
             expected.RemoveAt(0);
 
-        if (expected.Count >= tolerance)
+        if (slowDownReceiver.ShouldSlowDown())
+            slowdown = tolerance;
+
+        if (positionUpdateReceiver.Count < tolerance)
+            slowdown = 1;
+
+        if (slowdown == 0)
         {
             var latest = positionUpdateReceiver.Latest;
 
             if (!HasMatchingCommand(latest))
             {
-                expected.Clear();
                 slowdown = tolerance;
-
-                ent.Ent.Position() = latest.Position;
-                ent.Ent.Velocity() = latest.Velocity;
-                ent.Ent.IsFlying() = latest.IsFlying;
-                ent.Ent.IsSprinting() = latest.IsSprinting;
-
+                ApplyServerPosition(latest);
                 Console.WriteLine($"Corrected {c++}");
             }
         }
@@ -55,15 +49,14 @@ public class PlayerPosition(
     public void Stream()
     {
         ref var movement = ref ent.Ent.Movement();
-        if (expected.Count < tolerance)
-            movement = default;
 
-        if (positionUpdateReceiver.Count > tolerance && slowdown == 0)
+        if (slowdown == 0)
             socket.Send(new MovePlayerCommand() { Step = movement });
-        else movement = default;
-
-        if (slowdown > 0)
+        else
+        {
+            movement = default;
             slowdown--;
+        }
     }
 
     private bool HasMatchingCommand(PositionUpdateCommand command)
