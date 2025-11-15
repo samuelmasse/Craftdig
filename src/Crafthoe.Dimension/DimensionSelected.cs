@@ -1,21 +1,38 @@
-namespace Crafthoe.Player.Frontend;
+namespace Crafthoe.Dimension;
 
-[Player]
-public class PlayerSelected(DimensionBlocks blocks, PlayerEnt player, PlayerCamera camera)
+[Dimension]
+public class DimensionSelected(DimensionBlocks blocks, DimensionPlayerBag playerBag)
 {
-    private Vector3i? loc;
-    private Vector3i? normal;
-    private int distance = 1024;
+    private long time;
 
-    public Vector3i? Loc => loc;
-    public Vector3i? Normal => normal;
-    public ref int Distance => ref distance;
-
-    public void Render()
+    public void Tick()
     {
-        Vector3d origin = player.Ent.Position();
-        Vector3d lookAt = (camera.LookAt.X, camera.LookAt.Z, camera.LookAt.Y);
+        foreach (var player in playerBag.Ents)
+        {
+            player.BlockSelectionPosition() = player.Position();
+            player.BlockSelectionLookAt() = player.Movement().LookAt;
+            player.BlockSelection() = null;
+        }
 
+        time++;
+    }
+
+    public BlockSelection? this[EntMut player]
+    {
+        get
+        {
+            if (player.BlockSelectionLastComputed() != time)
+            {
+                player.BlockSelection() = Select(player.BlockSelectionPosition(), player.BlockSelectionLookAt());
+                player.BlockSelectionLastComputed() = time;
+            }
+
+            return player.BlockSelection();
+        }
+    }
+
+    public BlockSelection? Select(Vector3d origin, Vector3d lookAt)
+    {
         Vector3i dir = (Math.Sign(lookAt.X), Math.Sign(lookAt.Y), Math.Sign(lookAt.Z));
         Vector3d dt = Vector3d.Abs((1 / lookAt.X, 1 / lookAt.Y, 1 / lookAt.Z));
 
@@ -32,7 +49,7 @@ public class PlayerSelected(DimensionBlocks blocks, PlayerEnt player, PlayerCame
         int step = 0;
         bool found = false;
 
-        while (step < distance)
+        while (step < 1024)
         {
             if (blocks.TryGet(nloc, out var block) && block.IsSolid())
             {
@@ -63,14 +80,7 @@ public class PlayerSelected(DimensionBlocks blocks, PlayerEnt player, PlayerCame
         }
 
         if (found)
-        {
-            loc = nloc;
-            normal = nnormal;
-        }
-        else
-        {
-            loc = null;
-            normal = null;
-        }
+            return new(nloc, nnormal);
+        else return null;
     }
 }

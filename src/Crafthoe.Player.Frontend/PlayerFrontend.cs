@@ -4,40 +4,17 @@ namespace Crafthoe.Player.Frontend;
 public class PlayerFrontend(
     RootMouse mouse,
     RootKeyboard keyboard,
-    DimensionAir air,
-    DimensionBlocks blocks,
     PlayerCamera camera,
     PlayerEnt ent,
-    PlayerSelected selected,
     PlayerMovement movement,
     PlayerTeleporter teleporter,
-    PlayerFov fov)
+    PlayerFov fov,
+    PlayerConstruction construction)
 {
-    private int mainCooldown;
-    private int secondaryCooldown;
-
     public void Tick()
     {
         movement.Tick();
-
-        mainCooldown--;
-        secondaryCooldown--;
-
-        if (selected.Loc != null)
-        {
-            if (mouse.IsMainDown() && mainCooldown <= 0)
-            {
-                blocks.TrySet(selected.Loc.Value, air.Block);
-                mainCooldown = 5;
-            }
-
-            var hand = ent.Ent.HotBarSlots()[ent.Ent.HotBarIndex()].Item;
-            if (selected.Normal != null && hand.IsBuildable() && mouse.IsSecondaryDown() && secondaryCooldown <= 0)
-            {
-                blocks.TrySet(selected.Loc.Value + selected.Normal.Value, hand);
-                secondaryCooldown = 4;
-            }
-        }
+        construction.Tick();
     }
 
     public void NoTick()
@@ -53,6 +30,7 @@ public class PlayerFrontend(
     public void Input()
     {
         movement.Input();
+        construction.Input();
         camera.Rotate(-mouse.Delta / 300);
         camera.PreventBackFlipsAndFrontFlips();
 
@@ -62,12 +40,6 @@ public class PlayerFrontend(
             if (keyboard.IsKeyPressed(key))
                 ent.Ent.HotBarIndex() = i;
         }
-
-        if (!mouse.IsMainDown())
-            mainCooldown = 0;
-
-        if (!mouse.IsSecondaryDown())
-            secondaryCooldown = 0;
 
         ref var index = ref ent.Ent.HotBarIndex();
 

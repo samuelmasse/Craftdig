@@ -23,6 +23,9 @@ public static class Unit
     public static Vector3d Swizzle(this Vector3d pos) => (pos.X, pos.Z, pos.Y);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+    public static Vector3 Swizzle(this Vector3 pos) => (pos.X, pos.Z, pos.Y);
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
     public static Vector3i Swizzle(this Vector3i loc) => (loc.X, loc.Z, loc.Y);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]

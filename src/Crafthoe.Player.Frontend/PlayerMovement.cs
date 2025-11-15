@@ -43,6 +43,7 @@ public class PlayerMovement(
             mov += camera.Right;
 
         ent.Ent.Movement().Vector += (Vector3)mov.Swizzle();
+        ent.Ent.Movement().LookAt = camera.LookAt.Swizzle();
     }
 
     public void NoTick()

@@ -46,19 +46,27 @@ public class DimensionPendingMovement(DimensionSockets sockets)
         }
 
         ref var mov = ref ent.Movement();
+        ref var constr = ref ent.Construction();
 
-        if (pending.TryDequeue(out var step))
+        if (pending.TryDequeue(out var cmd))
         {
-            if (step.Sprint != MovementAction.None)
-                mov.Sprint = step.Sprint;
-            if (step.Fly != MovementAction.None)
-                mov.Fly = step.Fly;
-            if (step.Jump)
+            var cmov = cmd.Movement;
+            var cconstr = cmd.Construction;
+
+            if (cmov.Sprint != MovementAction.None)
+                mov.Sprint = cmov.Sprint;
+            if (cmov.Fly != MovementAction.None)
+                mov.Fly = cmov.Fly;
+            if (cmov.Jump)
                 mov.Jump = true;
 
-            mov.FlyUp = step.FlyUp;
-            mov.FlyDown = step.FlyDown;
-            mov.Vector = step.Vector;
+            mov.FlyUp = cmov.FlyUp;
+            mov.FlyDown = cmov.FlyDown;
+            mov.Vector = cmov.Vector;
+            mov.LookAt = cmov.LookAt;
+
+            constr.Action = cconstr.Action;
+            constr.Arg = cconstr.Arg;
         }
     }
 

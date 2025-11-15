@@ -5,10 +5,14 @@ public class DimensionContext(
     DimensionRigids rigids,
     DimensionMovement movement,
     DimensionBlockChanges blockChanges,
-    DimensionChunkCollector chunkCollector)
+    DimensionChunkCollector chunkCollector,
+    DimensionSelected selected,
+    DimensionConstruction construction)
 {
     public void Tick()
     {
+        selected.Tick();
+        construction.Tick();
         movement.Tick();
         rigids.Tick();
     }

@@ -7,6 +7,6 @@ public class DimensionMovePlayerReceiver : DimensionReceiver<MovePlayerCommand>
     {
         ref var pending = ref ns.Ent.SocketPlayer().PendingMovement();
         pending ??= [];
-        pending.Enqueue(cmd.Step);
+        pending.Enqueue(cmd);
     }
 }

@@ -5,5 +5,6 @@ public struct MovePlayerCommand : ICommand
 {
     public static ushort CommandId => (ushort)Commands.MovePlayer;
 
-    public MovementStep Step;
+    public MovementStep Movement;
+    public ConstructionStep Construction;
 }

@@ -7,7 +7,7 @@ file record DimensionServerComponents(
     HashSet<Vector2i>? SocketStreamedChunks,
 
     // Player
-    ConcurrentQueue<MovementStep>? PendingMovement,
+    ConcurrentQueue<MovePlayerCommand>? PendingMovement,
     int PendingMovementWait,
     int PendingMovementLongWait
 );

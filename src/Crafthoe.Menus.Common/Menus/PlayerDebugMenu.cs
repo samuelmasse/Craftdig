@@ -9,9 +9,9 @@ public class PlayerDebugMenu(
     AppStyle s,
     PlayerMetrics playerMetrics,
     DimensionSharedVertexBuffer svb,
+    DimensionSelected selected,
     PlayerEnt ent,
-    PlayerCamera camera,
-    PlayerSelected selected)
+    PlayerCamera camera)
 {
     public void Create(EntObj root)
     {
@@ -27,8 +27,8 @@ public class PlayerDebugMenu(
             () => text.Format("Tick: {0}", playerMetrics.TickMetric.Value.Max),
             () => text.Format("Render: {0}", playerMetrics.RenderMetric.Value.Max),
             () => text.Format("Buffers: {0}", gl.BufferTotalUsage),
-            () => text.Format("Selected Loc: {0}", selected.Loc.GetValueOrDefault()),
-            () => text.Format("Selected Normal: {0}", selected.Normal.GetValueOrDefault()),
+            () => text.Format("Selected Loc: {0}", selected[(EntMut)ent.Ent].GetValueOrDefault().Loc),
+            () => text.Format("Selected Normal: {0}", selected[(EntMut)ent.Ent].GetValueOrDefault().Normal),
             () => text.Format("TPS: {0}", playerMetrics.TickMetricWindow.Value.Ticks),
             () => text.Format("SVB: {0}", svb.Allocator.Used)
         ];

@@ -13,8 +13,8 @@ public class DimensionServer(
 {
     public void Tick()
     {
-        context.Frame();
         backend.Frame();
+        context.Frame();
         socketCleaner.Tick();
         chunkStreamerRequester.Tick();
         forgottenChunks.Tick();

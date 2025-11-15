@@ -49,12 +49,14 @@ public class PlayerPosition(
     public void Stream()
     {
         ref var movement = ref ent.Ent.Movement();
+        ref var construction = ref ent.Ent.Construction();
 
         if (slowdown == 0)
-            socket.Send(new MovePlayerCommand() { Step = movement });
+            socket.Send(new MovePlayerCommand() { Movement = movement, Construction = construction });
         else
         {
             movement = default;
+            construction = default;
             slowdown--;
         }
     }
