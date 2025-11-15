@@ -1,0 +1,58 @@
+<Project>
+
+    <PropertyGroup>
+        <TargetFramework>net9.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <BaseOutputPath>..\..\bin\$(MSBuildProjectName)</BaseOutputPath>
+        <BaseIntermediateOutputPath>..\..\obj\$(MSBuildProjectName)</BaseIntermediateOutputPath>
+        <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <Using Include="AlvorEngine" />
+        <Using Include="BigGustave" />
+        <Using Include="Cysharp.Text" />
+        <Using Include="Glw2D" />
+        <Using Include="Glw2D.Fonts" />
+        <Using Include="GlwLayer" />
+        <Using Include="GlwLayer.Driver" />
+        <Using Include="HadvarECS" />
+        <Using Include="HadvarECS.Generator" />
+        <Using Include="Microsoft.Win32.SafeHandles" />
+        <Using Include="NeedlerDI" />
+        <Using Include="OpenTK.Graphics.OpenGL4" />
+        <Using Include="OpenTK.Mathematics" />
+        <Using Include="OpenTK.Windowing.Common" />
+        <Using Include="OpenTK.Windowing.Common.Input" />
+        <Using Include="OpenTK.Windowing.Desktop" />
+        <Using Include="OpenTK.Windowing.GraphicsLibraryFramework" />
+        <Using Include="System.Buffers.Binary" />
+        <Using Include="System.Collections.Concurrent" />
+        <Using Include="System.Diagnostics" />
+        <Using Include="System.Diagnostics.CodeAnalysis" />
+        <Using Include="System.Globalization" />
+        <Using Include="System.IO.Compression" />
+        <Using Include="System.Net" />
+        <Using Include="System.Net.Security" />
+        <Using Include="System.Net.Sockets" />
+        <Using Include="System.Reflection" />
+        <Using Include="System.Runtime" />
+        <Using Include="System.Runtime.CompilerServices" />
+        <Using Include="System.Runtime.InteropServices" />
+        <Using Include="System.Security.Authentication" />
+        <Using Include="System.Security.Cryptography" />
+        <Using Include="System.Security.Cryptography.X509Certificates" />
+        <Using Include="System.Text" />
+        <Using Include="System.Text.Json" />
+        <Using Include="System.Text.RegularExpressions" />
+        <Using Include="Tomlyn" />
+        <Using Include="Tomlyn.Model" />
+        <Using Include="Tomlyn.Syntax" />
+        <Using Include="Wigdow" />
+    </ItemGroup>
+
+</Project>

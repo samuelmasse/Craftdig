@@ -17,6 +17,7 @@
             <Static>true</Static>
         </Using>
         <Using Include="Crafthoe.Menus" />
+        <Using Include="Crafthoe.Menus.Multiplayer" />
         <Using Include="Crafthoe.Module" />
         <Using Include="Crafthoe.Module.Frontend" />
         <Using Include="Crafthoe.Native" />
@@ -34,8 +35,8 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\Crafthoe.Menus\Crafthoe.Menus.csproj" />
-        <ProjectReference Include="..\Crafthoe.Native\Crafthoe.Native.csproj" />
+        <ProjectReference Include="..\..\src\Crafthoe.Menus\Crafthoe.Menus.csproj" />
+        <ProjectReference Include="..\..\src\Crafthoe.Native\Crafthoe.Native.csproj" />
     </ItemGroup>
 
 </Project>

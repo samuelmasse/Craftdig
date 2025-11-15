@@ -1,7 +1,5 @@
 namespace Crafthoe.Dev;
 
-using Crafthoe.Menus.Multiplayer;
-
 [Root]
 public class RootLoadNativeState(RootState state, RootScope scope) : State
 {

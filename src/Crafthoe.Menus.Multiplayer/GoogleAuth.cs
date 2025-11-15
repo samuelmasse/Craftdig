@@ -16,7 +16,7 @@ public static class GoogleAuth
     {
         ClientSecrets = Secrets,
         Scopes = ["openid", "email"],
-        DataStore = new FileDataStore("Crafthoe.GoogleAuth", true)
+        DataStore = new FileDataStore("Crafthoe.GoogleAuth")
     };
 
     private static string UserId => "crafhoe_user";
