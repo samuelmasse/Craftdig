@@ -75,7 +75,7 @@ public class ModuleMainMenu(
         Node(root)
             .Mut(s.Label)
             .TextV("Crafthoe 0.1")
-            .AlignmentV(Alignment.Left  | Alignment.Bottom)
+            .AlignmentV(Alignment.Left | Alignment.Bottom)
             .OffsetV((s.ItemSpacingS, -s.ItemSpacingXS));
 
         if (clientOptions.AllowNoAuth || clientOptions.AllowRawTcp)

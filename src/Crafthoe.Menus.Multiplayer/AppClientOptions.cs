@@ -8,7 +8,7 @@ public class AppClientOptions
 
     public bool AllowRawTcp { get; init; }
     public bool AllowNoAuth { get; init; }
-    public string? DefaultNoAuthUser { get; set;}
+    public string? DefaultNoAuthUser { get; set; }
 
     public bool UseRawTcp
     {

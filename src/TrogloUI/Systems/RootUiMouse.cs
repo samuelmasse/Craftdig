@@ -9,6 +9,7 @@ public class RootUiMouse(RootMouse mouse, RootUiScale scale, RootUiFocus focus)
     private EntObj? pressedSecondary;
     private bool prevMainDown;
     private bool prevSecondaryDown;
+    private int c;
 
     public Vector2 Position => position;
     public EntObj? Hovered => prevHovered;
@@ -35,14 +36,15 @@ public class RootUiMouse(RootMouse mouse, RootUiScale scale, RootUiFocus focus)
             }
 
             prevMainDown = true;
-            return;
         }
+        else
+        {
+            if (prevMainDown && pressedMain != null && pressedMain == hovered)
+                OnLeftClick(pressedMain);
 
-        if (prevMainDown && pressedMain != null && pressedMain == hovered)
-            OnLeftClick(pressedMain);
-
-        pressedMain = null;
-        prevMainDown = false;
+            pressedMain = null;
+            prevMainDown = false;
+        }
 
         if (mouse.IsSecondaryDown())
         {
@@ -54,14 +56,15 @@ public class RootUiMouse(RootMouse mouse, RootUiScale scale, RootUiFocus focus)
             }
 
             prevSecondaryDown = true;
-            return;
         }
+        else
+        {
+            if (prevSecondaryDown && pressedSecondary != null && pressedSecondary == hovered)
+                OnRightClick(pressedSecondary);
 
-        if (prevSecondaryDown && pressedSecondary != null && pressedSecondary == hovered)
-            OnRightClick(pressedSecondary);
-
-        pressedSecondary = null;
-        prevSecondaryDown = false;
+            pressedSecondary = null;
+            prevSecondaryDown = false;
+        }
 
         prevHovered = hovered;
 
