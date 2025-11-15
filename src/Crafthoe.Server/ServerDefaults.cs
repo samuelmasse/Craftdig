@@ -8,4 +8,5 @@ public record class ServerDefaults
     public required Ent Difficulty { get; init; }
     public int? Seed { get; init; }
     public string[] Allowlist { get; init; } = [];
+    public bool NoAuth { get; init; }
 }

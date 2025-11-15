@@ -3,7 +3,10 @@ namespace Crafthoe.Menus;
 [Module]
 public class ModuleMainMenu(
     RootScreen screen,
+    RootKeyboard keyboard,
+    RootText text,
     AppStyle s,
+    AppClientOptions clientOptions,
     ModuleSingleplayerWorldSelectMenu worldSelectMenu,
     ModuleMultiplayerConnectMenu connectMenu,
     ModuleMultiplayerLoginMenu loginMenu,
@@ -47,13 +50,17 @@ public class ModuleMainMenu(
                     {
                         var node = Node().StackRootV(root.StackRootV());
 
-                        if (!multiplayerCredentials.NeedLogin)
+                        if (clientOptions.NoAuthUser == null)
                         {
-                            multiplayerCredentials.StartLogin();
-                            multiplayerCredentials.WaitLogin();
-                            node.Mut(connectMenu.Create);
+                            if (!multiplayerCredentials.NeedLogin)
+                            {
+                                multiplayerCredentials.StartLogin();
+                                multiplayerCredentials.WaitLogin();
+                                node.Mut(connectMenu.Create);
+                            }
+                            else node.Mut(loginMenu.Create);
                         }
-                        else node.Mut(loginMenu.Create);
+                        else node.Mut(connectMenu.Create);
 
                         root.StackRootV()?.NodeStack().Push(node);
                     });
@@ -68,7 +75,34 @@ public class ModuleMainMenu(
         Node(root)
             .Mut(s.Label)
             .TextV("Crafthoe 0.1")
-            .AlignmentV(Alignment.Left | Alignment.Bottom)
+            .AlignmentV(Alignment.Left  | Alignment.Bottom)
             .OffsetV((s.ItemSpacingS, -s.ItemSpacingXS));
+
+        if (clientOptions.AllowNoAuth || clientOptions.AllowRawTcp)
+        {
+            Node(root)
+                .Mut(s.Label)
+                .TextF(() => text.Format("UseRawTcp = {0}, NoAuthUser = {1}", clientOptions.UseRawTcp, clientOptions.NoAuthUser))
+                .AlignmentV(Alignment.Right | Alignment.Bottom)
+                .OffsetV((-s.ItemSpacingS, -s.ItemSpacingXS))
+                .OnFrameF(() =>
+                {
+                    if (clientOptions.AllowRawTcp)
+                    {
+                        if (keyboard.IsKeyPressed(Keys.F3))
+                            clientOptions.UseRawTcp = !clientOptions.UseRawTcp;
+                    }
+
+                    if (clientOptions.AllowNoAuth)
+                    {
+                        if (keyboard.IsKeyPressed(Keys.F4))
+                        {
+                            if (clientOptions.NoAuthUser == null)
+                                clientOptions.NoAuthUser = clientOptions.DefaultNoAuthUser;
+                            else clientOptions.NoAuthUser = null;
+                        }
+                    }
+                });
+        }
     }
 }

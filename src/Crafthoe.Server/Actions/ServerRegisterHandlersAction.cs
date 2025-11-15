@@ -3,13 +3,17 @@ namespace Crafthoe.Server;
 [Server]
 public class ServerRegisterHandlersAction(
     ServerNetLoop loop,
+    ServerDefaults defaults,
     ServerAuthReceiver authReceiver,
+    ServerNoAuthReceiver noAuthReceiver,
     ServerPingReceiver pingReceiver,
     ServerSpawnPlayerReceiver spawnPlayerReceiver)
 {
     public void Run()
     {
         loop.Register<AuthCommand, byte>(authReceiver.Receive);
+        if (defaults.NoAuth)
+            loop.Register<NoAuthCommand, byte>(noAuthReceiver.Receive);
         loop.Register(Authenticated<PingCommand>(pingReceiver.Receive));
         loop.Register(Authenticated<SpawnPlayerCommand>(spawnPlayerReceiver.Receive));
         loop.Register(Authenticated(DimensionHandler<DimensionMovePlayerReceiver, MovePlayerCommand>()));

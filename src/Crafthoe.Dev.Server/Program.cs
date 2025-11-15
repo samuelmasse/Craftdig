@@ -23,6 +23,7 @@ serverScope.Add(new ServerDefaults()
     Name = "Server",
     Difficulty = native.NormalDifficulty,
     GameMode = native.SurvivalGameMode,
-    Allowlist = ["samuelmasse4@gmail.com"]
+    Allowlist = ["samuelmasse4@gmail.com"],
+    NoAuth = true
 });
 serverScope.Get<Server>().Run();

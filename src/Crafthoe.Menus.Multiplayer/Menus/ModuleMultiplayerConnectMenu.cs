@@ -3,6 +3,7 @@ namespace Crafthoe.Menus.Multiplayer;
 [Module]
 public class ModuleMultiplayerConnectMenu(
     AppStyle s,
+    AppClientOptions clientOptions,
     ModuleScope module,
     ModuleMultiplayerCredentials multiplayerCredentials,
     ModuleMultiplayerConnectAction multiplayerConnectAction,
@@ -11,10 +12,11 @@ public class ModuleMultiplayerConnectMenu(
     public void Create(EntObj root)
     {
         string defaultName = "localhost";
-        string defaultPort = "36676";
+        string defaultPort = clientOptions.UseRawTcp ? "36677" : "36676";
 
         var host = new StringBuilder(defaultName);
         var port = new StringBuilder(defaultPort);
+        var user = new StringBuilder(clientOptions.NoAuthUser);
 
         Node(root, out var form)
             .Mut(s.VerticalList)
@@ -23,21 +25,34 @@ public class ModuleMultiplayerConnectMenu(
             .InnerSpacingV(s.ItemSpacing)
             .AlignmentV(Alignment.Horizontal);
         {
-            Node(form)
-                .Mut(s.Label)
-                .TextV(multiplayerCredentials.Email ?? string.Empty);
+            if (clientOptions.NoAuthUser == null)
+            {
+                Node(form)
+                    .Mut(s.Label)
+                    .TextV(multiplayerCredentials.Email ?? string.Empty);
 
-            Node(form)
-                .OnPressF(() =>
-                {
-                    multiplayerCredentials.Logout();
+                Node(form)
+                    .OnPressF(() =>
+                    {
+                        multiplayerCredentials.Logout();
 
-                    root.StackRootV()?.NodeStack().Pop();
-                    root.StackRootV()?.NodeStack().Push(
-                        Node().StackRootV(root.StackRootV()).Mut(module.Get<ModuleMultiplayerLoginMenu>().Create));
-                })
-                .TextV("Logout")
-                .Mut(s.Button);
+                        root.StackRootV()?.NodeStack().Pop();
+                        root.StackRootV()?.NodeStack().Push(
+                            Node().StackRootV(root.StackRootV()).Mut(module.Get<ModuleMultiplayerLoginMenu>().Create));
+                    })
+                    .TextV("Logout")
+                    .Mut(s.Button);
+            }
+            else
+            {
+                Node(form)
+                    .Mut(s.Label)
+                    .TextV("User");
+
+                Node(form)
+                    .Mut(s.Textbox)
+                    .StringBuilderV(user);
+            }
 
             Node(form)
                 .Mut(s.Label)
@@ -83,6 +98,12 @@ public class ModuleMultiplayerConnectMenu(
                     Node(leftButtonsVertical)
                         .OnPressF(() =>
                         {
+                            if (clientOptions.NoAuthUser != null)
+                            {
+                                clientOptions.NoAuthUser = user.ToString();
+                                clientOptions.DefaultNoAuthUser = clientOptions.NoAuthUser;
+                            }
+
                             string connHost = host.ToString();
                             int connPort = int.Parse(port.ToString());
 

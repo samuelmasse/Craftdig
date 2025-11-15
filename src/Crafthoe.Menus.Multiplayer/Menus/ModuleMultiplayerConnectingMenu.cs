@@ -29,11 +29,11 @@ public class ModuleMultiplayerConnectingMenu(
                     if (multiplayerConnectAction.Connecting)
                         return;
 
-                    if (multiplayerConnectAction.Tcp != null && multiplayerConnectAction.Ssl != null)
+                    if (multiplayerConnectAction.Tcp != null && multiplayerConnectAction.Stream != null)
                     {
                         multiplayerJoinAction.Run(new(
                             multiplayerConnectAction.Tcp,
-                            multiplayerConnectAction.Ssl));
+                            multiplayerConnectAction.Stream));
                     }
                 });
 

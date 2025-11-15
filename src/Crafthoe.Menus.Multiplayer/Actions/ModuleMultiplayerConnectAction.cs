@@ -1,20 +1,20 @@
 namespace Crafthoe.Menus.Multiplayer;
 
 [Module]
-public class ModuleMultiplayerConnectAction
+public class ModuleMultiplayerConnectAction(AppClientOptions clientOptions)
 {
     private string? host;
     private int port;
     private Thread? thread;
     private TcpClient? tcp;
-    private SslStream? ssl;
+    private Stream? stream;
     private Exception? exception;
 
     public string? Host => host;
     public int Port => port;
     public bool Connecting => thread != null;
     public TcpClient? Tcp => tcp;
-    public SslStream? Ssl => ssl;
+    public Stream? Stream => stream;
     public Exception? Exception => exception;
 
     public void Start(string host, int port)
@@ -26,7 +26,7 @@ public class ModuleMultiplayerConnectAction
         this.port = port;
 
         tcp = null;
-        ssl = null;
+        stream = null;
         exception = null;
 
         thread = new Thread(() =>
@@ -36,40 +36,45 @@ public class ModuleMultiplayerConnectAction
                 tcp = new TcpClient();
                 tcp.Connect(host, port);
 
-                ssl = new SslStream(tcp.GetStream(), false, (sender, certificate, chain, errors) =>
+                if (!clientOptions.UseRawTcp)
                 {
-                    if (host == "localhost")
-                        return true;
-
-                    if (errors == SslPolicyErrors.None)
-                        return true;
-
-                    if (errors == SslPolicyErrors.RemoteCertificateChainErrors && chain != null)
+                    var ssl = new SslStream(tcp.GetStream(), false, (sender, certificate, chain, errors) =>
                     {
-                        foreach (var s in chain.ChainStatus)
+                        if (host == "localhost")
+                            return true;
+
+                        if (errors == SslPolicyErrors.None)
+                            return true;
+
+                        if (errors == SslPolicyErrors.RemoteCertificateChainErrors && chain != null)
                         {
-                            if (s.Status != X509ChainStatusFlags.NoError &&
-                                s.Status != X509ChainStatusFlags.RevocationStatusUnknown)
-                                return false;
+                            foreach (var s in chain.ChainStatus)
+                            {
+                                if (s.Status != X509ChainStatusFlags.NoError &&
+                                    s.Status != X509ChainStatusFlags.RevocationStatusUnknown)
+                                    return false;
+                            }
+
+                            return true;
                         }
 
-                        return true;
-                    }
+                        return false;
+                    });
+                    stream = ssl;
 
-                    return false;
-                });
-
-                var opt = new SslClientAuthenticationOptions
-                {
-                    TargetHost = host,
-                    EnabledSslProtocols = SslProtocols.Tls13 | SslProtocols.Tls12,
-                    CertificateRevocationCheckMode = X509RevocationMode.NoCheck
-                };
-                ssl.AuthenticateAsClient(opt);
+                    var opt = new SslClientAuthenticationOptions
+                    {
+                        TargetHost = host,
+                        EnabledSslProtocols = SslProtocols.Tls13 | SslProtocols.Tls12,
+                        CertificateRevocationCheckMode = X509RevocationMode.NoCheck
+                    };
+                    ssl.AuthenticateAsClient(opt);
+                }
+                else stream = tcp.GetStream();
             }
             catch (Exception e)
             {
-                try { ssl?.Dispose(); } catch { }
+                try { stream?.Dispose(); } catch { }
                 try { tcp?.Dispose(); } catch { }
                 exception = e;
             }
@@ -87,7 +92,7 @@ public class ModuleMultiplayerConnectAction
         if (thread == null)
             return;
 
-        try { ssl?.Dispose(); } catch { }
+        try { stream?.Dispose(); } catch { }
         try { tcp?.Dispose(); } catch { }
     }
 }
