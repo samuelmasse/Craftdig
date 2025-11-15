@@ -4,14 +4,22 @@ namespace Crafthoe.Client;
 public class PlayerPosition(
     PlayerSocket socket,
     PlayerEnt ent,
-    PlayerPositionUpdateReceiver positionUpdateReceiver)
+    PlayerPositionUpdateReceiver positionUpdateReceiver,
+    PlayerSlowDownReceiver slowDownReceiver)
 {
     private readonly List<PositionUpdateCommand> expected = [];
     private readonly int tolerance = 12;
+    private int slowdown;
     private int c;
 
     public void Tick()
     {
+        if (slowDownReceiver.ShouldSlowDown())
+        {
+            expected.Clear();
+            slowdown = tolerance;
+        }
+
         expected.Add(new()
         {
             Position = ent.Ent.Position(),
@@ -30,6 +38,7 @@ public class PlayerPosition(
             if (!HasMatchingCommand(latest))
             {
                 expected.Clear();
+                slowdown = tolerance;
 
                 ent.Ent.Position() = latest.Position;
                 ent.Ent.Velocity() = latest.Velocity;
@@ -39,7 +48,8 @@ public class PlayerPosition(
                 Console.WriteLine($"Corrected {c++}");
             }
         }
-        else ApplyServerPosition(positionUpdateReceiver.Latest);
+        else if (positionUpdateReceiver.Count > 0)
+            ApplyServerPosition(positionUpdateReceiver.Latest);
     }
 
     public void Stream()
@@ -48,9 +58,12 @@ public class PlayerPosition(
         if (expected.Count < tolerance)
             movement = default;
 
-        if (positionUpdateReceiver.Count > tolerance)
+        if (positionUpdateReceiver.Count > tolerance && slowdown == 0)
             socket.Send(new MovePlayerCommand() { Step = movement });
         else movement = default;
+
+        if (slowdown > 0)
+            slowdown--;
     }
 
     private bool HasMatchingCommand(PositionUpdateCommand command)

@@ -47,6 +47,10 @@ public class NetLoop
         where C : unmanaged, ICommand where D : unmanaged =>
         Register<C, D>((ns, cmd, items) => handler(ns, items));
 
+    public void Register<C>(Action handler)
+        where C : unmanaged, ICommand =>
+        Register<C, byte>((ns, cmd, data) => handler());
+
     public void Register<C>(Action<C> handler)
         where C : unmanaged, ICommand =>
         Register<C, byte>((ns, cmd, data) => handler(cmd));

@@ -3,6 +3,7 @@ namespace Crafthoe.Menus.Multiplayer;
 [Player]
 public class PlayerMultiplayerState(
     RootState state,
+    RootKeyboard keyboard,
     WorldTick tick,
     DimensionContext context,
     PlayerScope scope,
@@ -10,6 +11,7 @@ public class PlayerMultiplayerState(
     PlayerFrontend player,
     PlayerCommonState commonState,
     PlayerMultiplayerDisconnectAction multiplayerDisconnectAction,
+    PlayerSlowTickReceiver slowTickReceiver,
     PlayerClient client) : State
 {
     public override void Load()
@@ -33,7 +35,13 @@ public class PlayerMultiplayerState(
 
     public override void Frame(double time)
     {
-        int ticks = tick.Update(time);
+        int ticks = Math.Min(tick.Update(time), 8);
+        if (keyboard.IsKeyPressed(Keys.L))
+            ticks++;
+
+        if (ticks > 0 && slowTickReceiver.ShouldSlowTick())
+            ticks--;
+
         while (ticks > 0)
         {
             if (!commonState.Inv && !commonState.Paused)

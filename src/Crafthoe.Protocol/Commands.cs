@@ -16,4 +16,6 @@ public enum Commands : ushort
     ChunkUpdate,
     WorldIndicesUpdate,
     PositionUpdate,
+    SlowDown,
+    SlowTick
 }
