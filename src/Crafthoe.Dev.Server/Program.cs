@@ -24,6 +24,8 @@ serverScope.Add(new ServerDefaults()
     Difficulty = native.NormalDifficulty,
     GameMode = native.SurvivalGameMode,
     Allowlist = ["samuelmasse4@gmail.com"],
-    NoAuth = true
+    NoAuth = true,
+    DisableTls = true,
+    EnableRawTcp = true
 });
 serverScope.Get<Server>().Run();

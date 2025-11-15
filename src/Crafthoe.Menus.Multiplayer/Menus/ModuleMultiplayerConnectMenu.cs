@@ -11,7 +11,7 @@ public class ModuleMultiplayerConnectMenu(
 {
     public void Create(EntObj root)
     {
-        string defaultName = "localhost";
+        string defaultName = "127.0.0.1";
         string defaultPort = clientOptions.UseRawTcp ? "36677" : "36676";
 
         var host = new StringBuilder(defaultName);

@@ -1,13 +1,19 @@
 namespace Crafthoe.Server;
 
 [Server]
-public class ServerListenerTls(ServerListenerLoop listenerLoop, ServerLoadCertificateAction loadCertificateAction)
+public class ServerListenerTls(
+    ServerDefaults defaults,
+    ServerListenerLoop listenerLoop,
+    ServerLoadCertificateAction loadCertificateAction)
 {
     private Thread? thread;
     private Action? stop;
 
     public void Start()
     {
+        if (defaults.DisableTls)
+            return;
+
         var cert = loadCertificateAction.Run();
         int port = 36676;
 
@@ -17,7 +23,7 @@ public class ServerListenerTls(ServerListenerLoop listenerLoop, ServerLoadCertif
             var opt = new SslServerAuthenticationOptions
             {
                 ServerCertificate = cert,
-                EnabledSslProtocols = SslProtocols.Tls13 | SslProtocols.Tls12,
+                EnabledSslProtocols = SslProtocols.Tls13,
                 ClientCertificateRequired = false,
                 CertificateRevocationCheckMode = X509RevocationMode.Online
             };

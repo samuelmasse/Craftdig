@@ -40,8 +40,8 @@ public class ModuleMultiplayerConnectAction(AppClientOptions clientOptions)
                 {
                     var ssl = new SslStream(tcp.GetStream(), false, (sender, certificate, chain, errors) =>
                     {
-                        if (host == "localhost")
-                            return true;
+                        if (host == "127.0.0.1")
+                            errors &= ~SslPolicyErrors.RemoteCertificateChainErrors;
 
                         if (errors == SslPolicyErrors.None)
                             return true;
@@ -65,8 +65,8 @@ public class ModuleMultiplayerConnectAction(AppClientOptions clientOptions)
                     var opt = new SslClientAuthenticationOptions
                     {
                         TargetHost = host,
-                        EnabledSslProtocols = SslProtocols.Tls13 | SslProtocols.Tls12,
-                        CertificateRevocationCheckMode = X509RevocationMode.NoCheck
+                        EnabledSslProtocols = SslProtocols.Tls13,
+                        CertificateRevocationCheckMode = X509RevocationMode.Online
                     };
                     ssl.AuthenticateAsClient(opt);
                 }
