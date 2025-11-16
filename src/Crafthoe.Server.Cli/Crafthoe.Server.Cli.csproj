@@ -8,7 +8,6 @@
         <Using Include="Crafthoe" />
         <Using Include="Crafthoe.App" />
         <Using Include="Crafthoe.Module" />
-        <Using Include="Crafthoe.Native" />
         <Using Include="Crafthoe.Server" />
         <Using Include="Crafthoe.World" />
         <Using Include="System.CommandLine" />

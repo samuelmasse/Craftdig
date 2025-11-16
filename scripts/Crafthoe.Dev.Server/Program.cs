@@ -13,7 +13,7 @@ var serverScope = appScope
     .Scope<ServerScope>();
 
 var exeDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!;
-serverScope.Get<ServerBoot>().Run(exeDir);
+serverScope.Get<ServerBoot>().Run(Path.Join(exeDir, "Data"));
 
 serverScope.Add(new ServerDefaults()
 {
