@@ -1,14 +1,13 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <OutputType>Exe</OutputType>
         <ServerGarbageCollection>true</ServerGarbageCollection>
     </PropertyGroup>
 
     <ItemGroup>
+        <Using Include="AlvorEngine" />
         <Using Include="Crafthoe" />
         <Using Include="Crafthoe.App" />
-        <Using Include="Crafthoe.App.Frontend" />
         <Using Include="Crafthoe.Dimension" />
         <Using Include="Crafthoe.Dimension.Backend" />
         <Using Include="Crafthoe.Dimension.Server" />
@@ -22,10 +21,11 @@
         <Using Include="Crafthoe.World" />
         <Using Include="Crafthoe.World.Backend" />
         <Using Include="Crafthoe.World.Server" />
+        <Using Include="NeedlerDI" />
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\src\Crafthoe.Native\Crafthoe.Native.csproj" />
+        <ProjectReference Include="..\..\src\Crafthoe.Native.Backend\Crafthoe.Native.Backend.csproj" />
         <ProjectReference Include="..\..\src\Crafthoe.Server\Crafthoe.Server.csproj" />
     </ItemGroup>
 

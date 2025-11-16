@@ -6,9 +6,10 @@ public class RootBootState(RootState state, RootScope scope) : State
     public override void Load()
     {
         var app = scope.Scope<AppScope>();
+        var appLoader = app.Scope<AppLoaderScope>();
 
-        // TODO: Find a way to search for mods to load
-        app.Add(new AppMods([]));
+        app.Add(new AppMods(appLoader.Get<AppModFinder>().Find()));
+        appLoader.Get<AppFrontendLoader>().Run();
 
         state.Current = app.New<AppInitializeState>();
     }

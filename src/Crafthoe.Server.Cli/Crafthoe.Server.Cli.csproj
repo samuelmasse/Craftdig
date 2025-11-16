@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <AssemblyName>CrafthoeServer</AssemblyName>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <Using Include="Crafthoe" />
+        <Using Include="Crafthoe.App" />
+        <Using Include="Crafthoe.Module" />
+        <Using Include="Crafthoe.Native" />
+        <Using Include="Crafthoe.Server" />
+        <Using Include="Crafthoe.World" />
+        <Using Include="System.CommandLine" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="System.CommandLine" Version="2.0.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\Crafthoe.Server\Crafthoe.Server.csproj" />
+    </ItemGroup>
+
+</Project>

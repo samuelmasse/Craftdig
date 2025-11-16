@@ -1,6 +1,7 @@
 <Project>
 
     <PropertyGroup>
+        <OutputType>Exe</OutputType>
         <TargetFramework>net9.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
@@ -13,23 +14,14 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <Using Include="AlvorEngine" />
-        <Using Include="BigGustave" />
-        <Using Include="Cysharp.Text" />
-        <Using Include="Glw2D" />
-        <Using Include="Glw2D.Fonts" />
-        <Using Include="GlwLayer" />
-        <Using Include="GlwLayer.Driver" />
-        <Using Include="HadvarECS" />
-        <Using Include="HadvarECS.Generator" />
-        <Using Include="Microsoft.Win32.SafeHandles" />
-        <Using Include="NeedlerDI" />
-        <Using Include="OpenTK.Graphics.OpenGL4" />
-        <Using Include="OpenTK.Mathematics" />
-        <Using Include="OpenTK.Windowing.Common" />
-        <Using Include="OpenTK.Windowing.Common.Input" />
-        <Using Include="OpenTK.Windowing.Desktop" />
-        <Using Include="OpenTK.Windowing.GraphicsLibraryFramework" />
+        <PackageReference Include="SamuelMasse.SlnScripts" Version="0.*" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <Using Include="SamuelMasse.SlnScripts" />
+        <Using Include="SamuelMasse.SlnScripts.Script">
+            <Static>True</Static>
+        </Using>
         <Using Include="System.Buffers.Binary" />
         <Using Include="System.Collections.Concurrent" />
         <Using Include="System.Diagnostics" />
@@ -49,10 +41,6 @@
         <Using Include="System.Text" />
         <Using Include="System.Text.Json" />
         <Using Include="System.Text.RegularExpressions" />
-        <Using Include="Tomlyn" />
-        <Using Include="Tomlyn.Model" />
-        <Using Include="Tomlyn.Syntax" />
-        <Using Include="Wigdow" />
     </ItemGroup>
 
 </Project>

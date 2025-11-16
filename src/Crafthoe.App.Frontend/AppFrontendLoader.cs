@@ -1,7 +1,7 @@
 namespace Crafthoe.Module.Frontend;
 
-[ModuleLoader]
-public class ModuleFrontendLoader(AppFiles files, AppMods mods, ModuleFaceLoader faceLoader)
+[AppLoader]
+public class AppFrontendLoader(AppFiles files, AppMods mods)
 {
     public void Run()
     {
@@ -10,7 +10,5 @@ public class ModuleFrontendLoader(AppFiles files, AppMods mods, ModuleFaceLoader
             if (entry.Root != null)
                 files.AddRoot(entry.Root);
         }
-
-        faceLoader.Run();
     }
 }

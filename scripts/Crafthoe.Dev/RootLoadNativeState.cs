@@ -6,7 +6,11 @@ public class RootLoadNativeState(RootState state, RootScope scope) : State
     public override void Load()
     {
         var app = scope.Scope<AppScope>();
-        app.Add(new AppMods([new(typeof(ModuleNativeLoader))]));
+        app.Add(new AppMods([
+            new(typeof(ModuleNativeLoader), null),
+            new(typeof(ModuleNativeBackendLoader), null),
+            new(typeof(ModuleNativeFrontendLoader), null)
+        ]));
 
         var user = "testuser";
         var options = new AppClientOptions()
@@ -19,6 +23,13 @@ public class RootLoadNativeState(RootState state, RootScope scope) : State
         };
 
         app.Add(options);
+
+        var files = app.Get<AppFiles>();
+        files.AddRoot(Path.Join(
+            Path.GetDirectoryName(
+                Path.GetDirectoryName(
+                    Path.GetDirectoryName(
+                        Path.GetDirectoryName(files.Root))))!, "res"));
 
         state.Current = app.New<AppInitializeState>();
     }

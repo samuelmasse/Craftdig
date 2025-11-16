@@ -3,12 +3,15 @@
     <ItemGroup>
         <Using Include="Crafthoe" />
         <Using Include="Crafthoe.App" />
+        <Using Include="Crafthoe.App.Frontend" />
         <Using Include="Crafthoe.Module" />
+        <Using Include="Crafthoe.Module.Frontend" />
         <Using Include="Crafthoe.Native" />
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\Crafthoe.Module\Crafthoe.Module.csproj" />
+        <ProjectReference Include="..\Crafthoe.Module.Frontend\Crafthoe.Module.Frontend.csproj" />
+        <ProjectReference Include="..\Crafthoe.Native\Crafthoe.Native.csproj" />
     </ItemGroup>
 
 </Project>

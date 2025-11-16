@@ -3,32 +3,25 @@ namespace Crafthoe.App.Frontend;
 [App]
 public class AppFiles
 {
-    private readonly string baseDirectoy;
-    private readonly string projectDirectory;
+    private readonly List<string> roots = [AppDomain.CurrentDomain.BaseDirectory];
 
-    public AppFiles()
-    {
-        baseDirectoy = AppDomain.CurrentDomain.BaseDirectory;
-        projectDirectory = Path.Join(
-            Path.GetDirectoryName(
-                Path.GetDirectoryName(
-                    Path.GetDirectoryName(
-                        Path.GetDirectoryName(baseDirectoy))))!, "res");
-    }
+    public string Root => roots[^1];
 
     public string this[string path]
     {
         get
         {
-            string projectPath = Path.Join(projectDirectory, path);
-            if (File.Exists(projectPath))
-                return projectPath;
-
-            string basePath = Path.Join(baseDirectoy, path);
-            if (File.Exists(basePath))
-                return basePath;
+            for (int i = roots.Count - 1; i >= 0; i--)
+            {
+                var root = roots[i];
+                string rpath = Path.Join(root, path);
+                if (File.Exists(rpath))
+                    return rpath;
+            }
 
             throw new Exception($"File not found {path}");
         }
     }
+
+    public void AddRoot(string root) => roots.Add(root);
 }

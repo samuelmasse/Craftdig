@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <ItemGroup>
+        <Using Include="Crafthoe" />
+        <Using Include="Crafthoe.App" />
+        <Using Include="Crafthoe.Dimension" />
+        <Using Include="Crafthoe.Dimension.Backend" />
+        <Using Include="Crafthoe.Dimension.Unit">
+            <Static>true</Static>
+        </Using>
+        <Using Include="Crafthoe.Module" />
+        <Using Include="Crafthoe.Native" />
+        <Using Include="Crafthoe.World" />
+        <Using Include="Crafthoe.World.Backend" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\Crafthoe.Dimension.Backend\Crafthoe.Dimension.Backend.csproj" />
+        <ProjectReference Include="..\Crafthoe.Native\Crafthoe.Native.csproj" />
+    </ItemGroup>
+
+</Project>

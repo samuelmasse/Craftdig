@@ -7,13 +7,10 @@ public class ModuleNativeLoader(ModuleNative m) : ModLoader
     {
         m.OverworldDimension
             .IsDimension(true)
-            .Air(m.AirBlock)
-            .TerrainGeneratorType(typeof(DimensionNativeTerrainGenerator))
-            .BiomeGeneraetorType(typeof(DimensionNativeBiomeGenerator));
+            .Air(m.AirBlock);
 
         LoadGameModes();
         LoadDifficulties();
-        LoadFaces();
         LoadBlocks();
     }
 
@@ -59,25 +56,6 @@ public class ModuleNativeLoader(ModuleNative m) : ModLoader
             .Order(3);
     }
 
-    private void LoadFaces()
-    {
-        m.GrassFace
-            .IsFace(true)
-            .FaceFile("Grass");
-
-        m.GrassSideFace
-            .IsFace(true)
-            .FaceFile("GrassSide");
-
-        m.StoneFace
-            .IsFace(true)
-            .FaceFile("Stone");
-
-        m.DirtFace
-            .IsFace(true)
-            .FaceFile("Dirt");
-    }
-
     private void LoadBlocks()
     {
         m.AirBlock
@@ -89,31 +67,20 @@ public class ModuleNativeLoader(ModuleNative m) : ModLoader
             .MaxStack(64)
             .IsBlock(true)
             .IsSolid(true)
-            .IsBuildable(true)
-            .Faces(new()
-            {
-                Top = m.GrassFace,
-                Bottom = m.DirtFace,
-                Left = m.GrassSideFace,
-                Right = m.GrassSideFace,
-                Front = m.GrassSideFace,
-                Back = m.GrassSideFace
-            });
+            .IsBuildable(true);
 
         m.DirtBlock
             .Name("Dirt")
             .MaxStack(64)
             .IsBlock(true)
             .IsSolid(true)
-            .IsBuildable(true)
-            .Faces(new(m.DirtFace));
+            .IsBuildable(true);
 
         m.StoneBlock
             .Name("Stone")
             .MaxStack(64)
             .IsBlock(true)
             .IsSolid(true)
-            .IsBuildable(true)
-            .Faces(new(m.StoneFace));
+            .IsBuildable(true);
     }
 }
