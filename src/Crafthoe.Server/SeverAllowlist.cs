@@ -1,13 +1,16 @@
 namespace Crafthoe.Server;
 
 [Server]
-public class SeverAllowlist(ServerPaths paths, ServerDefaults defaults)
+public class SeverAllowlist(ServerDefaults defaults, ServerConfig config)
 {
-    private readonly string file = Path.Join(paths.Root, "Allowlist.txt");
+    private readonly string file = Path.Join(config.RootPath, "Allowlist.txt");
     private HashSet<string>? set;
 
     public void Allow(string email)
     {
+        if (config.PublicServer)
+            return;
+
         lock (this)
         {
             if (set == null)

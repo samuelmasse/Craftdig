@@ -3,37 +3,44 @@ Info("Packaging");
 Info("Deleting dist directory");
 Delete("dist");
 
-var mods = new List<string>()
+var mods = new List<(string Name, bool IncludeServer)>()
 {
-    "Crafthoe.Native",
-    "Crafthoe.Native.Backend",
-    "Crafthoe.Native.Frontend"
+    ("Crafthoe.Native", true),
+    ("Crafthoe.Native.Backend", true),
+    ("Crafthoe.Native.Frontend", false)
 };
 
 var modDlls = mods.Select((mod) =>
 {
-    Dir("src", mod, out var modDir);
-    Run($"dotnet build {modDir} -c Release", $"Building mod {mod}", $"Failed to build mod {mod}");
-    Dir("bin", mod, "Release", $"{mod}.dll", out var modDll);
-    return modDll;
+    Dir("src", mod.Name, out var modDir);
+    Run($"dotnet build {modDir} -c Release", $"Building mod {mod.Name}", $"Failed to build mod {mod.Name}");
+    Dir("bin", mod.Name, "Release", $"{mod.Name}.dll", out var modDll);
+    return (Mod: mod, Dll: modDll);
 }).ToList();
 
-var runtimes = new List<string>()
+var runtimes = new List<(string Name, bool CompileClient, bool CompileServer)>()
 {
-    "win-x64",
-    "linux-x64",
-    "osx-arm64"
+    ("win-x64", true, true),
+    ("linux-x64", true, true),
+    ("linux-arm64", false, true),
+    ("osx-arm64", true, true)
 };
 
-var exes = runtimes.SelectMany<string, string>((runtime) =>
+var exes = runtimes.SelectMany((runtime) =>
 {
-    var clientExe = Compile("Crafthoe", "Crafthoe", "Crafthoe", true);
-    var serverExe = Compile("Crafthoe.Server.Cli", "CrafthoeServer", "CrafthoeServer", false);
+    var exes = new List<string>();
 
-    string Compile(string projectName, string outputName, string exeName, bool includeRes)
+    if (runtime.CompileClient)
+        Compile("Crafthoe", "Crafthoe", "Crafthoe", true);
+    if (runtime.CompileServer)
+        Compile("Crafthoe.Server.Cli", "CrafthoeServer", "CrafthoeServer", false);
+
+    return exes;
+
+    string Compile(string projectName, string outputName, string exeName, bool server)
     {
         Dir("src", projectName, out var projectDir);
-        Dir("dist", runtime, outputName, out var outDir);
+        Dir("dist", runtime.Name, outputName, out var outDir);
 
         Section(() =>
         {
@@ -46,40 +53,35 @@ var exes = runtimes.SelectMany<string, string>((runtime) =>
                 "-p:PublishSingleFile=true",
                 "-p:IncludeNativeLibrariesForSelfExtract=true",
                 "-p:DebugType=None",
-                $"-r {runtime}",
+                $"-r {runtime.Name}",
                 $"-o {outDir}"
             );
 
-            Run(command, $"Publishing for {runtime}", $"Failed to publish for {runtime}");
+            Run(command, $"Publishing {outputName} for {runtime.Name}", $"Failed to publish {outputName} for {runtime.Name}");
         });
 
         Dir("res", projectName, out var resProjectDir);
         if (Directory.Exists(Absolute(resProjectDir)))
             Copy(resProjectDir, outDir);
 
-        var outMods = includeRes ? mods : [.. mods.SkipLast(1)];
-        for (int i = 0; i < outMods.Count; i++)
+        var outMods = server ? modDlls : [.. modDlls.Where(x => x.Mod.IncludeServer)];
+        foreach (var (mod, dll) in outMods)
         {
-            var mod = mods[i];
-            var modDll = modDlls[i];
-
-            Dir("res", mod, out var resModDir);
-            Dir(outDir, "Mods", mod, out var outModDir);
-            Dir(outModDir, $"{mod}.dll", out var outModDll);
-            Copy(modDll, outModDll);
+            Dir("res", mod.Name, out var resModDir);
+            Dir(outDir, "Mods", mod.Name, out var outModDir);
+            Dir(outModDir, $"{mod.Name}.dll", out var outModDll);
+            Copy(dll, outModDll);
 
             if (Directory.Exists(Absolute(resModDir)))
                 Copy(resModDir, outModDir);
         }
 
         Dir(outDir, "Load.txt", out var loadFile);
-        File.WriteAllLines(Absolute(loadFile), [.. outMods]);
+        File.WriteAllLines(Absolute(loadFile), [.. outMods.Select(x => x.Mod.Name)]);
 
-        Dir(outDir, $"{exeName}{(runtime.StartsWith("win") ? ".exe" : "")}", out var exeFile);
+        Dir(outDir, $"{exeName}{(runtime.Name.StartsWith("win") ? ".exe" : "")}", out var exeFile);
         return exeFile;
     }
-
-    return [clientExe, serverExe];
 }).ToList();
 
 Success($"Packaged");

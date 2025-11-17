@@ -1,9 +1,9 @@
 namespace Crafthoe.Server;
 
 [Server]
-public class ServerIdentities(ServerPaths paths)
+public class ServerIdentities(ServerConfig config)
 {
-    private readonly string file = Path.Join(paths.Root, "Identities.json");
+    private readonly string file = Path.Join(config.RootPath, "Identities.json");
     private Dictionary<string, string>? known;
 
     public void Verify(string email, string uid)

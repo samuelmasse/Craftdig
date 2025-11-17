@@ -9,7 +9,6 @@ var rootCommand = new RootCommand("Crafthoe Server") { rootArg };
 rootCommand.SetAction(parseResult =>
 {
     var dir = parseResult.GetValue(rootArg);
-    var root = dir?.FullName ?? Directory.GetCurrentDirectory();
 
     var appScope = new Injector()
         .Scope<RootScope>()
@@ -23,7 +22,7 @@ rootCommand.SetAction(parseResult =>
         .Scope<WorldScope>()
         .Scope<ServerScope>();
 
-    serverScope.Get<ServerBoot>().Run(root);
+    serverScope.Get<ServerBoot>().Run(dir?.FullName);
     serverScope.Get<Server>().Run();
 });
 

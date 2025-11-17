@@ -25,11 +25,14 @@ public class RootLoadNativeState(RootState state, RootScope scope) : State
         app.Add(options);
 
         var files = app.Get<AppFiles>();
-        files.AddRoot(Path.Join(
+        var res = Path.Join(
             Path.GetDirectoryName(
                 Path.GetDirectoryName(
                     Path.GetDirectoryName(
-                        Path.GetDirectoryName(files.Root))))!, "res"));
+                        Path.GetDirectoryName(files.Root))))!, "res");
+
+        foreach (var dir in Directory.GetDirectories(res))
+            files.AddRoot(dir);
 
         state.Current = app.New<AppInitializeState>();
     }

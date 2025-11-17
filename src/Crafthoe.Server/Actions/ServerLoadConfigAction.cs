@@ -1,34 +1,73 @@
 namespace Crafthoe.Server;
 
 [Server]
-public class ServerLoadConfigAction(ServerScope scope, ServerPaths paths)
+public class ServerLoadConfigAction
 {
-    public void Run()
+    public ServerConfig Run(string? root)
+    {
+        var roots = new List<string>() { MachineConfigDir(), UserDir(), ExeDir(), CwdDir() }
+            .Select(Path.GetFullPath)
+            .Select(Path.TrimEndingDirectorySeparator)
+            .ToList();
+
+        if (root == null)
+        {
+            var config = ReadConfig(roots, null);
+            var dynamicRoot = Path.TrimEndingDirectorySeparator(Path.GetFullPath(config.RootPath ?? CwdDir()));
+            roots.Add(dynamicRoot);
+            return ReadConfig(roots, dynamicRoot);
+        }
+        else
+        {
+            var fullRoot = Path.TrimEndingDirectorySeparator(Path.GetFullPath(root));
+            roots.Add(fullRoot);
+            return ReadConfig(roots, fullRoot);
+        }
+    }
+
+    private ServerConfig ReadConfig(List<string> roots, string? rootPath)
     {
         var builder = new ConfigurationBuilder();
-        string[] roots = [MachineConfigDir(), UserDir(), ExeDir(), CwdDir(), paths.Root ];
 
-        foreach (var root in roots.Distinct())
+        foreach (var root in roots)
         {
-            var iniPath = Path.Join(root, "Server.ini");
-            if (File.Exists(iniPath))
-                Console.WriteLine($"Loaded config {iniPath}");
-            builder.AddIniFile(iniPath, true);
-
-            var jsonPath = Path.Join(root, "Server.json");
-            if (File.Exists(jsonPath))
-                Console.WriteLine($"Loaded config {jsonPath}");
-            builder.AddJsonFile(jsonPath, true);
+            builder.AddIniFile(Path.Join(root, "Server.ini"), true);
+            builder.AddJsonFile(Path.Join(root, "Server.json"), true);
         }
 
         builder.AddEnvironmentVariables("Crafthoe_");
-        scope.Add(builder.Build().Get<ServerConfig>() ?? new());
+
+        if (rootPath != null)
+        {
+            var seen = new HashSet<string>();
+
+            for (int i = roots.Count - 1; i >= 0; i--)
+            {
+                var root = roots[i];
+                if (seen.Contains(root))
+                    continue;
+
+                var indent = new string(' ', seen.Count * 2);
+                var iniPath = Path.Join(root, "Server.ini");
+                if (File.Exists(iniPath))
+                    Console.WriteLine($"{indent}Config {iniPath}");
+                var jsonPath = Path.Join(root, "Server.json");
+                if (File.Exists(jsonPath))
+                    Console.WriteLine($"{indent}Config {jsonPath}");
+
+                seen.Add(root);
+            }
+
+            builder.AddInMemoryCollection(new Dictionary<string, string?> { { "RootPath", rootPath } });
+        }
+
+        return builder.Build().Get<ServerConfig>() ?? new();
     }
 
     private string MachineConfigDir() => OperatingSystem.IsWindows() ?
         Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "Crafthoe") :
         "/etc/crafthoe";
     private string UserDir() => Path.Join(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), ".crafthoe");
-    private string ExeDir() => Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!;
+    private string ExeDir() => AppContext.BaseDirectory;
     private string CwdDir() => Directory.GetCurrentDirectory();
 }
