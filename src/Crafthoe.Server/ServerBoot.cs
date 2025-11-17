@@ -7,7 +7,9 @@ public class ServerBoot(ModuleScope moduleScope, WorldScope worldScope, ServerSc
     {
         moduleScope.Handler(moduleScope.Get<ModuleEntMutInjector>());
         moduleScope.Scope<ModuleLoaderScope>().Get<ModuleLoader>().Run();
-        serverScope.Add(serverScope.Get<ServerLoadConfigAction>().Run(root));
-        worldScope.Add(new WorldPaths(Path.Join(root, "World")));
+
+        var config = serverScope.Get<ServerLoadConfigAction>().Run(root);
+        serverScope.Add(config);
+        worldScope.Add(new WorldPaths(Path.Join(config.RootPath, "World")));
     }
 }
