@@ -10,6 +10,7 @@
         <BaseOutputPath>..\..\bin\$(MSBuildProjectName)</BaseOutputPath>
         <BaseIntermediateOutputPath>..\..\obj\$(MSBuildProjectName)</BaseIntermediateOutputPath>
         <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+        <PathMap>$(MSBuildProjectDirectory)=$(MSBuildProjectName)</PathMap>
     </PropertyGroup>
 
     <ItemGroup>

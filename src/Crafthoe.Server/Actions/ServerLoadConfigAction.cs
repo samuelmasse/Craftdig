@@ -3,29 +3,20 @@ namespace Crafthoe.Server;
 [Server]
 public class ServerLoadConfigAction
 {
-    public ServerConfig Run(string? root)
+    public ServerConfig Run(string[] args)
     {
         var roots = new List<string>() { MachineConfigDir(), UserDir(), ExeDir(), CwdDir() }
             .Select(Path.GetFullPath)
             .Select(Path.TrimEndingDirectorySeparator)
             .ToList();
 
-        if (root == null)
-        {
-            var config = ReadConfig(roots, null);
-            var dynamicRoot = Path.TrimEndingDirectorySeparator(Path.GetFullPath(config.RootPath ?? CwdDir()));
-            roots.Add(dynamicRoot);
-            return ReadConfig(roots, dynamicRoot);
-        }
-        else
-        {
-            var fullRoot = Path.TrimEndingDirectorySeparator(Path.GetFullPath(root));
-            roots.Add(fullRoot);
-            return ReadConfig(roots, fullRoot);
-        }
+        var config = ReadConfig(roots, args, null);
+        var dynamicRoot = Path.TrimEndingDirectorySeparator(Path.GetFullPath(config.RootPath ?? CwdDir()));
+        roots.Add(dynamicRoot);
+        return ReadConfig(roots, args, dynamicRoot);
     }
 
-    private ServerConfig ReadConfig(List<string> roots, string? rootPath)
+    private ServerConfig ReadConfig(List<string> roots, string[] args, string? rootPath)
     {
         var builder = new ConfigurationBuilder();
 
@@ -36,6 +27,7 @@ public class ServerLoadConfigAction
         }
 
         builder.AddEnvironmentVariables("Crafthoe_");
+        builder.AddCommandLine(args);
 
         if (rootPath != null)
         {

@@ -12,7 +12,7 @@ var serverScope = appScope
     .Scope<WorldScope>()
     .Scope<ServerScope>();
 
-serverScope.Get<ServerBoot>().Run(Path.Join(AppContext.BaseDirectory, "Data"));
+serverScope.Get<ServerBoot>().Run([$"--RootPath={Path.Join(AppContext.BaseDirectory, "Data")}"]);
 
 serverScope.Add(new ServerDefaults()
 {

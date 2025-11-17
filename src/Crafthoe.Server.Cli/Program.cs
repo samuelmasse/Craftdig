@@ -1,29 +1,35 @@
-var rootArg = new Argument<DirectoryInfo?>("root")
+string[] help = ["-?", "-h", "--help"];
+
+if (help.Any(x => args.Contains(x)))
 {
-    Description = "Root directory of the server",
-    Arity = ArgumentArity.ZeroOrOne
-};
+    Console.WriteLine();
+    Console.WriteLine($"Usage:");
+    Console.WriteLine(" CrafthoeServer [options]");
+    Console.WriteLine();
+    Console.WriteLine("Run a Crafthoe server");
+    Console.WriteLine();
+    Console.WriteLine("Options:");
 
-var rootCommand = new RootCommand("Crafthoe Server") { rootArg };
+    var type = typeof(ServerConfig);
+    var properties = type.GetProperties(BindingFlags.Instance | BindingFlags.Public);
 
-rootCommand.SetAction(parseResult =>
-{
-    var dir = parseResult.GetValue(rootArg);
+    foreach (var item in properties)
+        Console.WriteLine($" --{item.Name}");
 
-    var appScope = new Injector()
-        .Scope<RootScope>()
-        .Scope<AppScope>();
+    return;
+}
 
-    appScope.Add(new AppMods(
-        appScope.Scope<AppLoaderScope>().Get<AppModFinder>().Find()));
+var appScope = new Injector()
+    .Scope<RootScope>()
+    .Scope<AppScope>();
 
-    var serverScope = appScope
-        .Scope<ModuleScope>()
-        .Scope<WorldScope>()
-        .Scope<ServerScope>();
+appScope.Add(new AppMods(
+    appScope.Scope<AppLoaderScope>().Get<AppModFinder>().Find()));
 
-    serverScope.Get<ServerBoot>().Run(dir?.FullName);
-    serverScope.Get<Server>().Run();
-});
+var serverScope = appScope
+    .Scope<ModuleScope>()
+    .Scope<WorldScope>()
+    .Scope<ServerScope>();
 
-return await rootCommand.Parse(args).InvokeAsync();
+serverScope.Get<ServerBoot>().Run(args);
+serverScope.Get<Server>().Run();

@@ -52,7 +52,7 @@ var exes = runtimes.SelectMany((runtime) =>
                 "--self-contained",
                 "-p:PublishSingleFile=true",
                 "-p:IncludeNativeLibrariesForSelfExtract=true",
-                "-p:DebugType=None",
+                "-p:DebugType=embedded",
                 $"-r {runtime.Name}",
                 $"-o {outDir}"
             );
