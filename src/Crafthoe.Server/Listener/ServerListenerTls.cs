@@ -3,6 +3,7 @@ namespace Crafthoe.Server;
 [Server]
 public class ServerListenerTls(
     ServerDefaults defaults,
+    ServerConfig config,
     ServerListenerLoop listenerLoop,
     ServerLoadCertificateAction loadCertificateAction)
 {
@@ -11,7 +12,7 @@ public class ServerListenerTls(
 
     public void Start()
     {
-        if (defaults.DisableTls)
+        if (config.DisableTls ?? defaults.DisableTls)
             return;
 
         var cert = loadCertificateAction.Run();

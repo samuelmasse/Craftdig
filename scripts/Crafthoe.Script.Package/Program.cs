@@ -53,23 +53,23 @@ var exes = runtimes.SelectMany<string, string>((runtime) =>
             Run(command, $"Publishing for {runtime}", $"Failed to publish for {runtime}");
         });
 
+        Dir("res", projectName, out var resProjectDir);
+        if (Directory.Exists(Absolute(resProjectDir)))
+            Copy(resProjectDir, outDir);
+
         var outMods = includeRes ? mods : [.. mods.SkipLast(1)];
-
-        if (includeRes)
-        {
-            Dir(outDir, "Mods", outMods.Last(), out var nativeFrontendModDir);
-            Dir(["res"], out var resDir);
-            Copy(resDir, nativeFrontendModDir);
-        }
-
         for (int i = 0; i < outMods.Count; i++)
         {
             var mod = mods[i];
             var modDll = modDlls[i];
 
+            Dir("res", mod, out var resModDir);
             Dir(outDir, "Mods", mod, out var outModDir);
             Dir(outModDir, $"{mod}.dll", out var outModDll);
             Copy(modDll, outModDll);
+
+            if (Directory.Exists(Absolute(resModDir)))
+                Copy(resModDir, outModDir);
         }
 
         Dir(outDir, "Load.txt", out var loadFile);

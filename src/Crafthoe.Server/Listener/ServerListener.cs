@@ -1,14 +1,14 @@
 namespace Crafthoe.Server;
 
 [Server]
-public class ServerListener(ServerDefaults defaults, ServerListenerLoop listenerLoop)
+public class ServerListener(ServerDefaults defaults, ServerConfig config, ServerListenerLoop listenerLoop)
 {
     private Thread? thread;
     private Action? stop;
 
     public void Start()
     {
-        if (!defaults.EnableRawTcp)
+        if (!(config.EnableRawTcp ?? defaults.EnableRawTcp))
             return;
 
         int port = 36677;

@@ -1,32 +1,21 @@
 namespace Crafthoe.Server;
 
 [Server]
-public class ServerLoadCertificateAction(ServerCreateDevCertificateAction createDevCertificateAction)
+public class ServerLoadCertificateAction(ServerConfig config, ServerCreateDevCertificateAction createDevCertificateAction)
 {
     public X509Certificate2 Run()
     {
-        var certPath = Environment.GetEnvironmentVariable("CRAFTHOE_CERT_PATH");
-        var keyPath = Environment.GetEnvironmentVariable("CRAFTHOE_CERT_KEY_PATH");
-        var password = Environment.GetEnvironmentVariable("CRAFTHOE_CERT_PASSWORD");
-
-        if (password != null)
+        if (config.KeyPath != null)
         {
-            if (certPath == null)
-                throw new Exception("TLS password defined without cert path");
-
-            return X509CertificateLoader.LoadPkcs12FromFile(certPath, password);
-        }
-        else if (keyPath != null)
-        {
-            if (certPath == null)
+            if (config.CertPath == null)
                 throw new Exception("TLS key path defined without cert path");
 
-            return X509Certificate2.CreateFromPemFile(certPath, keyPath);
+            return X509Certificate2.CreateFromPemFile(config.CertPath, config.KeyPath);
         }
         else
         {
-            if (certPath != null)
-                throw new Exception("TLS cert path defined without password or key");
+            if (config.CertPath != null)
+                throw new Exception("TLS cert path defined without key");
 
             return createDevCertificateAction.Run();
         }
