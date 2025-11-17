@@ -15,6 +15,7 @@
         <Using Include="Crafthoe.World" />
         <Using Include="Crafthoe.World.Backend" />
         <Using Include="Crafthoe.World.Server" />
+        <Using Include="Microsoft.Extensions.Configuration" />
     </ItemGroup>
 
     <ItemGroup>
