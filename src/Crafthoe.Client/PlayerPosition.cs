@@ -9,6 +9,7 @@ public class PlayerPosition(
 {
     private readonly List<PositionUpdateCommand> expected = [];
     private readonly int tolerance = 12;
+    private double matching = 1;
     private int slowdown;
     private int c;
 
@@ -37,13 +38,22 @@ public class PlayerPosition(
 
             if (!HasMatchingCommand(latest))
             {
-                slowdown = tolerance;
-                ApplyServerPosition(latest);
                 Console.WriteLine($"Corrected {c++}");
+                foreach (PositionUpdateCommand command in expected)
+                    Console.WriteLine($"{command.Position} : {Vector3d.Distance(command.Position, positionUpdateReceiver.Latest.Position)}");
+                Console.WriteLine("But:");
+                Console.WriteLine(positionUpdateReceiver.Latest.Position);
+
+                expected.Clear();
+                slowdown = tolerance;
+                matching = 1;
+                ApplyServerPosition(latest);
             }
         }
         else if (positionUpdateReceiver.Count > 0)
             ApplyServerPosition(positionUpdateReceiver.Latest);
+
+        matching = Math.Max(matching * 0.95, 0.001);
     }
 
     public void Stream()
@@ -63,13 +73,18 @@ public class PlayerPosition(
 
     private bool HasMatchingCommand(PositionUpdateCommand command)
     {
+        double min = double.PositiveInfinity;
+
         foreach (var ex in expected)
         {
-            if (Vector3d.Distance(command.Position, ex.Position) < 0.1)
-                return true;
+            var dist = Vector3d.Distance(command.Position, ex.Position);
+            if (dist < min)
+                min = dist;
         }
 
-        return false;
+        Console.WriteLine((int)(min * 1000));
+
+        return min < matching;
     }
 
     private void ApplyServerPosition(PositionUpdateCommand server)
