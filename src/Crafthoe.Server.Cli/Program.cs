@@ -1,23 +1,6 @@
-string[] help = ["-?", "-h", "--help"];
-
-if (help.Any(x => args.Contains(x)))
-{
-    Console.WriteLine();
-    Console.WriteLine($"Usage:");
-    Console.WriteLine(" CrafthoeServer [options]");
-    Console.WriteLine();
-    Console.WriteLine("Run a Crafthoe server");
-    Console.WriteLine();
-    Console.WriteLine("Options:");
-
-    var type = typeof(ServerConfig);
-    var properties = type.GetProperties(BindingFlags.Instance | BindingFlags.Public);
-
-    foreach (var item in properties)
-        Console.WriteLine($" --{item.Name}");
-
-    return;
-}
+var result = new Cli(args).Run();
+if (result != null)
+    return result.Value;
 
 var appScope = new Injector()
     .Scope<RootScope>()
@@ -33,3 +16,5 @@ var serverScope = appScope
 
 serverScope.Get<ServerBoot>().Run(args);
 serverScope.Get<Server>().Run();
+
+return 0;

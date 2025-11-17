@@ -10,6 +10,7 @@
         <Using Include="Crafthoe.App" />
         <Using Include="Crafthoe.Module" />
         <Using Include="Crafthoe.Server" />
+        <Using Include="Crafthoe.Server.Cli" />
         <Using Include="Crafthoe.World" />
     </ItemGroup>
 
