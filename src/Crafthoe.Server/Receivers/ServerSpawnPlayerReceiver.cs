@@ -1,7 +1,7 @@
 namespace Crafthoe.Server;
 
 [Server]
-public class ServerSpawnPlayerReceiver(WorldDimensionBag dimensionBag)
+public class ServerSpawnPlayerReceiver(AppLog log, WorldDimensionBag dimensionBag)
 {
     public void Receive(NetSocket ns)
     {
@@ -11,7 +11,7 @@ public class ServerSpawnPlayerReceiver(WorldDimensionBag dimensionBag)
             return;
         }
 
-        Console.WriteLine("Was asked to spawn");
+        log.Info("Was asked to spawn");
 
         var dimensionScope = dimensionBag.Ents[0].DimensionScope();
         ns.Ent.DimensionScope() = dimensionScope;

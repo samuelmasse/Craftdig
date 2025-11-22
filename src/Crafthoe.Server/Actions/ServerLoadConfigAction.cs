@@ -1,7 +1,7 @@
 namespace Crafthoe.Server;
 
 [Server]
-public class ServerLoadConfigAction
+public class ServerLoadConfigAction(AppLog log)
 {
     public ServerConfig Run(string[] args)
     {
@@ -42,10 +42,10 @@ public class ServerLoadConfigAction
                 var indent = new string(' ', seen.Count * 2);
                 var iniPath = Path.Join(root, "Server.ini");
                 if (File.Exists(iniPath))
-                    Console.WriteLine($"{indent}Config {iniPath}");
+                    log.Info($"{indent}Config {iniPath}");
                 var jsonPath = Path.Join(root, "Server.json");
                 if (File.Exists(jsonPath))
-                    Console.WriteLine($"{indent}Config {jsonPath}");
+                    log.Info($"{indent}Config {jsonPath}");
 
                 seen.Add(root);
             }

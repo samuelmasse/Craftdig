@@ -1,7 +1,7 @@
 namespace Crafthoe.Server;
 
 [Server]
-public class ServerRegisterShutdownHandlersAction(ServerShutdownAction shutdownAction)
+public class ServerRegisterShutdownHandlersAction(AppLog log, ServerShutdownAction shutdownAction)
 {
     private bool shuttingDown = false;
 
@@ -16,7 +16,7 @@ public class ServerRegisterShutdownHandlersAction(ServerShutdownAction shutdownA
                 if (!shuttingDown)
                 {
                     shuttingDown = true;
-                    Console.WriteLine("Received SIGINT");
+                    log.Info("Received SIGINT");
                     shutdownAction.Run();
                 }
             }
@@ -29,7 +29,7 @@ public class ServerRegisterShutdownHandlersAction(ServerShutdownAction shutdownA
                 if (!shuttingDown)
                 {
                     shuttingDown = true;
-                    Console.WriteLine("Received SIGTERM");
+                    log.Info("Received SIGTERM");
                     shutdownAction.Run();
                 }
             }

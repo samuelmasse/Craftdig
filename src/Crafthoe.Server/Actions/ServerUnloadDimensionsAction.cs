@@ -2,6 +2,7 @@ namespace Crafthoe.Server;
 
 [Server]
 public class ServerUnloadDimensionsAction(
+    AppLog log,
     WorldScope worldScope,
     WorldDimensionBag dimensionBag)
 {
@@ -17,6 +18,6 @@ public class ServerUnloadDimensionsAction(
 
         worldScope.Scope<WorldLoaderScope>().Get<WorldUnloader>().Run();
 
-        Console.WriteLine("Dimensions unloaded");
+        log.Info("Dimensions unloaded");
     }
 }

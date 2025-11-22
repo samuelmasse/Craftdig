@@ -2,6 +2,7 @@ namespace Crafthoe.Client;
 
 [Player]
 public class PlayerPosition(
+    AppLog log,
     PlayerSocket socket,
     PlayerEnt ent,
     PlayerPositionUpdateReceiver positionUpdateReceiver,
@@ -38,11 +39,11 @@ public class PlayerPosition(
 
             if (!HasMatchingCommand(latest))
             {
-                Console.WriteLine($"Corrected {c++}");
+                log.Info("Corrected {0}", c++);
                 foreach (PositionUpdateCommand command in expected)
-                    Console.WriteLine($"{command.Position} : {Vector3d.Distance(command.Position, positionUpdateReceiver.Latest.Position)}");
-                Console.WriteLine("But:");
-                Console.WriteLine(positionUpdateReceiver.Latest.Position);
+                    log.Info("{0} : {1}", command.Position, Vector3d.Distance(command.Position, positionUpdateReceiver.Latest.Position));
+                log.Info("But:");
+                log.Info(positionUpdateReceiver.Latest.Position);
 
                 expected.Clear();
                 slowdown = tolerance;
@@ -82,7 +83,7 @@ public class PlayerPosition(
                 min = dist;
         }
 
-        Console.WriteLine((int)(min * 1000));
+        log.Info((int)(min * 1000));
 
         return min < matching;
     }

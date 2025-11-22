@@ -1,7 +1,7 @@
 namespace Crafthoe.Server;
 
 [Server]
-public class ServerTicks(WorldTick tick, WorldDimensionBag dimensions, ServerTickCheck tickCheck)
+public class ServerTicks(AppLog log, WorldTick tick, WorldDimensionBag dimensions, ServerTickCheck tickCheck)
 {
     private Thread? thread;
     private bool stop;
@@ -11,7 +11,7 @@ public class ServerTicks(WorldTick tick, WorldDimensionBag dimensions, ServerTic
         thread = new(Run);
         thread.Start();
 
-        Console.WriteLine("Ticks started");
+        log.Info("Ticks started");
     }
 
     public void Stop() => stop = true;
@@ -19,7 +19,7 @@ public class ServerTicks(WorldTick tick, WorldDimensionBag dimensions, ServerTic
     public void Join()
     {
         thread?.Join();
-        Console.WriteLine("Ticks stopped");
+        log.Info("Ticks stopped");
     }
 
     public void Run()

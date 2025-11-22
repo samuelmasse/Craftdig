@@ -1,7 +1,7 @@
 namespace Crafthoe.Server;
 
 [Server]
-public class ServerListener(ServerDefaults defaults, ServerConfig config, ServerListenerLoop listenerLoop)
+public class ServerListener(AppLog log, ServerDefaults defaults, ServerConfig config, ServerListenerLoop listenerLoop)
 {
     private Thread? thread;
     private Action? stop;
@@ -16,7 +16,7 @@ public class ServerListener(ServerDefaults defaults, ServerConfig config, Server
         (thread, stop) = listenerLoop.Run(port, (tcp) => new(tcp, tcp.GetStream()));
         thread.Start();
 
-        Console.WriteLine($"Listening on port {port}...");
+        log.Info("Listening on port {0}...", port);
     }
 
     public void Stop() => stop?.Invoke();
@@ -24,6 +24,6 @@ public class ServerListener(ServerDefaults defaults, ServerConfig config, Server
     public void Join()
     {
         thread?.Join();
-        Console.WriteLine("Listener stopped");
+        log.Info("Listener stopped");
     }
 }

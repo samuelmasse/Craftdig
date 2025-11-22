@@ -1,7 +1,7 @@
 namespace Crafthoe.Dimension.Server;
 
 [Dimension]
-public class DimensionPendingMovement(DimensionSockets sockets)
+public class DimensionPendingMovement(AppLog log, DimensionSockets sockets)
 {
     public void Tick()
     {
@@ -23,7 +23,7 @@ public class DimensionPendingMovement(DimensionSockets sockets)
             ahead--;
         }
 
-        Console.WriteLine(ahead);
+        log.Info(ahead);
 
         if (ahead > 1)
         {

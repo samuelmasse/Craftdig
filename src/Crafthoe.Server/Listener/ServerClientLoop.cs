@@ -1,7 +1,7 @@
 namespace Crafthoe.Server;
 
 [Server]
-public class ServerClientLoop(ServerNetLoop loop, ServerSockets sockets)
+public class ServerClientLoop(AppLog log, ServerNetLoop loop, ServerSockets sockets)
 {
     public void Start(NetSocket socket)
     {
@@ -13,7 +13,7 @@ public class ServerClientLoop(ServerNetLoop loop, ServerSockets sockets)
 
     private void Loop(NetSocket socket)
     {
-        Console.WriteLine($"Socket connected");
+        log.Info($"Socket connected");
 
         try
         {
@@ -29,7 +29,7 @@ public class ServerClientLoop(ServerNetLoop loop, ServerSockets sockets)
         }
 
         socket.Disconnect();
-        Console.WriteLine($"Socket disconnected");
+        log.Info($"Socket disconnected");
 
         sockets.Remove(socket);
     }

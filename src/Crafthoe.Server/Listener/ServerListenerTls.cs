@@ -2,6 +2,7 @@ namespace Crafthoe.Server;
 
 [Server]
 public class ServerListenerTls(
+    AppLog log,
     ServerDefaults defaults,
     ServerConfig config,
     ServerListenerLoop listenerLoop,
@@ -35,7 +36,7 @@ public class ServerListenerTls(
         });
         thread.Start();
 
-        Console.WriteLine($"Listening on TLS port {port}...");
+        log.Info("Listening on TLS port {0}...", port);
     }
 
     public void Stop() => stop?.Invoke();
@@ -43,6 +44,6 @@ public class ServerListenerTls(
     public void Join()
     {
         thread?.Join();
-        Console.WriteLine("Listener TLS stopped");
+        log.Info("Listener TLS stopped");
     }
 }

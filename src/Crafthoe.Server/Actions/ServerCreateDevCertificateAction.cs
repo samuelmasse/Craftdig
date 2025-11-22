@@ -1,11 +1,11 @@
 namespace Crafthoe.Server;
 
 [Server]
-public class ServerCreateDevCertificateAction
+public class ServerCreateDevCertificateAction(AppLog log)
 {
     public X509Certificate2 Run()
     {
-        Console.WriteLine("Generating dev certificate");
+        log.Info("Generating dev certificate");
 
         using var ca = CreateCACertificate();
         using var leaf = CreateLeaftCertificate(ca);
