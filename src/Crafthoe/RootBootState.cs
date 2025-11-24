@@ -1,7 +1,7 @@
 namespace Crafthoe;
 
 [Root]
-public class RootBootState(RootState state, RootScope scope) : State
+public class RootBootState(RootState state, RootScope scope, RootScripts scripts) : State
 {
     public override void Load()
     {
@@ -9,8 +9,10 @@ public class RootBootState(RootState state, RootScope scope) : State
         var appLoader = app.Scope<AppLoaderScope>();
 
         app.Add(new AppMods(appLoader.Get<AppModFinder>().Find()));
+        appLoader.Get<AppLoader>().Run();
         appLoader.Get<AppFrontendLoader>().Run();
 
+        scripts.Add(app.Get<AppScript>());
         state.Current = app.New<AppInitializeState>();
     }
 }

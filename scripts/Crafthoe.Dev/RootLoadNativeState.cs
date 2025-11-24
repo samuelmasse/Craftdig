@@ -1,7 +1,7 @@
 namespace Crafthoe.Dev;
 
 [Root]
-public class RootLoadNativeState(RootState state, RootScope scope) : State
+public class RootLoadNativeState(RootState state, RootScope scope, RootScripts scripts) : State
 {
     public override void Load()
     {
@@ -34,6 +34,10 @@ public class RootLoadNativeState(RootState state, RootScope scope) : State
         foreach (var dir in Directory.GetDirectories(res))
             files.AddRoot(dir);
 
+        var appLoader = app.Scope<AppLoaderScope>();
+        appLoader.Get<AppLoader>().Run();
+
+        scripts.Add(app.Get<AppScript>());
         state.Current = app.New<AppInitializeState>();
     }
 }

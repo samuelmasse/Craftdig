@@ -7,6 +7,8 @@ appScope.Add(new AppMods([
     new(typeof(ModuleNativeBackendLoader), null)
 ]));
 
+appScope.Scope<AppLoaderScope>().Get<AppLoader>().Run();
+
 var serverScope = appScope
     .Scope<ModuleScope>()
     .Scope<WorldScope>()
@@ -21,4 +23,6 @@ serverScope.Add(new ServerDefaults()
     DisableTls = true,
     EnableRawTcp = true
 });
+
 serverScope.Get<Server>().Run();
+appScope.Scope<AppLoaderScope>().Get<AppUnloader>().Run();

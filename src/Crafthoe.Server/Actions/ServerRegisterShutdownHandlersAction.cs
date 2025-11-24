@@ -10,29 +10,23 @@ public class ServerRegisterShutdownHandlersAction(AppLog log, ServerShutdownActi
         Console.CancelKeyPress += (_, e) =>
         {
             e.Cancel = true;
-
-            lock (this)
-            {
-                if (!shuttingDown)
-                {
-                    shuttingDown = true;
-                    log.Info("Received SIGINT");
-                    shutdownAction.Run();
-                }
-            }
+            ShutDown();
         };
 
-        AppDomain.CurrentDomain.ProcessExit += (_, _) =>
+        AppDomain.CurrentDomain.ProcessExit += (_, _) => ShutDown();
+        AppDomain.CurrentDomain.UnhandledException += (_, _) => ShutDown();
+    }
+
+    private void ShutDown()
+    {
+        lock (this)
         {
-            lock (this)
+            if (!shuttingDown)
             {
-                if (!shuttingDown)
-                {
-                    shuttingDown = true;
-                    log.Info("Received SIGTERM");
-                    shutdownAction.Run();
-                }
+                shuttingDown = true;
+                log.Info("Received SIGTERM");
+                shutdownAction.Run();
             }
-        };
+        }
     }
 }

@@ -9,6 +9,8 @@ var appScope = new Injector()
 appScope.Add(new AppMods(
     appScope.Scope<AppLoaderScope>().Get<AppModFinder>().Find()));
 
+appScope.Scope<AppLoaderScope>().Get<AppLoader>().Run();
+
 var serverScope = appScope
     .Scope<ModuleScope>()
     .Scope<WorldScope>()
@@ -16,5 +18,6 @@ var serverScope = appScope
 
 serverScope.Get<ServerBoot>().Run(args);
 serverScope.Get<Server>().Run();
+appScope.Scope<AppLoaderScope>().Get<AppUnloader>().Run();
 
 return 0;

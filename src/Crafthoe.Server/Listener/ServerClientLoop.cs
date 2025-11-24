@@ -13,24 +13,22 @@ public class ServerClientLoop(AppLog log, ServerNetLoop loop, ServerSockets sock
 
     private void Loop(NetSocket socket)
     {
-        log.Info($"Socket connected");
-
         try
         {
+            log.Info($"Socket connected");
             loop.Run(socket);
         }
         catch (Exception e)
         {
             if (socket.Connected)
-            {
-                Console.Error.WriteLine("Error in socket");
-                Console.Error.WriteLine(e);
-            }
+                log.Warn("Error in socket", e);
         }
+        finally
+        {
+            socket.Disconnect();
+            log.Info($"Socket disconnected");
 
-        socket.Disconnect();
-        log.Info($"Socket disconnected");
-
-        sockets.Remove(socket);
+            sockets.Remove(socket);
+        }
     }
 }

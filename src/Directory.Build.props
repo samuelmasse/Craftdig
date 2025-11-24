@@ -31,6 +31,7 @@
         <Using Include="OpenTK.Windowing.Common.Input" />
         <Using Include="OpenTK.Windowing.Desktop" />
         <Using Include="OpenTK.Windowing.GraphicsLibraryFramework" />
+        <Using Include="System.Buffers" />
         <Using Include="System.Buffers.Binary" />
         <Using Include="System.Collections.Concurrent" />
         <Using Include="System.Diagnostics" />
