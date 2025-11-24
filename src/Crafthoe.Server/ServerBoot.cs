@@ -15,9 +15,12 @@ public class ServerBoot(AppLog log, ModuleScope moduleScope, WorldScope worldSco
         log.Raw(@"|  $$$$$$/| $$     |  $$$$$$$| $$       |  $$$$/| $$  | $$|  $$$$$$/|  $$$$$$$");
         log.Raw(@" \______/ |__/      \_______/|__/        \___/  |__/  |__/ \______/  \_______/");
         log.Raw(@"");
-        log.Info("Booting up");
 
         var config = serverScope.Get<ServerLoadConfigAction>().Run(args);
+        log.Level = config.LogLevel;
+
+        log.Info("Booting up");
+
         serverScope.Add(config);
         worldScope.Add(new WorldPaths(Path.Join(config.RootPath, "World")));
 

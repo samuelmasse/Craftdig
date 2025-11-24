@@ -9,4 +9,5 @@ public class ServerConfig
     public bool? EnableRawTcp { get; init; }
     public string? CertPath { get; init; }
     public string? KeyPath { get; init; }
+    public LogLevel LogLevel { get; init; } = LogLevel.Debug;
 }

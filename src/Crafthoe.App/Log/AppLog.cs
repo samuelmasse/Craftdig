@@ -3,7 +3,7 @@ namespace Crafthoe.App;
 [App]
 public partial class AppLog(AppLogStream logStream)
 {
-    private LogLevel level = LogLevel.Trace;
+    private LogLevel level = LogLevel.All;
 
     public ref LogLevel Level => ref level;
 

@@ -13,6 +13,7 @@ public class NetSocket(AppLog log, TcpClient tcp, Stream stream)
     {
         msg = default;
 
+        log.Trace("Socket {0} reading type", ent.Tag());
         Span<byte> tb = stackalloc byte[2];
         if (!Read(tb))
             return false;
@@ -20,6 +21,9 @@ public class NetSocket(AppLog log, TcpClient tcp, Stream stream)
         ushort type = BinaryPrimitives.ReadUInt16BigEndian(tb);
         if (type <= 0)
             throw new Exception("Message type is invalid");
+
+        log.Trace("Socket {0} read type : {1}", ent.Tag(), type);
+        log.Trace("Socket {0} reading size", ent.Tag(), type);
 
         Span<byte> sb = stackalloc byte[4];
         if (!Read(sb))
@@ -32,9 +36,14 @@ public class NetSocket(AppLog log, TcpClient tcp, Stream stream)
         if (buffer.Length < size)
             Array.Resize(ref buffer, (int)System.Numerics.BitOperations.RoundUpToPowerOf2((uint)size));
 
+        log.Trace("Socket {0} read size : {1}", ent.Tag(), size);
+        log.Trace("Socket {0} reading data", ent.Tag());
+
         var data = buffer.AsSpan()[..size];
         if (!Read(data))
             return false;
+
+        log.Trace("Socket {0} read data : {1} bytes", ent.Tag(), data.Length);
 
         msg = new(type, data);
         return true;
@@ -59,7 +68,7 @@ public class NetSocket(AppLog log, TcpClient tcp, Stream stream)
             }
             catch
             {
-                log.Trace("Socket {0} unable to send ({1}) {2} bytes", Ent.Tag(), type, data.Length);
+                log.Trace("Socket {0} unable to send ({1}) {2} bytes", ent.Tag(), type, data.Length);
             }
         }
     }
@@ -70,7 +79,7 @@ public class NetSocket(AppLog log, TcpClient tcp, Stream stream)
         var cmdBytes = MemoryMarshal.AsBytes(MemoryMarshal.CreateSpan(ref cmd, 1));
         var dataBytes = MemoryMarshal.AsBytes(data);
         var bytes = cmdBytes.Length + dataBytes.Length + sizeof(ushort) + sizeof(int);
-        log.Trace("Socket {0} -> {1} ({2}) {3} bytes", Ent.Tag(), typeof(C).Name, C.CommandId, bytes);
+        log.Trace("Socket {0} -> {1} ({2}) {3} bytes", ent.Tag(), typeof(C).Name, C.CommandId, bytes);
 
         Send(C.CommandId, cmdBytes, dataBytes);
     }
