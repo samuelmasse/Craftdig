@@ -1,12 +1,13 @@
 namespace Crafthoe.Protocol;
 
-public class NetSocket(TcpClient tcp, Stream stream)
+public class NetSocket(AppLog log, TcpClient tcp, Stream stream)
 {
     private readonly EntObj ent = new();
     private byte[] buffer = [];
 
     public EntMut Ent => (EntMut)ent;
     public bool Connected => tcp.Connected;
+    public EndPoint? Ip => tcp.Client.RemoteEndPoint;
 
     public bool TryGet(out NetMessage msg)
     {
@@ -56,16 +57,22 @@ public class NetSocket(TcpClient tcp, Stream stream)
                 stream.Write(cmd);
                 stream.Write(data);
             }
-            catch { }
+            catch
+            {
+                log.Trace("Socket {0} unable to send ({1}) {2} bytes", Ent.Tag(), type, data.Length);
+            }
         }
     }
 
     public void Send<C, D>(C cmd, ReadOnlySpan<D> data)
         where C : unmanaged, ICommand where D : unmanaged
     {
-        Send(C.CommandId,
-            MemoryMarshal.AsBytes(MemoryMarshal.CreateSpan(ref cmd, 1)),
-            MemoryMarshal.AsBytes(data));
+        var cmdBytes = MemoryMarshal.AsBytes(MemoryMarshal.CreateSpan(ref cmd, 1));
+        var dataBytes = MemoryMarshal.AsBytes(data);
+        var bytes = cmdBytes.Length + dataBytes.Length + sizeof(ushort) + sizeof(int);
+        log.Trace("Socket {0} -> {1} ({2}) {3} bytes", Ent.Tag(), typeof(C).Name, C.CommandId, bytes);
+
+        Send(C.CommandId, cmdBytes, dataBytes);
     }
 
     public void Send<C, D>(in C cmd, Span<D> data)

@@ -2,6 +2,7 @@ namespace Crafthoe.Menus.Multiplayer;
 
 [Module]
 public class ModuleMultiplayerConnectingMenu(
+    AppLog log,
     AppStyle s,
     ModuleMultiplayerConnectAction multiplayerConnectAction,
     ModuleMultiplayerJoinAction multiplayerJoinAction)
@@ -32,6 +33,7 @@ public class ModuleMultiplayerConnectingMenu(
                     if (multiplayerConnectAction.Tcp != null && multiplayerConnectAction.Stream != null)
                     {
                         multiplayerJoinAction.Run(new(
+                            log,
                             multiplayerConnectAction.Tcp,
                             multiplayerConnectAction.Stream));
                     }

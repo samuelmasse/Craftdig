@@ -1,7 +1,7 @@
 namespace Crafthoe.Dimension.Server;
 
 [Dimension]
-public class DimensionSocketCleaner(DimensionSockets sockets, DimensionPlayerBag playerBag, DimensionRigidBag rigidBag)
+public class DimensionSocketCleaner(AppLog log, DimensionSockets sockets, DimensionPlayerBag playerBag, DimensionRigidBag rigidBag)
 {
     private readonly List<NetSocket> remove = [];
 
@@ -18,6 +18,8 @@ public class DimensionSocketCleaner(DimensionSockets sockets, DimensionPlayerBag
             playerBag.Remove(ns.Ent.SocketPlayer());
             rigidBag.Remove(ns.Ent.SocketPlayer());
             sockets.Remove(ns);
+
+            log.Info("Player {0} left", ns.Ent.SocketPlayer().Tag());
         }
 
         remove.Clear();

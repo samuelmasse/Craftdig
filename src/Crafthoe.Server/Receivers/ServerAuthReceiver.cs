@@ -4,6 +4,7 @@ using Google.Apis.Auth;
 
 [Server]
 public class ServerAuthReceiver(
+    AppLog log,
     ServerIdentities identities,
     SeverAllowlist allowlist,
     ServerSockets sockets)
@@ -17,6 +18,7 @@ public class ServerAuthReceiver(
     {
         if (ns.Ent.IsAuthenticated())
         {
+            log.Warn("Socket {0} tried to re-authenticate : {1}", ns.Ent.Tag(), ns.Ent.AuthenticatedEmail());
             ns.Disconnect();
             return;
         }
@@ -29,20 +31,52 @@ public class ServerAuthReceiver(
 
     private void AuthJwt(NetSocket ns, string token)
     {
-        var task = GoogleJsonWebSignature.ValidateAsync(token, settings);
-        task.Wait();
-        var payload = task.Result;
+        GoogleJsonWebSignature.Payload payload;
 
-        if (!payload.EmailVerified)
-            throw new Exception();
+        try
+        {
+            var task = GoogleJsonWebSignature.ValidateAsync(token, settings);
+            task.Wait();
+            payload = task.Result;
+        }
+        catch
+        {
+            log.Warn("Socket {0} tried to authenticate with an invalid JWT", ns.Ent.Tag());
+            ns.Disconnect();
+            return;
+        }
 
         var email = payload.Email;
         var iss = payload.Issuer;
         var sub = payload.Subject;
         var uid = $"{iss}|{sub}";
 
-        identities.Verify(email, uid);
-        allowlist.Allow(email);
+        if (!payload.EmailVerified)
+        {
+            log.Warn("Socket {0} tried to authenticate with an unverified email : {1}",
+                ns.Ent.Tag(), email);
+
+            ns.Disconnect();
+            return;
+        }
+
+        if (!identities.Verify(email, uid))
+        {
+            log.Warn("Socket {0} tried to authenticate with an inconsitent identity : {1} but {2}",
+                ns.Ent.Tag(), email, uid);
+
+            ns.Disconnect();
+            return;
+        }
+
+        if (!allowlist.Allow(email))
+        {
+            log.Warn("Socket {0} tried to authenticate with an email that is not allowlisted : {1}",
+                ns.Ent.Tag(), email);
+
+            ns.Disconnect();
+            return;
+        }
 
         sockets.ForEach(ns =>
         {
@@ -50,6 +84,9 @@ public class ServerAuthReceiver(
                 ns.Disconnect();
         });
 
+        log.Info("Socket {0} authenticated : {1}", ns.Ent.Tag(), email);
+
+        ns.Ent.AuthenticatedEmail() = email;
         ns.Ent.AuthenticatedUid() = uid;
         ns.Ent.IsAuthenticated() = true;
     }

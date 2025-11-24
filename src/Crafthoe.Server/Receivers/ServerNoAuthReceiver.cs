@@ -20,6 +20,7 @@ public class ServerNoAuthReceiver(ServerSockets sockets)
         });
 
         ns.Ent.AuthenticatedUid() = uid;
+        ns.Ent.AuthenticatedEmail() = uid;
         ns.Ent.IsAuthenticated() = true;
     }
 }

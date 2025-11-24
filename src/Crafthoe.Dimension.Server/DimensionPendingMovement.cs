@@ -23,7 +23,7 @@ public class DimensionPendingMovement(AppLog log, DimensionSockets sockets)
             ahead--;
         }
 
-        log.Info("{0} {1}", ent.Tag(), ahead);
+        log.Debug("{0} ahead by {1}", ent.Tag(), ahead);
 
         if (ahead > 1)
         {

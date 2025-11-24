@@ -52,11 +52,12 @@ public class AppLogConsole(AppLogStream logStream)
 
                     var stype = entry.Entry.Level switch
                     {
-                        LogLevel.Fatal => "\x1b[41m",
-                        LogLevel.Error => "\x1b[31m",
-                        LogLevel.Warn => "\x1b[33m",
-                        LogLevel.Debug => "\x1b[36m",
-                        LogLevel.Trace => "\x1b[35m",
+                        LogLevel.Fatal => "\x1b[1;37;41m",
+                        LogLevel.Error => "\x1b[1;91;49m",
+                        LogLevel.Warn => "\x1b[1;93;49m",
+                        LogLevel.Info => "\x1b[1;37;49m",
+                        LogLevel.Debug => "\x1b[0;37;49m",
+                        LogLevel.Trace => "\x1b[0;90;49m",
                         _ => "\x1b[0m"
                     };
 

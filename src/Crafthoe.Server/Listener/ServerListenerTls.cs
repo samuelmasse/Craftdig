@@ -32,7 +32,7 @@ public class ServerListenerTls(
 
             ssl.AuthenticateAsServer(opt);
 
-            return new(tcp, ssl);
+            return new(log, tcp, ssl);
         });
         thread.Start();
 

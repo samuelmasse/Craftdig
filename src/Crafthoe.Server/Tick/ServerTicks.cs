@@ -38,10 +38,15 @@ public class ServerTicks(AppLog log, WorldTick tick, WorldDimensionBag dimension
             int ticks = tick.Update(dt);
             while (ticks > 0)
             {
+                var start = sw.Elapsed.TotalMilliseconds;
+                log.Trace("Tick started");
+
                 foreach (var dimension in dimensions.Ents)
                     dimension.DimensionScope().Get<DimensionServer>().Tick();
 
                 ticks--;
+
+                log.Trace("Tick took {0}ms", sw.Elapsed.TotalMilliseconds - start);
             }
         }
     }

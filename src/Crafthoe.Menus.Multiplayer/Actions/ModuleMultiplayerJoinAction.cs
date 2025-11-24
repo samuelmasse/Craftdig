@@ -5,6 +5,8 @@ public class ModuleMultiplayerJoinAction(RootState state, ModuleEnts ents, Modul
 {
     public void Run(PlayerSocket socket)
     {
+        socket.Ent.Tag() = "sc";
+
         var worldScope = scope.Scope<WorldScope>();
 
         var worldLoaderScope = worldScope.Scope<WorldLoaderScope>();

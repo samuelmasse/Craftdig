@@ -3,13 +3,13 @@ namespace Crafthoe.App;
 [App]
 public partial class AppLog(AppLogStream logStream)
 {
-    private LogLevel level = LogLevel.Info;
+    private LogLevel level = LogLevel.Trace;
 
     public ref LogLevel Level => ref level;
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public void Raw(string msg,
-        [CallerFilePath] string file = "", [CallerLineNumber] int line = 0)
+        AppLog? _ = null, [CallerFilePath] string file = "", [CallerLineNumber] int line = 0)
     {
         var sb = Open();
         sb.Append(msg);

@@ -2,6 +2,7 @@ namespace Crafthoe.Server;
 
 [Server]
 public class ServerRegisterHandlersAction(
+    AppLog log,
     ServerNetLoop loop,
     ServerDefaults defaults,
     ServerAuthReceiver authReceiver,
@@ -24,6 +25,7 @@ public class ServerRegisterHandlersAction(
     {
         if (!ns.Ent.IsAuthenticated())
         {
+            log.Warn("Socket {0} tried to perform an authenticated action before authenticating", ns.Ent.Tag());
             ns.Disconnect();
             return;
         }
@@ -39,6 +41,7 @@ public class ServerRegisterHandlersAction(
     {
         if (ns.Ent.SocketPlayer() == null)
         {
+            log.Warn("Socket {0} tried to perform a dimension action before spawning", ns.Ent.Tag());
             ns.Disconnect();
             return;
         }

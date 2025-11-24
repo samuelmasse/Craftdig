@@ -6,19 +6,17 @@ public class SeverAllowlist(ServerDefaults defaults, ServerConfig config)
     private readonly string file = Path.Join(config.RootPath, "Allowlist.txt");
     private HashSet<string>? set;
 
-    public void Allow(string email)
+    public bool Allow(string email)
     {
         if (config.PublicServer)
-            return;
+            return true;
 
         lock (this)
         {
             if (set == null)
                 Read();
 
-            if (set!.Contains(email))
-                return;
-            else throw new Exception();
+            return set!.Contains(email);
         }
     }
 

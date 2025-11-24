@@ -83,7 +83,7 @@ public class PlayerPosition(
                 min = dist;
         }
 
-        log.Info((int)(min * 1000));
+        log.Debug((int)(min * 1000));
 
         return min < matching;
     }

@@ -1,6 +1,6 @@
 namespace Crafthoe.Protocol;
 
-public class NetLoop
+public class NetLoop(AppLog log)
 {
     private readonly Action<NetSocket, NetMessage>[] handlers = new Action<NetSocket, NetMessage>[0xFFFF];
 
@@ -28,6 +28,8 @@ public class NetLoop
 
         Register(C.CommandId, (ns, msg) =>
         {
+            log.Trace("Socket {0} <- {1} ({2}) {3} bytes", ns.Ent.Tag(), typeof(C).Name, C.CommandId, msg.Data.Length);
+
             var cmd = MemoryMarshal.AsRef<C>(msg.Data[..header]);
             var data = msg.Data[header..];
             var items = MemoryMarshal.Cast<byte, D>(data);

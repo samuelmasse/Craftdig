@@ -6,7 +6,7 @@ public class ServerIdentities(ServerConfig config)
     private readonly string file = Path.Join(config.RootPath, "Identities.json");
     private Dictionary<string, string>? known;
 
-    public void Verify(string email, string uid)
+    public bool Verify(string email, string uid)
     {
         lock (this)
         {
@@ -16,13 +16,15 @@ public class ServerIdentities(ServerConfig config)
             if (known!.TryGetValue(email, out var knownUid))
             {
                 if (uid != knownUid)
-                    throw new Exception();
+                    return false;
             }
             else
             {
                 known.Add(email, uid);
                 Persist();
             }
+
+            return true;
         }
     }
 

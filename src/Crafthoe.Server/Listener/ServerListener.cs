@@ -13,7 +13,7 @@ public class ServerListener(AppLog log, ServerDefaults defaults, ServerConfig co
 
         int port = 36677;
 
-        (thread, stop) = listenerLoop.Run(port, (tcp) => new(tcp, tcp.GetStream()));
+        (thread, stop) = listenerLoop.Run(port, (tcp) => new(log, tcp, tcp.GetStream()));
         thread.Start();
 
         log.Info("Listening on port {0}...", port);

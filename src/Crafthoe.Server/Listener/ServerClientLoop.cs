@@ -3,32 +3,38 @@ namespace Crafthoe.Server;
 [Server]
 public class ServerClientLoop(AppLog log, ServerNetLoop loop, ServerSockets sockets)
 {
-    public void Start(NetSocket socket)
+    private long nextSocketId;
+
+    public void Start(NetSocket ns)
     {
-        var thread = new Thread(() => Loop(socket));
-        socket.Ent.SocketThread() = thread;
-        thread.Start();
-        sockets.Add(socket);
+        lock (this)
+        {
+            var thread = new Thread(() => Loop(ns));
+            ns.Ent.SocketThread() = thread;
+            ns.Ent.Tag() = $"s{++nextSocketId}";
+            thread.Start();
+            sockets.Add(ns);
+        }
     }
 
-    private void Loop(NetSocket socket)
+    private void Loop(NetSocket ns)
     {
         try
         {
-            log.Info($"Socket connected");
-            loop.Run(socket);
+            log.Info("Socket {0} connected : {1}", ns.Ent.Tag(), ns.Ip);
+            loop.Run(ns);
         }
         catch (Exception e)
         {
-            if (socket.Connected)
-                log.Warn("Error in socket", e);
+            if (ns.Connected)
+                log.Warn("Socket {0} crashed", ns.Ent.Tag(), e);
         }
         finally
         {
-            socket.Disconnect();
-            log.Info($"Socket disconnected");
+            ns.Disconnect();
+            log.Info("Socket {0} disconnected", ns.Ent.Tag());
 
-            sockets.Remove(socket);
+            sockets.Remove(ns);
         }
     }
 }

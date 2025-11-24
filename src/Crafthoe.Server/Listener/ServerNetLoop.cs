@@ -1,4 +1,4 @@
 namespace Crafthoe.Server;
 
 [Server]
-public class ServerNetLoop : NetLoop;
+public class ServerNetLoop(AppLog log) : NetLoop(log);

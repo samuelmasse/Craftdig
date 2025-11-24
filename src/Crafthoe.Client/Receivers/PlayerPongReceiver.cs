@@ -8,6 +8,6 @@ public class PlayerPongReceiver(AppLog log)
         var dt = Stopwatch.GetTimestamp() - cmd.Ping.Timestamp;
         var ms = dt * 1000 / (double)Stopwatch.Frequency;
 
-        log.Info("Pong! {0}", ms);
+        log.Debug("Pong! {0}", ms);
     }
 }
