@@ -10,6 +10,7 @@ public class ServerClientLoop(AppLog log, ServerNetLoop loop, ServerSockets sock
         lock (this)
         {
             var thread = new Thread(() => Loop(ns));
+            ns.MaxMessageSize = 4096;
             ns.Ent.SocketThread() = thread;
             ns.Ent.Tag() = $"s{++nextSocketId}";
             thread.Start();

@@ -4,46 +4,39 @@ public class NetSocket(AppLog log, TcpClient tcp, Stream stream)
 {
     private readonly EntObj ent = new();
     private byte[] buffer = [];
+    private long maxMessageSize = long.MaxValue;
 
     public EntMut Ent => (EntMut)ent;
     public bool Connected => tcp.Connected;
     public EndPoint? Ip => tcp.Client.RemoteEndPoint;
+    public ref long MaxMessageSize => ref maxMessageSize;
 
     public bool TryGet(out NetMessage msg)
     {
         msg = default;
 
-        log.Trace("Socket {0} reading type", ent.Tag());
         Span<byte> tb = stackalloc byte[2];
         if (!Read(tb))
             return false;
 
         ushort type = BinaryPrimitives.ReadUInt16BigEndian(tb);
         if (type <= 0)
-            throw new Exception("Message type is invalid");
-
-        log.Trace("Socket {0} read type : {1}", ent.Tag(), type);
-        log.Trace("Socket {0} reading size", ent.Tag(), type);
+            throw new Exception($"Message type is invalid : {type}");
 
         Span<byte> sb = stackalloc byte[4];
         if (!Read(sb))
             return false;
 
         int size = BinaryPrimitives.ReadInt32BigEndian(sb);
-        if (size < 0)
-            throw new Exception("Message size is invalid");
+        if (size < 0 || size > maxMessageSize)
+            throw new Exception($"Message size is invalid : {size}");
 
         if (buffer.Length < size)
             Array.Resize(ref buffer, (int)System.Numerics.BitOperations.RoundUpToPowerOf2((uint)size));
 
-        log.Trace("Socket {0} read size : {1}", ent.Tag(), size);
-        log.Trace("Socket {0} reading data", ent.Tag());
-
         var data = buffer.AsSpan()[..size];
         if (!Read(data))
             return false;
-
-        log.Trace("Socket {0} read data : {1} bytes", ent.Tag(), data.Length);
 
         msg = new(type, data);
         return true;
@@ -68,7 +61,8 @@ public class NetSocket(AppLog log, TcpClient tcp, Stream stream)
             }
             catch
             {
-                log.Trace("Socket {0} unable to send ({1}) {2} bytes", ent.Tag(), type, data.Length);
+                log.Trace("Socket {0} unable to send ({1}) {2} bytes",
+                    ent.Tag(), type, cmd.Length + data.Length + tb.Length + sb.Length);
             }
         }
     }
