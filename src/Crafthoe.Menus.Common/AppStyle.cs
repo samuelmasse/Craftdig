@@ -36,7 +36,7 @@ public class AppStyle(RootText text, RootKeyboard keyboard, AppMenuTextures menu
     public Font Font => monocraft.Font;
 
     public void Text(EntObj ent) => ent
-        .TagV(nameof(Text))
+        .Tag(nameof(Text))
         .FontV(Font)
         .FontSizeV(FontSize)
         .FontPaddingV((ItemSpacingXS, 0, ItemSpacingXS, 0))
@@ -44,7 +44,7 @@ public class AppStyle(RootText text, RootKeyboard keyboard, AppMenuTextures menu
 
     public void Label(EntObj ent) => ent
         .Mut(Text)
-        .TagV(nameof(Label))
+        .Tag(nameof(Label))
         .SizeTextRelativeV((1, 1))
         .SizeRelativeV((0, 0));
 
@@ -89,7 +89,7 @@ public class AppStyle(RootText text, RootKeyboard keyboard, AppMenuTextures menu
     public void Textbox(EntObj ent) => ent
         .Mut(InputItem)
         .Mut(Text)
-        .TagV(nameof(Textbox))
+        .Tag(nameof(Textbox))
         .TextAlignmentV(Alignment.Left | Alignment.Vertical)
         .ColorV(ButtonColorDisabled)
         .TextF(() => text.Format("{0}{1}", ent.StringBuilderV(), ent.CarretR()))
@@ -139,7 +139,7 @@ public class AppStyle(RootText text, RootKeyboard keyboard, AppMenuTextures menu
     public void Button(EntObj ent) => ent
         .Mut(InputItem)
         .Mut(Text)
-        .TagV(nameof(Button))
+        .Tag(nameof(Button))
         .OnUpdateF(() =>
         {
             if (ent.IsFocusedR() && keyboard.IsKeyPressedRepeated(Keys.Enter))
@@ -155,19 +155,19 @@ public class AppStyle(RootText text, RootKeyboard keyboard, AppMenuTextures menu
         });
 
     public void VerticalList(EntObj ent) => ent
-        .TagV(nameof(VerticalList))
+        .Tag(nameof(VerticalList))
         .InnerLayoutV(InnerLayout.VerticalList)
         .SizeInnerSumRelativeV(Vertical)
         .SizeRelativeV((0, 0));
 
     public void HorizontalList(EntObj ent) => ent
-        .TagV(nameof(HorizontalList))
+        .Tag(nameof(HorizontalList))
         .InnerLayoutV(InnerLayout.HorizontalList)
         .SizeInnerSumRelativeV(Horizontal)
         .SizeRelativeV((0, 0));
 
     public void Slot(EntObj ent) => ent
-        .TagV(nameof(Slot))
+        .Tag(nameof(Slot))
         .SizeV((SlotSize, SlotSize))
         .SizeRelativeV((0, 0))
         .TextureV(SlotTexture)
@@ -200,7 +200,7 @@ public class AppStyle(RootText text, RootKeyboard keyboard, AppMenuTextures menu
             ent.SlotV().GetSlotValueF()?.Invoke().Item.Name() : null);
 
     public void SlotButton(EntObj ent) => ent
-        .TagV(nameof(SlotButton))
+        .Tag(nameof(SlotButton))
         .IsSelectableV(true)
         .ColorF(() => ent.IsHoveredR() ? (1, 1, 1, 0.5f) : default)
         .OnPressF(() =>

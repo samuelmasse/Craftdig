@@ -66,27 +66,29 @@ public class AppLogConsole(AppLogStream logStream)
                     for (int j = 0; j < entry.Chars.Length; j++)
                     {
                         var c = entry.Chars.Span[j];
-                        if (c == '\n' || c == '\r')
+                        if (c == '\n')
                         {
                             Flush();
                             start = j + 1;
                             length = 0;
                         }
-                        else length++;
+                        else if (c != '\r')
+                            length++;
                     }
 
                     Flush();
 
                     void Flush()
                     {
-                        if (length == 0)
-                            return;
+                        if (length > 0)
+                        {
+                            if (!noColor)
+                                Write(stype);
+                            Write(entry.Chars.Span.Slice(start, length));
+                            if (!noColor)
+                                Write("\x1b[0m");
+                        }
 
-                        if (!noColor)
-                            Write(stype);
-                        Write(entry.Chars.Span.Slice(start, length));
-                        if (!noColor)
-                            Write("\x1b[0m");
                         Write(newline);
                     }
                 }

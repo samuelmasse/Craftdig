@@ -16,6 +16,7 @@ public class ServerSpawnPlayerReceiver(AppLog log, WorldDimensionBag dimensionBa
         var dimensionScope = dimensionBag.Ents[0].DimensionScope();
         ns.Ent.DimensionScope() = dimensionScope;
         ns.Ent.SocketPlayer() = new EntObj();
+        ns.Ent.SocketPlayer().Tag(ns.Ent.AuthenticatedUid());
         dimensionScope.Get<DimensionPlayerSpawner>().Add(ns);
     }
 }
