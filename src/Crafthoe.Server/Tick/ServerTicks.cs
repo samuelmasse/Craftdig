@@ -1,7 +1,7 @@
 namespace Crafthoe.Server;
 
 [Server]
-public class ServerTicks(AppLog log, WorldTick tick, WorldDimensionBag dimensions, ServerTickCheck tickCheck)
+public class ServerTicks(AppLog log, WorldTick tick, WorldDimensionBag dimensions, ServerTickCheck tickCheck, ServerKicker kicker)
 {
     private Thread? thread;
     private bool stop;
@@ -41,12 +41,13 @@ public class ServerTicks(AppLog log, WorldTick tick, WorldDimensionBag dimension
                 var start = sw.Elapsed.TotalMilliseconds;
                 log.Trace("Tick started");
 
+                kicker.Tick();
                 foreach (var dimension in dimensions.Ents)
                     dimension.DimensionScope().Get<DimensionServer>().Tick();
 
                 ticks--;
 
-                log.Trace("Tick took {0}ms", sw.Elapsed.TotalMilliseconds - start);
+                log.Trace("Tick took {0} ms", Math.Round(sw.Elapsed.TotalMilliseconds - start, 4));
             }
         }
     }

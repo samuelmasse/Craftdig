@@ -1,7 +1,12 @@
 namespace Crafthoe.Server;
 
 [Server]
-public class ServerClientLoop(AppLog log, ServerNetLoop loop, ServerSockets sockets)
+public class ServerClientLoop(
+    AppLog log,
+    ServerNetLoop loop,
+    ServerSockets sockets,
+    ServerClientThreadPool clientThreadPool,
+    ServerClientLimits clientLimits)
 {
     private long nextSocketId;
 
@@ -9,17 +14,20 @@ public class ServerClientLoop(AppLog log, ServerNetLoop loop, ServerSockets sock
     {
         lock (this)
         {
-            var thread = new Thread(() => Loop(ns));
             ns.MaxMessageSize = 4096;
-            ns.Ent.SocketThread() = thread;
+            ns.Ent.ConnectedTime() = DateTime.UtcNow;
             ns.Ent.Tag() = $"s{++nextSocketId}";
-            thread.Start();
-            sockets.Add(ns);
+
+            clientThreadPool.Start((execution) => Loop(execution, ns));
         }
     }
 
-    private void Loop(NetSocket ns)
+    private void Loop(ClientThreadExecution execution, NetSocket ns)
     {
+        sockets.Add(ns);
+        clientLimits.Pulse();
+        ns.Ent.SocketThread() = execution;
+
         try
         {
             log.Info("Socket {0} connected : {1}", ns.Ent.Tag(), ns.Ip);
@@ -36,6 +44,7 @@ public class ServerClientLoop(AppLog log, ServerNetLoop loop, ServerSockets sock
             log.Info("Socket {0} disconnected", ns.Ent.Tag());
 
             sockets.Remove(ns);
+            clientLimits.Pulse();
         }
     }
 }

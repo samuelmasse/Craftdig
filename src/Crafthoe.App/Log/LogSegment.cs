@@ -2,11 +2,8 @@ namespace Crafthoe.App;
 
 public class LogSegment
 {
-    public const int EntryBufferSize = 0xFFFF;
-    public const int CharBufferSize = 0xFFFFF;
-
-    private readonly LogBufferEntry[] entries = new LogBufferEntry[EntryBufferSize];
-    private readonly char[] chars = new char[CharBufferSize];
+    private readonly LogBufferEntry[] entries = new LogBufferEntry[4096];
+    private readonly char[] chars = new char[65536];
     private int entryIndex;
     private int charIndex;
     private bool closed;

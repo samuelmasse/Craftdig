@@ -4,8 +4,7 @@ namespace Crafthoe.App;
 public class AppLogConsole(AppLogStream logStream)
 {
     private readonly char[] newline = Environment.NewLine.ToCharArray();
-    private readonly char[] buffer = new char[
-        LogSegment.CharBufferSize + LogSegment.EntryBufferSize * 0xFF];
+    private char[] buffer = new char[4096];
 
     private bool noColor;
     private int bufferIndex;
@@ -114,6 +113,9 @@ public class AppLogConsole(AppLogStream logStream)
 
     private void Write(ReadOnlySpan<char> text)
     {
+        if (bufferIndex + text.Length >= buffer.Length)
+            Array.Resize(ref buffer, (int)System.Numerics.BitOperations.RoundUpToPowerOf2((uint)(bufferIndex + text.Length)));
+
         text.CopyTo(new(buffer, bufferIndex, text.Length));
         bufferIndex += text.Length;
     }

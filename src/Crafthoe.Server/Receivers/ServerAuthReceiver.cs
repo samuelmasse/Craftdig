@@ -7,7 +7,8 @@ public class ServerAuthReceiver(
     AppLog log,
     ServerIdentities identities,
     SeverAllowlist allowlist,
-    ServerSockets sockets)
+    ServerSockets sockets,
+    ServerClientLimits clientLimits)
 {
     private readonly GoogleJsonWebSignature.ValidationSettings settings = new()
     {
@@ -18,7 +19,7 @@ public class ServerAuthReceiver(
     {
         if (ns.Ent.IsAuthenticated())
         {
-            log.Warn("Socket {0} tried to re-authenticate : {1}", ns.Ent.Tag(), ns.Ent.AuthenticatedEmail());
+            log.Warn("Socket {0} tried to re-authenticate", ns.Ent.Tag());
             ns.Disconnect();
             return;
         }
@@ -86,8 +87,10 @@ public class ServerAuthReceiver(
 
         log.Info("Socket {0} authenticated : {1}", ns.Ent.Tag(), email);
 
+        ns.Ent.Tag() = email;
         ns.Ent.AuthenticatedEmail() = email;
         ns.Ent.AuthenticatedUid() = uid;
         ns.Ent.IsAuthenticated() = true;
+        clientLimits.Pulse();
     }
 }

@@ -1,12 +1,13 @@
 namespace Crafthoe.Server;
 
 [Server]
-public class ServerNoAuthReceiver(ServerSockets sockets)
+public class ServerNoAuthReceiver(AppLog log, ServerSockets sockets, ServerClientLimits clientLimits)
 {
     public void Receive(NetSocket ns, ReadOnlySpan<byte> data)
     {
         if (ns.Ent.IsAuthenticated())
         {
+            log.Warn("Socket {0} tried to re-authenticate", ns.Ent.Tag());
             ns.Disconnect();
             return;
         }
@@ -19,8 +20,12 @@ public class ServerNoAuthReceiver(ServerSockets sockets)
                 ns.Disconnect();
         });
 
+        log.Info("Socket {0} authenticated : {1}", ns.Ent.Tag(), uid);
+
+        ns.Ent.Tag() = uid;
         ns.Ent.AuthenticatedUid() = uid;
         ns.Ent.AuthenticatedEmail() = uid;
         ns.Ent.IsAuthenticated() = true;
+        clientLimits.Pulse();
     }
 }

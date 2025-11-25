@@ -1,7 +1,7 @@
 namespace Crafthoe.Server;
 
 [Server]
-public class ServerListenerLoop(AppLog log, ServerClientLoop clientLoop)
+public class ServerListenerLoop(AppLog log, ServerClientLoop clientLoop, ServerClientLimits clientLimits)
 {
     public (Thread, Action) Run(int port, Func<TcpClient, NetSocket> handler)
     {
@@ -17,6 +17,7 @@ public class ServerListenerLoop(AppLog log, ServerClientLoop clientLoop)
 
                 try
                 {
+                    clientLimits.Wait();
                     log.Debug("Listener on port {0} accepting new connections", port);
                     tcp = listener.AcceptTcpClient();
                     log.Debug("Listener on port {0} got a new connection {1}", port, tcp.Client.RemoteEndPoint);

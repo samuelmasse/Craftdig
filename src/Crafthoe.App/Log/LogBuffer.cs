@@ -2,24 +2,30 @@ namespace Crafthoe.App;
 
 public class LogBuffer
 {
-    private static readonly ArrayPool<LogBufferEntry> EntriesPool = ArrayPool<LogBufferEntry>.Create();
-    private static readonly ArrayPool<char> CharsPool = ArrayPool<char>.Create();
+    private const int EntriesMax = 4096;
+    private const int CharsMax = 65536;
 
-    private readonly LogBufferEntry[] entries = EntriesPool.Rent(0xFFF);
-    private readonly char[] chars = CharsPool.Rent(0xFFFF);
+    private LogBufferEntry[] entries = new LogBufferEntry[4];
+    private char[] chars = new char[16];
 
     private int charWritten;
     private int written;
     private int read;
 
-    public int CharCapacity => chars.Length - charWritten;
-    public int Capacity => entries.Length - written;
+    public int CharCapacity => CharsMax - charWritten;
+    public int Capacity => EntriesMax - written;
     public bool Synced => written == read;
 
     public void Write(LogEntry entry, ReadOnlySpan<char> text)
     {
+        if (charWritten + text.Length >= chars.Length)
+            Array.Resize(ref chars, (int)System.Numerics.BitOperations.RoundUpToPowerOf2((uint)(charWritten + text.Length)));
+
         var dst = new Memory<char>(chars, charWritten, text.Length);
         text.CopyTo(dst.Span);
+
+        if (written >= entries.Length)
+            Array.Resize(ref entries, entries.Length * 2);
 
         entries[written] = new(entry, dst);
 
@@ -44,11 +50,5 @@ public class LogBuffer
         charWritten = 0;
         written = 0;
         read = 0;
-    }
-
-    public void Return()
-    {
-        EntriesPool.Return(entries);
-        CharsPool.Return(chars);
     }
 }

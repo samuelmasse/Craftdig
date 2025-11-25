@@ -21,7 +21,7 @@ public class AppLogStream
         logs = [];
         localLogThread = new(CreateLogThreads);
 
-        segments = new LogSegment[0xF];
+        segments = new LogSegment[5];
         for (int i = 0; i < segments.Length; i++)
             segments[i] = new();
     }
@@ -124,12 +124,7 @@ public class AppLogStream
                 }
 
                 if (synced)
-                {
-                    foreach (var buffer in logs[i].Buffers)
-                        buffer.Return();
-
                     logs.RemoveAt(i);
-                }
             }
         }
     }
