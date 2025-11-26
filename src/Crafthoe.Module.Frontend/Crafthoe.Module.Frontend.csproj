@@ -1,11 +1,20 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <ItemGroup>
+        <Using Include="AlvorEngine" />
         <Using Include="Crafthoe" />
         <Using Include="Crafthoe.App" />
         <Using Include="Crafthoe.App.Frontend" />
         <Using Include="Crafthoe.Module" />
         <Using Include="Crafthoe.Module.Frontend" />
+        <Using Include="Glw2D" />
+        <Using Include="Glw2D.Fonts" />
+        <Using Include="GlwLayer" />
+        <Using Include="OpenTK.Graphics.OpenGL4" />
+        <Using Include="OpenTK.Windowing.Common" />
+        <Using Include="OpenTK.Windowing.Common.Input" />
+        <Using Include="OpenTK.Windowing.Desktop" />
+        <Using Include="OpenTK.Windowing.GraphicsLibraryFramework" />
     </ItemGroup>
 
     <ItemGroup>

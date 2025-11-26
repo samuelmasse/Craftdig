@@ -14,23 +14,12 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <Using Include="AlvorEngine" />
-        <Using Include="BigGustave" />
         <Using Include="Cysharp.Text" />
-        <Using Include="Glw2D" />
-        <Using Include="Glw2D.Fonts" />
-        <Using Include="GlwLayer" />
-        <Using Include="GlwLayer.Driver" />
         <Using Include="HadvarECS" />
         <Using Include="HadvarECS.Generator" />
         <Using Include="Microsoft.Win32.SafeHandles" />
         <Using Include="NeedlerDI" />
-        <Using Include="OpenTK.Graphics.OpenGL4" />
         <Using Include="OpenTK.Mathematics" />
-        <Using Include="OpenTK.Windowing.Common" />
-        <Using Include="OpenTK.Windowing.Common.Input" />
-        <Using Include="OpenTK.Windowing.Desktop" />
-        <Using Include="OpenTK.Windowing.GraphicsLibraryFramework" />
         <Using Include="System.Buffers" />
         <Using Include="System.Buffers.Binary" />
         <Using Include="System.Collections.Concurrent" />
@@ -54,7 +43,6 @@
         <Using Include="Tomlyn" />
         <Using Include="Tomlyn.Model" />
         <Using Include="Tomlyn.Syntax" />
-        <Using Include="Wigdow" />
     </ItemGroup>
 
 </Project>

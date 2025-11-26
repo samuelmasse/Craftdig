@@ -9,7 +9,6 @@ public class RootUiMouse(RootMouse mouse, RootUiScale scale, RootUiFocus focus)
     private EntObj? pressedSecondary;
     private bool prevMainDown;
     private bool prevSecondaryDown;
-    private int c;
 
     public Vector2 Position => position;
     public EntObj? Hovered => prevHovered;

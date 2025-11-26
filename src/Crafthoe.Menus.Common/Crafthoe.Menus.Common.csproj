@@ -1,7 +1,10 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <ItemGroup>
+        <Using Include="AlvorEngine" />
         <Using Include="AlvorEngine.Loop" />
+        <Using Include="Glw2D" />
+        <Using Include="Glw2D.Fonts" />
         <Using Include="Crafthoe" />
         <Using Include="Crafthoe.App" />
         <Using Include="Crafthoe.App.Frontend" />
@@ -16,6 +19,11 @@
         <Using Include="Crafthoe.Player.Frontend" />
         <Using Include="Crafthoe.World" />
         <Using Include="Crafthoe.World.Frontend" />
+        <Using Include="OpenTK.Graphics.OpenGL4" />
+        <Using Include="OpenTK.Windowing.Common" />
+        <Using Include="OpenTK.Windowing.Common.Input" />
+        <Using Include="OpenTK.Windowing.Desktop" />
+        <Using Include="OpenTK.Windowing.GraphicsLibraryFramework" />
         <Using Include="TrogloUI" />
         <Using Include="TrogloUI.UiSyntax">
             <Static>true</Static>

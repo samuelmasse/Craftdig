@@ -6,6 +6,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <Using Include="AlvorEngine" />
         <Using Include="AlvorEngine.Loop" />
         <Using Include="Crafthoe" />
         <Using Include="Crafthoe.App" />
@@ -26,6 +27,7 @@
         <Using Include="Crafthoe.World.Frontend" />
         <Using Include="GlwLayer.Driver.OpenTK" />
         <Using Include="TrogloUI" />
+        <Using Include="Wigdow" />
     </ItemGroup>
 
     <ItemGroup>

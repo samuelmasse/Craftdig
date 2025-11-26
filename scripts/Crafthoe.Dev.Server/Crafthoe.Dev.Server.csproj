@@ -5,7 +5,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <Using Include="AlvorEngine" />
         <Using Include="Crafthoe" />
         <Using Include="Crafthoe.App" />
         <Using Include="Crafthoe.Dimension" />

@@ -1,5 +1,4 @@
 var appScope = new Injector()
-    .Scope<RootScope>()
     .Scope<AppScope>();
 
 appScope.Add(new AppMods([
