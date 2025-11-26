@@ -4,7 +4,8 @@ namespace Crafthoe.Client;
 public class PlayerClient(
     PlayerPings pings,
     PlayerPosition position,
-    PlayerChunks chunks)
+    PlayerChunks chunks,
+    PlayerSections sections)
 {
     public void Tick()
     {
@@ -19,6 +20,7 @@ public class PlayerClient(
     public void Frame()
     {
         chunks.Frame();
+        sections.Frame();
         pings.Frame();
     }
 }

@@ -19,6 +19,8 @@ public class PlayerChunks(
             chunk.Blocks() = blocks;
             chunkBag.Add(chunk);
             chunkReceiverHandler.Receive(chunk);
+
+            count--;
         }
     }
 }

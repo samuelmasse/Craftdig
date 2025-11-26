@@ -6,29 +6,12 @@ public class PlayerChunkUpdateReceiver(
     DimensionBlocksPool blocksPool,
     PlayerChunkUpdateQueue chunkUpdateQueue)
 {
-    private readonly ChunkUpdateBlockEntry[] buffer = new ChunkUpdateBlockEntry[ChunkVolume];
+    private readonly EntDecompressor decompressor = new(moduleIndices, ChunkVolume);
 
     public void Receive(ChunkUpdateCommand cmd, ReadOnlySpan<byte> data)
     {
         var blocks = blocksPool.Take();
-
-        BrotliDecoder.TryDecompress(
-            data,
-            MemoryMarshal.AsBytes(buffer.AsSpan()),
-            out var bytes);
-
-        int count = bytes / Marshal.SizeOf<ChunkUpdateBlockEntry>();
-        var entries = buffer.AsSpan()[..count];
-        int cur = 0;
-
-        foreach (var entry in entries)
-        {
-            var block = moduleIndices[entry.Value];
-
-            for (int i = 0; i < entry.Count; i++)
-                blocks.Span[cur++] = block;
-        }
-
+        decompressor.Decompress(data, blocks.Span);
         chunkUpdateQueue.Enqueue((cmd.Cloc, blocks));
     }
 }

@@ -18,5 +18,6 @@ public enum Commands : ushort
     WorldIndicesUpdate,
     PositionUpdate,
     SlowDown,
-    SlowTick
+    SlowTick,
+    SectionUpdate
 }
