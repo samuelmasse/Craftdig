@@ -20,7 +20,9 @@ public class AppLogConsole(AppLogStream logStream)
 
     public void Print()
     {
-        while (true)
+        bool next = true;
+
+        while (next)
         {
             long nextIndex = logStream.SegmentIndex;
             long diff = nextIndex - segmentIndex;
@@ -41,9 +43,6 @@ public class AppLogConsole(AppLogStream logStream)
             {
                 var closed = segment.Closed;
                 var entries = segment.Entries[segmentInnerIndex..];
-
-                if (diff == 0 && entries.Length == 0)
-                    return;
 
                 for (int i = 0; i < entries.Length; i++)
                 {
@@ -108,6 +107,8 @@ public class AppLogConsole(AppLogStream logStream)
                 Console.Out.Write(buffer.AsSpan()[..bufferIndex]);
                 bufferIndex = 0;
             }
+
+            next = diff != 0;
         }
     }
 
