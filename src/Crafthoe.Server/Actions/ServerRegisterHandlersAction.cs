@@ -19,6 +19,7 @@ public class ServerRegisterHandlersAction(
         loop.Register(Authenticated<SpawnPlayerCommand>(spawnPlayerReceiver.Receive));
         loop.Register(Authenticated(DimensionHandler<DimensionMovePlayerReceiver, MovePlayerCommand>()));
         loop.Register(Authenticated(DimensionHandler<DimensionForgetChunkReceiver, ForgetChunkCommand>()));
+        loop.Register(Authenticated(DimensionHandler<DimensionForgetSectionReceiver, ForgetSectionCommand>()));
     }
 
     private Action<NetSocket, C> Authenticated<C>(Action<NetSocket, C> handler) where C : unmanaged => (ns, cmd) =>

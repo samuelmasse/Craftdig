@@ -5,11 +5,13 @@ public class PlayerClient(
     PlayerPings pings,
     PlayerPosition position,
     PlayerChunks chunks,
-    PlayerSections sections)
+    PlayerSections sections,
+    PlayerAheadSections aheadSections)
 {
     public void Tick()
     {
         position.Tick();
+        aheadSections.Tick();
     }
 
     public void Stream()

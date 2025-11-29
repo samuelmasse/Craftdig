@@ -5,7 +5,7 @@ public class PlayerSectionUpdateReceiver(
     WorldModuleIndices moduleIndices,
     PlayerSectionUpdateQueue sectionUpdateQueue)
 {
-    private readonly EntDecompressor decompressor = new(moduleIndices, SectionVolume);
+    private readonly EntDecompressor decompressor = new(moduleIndices);
     private readonly ConcurrentBag<Ent[]> pool = [];
 
     public void Receive(SectionUpdateCommand cmd, ReadOnlySpan<byte> data)

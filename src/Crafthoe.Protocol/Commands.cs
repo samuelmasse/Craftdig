@@ -12,6 +12,7 @@ public enum Commands : ushort
     SpawnPlayer,
     MovePlayer,
     ForgetChunk,
+    ForgetSection,
 
     ClientStart = 30000,
     ChunkUpdate,

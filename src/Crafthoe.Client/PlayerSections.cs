@@ -6,7 +6,8 @@ public class PlayerSections(
     DimensionBlocksRaw blocksRaw,
     DimensionBlockChanges blockChanges,
     PlayerSectionUpdateReceiver sectionUpdateReceiver,
-    PlayerSectionUpdateQueue sectionUpdateQueue)
+    PlayerSectionUpdateQueue sectionUpdateQueue,
+    PlayerAheadSections aheadSections)
 {
     public void Frame()
     {
@@ -37,6 +38,7 @@ public class PlayerSections(
 
             blocks.AsSpan().CopyTo(blocksRaw.Slice(sloc).Span);
             sectionUpdateReceiver.Return(blocks);
+            aheadSections.Remove(sloc);
 
             count--;
         }

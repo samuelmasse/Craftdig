@@ -6,7 +6,7 @@ public class PlayerChunkUpdateReceiver(
     DimensionBlocksPool blocksPool,
     PlayerChunkUpdateQueue chunkUpdateQueue)
 {
-    private readonly EntDecompressor decompressor = new(moduleIndices, ChunkVolume);
+    private readonly EntDecompressor decompressor = new(moduleIndices);
 
     public void Receive(ChunkUpdateCommand cmd, ReadOnlySpan<byte> data)
     {

@@ -10,16 +10,20 @@ public class DimensionServer(
     DimensionPositionStreamer positionStreamer,
     DimensionChunkStreamerRequester chunkStreamerRequester,
     DimensionForgottenChunks forgottenChunks,
-    DimensionSectionStreamer sectionStreamer)
+    DimensionForgottenSections forgottenSections,
+    DimensionSectionUpdateStreamer sectionUpdateStreamer,
+    DimensionSectionReminder sectionReminder)
 {
     public void Tick()
     {
         backend.Frame();
-        sectionStreamer.Tick();
+        forgottenSections.Tick();
+        sectionUpdateStreamer.Tick();
+        sectionReminder.Tick();
+        forgottenChunks.Tick();
+        chunkStreamerRequester.Tick();
         context.Frame();
         socketCleaner.Tick();
-        chunkStreamerRequester.Tick();
-        forgottenChunks.Tick();
         pendingMovement.Tick();
         context.Tick();
         playerSpawner.Tick();

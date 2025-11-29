@@ -1,6 +1,6 @@
 namespace Crafthoe.Client;
 
-public class EntDecompressor(WorldModuleIndices moduleIndices, int size)
+public class EntDecompressor(WorldModuleIndices moduleIndices)
 {
     private readonly ChunkUpdateBlockEntry[] buffer = new ChunkUpdateBlockEntry[ChunkVolume];
 
@@ -23,4 +23,4 @@ public class EntDecompressor(WorldModuleIndices moduleIndices, int size)
                 output[cur++] = block;
         }
     }
-} 
+}
