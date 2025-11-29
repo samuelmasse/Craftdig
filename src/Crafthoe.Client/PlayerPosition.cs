@@ -63,7 +63,7 @@ public class PlayerPosition(
         ref var construction = ref ent.Ent.Construction();
 
         if (slowdown == 0)
-            socket.Send(new MovePlayerCommand() { Movement = movement, Construction = default });
+            socket.Send(new MovePlayerCommand() { Movement = movement, Construction = construction });
         else
         {
             movement = default;
