@@ -2,6 +2,7 @@ namespace Crafthoe.World;
 
 [Components]
 file record WorldComponents(
+    [ComponentToString] ulong WorldId,
     int WorldEntPtrBagIndex,
     int DimensionBagIndex,
 

@@ -1,7 +1,7 @@
 namespace Crafthoe.Dimension;
 
 [Dimension]
-public class DimensionChunks(WorldEntPtrBag entPtrBag)
+public class DimensionChunks(WorldEntArena entArena)
 {
     private readonly L3Map512<EntPtr> map = new();
 
@@ -30,10 +30,9 @@ public class DimensionChunks(WorldEntPtrBag entPtrBag)
         if (Contains(cloc))
             return;
 
-        var chunk = new EntPtr()
+        var chunk = entArena.Alloc()
             .IsChunk(true)
             .Cloc(cloc);
-        entPtrBag.Add(chunk);
         map.Add(cloc, chunk);
     }
 
@@ -43,7 +42,6 @@ public class DimensionChunks(WorldEntPtrBag entPtrBag)
             return;
 
         var chunk = map[cloc];
-        entPtrBag.Remove(chunk);
         chunk.Dispose();
         map.Remove(cloc);
     }

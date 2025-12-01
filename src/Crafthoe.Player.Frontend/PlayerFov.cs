@@ -11,6 +11,6 @@ public class PlayerFov(PlayerEnt ent, PlayerPerspective perspective)
         if (ent.Ent.IsSprinting())
             fov += 10;
 
-        perspective.Fov = (float)MathHelper.Lerp(perspective.Fov, fov, delta * 10);
+        perspective.Fov = (float)Math.Clamp(MathHelper.Lerp(perspective.Fov, fov, delta * 10), 70, 90);
     }
 }
