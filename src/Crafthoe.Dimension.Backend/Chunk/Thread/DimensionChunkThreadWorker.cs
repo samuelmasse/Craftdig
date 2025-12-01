@@ -10,8 +10,11 @@ public class DimensionChunkThreadWorker(
     {
         if (!input.Noop)
         {
-            chunkGenerator.Generate(input.Blocks.Span, input.Cloc);
-            biomeGenerator.Generate(input.Blocks.Span, input.Cloc);
+            chunkGenerator.Generate(input.Blocks, input.Cloc);
+            biomeGenerator.Generate(input.Blocks, input.Cloc);
+
+            for (int sz = 0; sz < SectionHeight; sz++)
+                input.Blocks.Pack(sz);
         }
 
         output.Add(input);

@@ -5,7 +5,6 @@ public class DimensionRegionThreadWorker(
     DimensionRegionThreadStates states,
     DimensionRegionWriter writer,
     DimensionRegionThreadChunkReader reader,
-    DimensionBlocksPool blocksPool,
     DimensionRegionThreadFileHandles handles,
     DimensionRegionThreadOutputBag output)
 {
@@ -17,13 +16,13 @@ public class DimensionRegionThreadWorker(
             states.Drain();
         }
         else if (input.Type == RegionThreadInputType.WriteSection)
-            writer.Write(input.Blocks.Span, input.Sloc);
+            writer.Write(input.Blocks, input.SectionZ, input.Sloc);
         else if (input.Type == RegionThreadInputType.ReadChunk)
         {
-            bool noop = reader.TryRead(input.Blocks.Span, input.Sloc.Xy);
+            bool noop = reader.TryRead(input.Blocks, input.Sloc.Xy);
             output.Add(new(input, noop));
         }
         else if (input.Type == RegionThreadInputType.DisposeChunk)
-            blocksPool.Add(input.Blocks);
+            input.Blocks.Fill(default);
     }
 }

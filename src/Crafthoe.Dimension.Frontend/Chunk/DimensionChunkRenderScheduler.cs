@@ -1,7 +1,7 @@
 namespace Crafthoe.Dimension.Frontend;
 
 [Dimension]
-public class DimensionChunkRenderScheduler(DimensionChunks chunks)
+public class DimensionChunkRenderScheduler(DimensionChunks chunks, DimensionBlocksRaw blocksRaw)
 {
     public void Add(Vector2i cloc)
     {
@@ -31,10 +31,16 @@ public class DimensionChunkRenderScheduler(DimensionChunks chunks)
         if (!chunks.TryGet(cloc, out var chunk))
             return;
 
+        if (!blocksRaw.TryGetChunkBlocks(cloc, out var blocks))
+            return;
+
         if (!chunk.IsUnrenderedListBuilt())
         {
             for (int sz = 0; sz < SectionHeight; sz++)
-                chunk.Unrendered().Add(sz, sz);
+            {
+                if (blocks.Uniform(sz) == default || blocks.Uniform(sz).IsSolid())
+                    chunk.Unrendered().Add(sz, sz);
+            }
 
             chunk.IsUnrenderedListBuilt() = true;
         }

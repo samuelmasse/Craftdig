@@ -23,6 +23,6 @@ public class DimensionRegionThreadTimer(
 
     private void Tick()
     {
-        queue.Enqeue(new(default, RegionThreadInputType.Flush, default));
+        queue.Enqeue(new(default, RegionThreadInputType.Flush, default!, default));
     }
 }

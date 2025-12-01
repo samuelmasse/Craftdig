@@ -32,13 +32,14 @@ public class DimensionChunkReceiver(
                 regionThreadWorkQueue.Enqeue(
                     new(new(cloc, sz),
                     RegionThreadInputType.WriteSection,
-                    blocks.Slice(sz * SectionVolume, SectionVolume)));
+                    output.Blocks,
+                    sz));
             }
         }
 
         chunks.Alloc(cloc);
         var chunk = chunks[cloc];
-        chunk.Blocks() = output.Blocks;
+        chunk.ChunkBlocks() = output.Blocks;
         chunkBag.Add(chunk);
         chunkPending.Remove(cloc);
         chunkReceiverHandlers.Run(chunk);

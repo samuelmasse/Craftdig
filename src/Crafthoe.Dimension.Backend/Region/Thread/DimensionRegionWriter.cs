@@ -12,13 +12,15 @@ public class DimensionRegionWriter(
     private readonly byte[] zeroes = new byte[SectionVolume * RegionBlockEntry.Size];
     private int bytes;
 
-    public void Write(ReadOnlySpan<Ent> blocks, Vector3i sloc)
+    public void Write(ChunkBlocks blocks, int sz, Vector3i sloc)
     {
         var state = regionStates[sloc.Xy.ToRloc()];
         var offset = sloc - state.Origin;
         ref var alloc = ref state.Index[offset];
 
-        EncodeIntoBuffer(blocks);
+        if (blocks.Uniform(sz) != default)
+            EncodeIntoBuffer(blocks.Uniform(sz));
+        else EncodeIntoBuffer(blocks.Slice(sz));
 
         if (alloc.Bucket != 0)
         {
@@ -45,6 +47,12 @@ public class DimensionRegionWriter(
         var bucket = regionFileHandles[state.Files.Buckets[alloc.Bucket]];
         RandomAccess.Write(bucket, compressed.AsSpan()[..bytes],
             alloc.Offset * regionBuckets.Sizes[alloc.Bucket]);
+    }
+
+    private void EncodeIntoBuffer(Ent uniform)
+    {
+        buffer[0] = new() { Value = moduleIndices[uniform], Count = SectionVolume };
+        BrotliEncoder.TryCompress(MemoryMarshal.AsBytes(buffer.AsSpan()[..1]), compressed, out bytes);
     }
 
     private void EncodeIntoBuffer(ReadOnlySpan<Ent> blocks)

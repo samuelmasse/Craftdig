@@ -1,13 +1,13 @@
 namespace Crafthoe.Client;
 
 [Player]
-public class PlayerChunkClientUnloader(DimensionBlocksPool blocksPool, PlayerSocket socket)
+public class PlayerChunkClientUnloader(DimensionBlocksRaw blocksRaw, PlayerSocket socket)
 {
     public void Unload(EntMut ent)
     {
         socket.Send(new ForgetChunkCommand() { Cloc = ent.Cloc() });
 
-        if (!ent.Blocks().IsEmpty)
-            blocksPool.Add(ent.Blocks());
+        if (blocksRaw.TryGetChunkBlocks(ent.Cloc(), out var blocks))
+            blocks.Fill(default);
     }
 }

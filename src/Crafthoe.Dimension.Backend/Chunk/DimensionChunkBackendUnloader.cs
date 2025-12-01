@@ -2,6 +2,7 @@ namespace Crafthoe.Dimension.Backend;
 
 [Dimension]
 public class DimensionChunkBackendUnloader(
+    DimensionBlocksRaw blocksRaw,
     DimensionRegionThreadWorkQueue regionThreadWorkQueue,
     DimensionRegionInvalidation regionInvalidation)
 {
@@ -12,7 +13,7 @@ public class DimensionChunkBackendUnloader(
         for (int sz = 0; sz < SectionHeight; sz++)
             regionInvalidation.Drain(new(cloc, sz));
 
-        if (!ent.Blocks().IsEmpty)
-            regionThreadWorkQueue.Enqeue(new(new(cloc, 0), RegionThreadInputType.DisposeChunk, ent.Blocks()));
+        if (blocksRaw.TryGetChunkBlocks(cloc, out var blocks))
+            regionThreadWorkQueue.Enqeue(new(new(cloc, 0), RegionThreadInputType.DisposeChunk, blocks, 0));
     }
 }

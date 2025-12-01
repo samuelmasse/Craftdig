@@ -12,14 +12,13 @@ public class DimensionBlocksRaw(DimensionChunks chunks)
         }
 
         var cloc = loc.Xy.ToCloc();
-        var blocks = Memory(cloc).Span;
-        if (blocks.IsEmpty)
+        if (!TryGetChunkBlocks(cloc, out var blocks))
         {
             block = default;
             return false;
         }
 
-        block = blocks[loc.ToInnerIndex()];
+        block = blocks[loc];
         return true;
     }
 
@@ -29,21 +28,36 @@ public class DimensionBlocksRaw(DimensionChunks chunks)
             return false;
 
         var cloc = loc.Xy.ToCloc();
-        var blocks = Memory(cloc).Span;
-        if (blocks.IsEmpty)
+        if (!TryGetChunkBlocks(cloc, out var blocks))
             return false;
 
-        blocks[loc.ToInnerIndex()] = block;
+        blocks[loc] = block;
         return true;
     }
 
-    public Memory<Ent> Slice(Vector3i sloc) => Memory(sloc.Xy).Slice(sloc.Z * SectionVolume, SectionVolume);
-
-    public Memory<Ent> Memory(Vector2i cloc)
+    public bool TryGetChunkBlocks(Vector2i cloc, [NotNullWhen(true)] out ChunkBlocks? blocks)
     {
-        if (!chunks.TryGet(cloc, out var chunk))
-            return default;
+        chunks.TryGet(cloc, out var chunk);
+        blocks = chunk.GetChunkBlocks();
 
-        return chunk.Blocks();
+        if (blocks == null)
+        {
+            if (!chunk.IsAlive)
+                return false;
+
+            blocks = new();
+            chunk.ChunkBlocks() = blocks;
+        }
+
+        return true;
+    }
+
+    public ChunkBlocks ChunkBlocks(Vector2i cloc)
+    {
+        TryGetChunkBlocks(cloc, out var blocks);
+        if (blocks == null)
+            throw new NullReferenceException();
+
+        return blocks;
     }
 }

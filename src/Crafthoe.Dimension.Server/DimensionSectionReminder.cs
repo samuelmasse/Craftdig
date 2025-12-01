@@ -1,7 +1,10 @@
 namespace Crafthoe.Dimension.Server;
 
 [Dimension]
-public class DimensionSectionReminder(DimensionSockets sockets, DimensionSectionStreamer sectionStreamer)
+public class DimensionSectionReminder(
+    DimensionSockets sockets,
+    DimensionSectionStreamer sectionStreamer,
+    DimensionBlocksRaw blocksRaw)
 {
     private readonly Stopwatch watch = new();
     private readonly List<bool> next = [];
@@ -53,7 +56,10 @@ public class DimensionSectionReminder(DimensionSockets sockets, DimensionSection
         var sloc = queue.Dequeue();
         sections.Remove(sloc);
 
-        var compressed = sectionStreamer.Command(sloc, out var cmd);
+        if (!blocksRaw.TryGetChunkBlocks(sloc.Xy, out var blocks))
+            return false;
+
+        var compressed = sectionStreamer.Command(sloc, blocks, out var cmd);
         ns.Send(cmd, compressed);
 
         return true;

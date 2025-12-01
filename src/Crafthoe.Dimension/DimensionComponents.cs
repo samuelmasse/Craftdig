@@ -7,7 +7,7 @@ file record DimensionComponents(
     // Chunk
     [ComponentToString] bool IsChunk,
     [ComponentToString] Vector2i Cloc,
-    [ComponentReturnSpan] Memory<Ent> Blocks,
+    ChunkBlocks? ChunkBlocks,
     int ChunkBagIndex,
 
     // Rigid

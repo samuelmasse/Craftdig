@@ -49,5 +49,5 @@ public class DimensionRegionInvalidation(
     }
 
     private void Write(Vector3i sloc) => regionThreadWorkQueue.Enqeue(
-        new(sloc, RegionThreadInputType.WriteSection, blocksRaw.Slice(sloc)));
+        new(sloc, RegionThreadInputType.WriteSection, blocksRaw.ChunkBlocks(sloc.Xy), sloc.Z));
 }

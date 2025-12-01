@@ -2,5 +2,5 @@ namespace Crafthoe.Dimension.Backend;
 
 public interface ITerrainGenerator
 {
-    void Generate(Span<Ent> blocks, Vector2i cloc);
+    void Generate(ChunkBlocks blocks, Vector2i cloc);
 }

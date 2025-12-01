@@ -2,7 +2,6 @@ namespace Crafthoe.Client;
 
 [Player]
 public class PlayerSections(
-    DimensionChunks chunks,
     DimensionBlocksRaw blocksRaw,
     DimensionBlockChanges blockChanges,
     PlayerSectionUpdateReceiver sectionUpdateReceiver,
@@ -15,12 +14,12 @@ public class PlayerSections(
         while (count > 0 && sectionUpdateQueue.TryDequeue(out var item))
         {
             var (sloc, blocks) = item;
-
-            if (!chunks.Contains(sloc.Xy))
+ 
+            if (!blocksRaw.TryGetChunkBlocks(sloc.Xy, out var chunkBlocks))
                 continue;
-
-            var slice = blocksRaw.Slice(sloc).Span;
-
+        
+            var slice = chunkBlocks.Slice(sloc.Z);
+        
             for (int z = 0; z < SectionSize; z++)
             {
                 for (int y = 0; y < SectionSize; y++)
@@ -29,17 +28,18 @@ public class PlayerSections(
                     {
                         var dt = new Vector3i(x, y, z);
                         var index = dt.ToInnerIndex();
-
+        
                         if (blocks[index] != slice[index])
                             blockChanges.Add(sloc * SectionSize + dt, slice[index]);
+        
+                        slice[index] = blocks[index];
                     }
                 }
             }
-
-            blocks.AsSpan().CopyTo(blocksRaw.Slice(sloc).Span);
+        
             sectionUpdateReceiver.Return(blocks);
             aheadSections.Remove(sloc);
-
+        
             count--;
         }
     }

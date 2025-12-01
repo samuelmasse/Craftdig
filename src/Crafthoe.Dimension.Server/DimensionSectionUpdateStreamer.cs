@@ -4,7 +4,8 @@ namespace Crafthoe.Dimension.Server;
 public class DimensionSectionUpdateStreamer(
     DimensionBlockChanges blockChanges,
     DimensionSockets sockets,
-    DimensionSectionStreamer sectionStreamer)
+    DimensionSectionStreamer sectionStreamer,
+    DimensionBlocksRaw blocksRaw)
 {
     private readonly HashSet<Vector3i> slocs = [];
 
@@ -15,7 +16,10 @@ public class DimensionSectionUpdateStreamer(
 
         foreach (var sloc in slocs)
         {
-            var compressed = sectionStreamer.Command(sloc, out var cmd);
+            if (!blocksRaw.TryGetChunkBlocks(sloc.Xy, out var blocks))
+                continue;
+
+            var compressed = sectionStreamer.Command(sloc, blocks, out var cmd);
 
             foreach (var ns in sockets.Span)
             {
