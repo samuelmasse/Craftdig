@@ -19,6 +19,7 @@ public class ServerClientLoop(
             ns.Ent.Tag() = $"s{++nextSocketId}";
 
             clientThreadPool.Start((execution) => Loop(execution, ns));
+            clientThreadPool.Start((execution) => Push(execution, ns));
         }
     }
 
@@ -45,6 +46,23 @@ public class ServerClientLoop(
 
             sockets.Remove(ns);
             clientLimits.Pulse();
+        }
+    }
+
+    private void Push(ClientThreadExecution execution, NetSocket ns)
+    {
+        try
+        {
+            ns.Push();
+        }
+        catch (Exception e)
+        {
+            if (ns.Connected)
+                log.Warn("Socket {0} push crashed", ns.Ent.Tag(), e);
+        }
+        finally
+        {
+            ns.Disconnect();
         }
     }
 }

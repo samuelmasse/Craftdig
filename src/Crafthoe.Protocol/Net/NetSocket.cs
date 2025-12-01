@@ -6,6 +6,19 @@ public class NetSocket(AppLog log, TcpClient tcp, Stream stream)
     private byte[] buffer = [];
     private long maxMessageSize = long.MaxValue;
 
+    private readonly SemaphoreSlim outSemaphore = new(0);
+    private readonly byte[][] outSegments =
+    [
+        new byte[short.MaxValue],
+        new byte[short.MaxValue],
+        new byte[short.MaxValue],
+        new byte[short.MaxValue]
+    ];
+    private readonly int[] outSegmentCommitIndex = [0, 0, 0, 0];
+    private readonly int[] outSegmentSendCommitIndex = [0, 0, 0, 0];
+    private long outSegmentIndex;
+    private long outSegmentSendIndex;
+
     public EntMut Ent => (EntMut)ent;
     public bool Connected => tcp.Connected;
     public EndPoint? Ip => tcp.Client.RemoteEndPoint;
@@ -42,6 +55,36 @@ public class NetSocket(AppLog log, TcpClient tcp, Stream stream)
         return true;
     }
 
+    public void Push()
+    {
+        while (Connected)
+        {
+            outSemaphore.Wait();
+
+            while (Connected)
+            {
+                long rindex = outSegmentSendIndex % outSegments.Length;
+                var segment = outSegments[rindex];
+                var commitIndex = outSegmentCommitIndex[rindex];
+                var sendCommitIndex = outSegmentSendCommitIndex[rindex];
+
+                if (sendCommitIndex < commitIndex)
+                {
+                    var data = segment.AsSpan()[sendCommitIndex..commitIndex];
+                    stream.Write(data);
+                    outSegmentSendCommitIndex[rindex] = commitIndex;
+                }
+                else if (outSegmentIndex > outSegmentSendIndex)
+                {
+                    outSegmentCommitIndex[rindex] = 0;
+                    outSegmentSendCommitIndex[rindex] = 0;
+                    outSegmentSendIndex++;
+                }
+                else break;
+            }
+        }
+    }
+
     public void Send(ushort type, ReadOnlySpan<byte> cmd, ReadOnlySpan<byte> data)
     {
         lock (this)
@@ -52,17 +95,38 @@ public class NetSocket(AppLog log, TcpClient tcp, Stream stream)
             Span<byte> sb = stackalloc byte[4];
             BinaryPrimitives.WriteInt32BigEndian(sb, cmd.Length + data.Length);
 
-            try
+            int needed = tb.Length + sb.Length + cmd.Length + data.Length;
+
+            var segment = outSegments[outSegmentIndex % outSegments.Length];
+            var commitIndex = outSegmentCommitIndex[outSegmentIndex % outSegments.Length];
+            int available = segment.Length - commitIndex;
+
+            if (available < needed)
             {
-                stream.Write(tb);
-                stream.Write(sb);
-                stream.Write(cmd);
-                stream.Write(data);
+                outSegmentIndex++;
+
+                segment = outSegments[outSegmentIndex % outSegments.Length];
+                commitIndex = outSegmentCommitIndex[outSegmentIndex % outSegments.Length];
+
+                if (commitIndex != 0)
+                {
+                    log.Trace("Socket {0} unable to send ({1}) {2} bytes", ent.Tag(), type, needed);
+                    Disconnect();
+                    return;
+                }
             }
-            catch
+
+            Write(tb);
+            Write(sb);
+            Write(cmd);
+            Write(data);
+            outSegmentCommitIndex[outSegmentIndex % outSegments.Length] += needed;
+            outSemaphore.Release();
+
+            void Write(ReadOnlySpan<byte> bytes)
             {
-                log.Trace("Socket {0} unable to send ({1}) {2} bytes",
-                    ent.Tag(), type, cmd.Length + data.Length + tb.Length + sb.Length);
+                bytes.CopyTo(segment.AsSpan()[commitIndex..]);
+                commitIndex += bytes.Length;
             }
         }
     }
@@ -115,5 +179,6 @@ public class NetSocket(AppLog log, TcpClient tcp, Stream stream)
     {
         try { stream.Dispose(); } catch { }
         try { tcp.Dispose(); } catch { }
+        outSemaphore.Release(ushort.MaxValue);
     }
 }

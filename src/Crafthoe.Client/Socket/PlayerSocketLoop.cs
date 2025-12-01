@@ -14,6 +14,7 @@ public class PlayerSocketLoop(
     PlayerSlowTickReceiver slowTickReceiver)
 {
     private Thread? thread;
+    private Thread? pushThread;
 
     public void Start()
     {
@@ -28,12 +29,16 @@ public class PlayerSocketLoop(
 
         thread = new Thread(Loop);
         thread.Start();
+
+        pushThread = new Thread(Push);
+        pushThread.Start();
     }
 
     public void Stop()
     {
         socket.Disconnect();
         thread?.Join();
+        pushThread?.Join();
     }
 
     private void Loop()
@@ -41,6 +46,19 @@ public class PlayerSocketLoop(
         try
         {
             loop.Run(socket);
+        }
+        catch
+        {
+            if (socket.Connected)
+                throw;
+        }
+    }
+
+    private void Push()
+    {
+        try
+        {
+            socket.Push();
         }
         catch
         {
