@@ -3,6 +3,8 @@ namespace Crafthoe.Dimension;
 public class ChunkBlocks
 {
     private readonly static EntPtr Empty = new();
+
+    private readonly DimensionBlocksAllocator allocator;
     private readonly SectionBlocks[] sections = new SectionBlocks[SectionHeight];
 
     public Ent this[Vector3i index]
@@ -27,8 +29,10 @@ public class ChunkBlocks
         }
     }
 
-    public ChunkBlocks()
+    public ChunkBlocks(DimensionBlocksAllocator allocator)
     {
+        this.allocator = allocator;
+
         for (int i = 0; i < sections.Length; i++)
             Fill(i, Empty);
     }
@@ -51,7 +55,13 @@ public class ChunkBlocks
     {
         ref var section = ref sections[sz];
         section.Uniform = uniform;
-        section.Data = Array.Empty<Ent>();
+
+        if (section.Alloc != 0)
+        {
+            allocator.Free(section.Alloc);
+            section.Data = default;
+            section.Alloc = default;
+        }
     }
 
     public bool Pack(int sz)
@@ -78,10 +88,13 @@ public class ChunkBlocks
         if (section.Uniform == default)
             return;
 
-        var data = new Ent[SectionVolume];
-        data.AsSpan().Fill(section.Uniform);
+        var alloc = allocator.Alloc();
+        var data = allocator.Memory(alloc);
+
+        data.Span.Fill(section.Uniform);
 
         section.Data = data;
+        section.Alloc = alloc;
         section.Uniform = default;
     }
 

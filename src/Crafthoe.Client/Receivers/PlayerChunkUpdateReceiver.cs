@@ -3,13 +3,14 @@ namespace Crafthoe.Client;
 [Player]
 public class PlayerChunkUpdateReceiver(
     WorldModuleIndices moduleIndices,
+    DimensionBlocksAllocator blocksAllocator,
     PlayerChunkUpdateQueue chunkUpdateQueue)
 {
     private readonly ChunkUpdateBlockEntry[] buffer = new ChunkUpdateBlockEntry[ChunkVolume];
 
     public void Receive(ChunkUpdateCommand cmd, ReadOnlySpan<byte> data)
     {
-        var blocks = new ChunkBlocks();
+        var blocks = new ChunkBlocks(blocksAllocator);
 
         BrotliDecoder.TryDecompress(
             data,

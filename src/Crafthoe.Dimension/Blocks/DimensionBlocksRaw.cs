@@ -39,25 +39,6 @@ public class DimensionBlocksRaw(DimensionChunks chunks)
     {
         chunks.TryGet(cloc, out var chunk);
         blocks = chunk.GetChunkBlocks();
-
-        if (blocks == null)
-        {
-            if (!chunk.IsAlive)
-                return false;
-
-            blocks = new();
-            chunk.ChunkBlocks() = blocks;
-        }
-
-        return true;
-    }
-
-    public ChunkBlocks ChunkBlocks(Vector2i cloc)
-    {
-        TryGetChunkBlocks(cloc, out var blocks);
-        if (blocks == null)
-            throw new NullReferenceException();
-
-        return blocks;
+        return blocks != null;
     }
 }
