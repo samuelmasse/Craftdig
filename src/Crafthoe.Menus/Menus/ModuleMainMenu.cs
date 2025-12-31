@@ -1,4 +1,4 @@
-namespace Crafthoe.Menus;
+namespace Craftdig.Menus;
 
 [Module]
 public class ModuleMainMenu(
@@ -24,7 +24,7 @@ public class ModuleMainMenu(
         {
             Node(list)
                 .Mut(s.Label)
-                .TextV("Crafthoe")
+                .TextV("Craftdig")
                 .FontSizeV(s.FontSizeTitle)
                 .FontPaddingV((s.ItemSpacing, 0, s.ItemSpacing, 0))
                 .ColorV(s.ButtonColor)
@@ -74,7 +74,7 @@ public class ModuleMainMenu(
 
         Node(root)
             .Mut(s.Label)
-            .TextV("Crafthoe 0.1")
+            .TextV("Craftdig 0.1")
             .AlignmentV(Alignment.Left | Alignment.Bottom)
             .OffsetV((s.ItemSpacingS, -s.ItemSpacingXS));
 

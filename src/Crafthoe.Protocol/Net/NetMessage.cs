@@ -1,4 +1,4 @@
-namespace Crafthoe.Protocol;
+namespace Craftdig.Protocol;
 
 public readonly ref struct NetMessage(ushort type, ReadOnlySpan<byte> data)
 {

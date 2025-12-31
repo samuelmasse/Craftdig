@@ -1,4 +1,4 @@
-namespace Crafthoe.Player.Frontend;
+namespace Craftdig.Player.Frontend;
 
 [Player]
 public class PlayerConstruction(RootMouse mouse, WorldModuleIndices moduleIndices, PlayerEnt ent)

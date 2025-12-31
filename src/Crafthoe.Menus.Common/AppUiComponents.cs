@@ -1,4 +1,4 @@
-namespace Crafthoe.Menus.Common;
+namespace Craftdig.Menus.Common;
 
 [Components]
 file record AppUiComponents(

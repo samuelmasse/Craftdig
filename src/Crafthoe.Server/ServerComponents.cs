@@ -1,4 +1,4 @@
-namespace Crafthoe.Server;
+namespace Craftdig.Server;
 
 [Components]
 file record ServerComponents(

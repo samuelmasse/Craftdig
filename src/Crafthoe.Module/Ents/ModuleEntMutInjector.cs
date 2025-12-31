@@ -1,4 +1,4 @@
-namespace Crafthoe.Module;
+namespace Craftdig.Module;
 
 [Module]
 public class ModuleEntMutInjector(ModuleEntsMut entsMut) : InjectorCustomHandler

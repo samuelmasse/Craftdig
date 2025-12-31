@@ -1,4 +1,4 @@
-namespace Crafthoe.Menus.Common;
+namespace Craftdig.Menus.Common;
 
 [Player]
 public class PlayerEscapeMenu(AppReset reset, AppStyle s, ModuleScope scope)

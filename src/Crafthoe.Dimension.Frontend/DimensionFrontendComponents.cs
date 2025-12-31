@@ -1,4 +1,4 @@
-namespace Crafthoe.Dimension.Frontend;
+namespace Craftdig.Dimension.Frontend;
 
 [Components]
 file record DimensionFrontendComponents(

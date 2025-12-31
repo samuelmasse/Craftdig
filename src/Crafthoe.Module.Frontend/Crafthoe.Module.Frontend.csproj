@@ -2,11 +2,11 @@
 
     <ItemGroup>
         <Using Include="AlvorEngine" />
-        <Using Include="Crafthoe" />
-        <Using Include="Crafthoe.App" />
-        <Using Include="Crafthoe.App.Frontend" />
-        <Using Include="Crafthoe.Module" />
-        <Using Include="Crafthoe.Module.Frontend" />
+        <Using Include="Craftdig" />
+        <Using Include="Craftdig.App" />
+        <Using Include="Craftdig.App.Frontend" />
+        <Using Include="Craftdig.Module" />
+        <Using Include="Craftdig.Module.Frontend" />
         <Using Include="Glw2D" />
         <Using Include="Glw2D.Fonts" />
         <Using Include="GlwLayer" />

@@ -1,4 +1,4 @@
-namespace Crafthoe;
+namespace Craftdig;
 
 [Root]
 public class RootBootState(RootState state, RootScope scope, RootScripts scripts) : State

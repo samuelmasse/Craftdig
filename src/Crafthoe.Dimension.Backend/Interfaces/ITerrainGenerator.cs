@@ -1,4 +1,4 @@
-namespace Crafthoe.Dimension.Backend;
+namespace Craftdig.Dimension.Backend;
 
 public interface ITerrainGenerator
 {

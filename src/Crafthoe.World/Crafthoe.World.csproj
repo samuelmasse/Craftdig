@@ -1,10 +1,10 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <ItemGroup>
-        <Using Include="Crafthoe" />
-        <Using Include="Crafthoe.App" />
-        <Using Include="Crafthoe.Module" />
-        <Using Include="Crafthoe.World" />
+        <Using Include="Craftdig" />
+        <Using Include="Craftdig.App" />
+        <Using Include="Craftdig.Module" />
+        <Using Include="Craftdig.World" />
     </ItemGroup>
 
     <ItemGroup>

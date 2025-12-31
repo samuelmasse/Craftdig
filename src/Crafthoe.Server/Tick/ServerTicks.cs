@@ -1,4 +1,4 @@
-namespace Crafthoe.Server;
+namespace Craftdig.Server;
 
 [Server]
 public class ServerTicks(AppLog log, WorldTick tick, WorldDimensionBag dimensions, ServerTickCheck tickCheck, ServerKicker kicker)

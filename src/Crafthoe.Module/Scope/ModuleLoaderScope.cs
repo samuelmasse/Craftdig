@@ -1,4 +1,4 @@
-namespace Crafthoe.Module;
+namespace Craftdig.Module;
 
 [ModuleLoader]
 public class ModuleLoaderScope : InjectorScope<ModuleLoaderAttribute>;

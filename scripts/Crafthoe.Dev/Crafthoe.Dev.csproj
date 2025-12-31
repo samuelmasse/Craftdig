@@ -7,25 +7,25 @@
     <ItemGroup>
         <Using Include="AlvorEngine" />
         <Using Include="AlvorEngine.Loop" />
-        <Using Include="Crafthoe" />
-        <Using Include="Crafthoe.App" />
-        <Using Include="Crafthoe.App.Frontend" />
-        <Using Include="Crafthoe.Dimension" />
-        <Using Include="Crafthoe.Dimension.Backend" />
-        <Using Include="Crafthoe.Dimension.Frontend" />
-        <Using Include="Crafthoe.Dimension.Unit">
+        <Using Include="Craftdig" />
+        <Using Include="Craftdig.App" />
+        <Using Include="Craftdig.App.Frontend" />
+        <Using Include="Craftdig.Dimension" />
+        <Using Include="Craftdig.Dimension.Backend" />
+        <Using Include="Craftdig.Dimension.Frontend" />
+        <Using Include="Craftdig.Dimension.Unit">
             <Static>true</Static>
         </Using>
-        <Using Include="Crafthoe.Menus" />
-        <Using Include="Crafthoe.Menus.Multiplayer" />
-        <Using Include="Crafthoe.Module" />
-        <Using Include="Crafthoe.Module.Frontend" />
-        <Using Include="Crafthoe.Native" />
-        <Using Include="Crafthoe.Player.Frontend" />
-        <Using Include="Crafthoe.Protocol" />
-        <Using Include="Crafthoe.World" />
-        <Using Include="Crafthoe.World.Backend" />
-        <Using Include="Crafthoe.World.Frontend" />
+        <Using Include="Craftdig.Menus" />
+        <Using Include="Craftdig.Menus.Multiplayer" />
+        <Using Include="Craftdig.Module" />
+        <Using Include="Craftdig.Module.Frontend" />
+        <Using Include="Craftdig.Native" />
+        <Using Include="Craftdig.Player.Frontend" />
+        <Using Include="Craftdig.Protocol" />
+        <Using Include="Craftdig.World" />
+        <Using Include="Craftdig.World.Backend" />
+        <Using Include="Craftdig.World.Frontend" />
         <Using Include="GlwLayer.Driver.OpenTK" />
         <Using Include="TrogloUI" />
         <Using Include="Wigdow" />

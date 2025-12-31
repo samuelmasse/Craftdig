@@ -1,4 +1,4 @@
-namespace Crafthoe.Dimension;
+namespace Craftdig.Dimension;
 
 [Dimension]
 public class DimensionSelected(DimensionBlocks blocks, DimensionPlayerBag playerBag)

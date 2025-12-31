@@ -1,4 +1,4 @@
-namespace Crafthoe.Menus.Multiplayer;
+namespace Craftdig.Menus.Multiplayer;
 
 [Player]
 public class PlayerMultiplayerState(

@@ -1,4 +1,4 @@
-namespace Crafthoe.App.Frontend;
+namespace Craftdig.App.Frontend;
 
 [App]
 public class AppDoublePress(RootKeyboard keyboard)

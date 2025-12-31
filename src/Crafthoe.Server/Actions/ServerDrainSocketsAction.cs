@@ -1,4 +1,4 @@
-namespace Crafthoe.Server;
+namespace Craftdig.Server;
 
 [Server]
 public class ServerDrainSocketsAction(AppLog log, ServerSockets sockets, ServerClientThreadPool clientThreadPool)

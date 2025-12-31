@@ -1,20 +1,20 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <ItemGroup>
-        <Using Include="Crafthoe" />
-        <Using Include="Crafthoe.App" />
-        <Using Include="Crafthoe.Dimension" />
-        <Using Include="Crafthoe.Dimension.Backend" />
-        <Using Include="Crafthoe.Dimension.Server" />
-        <Using Include="Crafthoe.Dimension.Unit">
+        <Using Include="Craftdig" />
+        <Using Include="Craftdig.App" />
+        <Using Include="Craftdig.Dimension" />
+        <Using Include="Craftdig.Dimension.Backend" />
+        <Using Include="Craftdig.Dimension.Server" />
+        <Using Include="Craftdig.Dimension.Unit">
             <Static>true</Static>
         </Using>
-        <Using Include="Crafthoe.Module" />
-        <Using Include="Crafthoe.Protocol" />
-        <Using Include="Crafthoe.Server" />
-        <Using Include="Crafthoe.World" />
-        <Using Include="Crafthoe.World.Backend" />
-        <Using Include="Crafthoe.World.Server" />
+        <Using Include="Craftdig.Module" />
+        <Using Include="Craftdig.Protocol" />
+        <Using Include="Craftdig.Server" />
+        <Using Include="Craftdig.World" />
+        <Using Include="Craftdig.World.Backend" />
+        <Using Include="Craftdig.World.Server" />
         <Using Include="Microsoft.Extensions.Configuration" />
     </ItemGroup>
 
@@ -29,7 +29,8 @@
         <PackageReference Include="Microsoft.Extensions.Configuration" Version="10.0.0" />
         <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="10.0.0" />
         <PackageReference Include="Microsoft.Extensions.Configuration.CommandLine" Version="10.0.0" />
-        <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="10.0.0" />
+        <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables"
+            Version="10.0.0" />
         <PackageReference Include="Microsoft.Extensions.Configuration.Ini" Version="10.0.0" />
         <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="10.0.0" />
     </ItemGroup>

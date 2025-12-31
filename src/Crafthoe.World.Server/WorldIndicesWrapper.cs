@@ -1,4 +1,4 @@
-namespace Crafthoe.World.Server;
+namespace Craftdig.World.Server;
 
 [World]
 public class WorldIndicesWrapper(WorldModuleIndices moduleIndices)

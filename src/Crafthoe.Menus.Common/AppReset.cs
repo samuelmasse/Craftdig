@@ -1,4 +1,4 @@
-namespace Crafthoe.Menus.Common;
+namespace Craftdig.Menus.Common;
 
 [App]
 public class AppReset

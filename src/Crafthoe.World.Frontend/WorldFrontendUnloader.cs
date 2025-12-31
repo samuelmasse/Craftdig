@@ -1,4 +1,4 @@
-namespace Crafthoe.World.Frontend;
+namespace Craftdig.World.Frontend;
 
 [WorldLoader]
 public class WorldFrontendUnloader(WorldGlw gl)

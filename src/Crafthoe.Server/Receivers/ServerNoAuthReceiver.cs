@@ -1,4 +1,4 @@
-namespace Crafthoe.Server;
+namespace Craftdig.Server;
 
 [Server]
 public class ServerNoAuthReceiver(AppLog log, ServerSockets sockets, ServerClientLimits clientLimits)

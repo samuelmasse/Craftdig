@@ -1,4 +1,4 @@
-namespace Crafthoe.World.Backend;
+namespace Craftdig.World.Backend;
 
 [WorldLoader]
 public class WorldModuleIndicesLoader(ModuleEnts ents, WorldPaths paths, WorldModuleIndices moduleIndices)

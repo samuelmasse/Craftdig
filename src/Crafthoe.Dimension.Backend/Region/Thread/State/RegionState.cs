@@ -1,4 +1,4 @@
-namespace Crafthoe.Dimension.Backend;
+namespace Craftdig.Dimension.Backend;
 
 public class RegionState(string dir, Vector2i rloc, int levels)
 {

@@ -1,4 +1,4 @@
-namespace Crafthoe.App;
+namespace Craftdig.App;
 
 public class EntBag<E, N> where E : IEntSet<E>
 {

@@ -1,4 +1,4 @@
-namespace Crafthoe.Protocol;
+namespace Craftdig.Protocol;
 
 public class NetLoop(AppLog log)
 {

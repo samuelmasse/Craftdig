@@ -1,4 +1,4 @@
-namespace Crafthoe.Module;
+namespace Craftdig.Module;
 
 [Components]
 file record ModuleComponents(

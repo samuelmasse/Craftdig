@@ -1,4 +1,4 @@
-namespace Crafthoe.Module.Frontend;
+namespace Craftdig.Module.Frontend;
 
 [Components]
 file record ModuleFrontendComponents(

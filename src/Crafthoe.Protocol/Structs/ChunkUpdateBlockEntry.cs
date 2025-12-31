@@ -1,7 +1,7 @@
-namespace Crafthoe.Protocol;
+namespace Craftdig.Protocol;
 
 [StructLayout(LayoutKind.Sequential, Pack = 1)]
-public struct ChunkUpdateBlockEntry
+public record struct ChunkUpdateBlockEntry
 {
     public int Value;
     public int Count;

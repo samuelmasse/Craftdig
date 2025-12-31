@@ -1,3 +1,3 @@
-namespace Crafthoe.Dimension;
+namespace Craftdig.Dimension;
 
 public readonly record struct ValueChange<T>(Vector3i Loc, T Prev);

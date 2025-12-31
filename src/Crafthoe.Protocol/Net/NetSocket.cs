@@ -1,4 +1,4 @@
-namespace Crafthoe.Protocol;
+namespace Craftdig.Protocol;
 
 public class NetSocket(AppLog log, TcpClient tcp, Stream stream)
 {

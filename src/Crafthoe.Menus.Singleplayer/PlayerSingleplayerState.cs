@@ -1,4 +1,4 @@
-namespace Crafthoe.Menus.Singleplayer;
+namespace Craftdig.Menus.Singleplayer;
 
 [Player]
 public class PlayerSingleplayerState(

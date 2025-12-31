@@ -1,4 +1,4 @@
-namespace Crafthoe.Module.Frontend;
+namespace Craftdig.Module.Frontend;
 
 [Module]
 public class ModuleImages(RootPngs pngs, AppFiles files)

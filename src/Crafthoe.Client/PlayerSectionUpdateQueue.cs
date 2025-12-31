@@ -1,4 +1,4 @@
-namespace Crafthoe.Client;
+namespace Craftdig.Client;
 
 [Player]
 public class PlayerSectionUpdateQueue

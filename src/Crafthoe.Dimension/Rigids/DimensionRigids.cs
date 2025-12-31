@@ -1,4 +1,4 @@
-namespace Crafthoe.Dimension;
+namespace Craftdig.Dimension;
 
 [Dimension]
 public class DimensionRigids(DimensionBlocks blocks, DimensionRigidBag rigidBag)

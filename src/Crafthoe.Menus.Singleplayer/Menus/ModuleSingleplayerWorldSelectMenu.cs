@@ -1,4 +1,4 @@
-namespace Crafthoe.Menus.Singleplayer;
+namespace Craftdig.Menus.Singleplayer;
 
 [Module]
 public class ModuleSingleplayerWorldSelectMenu(

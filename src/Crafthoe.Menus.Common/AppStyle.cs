@@ -1,4 +1,4 @@
-namespace Crafthoe.Menus.Common;
+namespace Craftdig.Menus.Common;
 
 [App]
 public class AppStyle(RootText text, RootKeyboard keyboard, AppMenuTextures menuTextures, AppMonocraft monocraft)

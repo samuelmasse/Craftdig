@@ -1,4 +1,4 @@
-namespace Crafthoe.Menus;
+namespace Craftdig.Menus;
 
 [App]
 public class AppTooltipMenu(RootUiMouse uiMouse, AppStyle s)

@@ -1,4 +1,4 @@
-namespace Crafthoe.Server;
+namespace Craftdig.Server;
 
 [Server]
 public class ServerListener(AppLog log, ServerDefaults defaults, ServerConfig config, ServerListenerLoop listenerLoop)

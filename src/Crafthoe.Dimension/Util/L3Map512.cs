@@ -1,4 +1,4 @@
-namespace Crafthoe.Dimension;
+namespace Craftdig.Dimension;
 
 public class L3Map512<T> where T : struct, IEquatable<T>
 {

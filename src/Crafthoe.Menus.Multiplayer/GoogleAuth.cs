@@ -1,4 +1,4 @@
-namespace Crafthoe.Menus.Multiplayer;
+namespace Craftdig.Menus.Multiplayer;
 
 using Google.Apis.Auth.OAuth2;
 using Google.Apis.Auth.OAuth2.Flows;
@@ -16,7 +16,7 @@ public static class GoogleAuth
     {
         ClientSecrets = Secrets,
         Scopes = ["openid", "email"],
-        DataStore = new FileDataStore("Crafthoe.GoogleAuth")
+        DataStore = new FileDataStore("Craftdig.GoogleAuth")
     };
 
     private static string UserId => "crafhoe_user";

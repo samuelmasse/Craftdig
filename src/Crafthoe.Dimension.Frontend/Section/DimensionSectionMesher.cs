@@ -1,4 +1,4 @@
-namespace Crafthoe.Dimension.Frontend;
+namespace Craftdig.Dimension.Frontend;
 
 [Dimension]
 public class DimensionSectionMesher(RootCube cube, DimensionBlocks blocks)

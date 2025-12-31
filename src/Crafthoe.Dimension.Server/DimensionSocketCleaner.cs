@@ -1,4 +1,4 @@
-namespace Crafthoe.Dimension.Server;
+namespace Craftdig.Dimension.Server;
 
 [Dimension]
 public class DimensionSocketCleaner(AppLog log, DimensionSockets sockets, DimensionPlayerBag playerBag, DimensionRigidBag rigidBag)

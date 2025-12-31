@@ -1,4 +1,4 @@
-namespace Crafthoe.Menus.Common;
+namespace Craftdig.Menus.Common;
 
 [Player]
 public class PlayerOverlayMenu(AppStyle s, PlayerEnt ent)

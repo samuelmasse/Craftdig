@@ -1,6 +1,6 @@
-namespace Crafthoe.Dimension;
+namespace Craftdig.Dimension;
 
-public struct SectionBlocks
+public record struct SectionBlocks
 {
     public Ent Uniform;
     public Memory<Ent> Data;

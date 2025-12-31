@@ -1,4 +1,4 @@
-namespace Crafthoe.Menus;
+namespace Craftdig.Menus;
 
 [Module]
 public class ModuleMenuState(

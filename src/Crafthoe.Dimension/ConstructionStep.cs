@@ -1,4 +1,4 @@
-namespace Crafthoe.Dimension;
+namespace Craftdig.Dimension;
 
 [StructLayout(LayoutKind.Sequential, Pack = 1)]
 public struct ConstructionStep

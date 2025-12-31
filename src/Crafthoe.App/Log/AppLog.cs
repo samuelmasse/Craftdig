@@ -1,4 +1,4 @@
-namespace Crafthoe.App;
+namespace Craftdig.App;
 
 [App]
 public partial class AppLog(AppLogStream logStream)

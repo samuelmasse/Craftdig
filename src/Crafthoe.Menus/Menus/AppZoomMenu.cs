@@ -1,4 +1,4 @@
-namespace Crafthoe.Menus;
+namespace Craftdig.Menus;
 
 [App]
 public class AppZoomMenu(RootKeyboard keyboard, RootText text, RootUiScale scale, AppStyle s)

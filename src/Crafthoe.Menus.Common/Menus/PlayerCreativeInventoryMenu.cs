@@ -1,4 +1,4 @@
-namespace Crafthoe.Menus.Common;
+namespace Craftdig.Menus.Common;
 
 [Player]
 public class PlayerCreativeInventoryMenu(ModuleEnts ents, AppStyle s, PlayerEnt player)

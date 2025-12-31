@@ -1,4 +1,4 @@
-namespace Crafthoe.Native;
+namespace Craftdig.Native;
 
 [Module]
 public record class ModuleNative(

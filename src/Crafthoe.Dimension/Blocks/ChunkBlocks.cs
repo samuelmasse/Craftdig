@@ -1,4 +1,4 @@
-namespace Crafthoe.Dimension;
+namespace Craftdig.Dimension;
 
 public class ChunkBlocks
 {

@@ -1,4 +1,4 @@
-namespace Crafthoe.App;
+namespace Craftdig.App;
 
 [AppLoader]
 public class AppUnloader(AppLog log, AppLogThread logThread)

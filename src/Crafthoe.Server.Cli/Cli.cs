@@ -1,4 +1,4 @@
-namespace Crafthoe.Server.Cli;
+namespace Craftdig.Server.Cli;
 
 public class Cli(string[] args)
 {
@@ -15,9 +15,9 @@ public class Cli(string[] args)
         {
             Console.WriteLine();
             Console.WriteLine($"Usage:");
-            Console.WriteLine(" CrafthoeServer [options]");
+            Console.WriteLine(" CraftdigServer [options]");
             Console.WriteLine();
-            Console.WriteLine("Run a Crafthoe server");
+            Console.WriteLine("Run a Craftdig server");
             Console.WriteLine();
             Console.WriteLine("Options:");
 
@@ -34,7 +34,7 @@ public class Cli(string[] args)
             {
                 if (!props.Contains(arg[2..]))
                 {
-                    Console.WriteLine($"Crafthoe: unrecognized option '{arg}'");
+                    Console.WriteLine($"Craftdig: unrecognized option '{arg}'");
                     return 1;
                 }
 
@@ -42,7 +42,7 @@ public class Cli(string[] args)
             }
             else if (!declaring)
             {
-                Console.WriteLine($"Crafthoe: invalid syntax '{arg}'");
+                Console.WriteLine($"Craftdig: invalid syntax '{arg}'");
                 return 1;
             }
             else declaring = false;
@@ -50,7 +50,7 @@ public class Cli(string[] args)
 
         if (declaring)
         {
-            Console.WriteLine($"Crafthoe: incomplete option '{args[^1]}'");
+            Console.WriteLine($"Craftdig: incomplete option '{args[^1]}'");
             return 1;
         }
 

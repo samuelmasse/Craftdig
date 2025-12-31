@@ -1,4 +1,4 @@
-namespace Crafthoe.Dimension.Frontend;
+namespace Craftdig.Dimension.Frontend;
 
 [DimensionLoader]
 public class DimensionFrontendUnloader(

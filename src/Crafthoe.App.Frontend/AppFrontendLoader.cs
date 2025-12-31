@@ -1,4 +1,4 @@
-namespace Crafthoe.Module.Frontend;
+namespace Craftdig.Module.Frontend;
 
 [AppLoader]
 public class AppFrontendLoader(AppFiles files, AppMods mods)

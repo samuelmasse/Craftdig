@@ -1,9 +1,9 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <ItemGroup>
-        <Using Include="Crafthoe" />
-        <Using Include="Crafthoe.App" />
-        <Using Include="Crafthoe.Module" />
+        <Using Include="Craftdig" />
+        <Using Include="Craftdig.App" />
+        <Using Include="Craftdig.Module" />
     </ItemGroup>
 
     <ItemGroup>

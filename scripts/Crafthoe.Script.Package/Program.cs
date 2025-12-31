@@ -5,9 +5,9 @@ Delete("dist");
 
 var mods = new List<(string Name, bool IncludeServer)>()
 {
-    ("Crafthoe.Native", true),
-    ("Crafthoe.Native.Backend", true),
-    ("Crafthoe.Native.Frontend", false)
+    ("Craftdig.Native", true),
+    ("Craftdig.Native.Backend", true),
+    ("Craftdig.Native.Frontend", false)
 };
 
 var modDlls = mods.Select((mod) =>
@@ -31,9 +31,9 @@ var exes = runtimes.SelectMany((runtime) =>
     var exes = new List<string>();
 
     if (runtime.CompileClient)
-        Compile("Crafthoe", "Crafthoe", "Crafthoe", true);
+        Compile("Craftdig", "Craftdig", "Craftdig", true);
     if (runtime.CompileServer)
-        Compile("Crafthoe.Server.Cli", "CrafthoeServer", "CrafthoeServer", false);
+        Compile("Craftdig.Server.Cli", "CraftdigServer", "CraftdigServer", false);
 
     return exes;
 

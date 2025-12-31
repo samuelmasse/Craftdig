@@ -1,4 +1,4 @@
-namespace Crafthoe.Menus.Multiplayer;
+namespace Craftdig.Menus.Multiplayer;
 
 [Module]
 public class ModuleMultiplayerJoinAction(RootState state, ModuleEnts ents, ModuleScope scope)

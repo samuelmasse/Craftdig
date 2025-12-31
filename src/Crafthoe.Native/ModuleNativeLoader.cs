@@ -1,4 +1,4 @@
-namespace Crafthoe.Native;
+namespace Craftdig.Native;
 
 [ModuleLoader]
 public class ModuleNativeLoader(ModuleNative m) : ModLoader

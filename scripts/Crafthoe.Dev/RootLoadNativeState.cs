@@ -1,4 +1,4 @@
-namespace Crafthoe.Dev;
+namespace Craftdig.Dev;
 
 [Root]
 public class RootLoadNativeState(RootState state, RootScope scope, RootScripts scripts) : State

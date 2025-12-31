@@ -1,4 +1,4 @@
-namespace Crafthoe.Server;
+namespace Craftdig.Server;
 
 [Server]
 public class ServerLoadConfigAction(AppLog log)
@@ -26,7 +26,7 @@ public class ServerLoadConfigAction(AppLog log)
             builder.AddJsonFile(Path.Join(root, "Server.json"), true);
         }
 
-        builder.AddEnvironmentVariables("Crafthoe_");
+        builder.AddEnvironmentVariables("Craftdig_");
         builder.AddCommandLine(args);
 
         if (rootPath != null)
@@ -57,9 +57,9 @@ public class ServerLoadConfigAction(AppLog log)
     }
 
     private string MachineConfigDir() => OperatingSystem.IsWindows() ?
-        Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "Crafthoe") :
-        "/etc/crafthoe";
-    private string UserDir() => Path.Join(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), ".crafthoe");
+        Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "Craftdig") :
+        "/etc/craftdig";
+    private string UserDir() => Path.Join(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), ".craftdig");
     private string ExeDir() => AppContext.BaseDirectory;
     private string CwdDir() => Directory.GetCurrentDirectory();
 }

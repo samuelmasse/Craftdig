@@ -1,4 +1,4 @@
-namespace Crafthoe.Server;
+namespace Craftdig.Server;
 
 [Dimension]
 public class DimensionForgetSectionReceiver(DimensionForgottenSections forgottenSections) : DimensionReceiver<ForgetSectionCommand>

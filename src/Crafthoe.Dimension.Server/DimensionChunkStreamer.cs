@@ -1,4 +1,4 @@
-namespace Crafthoe.Dimension.Server;
+namespace Craftdig.Dimension.Server;
 
 [Dimension]
 public class DimensionChunkStreamer(
@@ -44,10 +44,33 @@ public class DimensionChunkStreamer(
                 void Flush()
                 {
                     if (run > 0)
+                    {
                         buffer[count++] = new() { Value = moduleIndices[prev], Count = run };
+                        if (buffer[count - 1].Value == 0)
+                        {
+
+                        }
+                    }
                 }
             }
-            else buffer[count++] = new() { Value = moduleIndices[blocks.Uniform(sz)], Count = SectionVolume };
+            else
+            {
+                var uni = blocks.Uniform(sz);
+                buffer[count++] = new() { Value = moduleIndices[uni], Count = SectionVolume };
+                if (buffer[count - 1].Value == 0)
+                {
+                    blocks.Uniform(sz);
+                }
+            }
+        }
+
+        var span = buffer.AsSpan()[..count];
+        foreach (var item in span)
+        {
+            if (item.Value == 0)
+            {
+
+            }
         }
 
         BrotliEncoder.TryCompress(

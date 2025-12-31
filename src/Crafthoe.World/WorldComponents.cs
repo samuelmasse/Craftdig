@@ -1,4 +1,4 @@
-namespace Crafthoe.World;
+namespace Craftdig.World;
 
 [Components]
 file record WorldComponents(

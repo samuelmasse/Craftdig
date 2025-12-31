@@ -1,3 +1,3 @@
-namespace Crafthoe.Module;
+namespace Craftdig.Module;
 
 public record class EntMutList;

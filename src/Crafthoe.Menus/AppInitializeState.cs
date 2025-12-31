@@ -1,4 +1,4 @@
-namespace Crafthoe.Menus;
+namespace Craftdig.Menus;
 
 [App]
 public class AppInitializeState(
@@ -18,7 +18,7 @@ public class AppInitializeState(
     public override void Load()
     {
         controlsToml.AddFromFile(files["Controls.toml"]);
-        screen.Title = "Crafthoe";
+        screen.Title = "Craftdig";
         screen.Size = screen.MonitorSize / 4 * 3;
 
         scripts.Add(root.Get<RootUiScript>());

@@ -1,4 +1,4 @@
-namespace Crafthoe.Module;
+namespace Craftdig.Module;
 
 [ModuleLoader]
 public class ModuleLoader(AppLog log, AppMods mods, ModuleEnts ents, ModuleLoaderScope scope)

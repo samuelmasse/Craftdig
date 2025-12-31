@@ -1,4 +1,4 @@
-namespace Crafthoe.Menus.Multiplayer;
+namespace Craftdig.Menus.Multiplayer;
 
 using System.IdentityModel.Tokens.Jwt;
 using Google.Apis.Auth.OAuth2;

@@ -1,12 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <ItemGroup>
-        <Using Include="Crafthoe" />
-        <Using Include="Crafthoe.App" />
-        <Using Include="Crafthoe.Module" />
-        <Using Include="Crafthoe.Protocol" />
-        <Using Include="Crafthoe.World" />
-        <Using Include="Crafthoe.World.Server" />
+        <Using Include="Craftdig" />
+        <Using Include="Craftdig.App" />
+        <Using Include="Craftdig.Module" />
+        <Using Include="Craftdig.Protocol" />
+        <Using Include="Craftdig.World" />
+        <Using Include="Craftdig.World.Server" />
     </ItemGroup>
 
     <ItemGroup>

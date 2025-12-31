@@ -1,4 +1,4 @@
-namespace Crafthoe.Dimension.Frontend;
+namespace Craftdig.Dimension.Frontend;
 
 [StructLayout(LayoutKind.Sequential)]
 public readonly record struct BlockVertex(Vector3 Position, Vector3 Color, Vector3 TexCoord) : IVertex

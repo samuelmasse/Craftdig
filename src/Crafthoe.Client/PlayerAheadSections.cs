@@ -1,4 +1,4 @@
-namespace Crafthoe.Client;
+namespace Craftdig.Client;
 
 [Player]
 public class PlayerAheadSections(AppLog log, DimensionBlockChanges blockChanges, PlayerSocket socket)

@@ -1,4 +1,4 @@
-namespace Crafthoe.Native;
+namespace Craftdig.Native;
 
 [Dimension]
 public class DimensionNativeBiomeGenerator(ModuleNative m) : IBiomeGenerator

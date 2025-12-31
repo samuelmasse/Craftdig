@@ -1,4 +1,4 @@
-namespace Crafthoe.Dimension.Server;
+namespace Craftdig.Dimension.Server;
 
 [Dimension]
 public class DimensionPendingMovement(AppLog log, DimensionSockets sockets)

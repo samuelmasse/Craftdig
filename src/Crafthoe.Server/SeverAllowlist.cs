@@ -1,4 +1,4 @@
-namespace Crafthoe.Server;
+namespace Craftdig.Server;
 
 [Server]
 public class SeverAllowlist(ServerDefaults defaults, ServerConfig config)
