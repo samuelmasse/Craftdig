@@ -1,0 +1,63 @@
+<Solution>
+    <Folder Name="/Backend/">
+        <Project Path="src/Craftdig.Dimension.Backend/Craftdig.Dimension.Backend.csproj"
+            Id="e8279f1a-3a9c-4d8a-8e15-7dbdc72f30bb" />
+        <Project Path="src/Craftdig.Native.Backend/Craftdig.Native.Backend.csproj"
+            Id="9c8c51ce-3204-4690-aa7b-2610f7592a6f" />
+        <Project Path="src/Craftdig.World.Backend/Craftdig.World.Backend.csproj"
+            Id="856d74b0-a6dc-4b22-9d2f-a0021a1f3f4e" />
+    </Folder>
+    <Folder Name="/Client/">
+        <Project Path="src/Craftdig.Client/Craftdig.Client.csproj"
+            Id="127bfd8d-6aa3-40fa-967e-847cd54d1d1c" />
+        <Project Path="src/Craftdig.Menus.Common/Craftdig.Menus.Common.csproj"
+            Id="317ffeaf-aec2-483d-ab9e-39266488c513" />
+        <Project Path="src/Craftdig.Menus.Multiplayer/Craftdig.Menus.Multiplayer.csproj"
+            Id="1460f010-6f53-4d89-99d1-ab16d365feef" />
+        <Project Path="src/Craftdig.Menus.Singleplayer/Craftdig.Menus.Singleplayer.csproj"
+            Id="1c85507b-bf01-4bb5-824e-7d88337a46b0" />
+        <Project Path="src/Craftdig.Menus/Craftdig.Menus.csproj" />
+        <Project Path="src/Craftdig/Craftdig.csproj" />
+    </Folder>
+    <Folder Name="/Common/">
+        <Project Path="src/Craftdig.App/Craftdig.App.csproj" />
+        <Project Path="src/Craftdig.Dimension/Craftdig.Dimension.csproj" />
+        <Project Path="src/Craftdig.Module/Craftdig.Module.csproj" />
+        <Project Path="src/Craftdig.Native/Craftdig.Native.csproj" />
+        <Project Path="src/Craftdig.Protocol/Craftdig.Protocol.csproj"
+            Id="60f27aa6-6497-4e4a-a7f1-f1d0aca673bc" />
+        <Project Path="src/Craftdig.World/Craftdig.World.csproj" />
+    </Folder>
+    <Folder Name="/Frontend/">
+        <Project Path="src/Craftdig.App.Frontend/Craftdig.App.Frontend.csproj"
+            Id="8be24ca5-85cd-405e-8330-34825128e5fc" />
+        <Project Path="src/Craftdig.Dimension.Frontend/Craftdig.Dimension.Frontend.csproj"
+            Id="d96f12fa-cadd-4044-968c-2e55a31a9980" />
+        <Project Path="src/Craftdig.Module.Frontend/Craftdig.Module.Frontend.csproj"
+            Id="73053e3e-6f5f-44d3-95af-49f83c9fda0b" />
+        <Project Path="src/Craftdig.Native.Frontend/Craftdig.Native.Frontend.csproj"
+            Id="54f64a25-6e07-4785-a6b1-c80720658064" />
+        <Project Path="src/Craftdig.Player.Frontend/Craftdig.Player.Frontend.csproj"
+            Id="11e61da7-83e7-4f25-b84c-103f0c92100f" />
+        <Project Path="src/Craftdig.World.Frontend/Craftdig.World.Frontend.csproj"
+            Id="e359e76e-5a40-49e4-bfda-25d105f9b475" />
+    </Folder>
+    <Folder Name="/Scripts/">
+        <Project Path="scripts/Craftdig.Dev.Server/Craftdig.Dev.Server.csproj"
+            Id="33843de9-783f-44d5-a71d-0ea813d958d2" />
+        <Project Path="scripts/Craftdig.Dev/Craftdig.Dev.csproj" />
+        <Project Path="scripts/Craftdig.Script.Package/Craftdig.Script.Package.csproj"
+            Id="0dc9d1d4-deff-4f88-952d-1b80de3de613" />
+    </Folder>
+    <Folder Name="/Server/">
+        <Project Path="src/Craftdig.Dimension.Server/Craftdig.Dimension.Server.csproj"
+            Id="df3681b8-c06c-4a1f-96bb-f3b87bc54d39" />
+        <Project Path="src/Craftdig.Server.Cli/Craftdig.Server.Cli.csproj"
+            Id="1b64d78b-5d42-4b8e-b571-9c22fb6b0ae0" />
+        <Project Path="src/Craftdig.Server/Craftdig.Server.csproj"
+            Id="1b1deb04-2f80-4688-ba54-f8f87630328d" />
+        <Project Path="src/Craftdig.World.Server/Craftdig.World.Server.csproj"
+            Id="02209b5e-aa61-496f-a283-70c390a40707" />
+    </Folder>
+    <Project Path="src/TrogloUI/TrogloUI.csproj" />
+</Solution>

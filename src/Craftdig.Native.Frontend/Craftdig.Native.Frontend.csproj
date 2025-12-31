@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <ItemGroup>
+        <Using Include="Craftdig" />
+        <Using Include="Craftdig.App" />
+        <Using Include="Craftdig.App.Frontend" />
+        <Using Include="Craftdig.Module" />
+        <Using Include="Craftdig.Module.Frontend" />
+        <Using Include="Craftdig.Native" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\Craftdig.Module.Frontend\Craftdig.Module.Frontend.csproj" />
+        <ProjectReference Include="..\Craftdig.Native\Craftdig.Native.csproj" />
+    </ItemGroup>
+
+</Project>

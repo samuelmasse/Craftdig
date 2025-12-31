@@ -1,0 +1,31 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <ServerGarbageCollection>true</ServerGarbageCollection>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <Using Include="Craftdig" />
+        <Using Include="Craftdig.App" />
+        <Using Include="Craftdig.Dimension" />
+        <Using Include="Craftdig.Dimension.Backend" />
+        <Using Include="Craftdig.Dimension.Server" />
+        <Using Include="Craftdig.Dimension.Unit">
+            <Static>true</Static>
+        </Using>
+        <Using Include="Craftdig.Module" />
+        <Using Include="Craftdig.Native" />
+        <Using Include="Craftdig.Protocol" />
+        <Using Include="Craftdig.Server" />
+        <Using Include="Craftdig.World" />
+        <Using Include="Craftdig.World.Backend" />
+        <Using Include="Craftdig.World.Server" />
+        <Using Include="NeedlerDI" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\src\Craftdig.Native.Backend\Craftdig.Native.Backend.csproj" />
+        <ProjectReference Include="..\..\src\Craftdig.Server\Craftdig.Server.csproj" />
+    </ItemGroup>
+
+</Project>

@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <ItemGroup>
+        <Using Include="AlvorEngine" />
+        <Using Include="Craftdig" />
+        <Using Include="Craftdig.App" />
+        <Using Include="Craftdig.App.Frontend" />
+        <Using Include="Craftdig.Module" />
+        <Using Include="Craftdig.Module.Frontend" />
+        <Using Include="Craftdig.World" />
+        <Using Include="Craftdig.World.Frontend" />
+        <Using Include="Glw2D" />
+        <Using Include="Glw2D.Fonts" />
+        <Using Include="GlwLayer" />
+        <Using Include="OpenTK.Graphics.OpenGL4" />
+        <Using Include="OpenTK.Windowing.Common" />
+        <Using Include="OpenTK.Windowing.Common.Input" />
+        <Using Include="OpenTK.Windowing.Desktop" />
+        <Using Include="OpenTK.Windowing.GraphicsLibraryFramework" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\Craftdig.Module.Frontend\Craftdig.Module.Frontend.csproj" />
+        <ProjectReference Include="..\Craftdig.World\Craftdig.World.csproj" />
+    </ItemGroup>
+
+</Project>
