@@ -1,0 +1,41 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <ItemGroup>
+        <Using Include="AlvorEngine" />
+        <Using Include="AlvorEngine.Loop" />
+        <Using Include="Glw2D" />
+        <Using Include="Glw2D.Fonts" />
+        <Using Include="Craftdig" />
+        <Using Include="Craftdig.App" />
+        <Using Include="Craftdig.App.Frontend" />
+        <Using Include="Craftdig.Dimension" />
+        <Using Include="Craftdig.Dimension.Backend" />
+        <Using Include="Craftdig.Dimension.Frontend" />
+        <Using Include="Craftdig.Dimension.Unit">
+            <Static>true</Static>
+        </Using>
+        <Using Include="Craftdig.Menus" />
+        <Using Include="Craftdig.Menus.Common" />
+        <Using Include="Craftdig.Module" />
+        <Using Include="Craftdig.Module.Frontend" />
+        <Using Include="Craftdig.Player.Frontend" />
+        <Using Include="Craftdig.World" />
+        <Using Include="Craftdig.World.Backend" />
+        <Using Include="Craftdig.World.Frontend" />
+        <Using Include="OpenTK.Graphics.OpenGL4" />
+        <Using Include="OpenTK.Windowing.Common" />
+        <Using Include="OpenTK.Windowing.Common.Input" />
+        <Using Include="OpenTK.Windowing.Desktop" />
+        <Using Include="OpenTK.Windowing.GraphicsLibraryFramework" />
+        <Using Include="TrogloUI" />
+        <Using Include="TrogloUI.UiSyntax">
+            <Static>true</Static>
+        </Using>
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\Craftdig.Dimension.Backend\Craftdig.Dimension.Backend.csproj" />
+        <ProjectReference Include="..\Craftdig.Menus.Common\Craftdig.Menus.Common.csproj" />
+    </ItemGroup>
+
+</Project>

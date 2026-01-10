@@ -1,3 +1,3 @@
-# Crafthoe
+# Craftdig
 
-Crafthoe is a C# Minecraft clone
+Craftdig is a C# Minecraft clone

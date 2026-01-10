@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <ItemGroup>
+        <Using Include="Craftdig" />
+        <Using Include="Craftdig.App" />
+        <Using Include="Craftdig.Module" />
+        <Using Include="Craftdig.World" />
+        <Using Include="Craftdig.World.Backend" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\Craftdig.World\Craftdig.World.csproj" />
+    </ItemGroup>
+
+</Project>

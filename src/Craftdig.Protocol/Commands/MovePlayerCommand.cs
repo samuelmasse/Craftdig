@@ -1,0 +1,10 @@
+namespace Craftdig.Protocol;
+
+[StructLayout(LayoutKind.Sequential, Pack = 1)]
+public struct MovePlayerCommand : ICommand
+{
+    public static ushort CommandId => (ushort)Commands.MovePlayer;
+
+    public MovementStep Movement;
+    public ConstructionStep Construction;
+}

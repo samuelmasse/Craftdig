@@ -1,7 +1,0 @@
-namespace Crafthoe.Dimension.Backend;
-
-[Dimension]
-public class DimensionBiomeGenerator(IBiomeGenerator generator)
-{
-    public void Generate(ChunkBlocks blocks, Vector2i cloc) => generator.Generate(blocks, cloc);
-}

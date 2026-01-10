@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <ItemGroup>
+        <ProjectReference Include="..\Craftdig.Dimension\Craftdig.Dimension.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <Using Include="Craftdig" />
+        <Using Include="Craftdig.App" />
+        <Using Include="Craftdig.Dimension" />
+        <Using Include="Craftdig.Protocol" />
+        <Using Include="Craftdig.World" />
+    </ItemGroup>
+
+</Project>

@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <ItemGroup>
+        <Using Include="Craftdig" />
+        <Using Include="Craftdig.App" />
+        <Using Include="Craftdig.Dimension" />
+        <Using Include="Craftdig.Dimension.Backend" />
+        <Using Include="Craftdig.Dimension.Unit">
+            <Static>true</Static>
+        </Using>
+        <Using Include="Craftdig.Module" />
+        <Using Include="Craftdig.Native" />
+        <Using Include="Craftdig.World" />
+        <Using Include="Craftdig.World.Backend" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\Craftdig.Dimension.Backend\Craftdig.Dimension.Backend.csproj" />
+        <ProjectReference Include="..\Craftdig.Native\Craftdig.Native.csproj" />
+    </ItemGroup>
+
+</Project>

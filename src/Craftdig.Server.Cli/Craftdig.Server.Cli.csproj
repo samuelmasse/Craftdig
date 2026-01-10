@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <AssemblyName>CraftdigServer</AssemblyName>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <Using Include="Craftdig" />
+        <Using Include="Craftdig.App" />
+        <Using Include="Craftdig.Module" />
+        <Using Include="Craftdig.Server" />
+        <Using Include="Craftdig.Server.Cli" />
+        <Using Include="Craftdig.World" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\Craftdig.Server\Craftdig.Server.csproj" />
+    </ItemGroup>
+
+</Project>

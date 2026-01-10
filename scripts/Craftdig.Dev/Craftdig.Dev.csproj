@@ -1,0 +1,45 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <ServerGarbageCollection>true</ServerGarbageCollection>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <Using Include="AlvorEngine" />
+        <Using Include="AlvorEngine.Loop" />
+        <Using Include="Craftdig" />
+        <Using Include="Craftdig.App" />
+        <Using Include="Craftdig.App.Frontend" />
+        <Using Include="Craftdig.Dimension" />
+        <Using Include="Craftdig.Dimension.Backend" />
+        <Using Include="Craftdig.Dimension.Frontend" />
+        <Using Include="Craftdig.Dimension.Unit">
+            <Static>true</Static>
+        </Using>
+        <Using Include="Craftdig.Menus" />
+        <Using Include="Craftdig.Menus.Multiplayer" />
+        <Using Include="Craftdig.Module" />
+        <Using Include="Craftdig.Module.Frontend" />
+        <Using Include="Craftdig.Native" />
+        <Using Include="Craftdig.Player.Frontend" />
+        <Using Include="Craftdig.Protocol" />
+        <Using Include="Craftdig.World" />
+        <Using Include="Craftdig.World.Backend" />
+        <Using Include="Craftdig.World.Frontend" />
+        <Using Include="GlwLayer.Driver.OpenTK" />
+        <Using Include="TrogloUI" />
+        <Using Include="Wigdow" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="GlwLayer.Driver.OpenTK" Version="0.*" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\src\Craftdig.Menus\Craftdig.Menus.csproj" />
+        <ProjectReference Include="..\..\src\Craftdig.Native.Backend\Craftdig.Native.Backend.csproj" />
+        <ProjectReference
+            Include="..\..\src\Craftdig.Native.Frontend\Craftdig.Native.Frontend.csproj" />
+    </ItemGroup>
+
+</Project>
