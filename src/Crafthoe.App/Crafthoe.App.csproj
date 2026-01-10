@@ -7,10 +7,11 @@
 
     <ItemGroup>
         <PackageReference Include="AlvorEngine.FastNoiseLite" Version="1.0" />
-        <PackageReference Include="HadvarECS" Version="0.11.0" />
-        <PackageReference Include="HadvarECS.Generator" Version="0.11.0" />
+        <PackageReference Include="HadvarECS" Version="0.15.0" />
+        <PackageReference Include="HadvarECS.Generator" Version="0.15.0" />
         <PackageReference Include="NeedlerDI" Version="0.1.1" />
         <PackageReference Include="OpenTK.Mathematics" Version="4.9.4" />
+        <PackageReference Include="SigridDB" Version="0.1" />
         <PackageReference Include="Tomlyn" Version="0.19.0" />
         <PackageReference Include="ZString" Version="2.6.0" />
     </ItemGroup>

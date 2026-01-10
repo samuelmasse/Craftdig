@@ -6,7 +6,7 @@ public class RootUiDraw(RootSprites sprites, RootUiScale scale, RootUiPosition p
     internal void Draw(Vector2 o, EntObj n)
     {
         DrawNode(o + n.OffsetR(), n);
-        foreach (var sc in n.GetNodesR())
+        foreach (var sc in n.GetNodesR().Span)
             Draw(o + n.OffsetR(), sc);
     }
 

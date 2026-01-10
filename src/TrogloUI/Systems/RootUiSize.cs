@@ -9,13 +9,13 @@ public class RootUiSize(RootSprites sprites, RootUiScale scale)
         SizeInnerSizing(s, n);
         n.PaddingR() = Get(n.PaddingV(), n.PaddingF());
 
-        foreach (var c in n.GetNodesR())
+        foreach (var c in n.GetNodesR().Span)
             Size(n.SizeR() - n.PaddingR().Xy - n.PaddingR().Zw, c);
 
         SizeInnerMaxRelative(s, n);
         SizeInnerSumRelative(s, n);
 
-        foreach (var c in n.GetNodesR())
+        foreach (var c in n.GetNodesR().Span)
         {
             if (!c.HasIsPostSizedV() && !c.HasIsPostSizedF())
                 continue;
@@ -78,7 +78,7 @@ public class RootUiSize(RootSprites sprites, RootUiScale scale)
         var sizeInnerMaxRelative = Get(n.SizeInnerMaxRelativeV(), n.SizeInnerMaxRelativeF());
         var sizeInnerMax = Vector2.Zero;
 
-        foreach (var c in n.GetNodesR())
+        foreach (var c in n.GetNodesR().Span)
         {
             if (IsFloating(c))
                 continue;
@@ -101,7 +101,7 @@ public class RootUiSize(RootSprites sprites, RootUiScale scale)
         var sizeInnerSumRelative = Get(n.SizeInnerSumRelativeV(), n.SizeInnerSumRelativeF());
         var sizeInnerSum = Vector2.Zero;
 
-        foreach (var c in n.GetNodesR())
+        foreach (var c in n.GetNodesR().Span)
         {
             if (IsFloating(c))
                 continue;
@@ -126,7 +126,7 @@ public class RootUiSize(RootSprites sprites, RootUiScale scale)
         var innerSizing = Get(n.InnerSizingV(), n.InnerSizingF());
         float totalWeight = 0;
 
-        foreach (var c in n.GetNodesR())
+        foreach (var c in n.GetNodesR().Span)
         {
             c.UnsetHorizontalWeightSizeR();
             c.UnsetVerticalWeightSizeR();
@@ -143,13 +143,13 @@ public class RootUiSize(RootSprites sprites, RootUiScale scale)
 
         if (innerSizing == InnerSizing.HorizontalWeight)
         {
-            foreach (var c in n.GetNodesR())
+            foreach (var c in n.GetNodesR().Span)
             {
                 if (IsSelfWeight(c))
                     useableSize.X -= c.SizeR().X;
             }
 
-            foreach (var c in n.GetNodesR())
+            foreach (var c in n.GetNodesR().Span)
             {
                 if (IsSelfWeight(c))
                     continue;
@@ -159,13 +159,13 @@ public class RootUiSize(RootSprites sprites, RootUiScale scale)
         }
         else if (innerSizing == InnerSizing.VerticalWeight)
         {
-            foreach (var c in n.GetNodesR())
+            foreach (var c in n.GetNodesR().Span)
             {
                 if (IsSelfWeight(c))
                     useableSize.Y -= c.SizeR().Y;
             }
 
-            foreach (var c in n.GetNodesR())
+            foreach (var c in n.GetNodesR().Span)
             {
                 if (IsSelfWeight(c))
                     continue;

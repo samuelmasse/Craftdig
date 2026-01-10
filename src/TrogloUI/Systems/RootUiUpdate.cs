@@ -8,7 +8,7 @@ public class RootUiUpdate
         if (n.HasOnUpdateF())
             n.OnUpdateF()?.Invoke();
 
-        foreach (var c in n.GetNodesR())
+        foreach (var c in n.GetNodesR().Span)
             Update(c);
     }
 }

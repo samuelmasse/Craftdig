@@ -19,7 +19,7 @@ public class RootUiTraverse
         StackNodes(n);
         CompileNodes(n);
 
-        foreach (var c in n.GetNodesR())
+        foreach (var c in n.GetNodesR().Span)
             Traverse(c, depth + 1);
     }
 

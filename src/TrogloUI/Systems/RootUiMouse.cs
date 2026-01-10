@@ -118,7 +118,7 @@ public class RootUiMouse(RootMouse mouse, RootUiScale scale, RootUiFocus focus)
         if (box.ContainsInclusive(position) && Get(n.GetIsSelectableV(), n.GetIsSelectableF()))
             hovered = n;
 
-        foreach (var c in n.GetNodesR())
+        foreach (var c in n.GetNodesR().Span)
         {
             var child = FindHovered(nOffset, c);
             if (child != null)

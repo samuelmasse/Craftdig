@@ -6,7 +6,7 @@ public class RootUiPosition(RootSprites sprites, RootUiScale scale)
     internal void Position(Vector2 s, EntObj n)
     {
         PositionNode(s, n);
-        foreach (var c in n.GetNodesR())
+        foreach (var c in n.GetNodesR().Span)
         {
             Position(n.SizeR(), c);
 
@@ -24,7 +24,7 @@ public class RootUiPosition(RootSprites sprites, RootUiScale scale)
         {
             float y = 0;
 
-            foreach (var c in n.GetNodesR())
+            foreach (var c in n.GetNodesR().Span)
             {
                 if (IsFloating(c))
                     continue;
@@ -38,7 +38,7 @@ public class RootUiPosition(RootSprites sprites, RootUiScale scale)
         {
             float x = 0;
 
-            foreach (var c in n.GetNodesR())
+            foreach (var c in n.GetNodesR().Span)
             {
                 if (IsFloating(c))
                     continue;

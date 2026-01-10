@@ -9,7 +9,7 @@ public class DimensionChunkFrontendUnloader(
 {
     public void Unload(EntMut chunk)
     {
-        foreach (var section in chunk.GetSections())
+        foreach (var section in chunk.GetSections().Span)
         {
             if (section != default)
                 meshTransferer.Free(ref section.TerrainMesh());

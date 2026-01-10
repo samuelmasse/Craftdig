@@ -59,7 +59,7 @@ public class RootUiFocus(RootKeyboard keyboard)
                 newInits.Add(n);
         }
 
-        foreach (var c in n.GetNodesR())
+        foreach (var c in n.GetNodesR().Span)
             CollectFocusables(c);
     }
 }

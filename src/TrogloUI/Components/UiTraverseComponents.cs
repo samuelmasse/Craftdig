@@ -17,5 +17,5 @@ file record UiTraverseComponents(
     float OrderValueV,
     Func<float>? OrderValueF,
 
-    [ComponentTryGet] EntObj? StackedNodeR,
-    [ComponentReturnSpan] Memory<EntObj> NodesR);
+    EntObj? StackedNodeR,
+    Memory<EntObj> NodesR);

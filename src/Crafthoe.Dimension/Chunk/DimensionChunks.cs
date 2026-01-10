@@ -30,7 +30,7 @@ public class DimensionChunks(WorldEntArena entArena)
         if (Contains(cloc))
             return;
 
-        var chunk = entArena.Alloc()
+        var chunk = entArena.Arena.Alloc()
             .IsChunk(true)
             .Cloc(cloc);
         map.Add(cloc, chunk);

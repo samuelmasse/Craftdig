@@ -32,7 +32,7 @@ public class PlayerDebugMenu(
             () => text.Format("Selected Normal: {0}", selected[(EntMut)ent.Ent].GetValueOrDefault().Normal),
             () => text.Format("TPS: {0}", playerMetrics.TickMetricWindow.Value.Ticks),
             () => text.Format("SVB: {0}", svb.Allocator.Used),
-            () => text.Format("Arena: {0}", entArena.Allocated),
+            () => text.Format("Arena: {0}", entArena.Arena.Allocated),
         ];
 
         Node(root, out var list)
