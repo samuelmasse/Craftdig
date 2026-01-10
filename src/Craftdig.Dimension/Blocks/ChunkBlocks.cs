@@ -78,7 +78,7 @@ public class ChunkBlocks
                 return false;
         }
 
-        Fill(sz, section.Uniform);
+        Fill(sz, same);
         return true;
     }
 
