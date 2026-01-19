@@ -74,7 +74,7 @@ public class PlayerMultiplayerDebugMenu(
                     .TextF(() =>
                     {
                         var (cmd, dist) = Process();
-                        return text.Format("{0:0.0000} : {1:0.00}", dist,  cmd.Position);
+                        return text.Format("{0:0.0000} : {1:0.00}", dist, cmd.Position);
                     });
             }
         }
