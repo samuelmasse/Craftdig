@@ -12,11 +12,15 @@ public class PlayerMultiplayerState(
     PlayerCommonState commonState,
     PlayerMultiplayerDisconnectAction multiplayerDisconnectAction,
     PlayerSlowTickReceiver slowTickReceiver,
-    PlayerClient client) : State
+    PlayerClient client,
+    PlayerMultiplayerDebugMenu multiplayerDebugMenu) : State
 {
+    private int delay;
+
     public override void Load()
     {
         commonState.Load();
+        Node(commonState.Menus).Mut(multiplayerDebugMenu.Create);
     }
 
     public override void Unload()
@@ -38,8 +42,16 @@ public class PlayerMultiplayerState(
         int ticks = Math.Min(tick.Update(time), 8);
         if (keyboard.IsKeyPressed(Keys.L))
             ticks++;
+        if (keyboard.IsKeyPressed(Keys.K))
+            delay++;
 
-        if (ticks > 0 && slowTickReceiver.ShouldSlowTick())
+        while (delay > 0 && ticks > 0)
+        {
+            ticks--;
+            delay--;
+        }
+
+        while (ticks > 0 && slowTickReceiver.ShouldSlowTick())
             ticks--;
 
         while (ticks > 0)

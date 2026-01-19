@@ -2,17 +2,25 @@ namespace Craftdig.Client;
 
 [Player]
 public class PlayerPosition(
-    AppLog log,
     PlayerSocket socket,
     PlayerEnt ent,
-    PlayerPositionUpdateReceiver positionUpdateReceiver,
-    PlayerSlowDownReceiver slowDownReceiver)
+    PlayerPositionUpdateReceiver positionUpdateReceiver)
 {
     private readonly List<PositionUpdateCommand> expected = [];
+    private readonly List<PositionUpdateCommand> received = [];
     private readonly int tolerance = 12;
+    private bool correcting = true;
     private double matching = 1;
-    private int slowdown;
-    private int c;
+    private int listen;
+    private int debounce;
+
+    public ReadOnlySpan<PositionUpdateCommand> Expected => CollectionsMarshal.AsSpan(expected);
+    public ReadOnlySpan<PositionUpdateCommand> Received => CollectionsMarshal.AsSpan(received);
+    public int Tolerance => tolerance;
+    public ref bool Correcting => ref correcting;
+    public double Matching => matching;
+    public int Listen => listen;
+    public int Debounce => debounce;
 
     public void Tick()
     {
@@ -27,34 +35,34 @@ public class PlayerPosition(
         if (expected.Count > tolerance)
             expected.RemoveAt(0);
 
-        if (slowDownReceiver.ShouldSlowDown())
-            slowdown = tolerance;
+        if (positionUpdateReceiver.Count > 0)
+        {
+            received.Add(positionUpdateReceiver.Latest);
+            if (received.Count > tolerance)
+                received.RemoveAt(0);
+        }
 
         if (positionUpdateReceiver.Count < tolerance)
-            slowdown = 1;
+            listen = 1;
 
-        if (slowdown == 0)
+        if (listen == 0 && correcting && debounce == 0 && !HasMatchingCommand())
         {
-            var latest = positionUpdateReceiver.Latest;
+            listen = tolerance;
+            debounce = tolerance * 10;
+            matching = 1;
 
-            if (!HasMatchingCommand(latest))
-            {
-                log.Info("Corrected {0}", c++);
-                foreach (PositionUpdateCommand command in expected)
-                    log.Info("{0} : {1}", command.Position, Vector3d.Distance(command.Position, positionUpdateReceiver.Latest.Position));
-                log.Info("But:");
-                log.Info(positionUpdateReceiver.Latest.Position);
-
-                expected.Clear();
-                slowdown = tolerance;
-                matching = 1;
-                ApplyServerPosition(latest);
-            }
+            // Intentionally add some latency
+            socket.Send<MovePlayerCommand>();
+            socket.Send<MovePlayerCommand>();
         }
-        else if (positionUpdateReceiver.Count > 0)
-            ApplyServerPosition(positionUpdateReceiver.Latest);
 
-        matching = Math.Max(matching * 0.95, 0.001);
+        if (listen > 0 && received.Count > 0)
+            ApplyServerPosition(received[^1]);
+
+        if (debounce > 0)
+            debounce--;
+
+        matching = Math.Max(matching * 0.97, 0.001);
     }
 
     public void Stream()
@@ -62,28 +70,32 @@ public class PlayerPosition(
         ref var movement = ref ent.Ent.Movement();
         ref var construction = ref ent.Ent.Construction();
 
-        if (slowdown == 0)
-            socket.Send(new MovePlayerCommand() { Movement = movement, Construction = construction });
-        else
+        if (listen > 0)
         {
             movement = default;
             construction = default;
-            slowdown--;
+            listen--;
         }
+
+        socket.Send(new MovePlayerCommand() { Movement = movement, Construction = construction });
     }
 
-    private bool HasMatchingCommand(PositionUpdateCommand command)
+    private bool HasMatchingCommand()
     {
         double min = double.PositiveInfinity;
+        double max = 0;
 
-        foreach (var ex in expected)
+        foreach (var command in received)
         {
-            var dist = Vector3d.Distance(command.Position, ex.Position);
-            if (dist < min)
-                min = dist;
+            foreach (var ex in expected)
+            {
+                var dist = Vector3d.Distance(command.Position, ex.Position);
+                if (dist < min)
+                    min = dist;
+                if (dist > max)
+                    max = dist;
+            }
         }
-
-        log.Debug((int)(min * 1000));
 
         return min < matching;
     }

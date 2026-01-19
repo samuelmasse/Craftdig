@@ -6,6 +6,8 @@ public class PlayerSlowTickReceiver
     private int count;
     private int register;
 
+    public int Count => count;
+
     public void Receive()
     {
         count++;

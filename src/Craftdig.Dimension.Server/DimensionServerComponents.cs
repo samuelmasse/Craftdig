@@ -10,6 +10,5 @@ file record DimensionServerComponents(
 
     // Player
     ConcurrentQueue<MovePlayerCommand>? PendingMovement,
-    int PendingMovementWait,
-    int PendingMovementLongWait
+    int PendingMovementWait
 );

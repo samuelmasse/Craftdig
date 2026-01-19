@@ -10,7 +10,6 @@ public class PlayerSocketLoop(
     PlayerSectionUpdateReceiver sectionUpdateReceiver,
     PlayerChunkUpdateReceiver chunkUpdateReceiver,
     PlayerWorldIndicesUpdateReceiver worldIndicesUpdateReceiver,
-    PlayerSlowDownReceiver slowDownReceiver,
     PlayerSlowTickReceiver slowTickReceiver)
 {
     private Thread? thread;
@@ -24,7 +23,6 @@ public class PlayerSocketLoop(
         loop.Register<ChunkUpdateCommand, byte>(chunkUpdateReceiver.Receive);
         loop.Register<SectionUpdateCommand, byte>(sectionUpdateReceiver.Receive);
         loop.Register<WorldIndicesUpdateCommand, byte>(worldIndicesUpdateReceiver.Receive);
-        loop.Register<SlowDownCommand>(slowDownReceiver.Receive);
         loop.Register<SlowTickCommand>(slowTickReceiver.Receive);
 
         thread = new Thread(Loop);

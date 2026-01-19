@@ -35,6 +35,7 @@ public class PlayerCommonState(
     private bool paused;
     private bool inv;
 
+    public EntObj Menus => menus;
     public bool Paused => paused;
     public bool Inv => inv;
 

@@ -25,7 +25,7 @@ public class DimensionPendingMovement(AppLog log, DimensionSockets sockets)
 
         log.Debug("{0} ahead by {1}", ent.Tag(), ahead);
 
-        if (ahead > 1)
+        if (ahead > 2)
         {
             if (ent.PendingMovementWait() > Wait(ahead))
             {
@@ -33,17 +33,9 @@ public class DimensionPendingMovement(AppLog log, DimensionSockets sockets)
                 ent.PendingMovementWait() = 0;
             }
 
-            if (ent.PendingMovementLongWait() > LongWait(ahead))
-                ns.Send<SlowDownCommand>();
-
             ent.PendingMovementWait()++;
-            ent.PendingMovementLongWait()++;
         }
-        else
-        {
-            ent.PendingMovementWait() = 0;
-            ent.PendingMovementLongWait() = 0;
-        }
+        else ent.PendingMovementWait() = 0;
 
         ref var mov = ref ent.Movement();
         ref var constr = ref ent.Construction();
@@ -72,21 +64,11 @@ public class DimensionPendingMovement(AppLog log, DimensionSockets sockets)
 
     private int Wait(int ahead) => ahead switch
     {
-        2 => 24,
-        3 => 12,
-        4 => 6,
-        5 => 3,
-        6 => 1,
-        _ => 0
-    };
-
-    private int LongWait(int ahead) => ahead switch
-    {
-        2 => 120,
-        3 => 60,
-        4 => 30,
-        5 => 15,
-        6 => 7,
+        3 => 24,
+        4 => 12,
+        5 => 6,
+        6 => 3,
+        7 => 1,
         _ => 0
     };
 }
