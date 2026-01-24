@@ -14,6 +14,7 @@ public class PlayerCommonState(
     DimensionRigidBag rigidBag,
     PlayerEnt ent,
     PlayerRenderer playerRenderer,
+    PlayerConstruction construction,
     PlayerDebugMenu debugMenu,
     PlayerEscapeMenu escapeMenu,
     PlayerOverlayMenu playerOverlayMenu,
@@ -110,6 +111,8 @@ public class PlayerCommonState(
         }
 
         mouse.Track = !paused && !inv;
+        if (!mouse.Track)
+            construction.Reject();
     }
 
     public override void Render()

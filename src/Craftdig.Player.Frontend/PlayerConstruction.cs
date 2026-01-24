@@ -3,11 +3,23 @@ namespace Craftdig.Player.Frontend;
 [Player]
 public class PlayerConstruction(RootMouse mouse, WorldModuleIndices moduleIndices, PlayerEnt ent)
 {
+    private bool reject;
     private int mainCooldown;
     private int secondaryCooldown;
 
+    public void Reject() => reject = true;
+
     public void Tick()
     {
+        if (mainCooldown > 0)
+            mainCooldown--;
+
+        if (secondaryCooldown > 0)
+            secondaryCooldown--;
+
+        if (reject)
+            return;
+
         if (mouse.IsMainDown() && mainCooldown <= 0)
         {
             ent.Ent.Construction() = new() { Action = ConstructionAction.Remove };
@@ -29,5 +41,8 @@ public class PlayerConstruction(RootMouse mouse, WorldModuleIndices moduleIndice
 
         if (!mouse.IsSecondaryDown())
             secondaryCooldown = 0;
+
+        if (!mouse.IsMainDown() && !mouse.IsSecondaryDown())
+            reject = false;
     }
 }
