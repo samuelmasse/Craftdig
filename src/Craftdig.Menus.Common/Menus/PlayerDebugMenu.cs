@@ -16,10 +16,13 @@ public class PlayerDebugMenu(
 {
     public void Create(EntObj root)
     {
+        var gpu = GL.GetString(StringName.Renderer);
+
         List<Func<ReadOnlySpan<char>>> lines =
         [
             () => text.Format("Frame: {0}. {1:F3} ms ({2} FPS)",
                 metrics.Frame.Ticks, metrics.FrameWindow.Average, metrics.FrameWindow.Ticks),
+            () => text.Format("GPU: {0}", gpu),
             () => text.Format("Position: {0:F3}", ent.Ent.Position()),
             () => text.Format("Velocity: {0:F3}", ent.Ent.Velocity()),
             () => text.Format("Collision: {0}", ent.Ent.CollisionNormal()),
