@@ -22,7 +22,8 @@ public class DimensionSectionInvalidation(DimensionChunks chunks, DimensionBlock
         void Dirty(Vector3i delta)
         {
             var sloc = (loc + delta).ToSloc();
-            if (chunks.TryGet(sloc.Xy, out var chunk) && chunk.IsReadyToRender() && !chunk.Unrendered().ContainsKey(sloc.Z))
+            if (chunks.TryGet(sloc.Xy, out var chunk) && chunk.IsReadyToRender() && !chunk.Unrendered().ContainsKey(sloc.Z) &&
+                sloc.Z >= 0 && sloc.Z < SectionSize)
                 chunk.Unrendered().Add(sloc.Z, sloc.Z);
         }
     }
