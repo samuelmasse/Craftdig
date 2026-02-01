@@ -5,17 +5,17 @@ public class ServerRegisterHandlersAction(
     AppLog log,
     ServerNetLoop loop,
     ServerDefaults defaults,
-    ServerAuthReceiver authReceiver,
+    ServerBeginAuthReceiver beginAuthReceiver,
     ServerNoAuthReceiver noAuthReceiver,
     ServerPingReceiver pingReceiver,
     ServerSpawnPlayerReceiver spawnPlayerReceiver)
 {
     public void Run()
     {
-        loop.Register<AuthCommand, byte>(authReceiver.Receive);
+        loop.Register<BeginAuthCommand>(beginAuthReceiver.Receive);
+        loop.Register<PingCommand>(pingReceiver.Receive);
         if (defaults.NoAuth)
             loop.Register<NoAuthCommand, byte>(noAuthReceiver.Receive);
-        loop.Register(Authenticated<PingCommand>(pingReceiver.Receive));
         loop.Register(Authenticated<SpawnPlayerCommand>(spawnPlayerReceiver.Receive));
         loop.Register(Authenticated(DimensionHandler<DimensionMovePlayerReceiver, MovePlayerCommand>()));
         loop.Register(Authenticated(DimensionHandler<DimensionForgetChunkReceiver, ForgetChunkCommand>()));

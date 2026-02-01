@@ -6,6 +6,7 @@ public class PlayerSocketLoop(
     PlayerSocket socket,
     PlayerPingReceiver pingReceiver,
     PlayerPongReceiver pongReceiver,
+    PlayerReadyAuthReceiver readyAuthReceiver,
     PlayerPositionUpdateReceiver positionUpdateReceiver,
     PlayerSectionUpdateReceiver sectionUpdateReceiver,
     PlayerChunkUpdateReceiver chunkUpdateReceiver,
@@ -19,6 +20,7 @@ public class PlayerSocketLoop(
     {
         loop.Register<PingCommand>(pingReceiver.Receive);
         loop.Register<PongCommand>(pongReceiver.Receive);
+        loop.Register<ReadyAuthCommand, byte>(readyAuthReceiver.Receive);
         loop.Register<PositionUpdateCommand>(positionUpdateReceiver.Receive);
         loop.Register<ChunkUpdateCommand, byte>(chunkUpdateReceiver.Receive);
         loop.Register<SectionUpdateCommand, byte>(sectionUpdateReceiver.Receive);

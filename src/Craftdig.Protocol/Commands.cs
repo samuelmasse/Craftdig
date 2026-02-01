@@ -7,7 +7,7 @@ public enum Commands : ushort
     Pong,
 
     ServerStart = 20000,
-    Auth,
+    BeginAuth,
     NoAuth,
     SpawnPlayer,
     MovePlayer,
@@ -15,6 +15,7 @@ public enum Commands : ushort
     ForgetSection,
 
     ClientStart = 30000,
+    ReadyAuth,
     ChunkUpdate,
     WorldIndicesUpdate,
     PositionUpdate,

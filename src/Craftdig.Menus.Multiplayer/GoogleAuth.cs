@@ -8,8 +8,8 @@ public static class GoogleAuth
 {
     private static ClientSecrets Secrets => new()
     {
-        ClientId = "253499777147-87jfh5dlbotv4nenq0bd4vtlrd20jo0j.apps.googleusercontent.com",
-        ClientSecret = "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"
+        ClientId = "<clientId>",
+        ClientSecret = "<secret>"
     };
 
     private static GoogleAuthorizationCodeFlow.Initializer Initializer => new()
