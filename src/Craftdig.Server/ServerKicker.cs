@@ -17,7 +17,7 @@ public class ServerKicker(AppLog log, ServerSockets sockets)
             count++;
 
             var dt = now - ns.Ent.ConnectedTime();
-            if (dt.TotalSeconds < 3)
+            if (dt.TotalSeconds < 30)
                 return;
 
             log.Warn("Kicking socket {0}", ns.Ent.Tag());

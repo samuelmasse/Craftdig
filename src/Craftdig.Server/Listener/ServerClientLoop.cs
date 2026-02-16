@@ -31,6 +31,7 @@ public class ServerClientLoop(
 
         try
         {
+            log.Debug("Socket {0} loop running on thread {1}", ns.Ent.Tag(), execution.ClientThread.Id);
             log.Info("Socket {0} connected : {1}", ns.Ent.Tag(), ns.Ip);
             loop.Run(ns);
         }
@@ -53,7 +54,8 @@ public class ServerClientLoop(
     {
         try
         {
-            ns.Push();
+            log.Debug("Socket {0} push running on thread {1}", ns.Ent.Tag(), execution.ClientThread.Id);
+            ns.Push(default);
         }
         catch (Exception e)
         {

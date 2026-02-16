@@ -4,6 +4,7 @@ namespace Craftdig.Server;
 public class ServerClientThreadPool(AppLog log)
 {
     private readonly ConcurrentBag<ClientThread> pool = [];
+    private volatile bool stop;
 
     public void Start(Action<ClientThreadExecution> action)
     {
@@ -16,14 +17,21 @@ public class ServerClientThreadPool(AppLog log)
 
     public void Stop()
     {
+        log.Debug("Stopping {0} client threads", pool.Count);
+
+        stop = true;
+        int stopped = 0;
+
         while (!pool.IsEmpty)
         {
             if (pool.TryTake(out var thread))
             {
-                thread.Stop = true;
                 thread.Semaphore.Release();
+                stopped++;
             }
         }
+
+        log.Debug("Stopped {0} client threads", stopped);
     }
 
     private ClientThread Create()
@@ -36,31 +44,36 @@ public class ServerClientThreadPool(AppLog log)
 
     private void Loop(ClientThread thread)
     {
-        log.Trace("Client thread {0} started", thread.Id);
+        log.Debug("Client thread {0} started", thread.Id);
 
         while (true)
         {
-            log.Trace("Client thread {0} waiting", thread.Id);
-            thread.Semaphore.Wait();
-            if (thread.Stop)
+            log.Debug("Client thread {0} waiting", thread.Id);
+            if (stop)
             {
-                log.Trace("Client thread {0} stopped", thread.Id);
-                return;
+                log.Debug("Client thread {0} stopped", thread.Id);
+                break;
+            }
+            thread.Semaphore.Wait();
+            if (stop)
+            {
+                log.Debug("Client thread {0} stopped", thread.Id);
+                break;
             }
 
-            log.Trace("Client thread {0} running execution {1}", thread.Id, thread.CurrentExecutionId);
+            log.Debug("Client thread {0} running execution {1}", thread.Id, thread.CurrentExecutionId);
             thread.Action?.Invoke(new(thread, thread.CurrentExecutionId));
             thread.Action = null;
             thread.CurrentExecutionId++;
 
-            if (pool.Count < 32)
+            if (!stop && pool.Count < 32)
             {
-                log.Trace("Client thread {0} returning to pool", thread.Id);
+                log.Debug("Client thread {0} returning to pool", thread.Id);
                 pool.Add(thread);
             }
             else
             {
-                log.Trace("Client thread {0} dropped", thread.Id);
+                log.Debug("Client thread {0} dropped", thread.Id);
                 break;
             }
         }

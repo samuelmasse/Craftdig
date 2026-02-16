@@ -55,11 +55,18 @@ public class NetSocket(AppLog log, TcpClient tcp, Stream stream)
         return true;
     }
 
-    public void Push()
+    public void Push(CancellationToken ct)
     {
         while (Connected)
         {
-            outSemaphore.Wait();
+            try
+            {
+                outSemaphore.Wait(ct);
+            }
+            catch (OperationCanceledException)
+            {
+                return;
+            }
 
             while (Connected)
             {

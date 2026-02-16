@@ -11,7 +11,7 @@ public class ServerTicks(AppLog log, WorldTick tick, WorldDimensionBag dimension
         thread = new(Run);
         thread.Start();
 
-        log.Info("Ticks started");
+        log.Trace("Ticks started");
     }
 
     public void Stop() => stop = true;
@@ -19,7 +19,7 @@ public class ServerTicks(AppLog log, WorldTick tick, WorldDimensionBag dimension
     public void Join()
     {
         thread?.Join();
-        log.Info("Ticks stopped");
+        log.Trace("Ticks stopped");
     }
 
     public void Run()

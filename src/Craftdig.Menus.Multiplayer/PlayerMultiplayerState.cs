@@ -54,9 +54,6 @@ public class PlayerMultiplayerState(
         while (ticks > 0 && slowTickReceiver.ShouldSlowTick())
             ticks--;
 
-        // TODO: start ticks when auth completes
-        ticks = 0;
-
         while (ticks > 0)
         {
             if (!commonState.Inv && !commonState.Paused)

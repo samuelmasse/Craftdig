@@ -30,7 +30,9 @@ public class ModuleMultiplayerConnectingMenu(
                     if (multiplayerConnectAction.Connecting)
                         return;
 
-                    if (multiplayerConnectAction.Tcp != null && multiplayerConnectAction.Stream != null)
+                    if (multiplayerConnectAction.Exception == null &&
+                        multiplayerConnectAction.Tcp != null &&
+                        multiplayerConnectAction.Stream != null)
                     {
                         multiplayerJoinAction.Run(new(
                             log,

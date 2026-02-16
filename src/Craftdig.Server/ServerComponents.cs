@@ -5,7 +5,7 @@ file record ServerComponents(
     ClientThreadExecution SocketThread,
     DateTime ConnectedTime,
     string? AuthNonce,
-    string? AuthenticatedEmail,
     string? AuthenticatedUid,
+    string? AuthenticatedUsername,
     bool IsAuthenticated
 );

@@ -8,6 +8,8 @@ public enum Commands : ushort
 
     ServerStart = 20000,
     BeginAuth,
+    CompleteAuth,
+    ResultAuth,
     NoAuth,
     SpawnPlayer,
     MovePlayer,
