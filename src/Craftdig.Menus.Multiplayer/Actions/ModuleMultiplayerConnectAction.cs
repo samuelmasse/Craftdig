@@ -114,7 +114,7 @@ public class ModuleMultiplayerConnectAction(AppLog log, AppClientOptions clientO
         var loop = new NetLoop(log);
         socket = new NetSocket(log, tcp!, stream!);
 
-        using var ct = new CancellationTokenSource();
+        var ct = new CancellationTokenSource();
         var loopThread = new Thread(() => { try { loop.Run(socket); } catch { } finally { ct.Cancel(); } });
         var pushThread = new Thread(() => { try { socket.Push(ct.Token); } catch { } });
         var resultEvent = ListenForResult(loop);
@@ -128,13 +128,13 @@ public class ModuleMultiplayerConnectAction(AppLog log, AppClientOptions clientO
         if (clientOptions.NoAuthUser == null)
         {
             var nonce = AcquireNonce(sw, timeout, loop, loopThread);
-            var jwt = AcquireJwt(nonce);
+            var jwt = AcquireJwt(sw, timeout, loopThread, nonce);
 
             socket.Send<CompleteAuthCommand, byte>(Encoding.UTF8.GetBytes(jwt));
         }
         else socket.Send<NoAuthCommand, byte>(Encoding.UTF8.GetBytes(clientOptions.NoAuthUser));
 
-        while (loopThread.IsAlive && sw.Elapsed < timeout) { Thread.Sleep(10); }
+        while (loopThread.IsAlive && sw.Elapsed < timeout) { Wait(); }
 
         if (!resultEvent.IsSet)
         {
@@ -153,12 +153,11 @@ public class ModuleMultiplayerConnectAction(AppLog log, AppClientOptions clientO
 
         loop.Register<ReadyAuthCommand, byte>(data =>
         {
-            log.Warn("Nonce {0}", nonce);
             nonce = Encoding.UTF8.GetString(data);
         });
 
         socket!.Send<BeginAuthCommand>();
-        while (loopThread.IsAlive && nonce == null && sw.Elapsed < timeout) { Thread.Sleep(10); }
+        while (loopThread.IsAlive && nonce == null && sw.Elapsed < timeout) { Wait(); }
 
         if (nonce == null)
             throw new Exception("Failed to acquire nonce");
@@ -166,26 +165,23 @@ public class ModuleMultiplayerConnectAction(AppLog log, AppClientOptions clientO
         return nonce;
     }
 
-    private string AcquireJwt(string nonce)
+    private string AcquireJwt(Stopwatch sw, TimeSpan timeout, Thread loopThread, string nonce)
     {
         using var http = new HttpClient();
         http.DefaultRequestHeaders.Authorization =
             new AuthenticationHeaderValue("Bearer", credentials.GetFreshToken());
 
-        log.Warn(credentials.GetFreshToken());
-
         var postTask = http.PostAsJsonAsync($"https://craftdig.io/api/GetToken", new { host, nonce });
-        postTask.Wait();
+        while (loopThread.IsAlive && !postTask.IsCompleted && sw.Elapsed < timeout) { Wait(); }
 
         var bodyTask = postTask.Result.Content.ReadFromJsonAsync<GetTokenResponse>();
-        bodyTask.Wait();
+        while (loopThread.IsAlive && !bodyTask.IsCompleted && sw.Elapsed < timeout) { Wait(); }
 
         var body = bodyTask.Result;
 
         if (body == null || body?.Jwt == null)
             throw new Exception("Failed to obtain JWT");
 
-        log.Warn("Token {0}", body?.Jwt);
         return body!.Jwt;
     }
 
@@ -203,6 +199,8 @@ public class ModuleMultiplayerConnectAction(AppLog log, AppClientOptions clientO
 
         return resultEvent;
     }
+
+    private void Wait() => Thread.Sleep(10);
 
     private record GetTokenResponse(string Jwt);
 }

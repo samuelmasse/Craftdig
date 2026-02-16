@@ -74,6 +74,9 @@ public class ServerAuth(AppLog log, ServerSockets sockets, ServerClientLimits cl
         log.Info("Socket {0} authenticated : {1}", ns.Ent.Tag(), uid);
         log.Info("Socket {0} username : {1}", ns.Ent.Tag(), username);
 
+        // Forget nonce
+        ns.Ent.AuthNonce() = null;
+
         // Also set a friendly tag for this socket to the username
         ns.Ent.Tag() = username;
 
