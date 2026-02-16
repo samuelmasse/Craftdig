@@ -55,6 +55,10 @@ public class ServerAuth(AppLog log, ServerSockets sockets, ServerClientLimits cl
         // At this point the auth worked and we extract the user info
         ExtractUidAndUsername(token, out var uid, out var username);
 
+        // Prevent connection to non allowlisted users
+        if (GuardAllowlist(ns, uid, username))
+            return;
+
         // Limit sessions of the same player to one at a time
         // Username is globally unique but can change during a session
         // To limit confusion we kick any player with the same username
