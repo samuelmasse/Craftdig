@@ -13,13 +13,15 @@ var serverScope = appScope
     .Scope<WorldScope>()
     .Scope<ServerScope>();
 
-serverScope.Get<ServerBoot>().Run([$"--RootPath", Path.Join(AppContext.BaseDirectory, "Data"), "--LogLevel", "Trace"]);
+serverScope.Get<ServerBoot>().Run([
+    $"--RootPath", Path.Join(AppContext.BaseDirectory, "Data"),
+    "--LogLevel", "Trace",
+    "--PublicServer", "true"]);
 
 serverScope.Add(new ServerDefaults()
 {
-    Allowlist = ["samuelmasse4@gmail.com"],
     NoAuth = true,
-    DisableTls = true,
+    DisableTls = false,
     EnableRawTcp = true
 });
 

@@ -1,13 +1,15 @@
 namespace Craftdig.Server;
 
 using System.IdentityModel.Tokens.Jwt;
-using System.Net.Http.Json;
+using Microsoft.IdentityModel.Tokens;
 
 [Server]
 public class ServerAuth(AppLog log, ServerSockets sockets, ServerClientLimits clientLimits, SeverAllowlist allowlist)
 {
     private readonly HttpClient http = new();
     private readonly JwtSecurityTokenHandler jwts = new();
+    private IReadOnlyList<SecurityKey>? jwksKeys;
+    private DateTime jwksKeysExpiresAtUtc;
 
     public void SendNonce(NetSocket ns)
     {
@@ -43,10 +45,8 @@ public class ServerAuth(AppLog log, ServerSockets sockets, ServerClientLimits cl
         var jwt = Encoding.UTF8.GetString(data);
 
         // Online validation of the JWT with auth service
-        if (GuardInvalidJwt(ns, jwt))
+        if (GuardInvalidJwt(ns, jwt, out var token))
             return;
-
-        var token = jwts.ReadJwtToken(jwt);
 
         // Check if the nonce associated with this valid JWT is the nonce we sent before
         if (GuardInvalidNonce(ns, token))
@@ -156,23 +156,59 @@ public class ServerAuth(AppLog log, ServerSockets sockets, ServerClientLimits cl
         else return false;
     }
 
-    private bool GuardInvalidJwt(NetSocket ns, string jwt)
+    private bool GuardInvalidJwt(NetSocket ns, string jwt, [NotNullWhen(false)] out JwtSecurityToken? token)
     {
-        var postTask = http.PostAsJsonAsync($"https://craftdig.io/api/ValidateToken", new { jwt });
-        postTask.Wait();
+        int attempt = 0;
 
-        var bodyTask = postTask.Result.Content.ReadFromJsonAsync<ValidateTokenResponse>();
-        bodyTask.Wait();
-
-        var body = bodyTask.Result;
-
-        if (body == null || !body.Valid)
+        while (attempt < 2)
         {
-            log.Warn("Socket {0} tried to authenticate with an invalid JWT", ns.Ent.Tag());
-            ns.Disconnect();
-            return true;
+            try
+            {
+                attempt++;
+
+                var keys = GetJwksKeys(attempt > 1);
+
+                jwts.ValidateToken(jwt, new()
+                {
+                    RequireSignedTokens = true,
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKeys = keys,
+                    ValidateIssuer = false,
+                    ValidateAudience = false,
+                    ValidateLifetime = true,
+                    RequireExpirationTime = true
+                }, out var validated);
+
+                token = (JwtSecurityToken)validated;
+                return false;
+            }
+            catch { }
         }
-        else return false;
+
+        log.Warn("Socket {0} tried to authenticate with an invalid JWT", ns.Ent.Tag());
+        ns.Disconnect();
+        token = null;
+        return true;
+    }
+
+    private IReadOnlyList<SecurityKey> GetJwksKeys(bool forceRefresh)
+    {
+        var nowUtc = DateTime.UtcNow;
+
+        if (!forceRefresh && jwksKeys != null && nowUtc < jwksKeysExpiresAtUtc)
+            return jwksKeys;
+
+        var jwksJsonTask = http.GetStringAsync("https://craftdig.io/.well-known/jwks.json");
+        jwksJsonTask.Wait();
+
+        var jwksJson = jwksJsonTask.Result;
+        var jwks = new JsonWebKeySet(jwksJson);
+        var keys = jwks.Keys.Cast<SecurityKey>().ToArray();
+
+        jwksKeys = keys;
+        jwksKeysExpiresAtUtc = nowUtc.AddHours(1);
+
+        return jwksKeys;
     }
 
     private bool GuardInvalidNonce(NetSocket ns, JwtSecurityToken token)
