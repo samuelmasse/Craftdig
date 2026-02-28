@@ -66,8 +66,8 @@ public class PlayerCreativeInventoryMenu(ModuleEnts ents, AppStyle s, PlayerEnt 
             Node(hotbar, out var square)
                 .Mut(s.Button)
                 .Mut(s.Slot)
-                .GetSlotValueF(() => player.Ent.HotBarSlots()[i])
-                .SetSlotValueF((v) => player.Ent.HotBarSlots()[i] = v)
+                .GetSlotValueF(() => player.Ent.GetHotBarSlot(i))
+                .SetSlotValueF((v) => player.Ent.SetHotBarSlot(i, v))
                 .PlayerV((EntMut)player.Ent);
             {
                 Node(square)

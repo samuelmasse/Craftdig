@@ -36,8 +36,8 @@ public class PlayerSurvivalInventoryMenu(AppStyle s, PlayerEnt player)
                     .Mut(s.Button)
                     .Mut(s.Slot)
                     .PlayerV((EntMut)player.Ent)
-                    .GetSlotValueF(() => player.Ent.ArmorSlots()[x])
-                    .SetSlotValueF((v) => player.Ent.ArmorSlots()[x] = v);
+                    .GetSlotValueF(() => player.Ent.GetArmorSlot(x))
+                    .SetSlotValueF((v) => player.Ent.SetArmorSlot(x, v));
                 {
                     Node(square)
                         .Mut(s.SlotButton)
@@ -144,8 +144,8 @@ public class PlayerSurvivalInventoryMenu(AppStyle s, PlayerEnt player)
                     .Mut(s.Button)
                     .Mut(s.Slot)
                     .PlayerV((EntMut)player.Ent)
-                    .GetSlotValueF(() => player.Ent.InventorySlots()[loc.Y * HotBarSlots.Count + loc.X])
-                    .SetSlotValueF((v) => player.Ent.InventorySlots()[loc.Y * HotBarSlots.Count + loc.X] = v);
+                    .GetSlotValueF(() => player.Ent.GetInventorySlot(loc.Y * HotBarSlots.Count + loc.X))
+                    .SetSlotValueF((v) => player.Ent.SetInventorySlot(loc.Y * HotBarSlots.Count + loc.X, v));
                 {
                     Node(square)
                         .Mut(s.SlotButton)
@@ -165,8 +165,8 @@ public class PlayerSurvivalInventoryMenu(AppStyle s, PlayerEnt player)
             Node(hotbar, out var square)
                 .Mut(s.Button)
                 .Mut(s.Slot)
-                .GetSlotValueF(() => player.Ent.HotBarSlots()[i])
-                .SetSlotValueF((v) => player.Ent.HotBarSlots()[i] = v)
+                .GetSlotValueF(() => player.Ent.GetHotBarSlot(i))
+                .SetSlotValueF((v) => player.Ent.SetHotBarSlot(i, v))
                 .PlayerV((EntMut)player.Ent);
             {
                 Node(square)

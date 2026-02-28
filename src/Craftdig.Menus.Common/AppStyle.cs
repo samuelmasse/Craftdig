@@ -196,7 +196,7 @@ public class AppStyle(RootText text, RootKeyboard keyboard, AppMenuTextures menu
             })]);
 
     public void SlotTooltip(EntObj ent) => ent
-        .TooltipF(() => ent.SlotV().PlayerV().Offhand() == default ?
+        .TooltipF(() => ent.SlotV().PlayerV().GetOffhand() == default ?
             ent.SlotV().GetSlotValueF()?.Invoke().Item.Name() : null);
 
     public void SlotButton(EntObj ent) => ent
@@ -206,11 +206,11 @@ public class AppStyle(RootText text, RootKeyboard keyboard, AppMenuTextures menu
         .OnPressF(() =>
         {
             var val = ent.SlotV().GetSlotValueF()?.Invoke() ?? default;
-            ref var offhand = ref ent.SlotV().PlayerV().Offhand();
+            var offhand = ent.SlotV().PlayerV().GetOffhand();
 
-            if (ent.SlotV().PlayerV().Offhand() == default)
+            if (ent.SlotV().PlayerV().GetOffhand() == default)
             {
-                offhand = val;
+                ent.SlotV().PlayerV().SetOffhand(val);
                 ent.SlotV().SetSlotValueF()?.Invoke(default);
                 ent.SlotAddedV() = true;
             }
@@ -218,12 +218,12 @@ public class AppStyle(RootText text, RootKeyboard keyboard, AppMenuTextures menu
         .OnSecondaryPressF(() =>
         {
             var val = ent.SlotV().GetSlotValueF()?.Invoke() ?? default;
-            ref var offhand = ref ent.SlotV().PlayerV().Offhand();
+            var offhand = ent.SlotV().PlayerV().GetOffhand();
 
             if (offhand == default && val.Count > 0)
             {
                 int give = (int)Math.Ceiling(val.Count / 2f);
-                offhand = new(val.Item, give);
+                ent.SlotV().PlayerV().SetOffhand(new(val.Item, give));
 
                 if (val.Count - give > 0)
                     ent.SlotV().SetSlotValueF()?.Invoke(new(val.Item, val.Count - give));
@@ -237,7 +237,7 @@ public class AppStyle(RootText text, RootKeyboard keyboard, AppMenuTextures menu
             if (!ent.SlotAddedV())
             {
                 var val = ent.SlotV().GetSlotValueF()?.Invoke() ?? default;
-                ref var offhand = ref ent.SlotV().PlayerV().Offhand();
+                var offhand = ent.SlotV().PlayerV().GetOffhand();
 
                 if (val.Item == offhand.Item)
                 {
@@ -248,13 +248,14 @@ public class AppStyle(RootText text, RootKeyboard keyboard, AppMenuTextures menu
                             offhand = new(offhand.Item, offhand.Count - give);
                         else offhand = default;
 
+                        ent.SlotV().PlayerV().SetOffhand(offhand);
                         ent.SlotV().SetSlotValueF()?.Invoke(new(val.Item, val.Count + give));
                     }
                 }
                 else
                 {
                     ent.SlotV().SetSlotValueF()?.Invoke(offhand);
-                    ent.SlotV().PlayerV().Offhand() = val;
+                    ent.SlotV().PlayerV().SetOffhand(val);
                 }
             }
 
@@ -265,7 +266,7 @@ public class AppStyle(RootText text, RootKeyboard keyboard, AppMenuTextures menu
             if (!ent.SlotAddedV())
             {
                 var val = ent.SlotV().GetSlotValueF()?.Invoke() ?? default;
-                ref var offhand = ref ent.SlotV().PlayerV().Offhand();
+                var offhand = ent.SlotV().PlayerV().GetOffhand();
 
                 if (offhand.Count == 0)
                     return;
@@ -279,12 +280,14 @@ public class AppStyle(RootText text, RootKeyboard keyboard, AppMenuTextures menu
                         if (offhand.Count == 1)
                             offhand = default;
                         else offhand = new(offhand.Item, offhand.Count - 1);
+
+                        ent.SlotV().PlayerV().SetOffhand(offhand);
                     }
                 }
                 else if (val.Item != offhand.Item)
                 {
                     ent.SlotV().SetSlotValueF()?.Invoke(offhand);
-                    ent.SlotV().PlayerV().Offhand() = val;
+                    ent.SlotV().PlayerV().SetOffhand(val);
                 }
             }
 
@@ -297,9 +300,9 @@ public class AppStyle(RootText text, RootKeyboard keyboard, AppMenuTextures menu
         {
             var val = ent.SlotV().GetSlotValueF()?.Invoke() ?? default;
 
-            if (ent.SlotV().PlayerV().Offhand() == default)
+            if (ent.SlotV().PlayerV().GetOffhand() == default)
             {
-                ent.SlotV().PlayerV().Offhand() = val;
+                ent.SlotV().PlayerV().SetOffhand(val);
                 ent.SlotAddedV() = true;
             }
         })
@@ -309,14 +312,14 @@ public class AppStyle(RootText text, RootKeyboard keyboard, AppMenuTextures menu
             if (!ent.SlotAddedV())
             {
                 var val = ent.SlotV().GetSlotValueF()?.Invoke() ?? default;
-                ref var offhand = ref ent.SlotV().PlayerV().Offhand();
+                var offhand = ent.SlotV().PlayerV().GetOffhand();
 
                 if (val.Item == offhand.Item)
                 {
                     if (offhand.Count < val.Item.MaxStack())
-                        offhand = new(offhand.Item, offhand.Count + 1);
+                        ent.SlotV().PlayerV().SetOffhand(new(offhand.Item, offhand.Count + 1));
                 }
-                else ent.SlotV().PlayerV().Offhand() = val;
+                else ent.SlotV().PlayerV().SetOffhand(val);
             }
 
             ent.SlotAddedV() = false;
@@ -326,7 +329,7 @@ public class AppStyle(RootText text, RootKeyboard keyboard, AppMenuTextures menu
             if (!ent.SlotAddedV())
             {
                 var val = ent.SlotV().GetSlotValueF()?.Invoke() ?? default;
-                ref var offhand = ref ent.SlotV().PlayerV().Offhand();
+                var offhand = ent.SlotV().PlayerV().GetOffhand();
 
                 if (offhand.Count == 0)
                     offhand = val;
@@ -336,6 +339,8 @@ public class AppStyle(RootText text, RootKeyboard keyboard, AppMenuTextures menu
                         offhand = default;
                     else offhand = new(offhand.Item, offhand.Count - 1);
                 }
+
+                ent.SlotV().PlayerV().SetOffhand(offhand);
             }
 
             ent.SlotAddedV() = false;

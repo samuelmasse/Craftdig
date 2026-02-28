@@ -106,7 +106,7 @@ public class PlayerCommonState(
             paused = false;
             inv = false;
             currentKeyMenu = null;
-            ent.Ent.Offhand() = default;
+            ent.Ent.SetOffhand(default);
             menus.Nodes().Remove(dark);
         }
 

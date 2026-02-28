@@ -6,11 +6,15 @@ file record WorldComponents(
     int WorldEntPtrBagIndex,
     int DimensionBagIndex,
 
-    ArmorSlots ArmorSlots,
-    InventorySlots InventorySlots,
+    Ent[] ArmorSlotEntities,
+    int[] ArmorSlotCounts,
+    Ent[] InventorySlotEntities,
+    int[] InventorySlotCounts,
+    Ent[] HotBarSlotEntities,
+    int[] HotBarSlotCounts,
 
-    HotBarSlots HotBarSlots,
     int HotBarIndex,
 
-    ItemSlot Offhand
+    Ent OffhandEntity,
+    int OffhandCount
 );

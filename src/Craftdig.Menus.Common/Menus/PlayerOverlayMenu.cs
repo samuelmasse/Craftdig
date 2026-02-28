@@ -19,7 +19,7 @@ public class PlayerOverlayMenu(AppStyle s, PlayerEnt ent)
                 .SizeTextRelativeV(s.Horizontal + s.Vertical * 2)
                 .TextF(() =>
                 {
-                    var selected = ent.Ent.HotBarSlots()[ent.Ent.HotBarIndex()];
+                    var selected = ent.Ent.GetHotBarSlot(ent.Ent.HotBarIndex());
 
                     if (lastSelected != selected.Item)
                     {
@@ -45,7 +45,7 @@ public class PlayerOverlayMenu(AppStyle s, PlayerEnt ent)
 
                     Node(bar, out var square)
                         .Mut(s.Slot)
-                        .GetSlotValueF(() => ent.Ent.HotBarSlots()[k])
+                        .GetSlotValueF(() => ent.Ent.GetHotBarSlot(k))
                         .ColorV((0, 1, 0, 1));
                 }
 

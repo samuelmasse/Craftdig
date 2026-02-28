@@ -1,17 +1,28 @@
 namespace Craftdig.World;
 
-public struct HotBarSlots
+public static class HotBarSlots
 {
     public const int Count = 9;
 
-    private ItemSlot[]? slots;
-
-    public ref ItemSlot this[int index]
+    public static ItemSlot GetHotBarSlot<T>(this T ent, int index) where T : IEntMut
     {
-        get
-        {
-            slots ??= new ItemSlot[Count];
-            return ref slots[index];
-        }
+        var hotBarSlotCounts = ent.GetHotBarSlotCounts();
+        var hotBarSlotEntities = ent.GetHotBarSlotEntities();
+        if (hotBarSlotCounts == null || hotBarSlotEntities == null)
+            return default;
+
+        return new(hotBarSlotEntities[index], hotBarSlotCounts[index]);
+    }
+
+    public static void SetHotBarSlot<T>(this T ent, int index, ItemSlot val) where T : IEntMut
+    {
+        ref var hotBarSlotCounts = ref ent.HotBarSlotCounts();
+        ref var hotBarSlotEntities = ref ent.HotBarSlotEntities();
+
+        hotBarSlotCounts ??= new int[Count];
+        hotBarSlotEntities ??= new Ent[Count];
+
+        hotBarSlotEntities[index] = val.Item;
+        hotBarSlotCounts[index] = val.Count;
     }
 }
