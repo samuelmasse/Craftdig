@@ -9,4 +9,5 @@ public record PlayerControls(
     Control CameraUp,
     Control CameraDown,
     Control CameraJump,
-    Control CameraCrouch) : ControlList;
+    Control CameraCrouch,
+    Control DropItem) : ControlList;

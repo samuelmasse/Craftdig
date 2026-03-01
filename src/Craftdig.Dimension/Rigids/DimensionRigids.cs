@@ -1,7 +1,7 @@
 namespace Craftdig.Dimension;
 
 [Dimension]
-public class DimensionRigids(DimensionBlocks blocks, DimensionRigidBag rigidBag)
+public class DimensionRigids(AppLog log, DimensionBlocks blocks, DimensionRigidBag rigidBag)
 {
     public void Tick()
     {
@@ -12,7 +12,15 @@ public class DimensionRigids(DimensionBlocks blocks, DimensionRigidBag rigidBag)
             Collide((EntMut)ent);
             ent.Position() += ent.Velocity();
 
-            if (ent.GetIsFlying())
+            if (ent.IsProjectile())
+            {
+                float drag = 1;
+                if (ent.CollisionNormal().Z == 1)
+                    drag = 0.6f;
+                ent.Velocity() *= 0.98 * drag;
+                ent.Velocity().Z -= 0.08;
+            }
+            else if (ent.GetIsFlying())
             {
                 double v = ent.Velocity().Z;
                 ent.Velocity() *= (0.91f, 0.91f, 0.98f);

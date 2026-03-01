@@ -1,9 +1,10 @@
 namespace Craftdig.Player.Frontend;
 
 [Player]
-public class PlayerConstruction(RootMouse mouse, WorldModuleIndices moduleIndices, PlayerEnt ent)
+public class PlayerConstruction(RootMouse mouse, WorldModuleIndices moduleIndices, PlayerEnt ent, PlayerControls controls)
 {
     private bool reject;
+    private bool drop;
     private int mainCooldown;
     private int secondaryCooldown;
 
@@ -20,13 +21,22 @@ public class PlayerConstruction(RootMouse mouse, WorldModuleIndices moduleIndice
         if (reject)
             return;
 
+        var hand = ent.Ent.GetHotBarSlot(ent.Ent.HotBarIndex()).Item;
+        if (drop)
+        {
+            if (hand.IsBuildable())
+                ent.Ent.Construction() = new() { Action = ConstructionAction.Drop, Arg = moduleIndices[hand] };
+
+            drop = false;
+            return;
+        }
+
         if (mouse.IsMainDown() && mainCooldown <= 0)
         {
             ent.Ent.Construction() = new() { Action = ConstructionAction.Remove };
             mainCooldown = 5;
         }
 
-        var hand = ent.Ent.GetHotBarSlot(ent.Ent.HotBarIndex()).Item;
         if (hand.IsBuildable() && mouse.IsSecondaryDown() && secondaryCooldown <= 0)
         {
             ent.Ent.Construction() = new() { Action = ConstructionAction.Place, Arg = moduleIndices[hand] };
@@ -44,5 +54,8 @@ public class PlayerConstruction(RootMouse mouse, WorldModuleIndices moduleIndice
 
         if (!mouse.IsMainDown() && !mouse.IsSecondaryDown())
             reject = false;
+
+        if (controls.DropItem.Run())
+            drop = true;   
     }
 }

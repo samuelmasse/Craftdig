@@ -21,10 +21,6 @@ file record DimensionComponents(
     bool IsRunning,
     bool IsSprinting,
     int RigidBagIndex,
-    long BlockSelectionLastComputed,
-    BlockSelection? BlockSelection,
-    Vector3d BlockSelectionPosition,
-    Vector3 BlockSelectionLookAt,
     MovementStep Movement,
     ConstructionStep Construction,
     bool CanFly,
@@ -34,5 +30,15 @@ file record DimensionComponents(
     bool CanMoveVertically,
 
     // Player
-    int PlayerBagIndex
+    int PlayerBagIndex,
+    long BlockSelectionLastComputed,
+    BlockSelection? BlockSelection,
+    Vector3d BlockSelectionPosition,
+    Vector3 BlockSelectionLookAt,
+
+    // TestCube
+    [ComponentToString] bool IsTestCube,
+    Ent TestCubeMaterial,
+    float TestCubeSize,
+    bool IsProjectile
 );

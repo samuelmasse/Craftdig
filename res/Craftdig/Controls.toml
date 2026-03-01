@@ -31,3 +31,5 @@ Control = "Any"
 [CameraCrouch]
 Shift = "Down"
 Control = "Any"
+[DropItem]
+KeyPressRepeat = "Q"

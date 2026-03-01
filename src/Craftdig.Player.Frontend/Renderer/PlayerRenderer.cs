@@ -17,7 +17,8 @@ public class PlayerRenderer(
     PlayerGlw gl,
     PlayerPerspective perspective,
     PlayerCamera camera,
-    PlayerEnt ent)
+    PlayerEnt ent,
+    PlayerTestCubeRenderer testCubeRenderer)
 {
     public void Render()
     {
@@ -39,7 +40,7 @@ public class PlayerRenderer(
 
         var pos = Vector3d.Lerp(ent.Ent.PrevPosition(), ent.Ent.Position(), (float)tick.Alpha);
         var cloc = pos.ToLoc().Xy.ToCloc();
-        (pos.Y, pos.Z) = (pos.Z, pos.Y);
+        pos = pos.Swizzle();
 
         metrics.RenderMetric.Start();
         gl.BindVertexArray(sectionSharedVertexArray.Vao);
@@ -49,27 +50,27 @@ public class PlayerRenderer(
             for (int dx = -drawDistance.Far; dx <= drawDistance.Far; dx++)
             {
                 var ncloc = cloc + (dx, dy);
-
+        
                 var delta = Vector2i.Abs(cloc - ncloc);
                 var dist = delta.X + delta.Y;
                 if (dist > drawDistance.Far)
                     continue;
-
+        
                 if (!chunks.TryGet(ncloc, out var chunk))
                     continue;
-
+        
                 for (int i = 0; i < chunk.Rendered().Count; i++)
                 {
                     var z = chunk.Rendered()[chunk.Rendered().Keys[i]];
                     var nsloc = new Vector3i(ncloc.X, ncloc.Y, z);
                     if (!sections.TryGet(nsloc, out var section) || section.TerrainMesh().Count <= 0)
                         continue;
-
+        
                     blockProgram.Offset = (Vector3)(nsloc.Swizzle() * SectionSize - pos);
-
+        
                     var mesh = section.TerrainMesh();
                     int addr = (int)svb.Addr(mesh.Alloc);
-
+        
                     GL.DrawElementsBaseVertex(
                         PrimitiveType.Triangles,
                         quadIndexBuffer.IndexCount(mesh.Count),
@@ -81,6 +82,9 @@ public class PlayerRenderer(
         }
 
         gl.UnbindVertexArray();
+        blockProgram.Offset = default;
+        testCubeRenderer.Render(pos);
+
         metrics.RenderMetric.End();
 
         blockAtlas.Unbind(blockProgram.SamplerTexture);
