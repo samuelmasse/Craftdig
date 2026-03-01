@@ -5,7 +5,6 @@ public class PlayerTestCubeRenderer(
     RootCube cube,
     RootQuadIndexBuffer quadIndexBuffer,
     WorldTick tick,
-    DimensionRigidBag rigidBag,
     DimensionSharedVertexBuffer svb,
     DimensionGlw gl,
     DimensionSectionSharedVertexArray sectionSharedVertexArray)
@@ -13,9 +12,13 @@ public class PlayerTestCubeRenderer(
     private readonly List<BlockVertex> vertices = [];
     private int alloc;
 
-    public void Render(Vector3d origin)
+    public void Mesh(Ent chunk, Vector3d origin)
     {
-        foreach (var rigid in rigidBag.Ents)
+        var rigids = chunk.ChunkRigids();
+        if (rigids == null)
+            return;
+
+        foreach (var rigid in rigids)
         {
             if (!rigid.IsTestCube())
                 continue;
@@ -43,7 +46,10 @@ public class PlayerTestCubeRenderer(
                 vertices.Add(new((Vector3)(quad.BottomRight * size + off), Vector3.One * shadow, (1, 0, texture)));
             }
         }
+    }
 
+    public void Render()
+    {
         if (vertices.Count == 0)
             return;
 

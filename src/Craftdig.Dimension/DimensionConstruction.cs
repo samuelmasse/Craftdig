@@ -2,7 +2,6 @@ namespace Craftdig.Dimension;
 
 [Dimension]
 public class DimensionConstruction(
-    AppLog log,
     WorldModuleIndices moduleIndices,
     DimensionAir air,
     DimensionBlocks blocks,

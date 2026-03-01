@@ -50,27 +50,27 @@ public class PlayerRenderer(
             for (int dx = -drawDistance.Far; dx <= drawDistance.Far; dx++)
             {
                 var ncloc = cloc + (dx, dy);
-        
+
                 var delta = Vector2i.Abs(cloc - ncloc);
                 var dist = delta.X + delta.Y;
                 if (dist > drawDistance.Far)
                     continue;
-        
+
                 if (!chunks.TryGet(ncloc, out var chunk))
                     continue;
-        
+
                 for (int i = 0; i < chunk.Rendered().Count; i++)
                 {
                     var z = chunk.Rendered()[chunk.Rendered().Keys[i]];
                     var nsloc = new Vector3i(ncloc.X, ncloc.Y, z);
                     if (!sections.TryGet(nsloc, out var section) || section.TerrainMesh().Count <= 0)
                         continue;
-        
+
                     blockProgram.Offset = (Vector3)(nsloc.Swizzle() * SectionSize - pos);
-        
+
                     var mesh = section.TerrainMesh();
                     int addr = (int)svb.Addr(mesh.Alloc);
-        
+
                     GL.DrawElementsBaseVertex(
                         PrimitiveType.Triangles,
                         quadIndexBuffer.IndexCount(mesh.Count),
@@ -78,12 +78,14 @@ public class PlayerRenderer(
                         0,
                         addr / BlockVertex.Size);
                 }
+
+                testCubeRenderer.Mesh(chunk, pos);
             }
         }
 
         gl.UnbindVertexArray();
         blockProgram.Offset = default;
-        testCubeRenderer.Render(pos);
+        testCubeRenderer.Render();
 
         metrics.RenderMetric.End();
 

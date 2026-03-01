@@ -56,6 +56,6 @@ public class PlayerConstruction(RootMouse mouse, WorldModuleIndices moduleIndice
             reject = false;
 
         if (controls.DropItem.Run())
-            drop = true;   
+            drop = true;
     }
 }

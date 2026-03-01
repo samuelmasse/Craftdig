@@ -1,7 +1,7 @@
 namespace Craftdig.Dimension;
 
 [Dimension]
-public class DimensionRigids(AppLog log, DimensionBlocks blocks, DimensionRigidBag rigidBag)
+public class DimensionRigids(DimensionBlocks blocks, DimensionRigidBag rigidBag)
 {
     public void Tick()
     {
