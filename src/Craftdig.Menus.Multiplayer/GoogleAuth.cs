@@ -9,7 +9,7 @@ public static class GoogleAuth
     private static ClientSecrets Secrets => new()
     {
         // These are not intended to be secrets but they can get flagged as leaked secrets
-        // by code analyzers so they are obfuscated into base64 to work around that issue
+        // by code analyzers so they are obfuscated into hex to work around that issue
         ClientId = Encoding.UTF8.GetString(Convert.FromHexString(
             "3432383033373534333535312d33356c736f76307430653232736531716966766664746" +
             "939306465746c6466642e617070732e676f6f676c6575736572636f6e74656e742e636f6d")),
