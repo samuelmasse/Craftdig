@@ -36,6 +36,7 @@ public class PlayerSingleplayerState(
 
                 playerMetrics.TickMetric.Start();
                 context.Tick();
+                backend.Tick();
                 playerMetrics.TickMetric.End();
 
                 ticks--;

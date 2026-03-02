@@ -26,6 +26,7 @@ public class DimensionServer(
         socketCleaner.Tick();
         pendingMovement.Tick();
         context.Tick();
+        backend.Tick();
         playerSpawner.Tick();
         positionStreamer.Tick();
     }
