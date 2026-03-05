@@ -7,7 +7,8 @@ public class DimensionConstruction(
     DimensionBlocks blocks,
     DimensionPlayerBag playerBag,
     DimensionRigidBag rigidBag,
-    DimensionSelected selected)
+    DimensionSelected selected,
+    DimensionEntArena entArena)
 {
     public void Tick()
     {
@@ -25,8 +26,7 @@ public class DimensionConstruction(
 
         if (constr.Action == ConstructionAction.Drop)
         {
-            rigidBag.Add(new EntPtr()
-                .Mutate()
+            rigidBag.Add(entArena.Arena.Alloc().Mutate()
                 .IsTestCube(true)
                 .TestCubeMaterial(moduleIndices[constr.Arg])
                 .TestCubeSize(0.5f)

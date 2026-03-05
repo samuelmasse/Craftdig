@@ -13,7 +13,6 @@ public class ServerUnloadDimensionsAction(
             var dimensionLoaderScope = dimension.DimensionScope.Scope<DimensionLoaderScope>();
             dimensionLoaderScope.Get<DimensionBackendUnloader>().Run();
             dimensionLoaderScope.Get<DimensionUnloader>().Run();
-            dimension.Dispose();
         }
 
         worldScope.Scope<WorldLoaderScope>().Get<WorldUnloader>().Run();

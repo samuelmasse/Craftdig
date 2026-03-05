@@ -1,7 +1,7 @@
 namespace Craftdig.Dimension;
 
 [Dimension]
-public class DimensionChunks(WorldEntArena entArena)
+public class DimensionChunks(DimensionEntArena entArena)
 {
     private readonly L3Map512<EntPtr> map = new();
 

@@ -14,7 +14,7 @@ public class ModuleMultiplayerJoinAction(RootState state, ModuleEnts ents, Modul
 
         var dimensionScope = worldScope.Scope<DimensionScope>();
 
-        var dimensionEnt = new EntPtr() { DimensionScope = dimensionScope };
+        var dimensionEnt = new EntObj() { DimensionScope = dimensionScope };
         worldScope.Get<WorldDimensionBag>().Add(dimensionEnt);
 
         // For now just find the first dimension

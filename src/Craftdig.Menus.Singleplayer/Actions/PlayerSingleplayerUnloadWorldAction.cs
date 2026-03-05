@@ -13,7 +13,6 @@ public class PlayerSingleplayerUnloadWorldAction(WorldScope worldScope, WorldDim
             dimensionLoaderScope.Get<DimensionFrontendUnloader>().Run();
             dimensionLoaderScope.Get<DimensionBackendUnloader>().Run();
             dimensionLoaderScope.Get<DimensionUnloader>().Run();
-            dimension.Dispose();
         }
 
         worldScope.Scope<WorldLoaderScope>().Get<WorldFrontendUnloader>().Run();

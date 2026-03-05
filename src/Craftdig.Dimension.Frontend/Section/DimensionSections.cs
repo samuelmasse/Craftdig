@@ -1,7 +1,7 @@
 namespace Craftdig.Dimension.Frontend;
 
 [Dimension]
-public class DimensionSections(DimensionChunks chunks)
+public class DimensionSections(DimensionChunks chunks, DimensionEntArena entArena)
 {
     private readonly Queue<Memory<EntPtr>> pool = [];
 
@@ -19,12 +19,10 @@ public class DimensionSections(DimensionChunks chunks)
 
             for (int z = 0; z < chunk.Sections.Length; z++)
             {
-                chunk.Sections.Span[z] = new EntPtr()
-                {
-                    IsSection = true,
-                    Chunk = chunk,
-                    Sloc = (sloc.X, sloc.Y, z)
-                };
+                chunk.Sections.Span[z] = entArena.Arena.Alloc().Mutate()
+                    .IsSection(true)
+                    .Chunk(chunk)
+                    .Sloc((sloc.X, sloc.Y, z));
             }
         }
 

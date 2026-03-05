@@ -2,7 +2,7 @@ namespace Craftdig.Dimension;
 
 public class ChunkBlocks
 {
-    private readonly static EntPtr Empty = new();
+    private readonly static EntObj Empty = new();
 
     private readonly DimensionBlocksAllocator allocator;
     private readonly SectionBlocks[] sections = new SectionBlocks[SectionHeight];
@@ -34,7 +34,7 @@ public class ChunkBlocks
         this.allocator = allocator;
 
         for (int i = 0; i < sections.Length; i++)
-            Fill(i, Empty);
+            Fill(i, (Ent)Empty);
     }
 
     public Span<Ent> Slice(int sz)

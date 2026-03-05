@@ -101,7 +101,7 @@ public class ModuleSingleplayerWorldSelectMenu(
                 {
                     Node(rightButtonsVertical)
                         .OnPressF(() => root.StackRootV?.NodeStack.Push(
-                            new EntObj() { StackRootV = root.StackRootV}.Mutate(newWorldMenu.Create)))
+                            new EntObj() { StackRootV = root.StackRootV }.Mutate(newWorldMenu.Create)))
                         .TextV("Create New World")
                         .Mutate(s.Button);
 

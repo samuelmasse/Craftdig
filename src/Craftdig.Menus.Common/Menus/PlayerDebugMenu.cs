@@ -7,10 +7,11 @@ public class PlayerDebugMenu(
     RootMetrics metrics,
     RootKeyboard keyboard,
     AppStyle s,
-    WorldEntArena entArena,
-    PlayerMetrics playerMetrics,
+    WorldEntArena worldEntArena,
     DimensionSharedVertexBuffer svb,
     DimensionSelected selected,
+    DimensionEntArena dimensionEntArena,
+    PlayerMetrics playerMetrics,
     PlayerEnt ent,
     PlayerCamera camera)
 {
@@ -35,7 +36,8 @@ public class PlayerDebugMenu(
             () => text.Format("Selected Normal: {0}", selected[ent].GetValueOrDefault().Normal),
             () => text.Format("TPS: {0}", playerMetrics.TickMetricWindow.Value.Ticks),
             () => text.Format("SVB: {0}", svb.Allocator.Used),
-            () => text.Format("Arena: {0}", entArena.Arena.Allocated),
+            () => text.Format("World Arena: {0}", worldEntArena.Arena.Allocated),
+            () => text.Format("Dimension Arena: {0}", dimensionEntArena.Arena.Allocated),
         ];
 
         Node(root, out var list)
