@@ -6,7 +6,7 @@ public class PlayerOverlayMenu(AppStyle s, PlayerEnt ent)
     public void Create(EntObj root)
     {
         Node(root, out var verticalList)
-            .Mut(s.VerticalList)
+            .Mutate(s.VerticalList)
             .SizeInnerMaxRelativeV(s.Horizontal)
             .AlignmentV(Alignment.Bottom | Alignment.Horizontal);
         {
@@ -14,12 +14,12 @@ public class PlayerOverlayMenu(AppStyle s, PlayerEnt ent)
             Ent lastSelected = default;
 
             Node(verticalList, out var itemTooltip)
-                .Mut(s.Label)
+                .Mutate(s.Label)
                 .AlignmentV(Alignment.Horizontal)
                 .SizeTextRelativeV(s.Horizontal + s.Vertical * 2)
                 .TextF(() =>
                 {
-                    var selected = ent.Ent.GetHotBarSlot(ent.Ent.HotBarIndex());
+                    var selected = ent.GetHotBarSlot(ent.HotBarIndex);
 
                     if (lastSelected != selected.Item)
                     {
@@ -27,7 +27,7 @@ public class PlayerOverlayMenu(AppStyle s, PlayerEnt ent)
                         sw.Restart();
                     }
 
-                    return selected.Item.Name() ?? string.Empty;
+                    return selected.Item.Name ?? string.Empty;
                 })
                 .TextColorF(() => s.TextColor * (1, 1, 1, Math.Clamp(3 - (float)sw.Elapsed.TotalSeconds * 4, 0, 1)));
 
@@ -35,7 +35,7 @@ public class PlayerOverlayMenu(AppStyle s, PlayerEnt ent)
                 .SizeInnerMaxRelativeV(s.Vertical + s.Horizontal);
             {
                 Node(barContainer, out var bar)
-                    .Mut(s.HorizontalList)
+                    .Mutate(s.HorizontalList)
                     .PaddingV((s.ItemSpacingS, s.ItemSpacingS, s.ItemSpacingS, s.ItemSpacingS))
                     .ColorV(s.BoardColor)
                     .SizeInnerMaxRelativeV(s.Vertical);
@@ -44,14 +44,14 @@ public class PlayerOverlayMenu(AppStyle s, PlayerEnt ent)
                     int k = i;
 
                     Node(bar, out var square)
-                        .Mut(s.Slot)
-                        .GetSlotValueF(() => ent.Ent.GetHotBarSlot(k))
+                        .Mutate(s.Slot)
+                        .GetSlotValueF(() => ent.GetHotBarSlot(k))
                         .ColorV((0, 1, 0, 1));
                 }
 
                 Node(barContainer, out var puck)
                     .SizeV((s.SlotSize + s.ItemSpacingS * 2, s.SlotSize + s.ItemSpacingS * 2))
-                    .OffsetF(() => (ent.Ent.HotBarIndex() * s.SlotSize, 0));
+                    .OffsetF(() => (ent.HotBarIndex * s.SlotSize, 0));
                 {
                     Node(puck, out var puckTop)
                         .SizeRelativeV(s.Horizontal)

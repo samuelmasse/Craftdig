@@ -21,6 +21,6 @@ public class DimensionChunkRenderDescheduler(DimensionChunks chunks)
         if (!chunks.TryGet(cloc, out var chunk))
             return;
 
-        chunk.IsReadyToRender() = false;
+        chunk.IsReadyToRender = false;
     }
 }

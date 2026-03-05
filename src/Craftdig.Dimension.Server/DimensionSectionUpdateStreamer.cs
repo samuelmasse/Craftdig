@@ -23,7 +23,7 @@ public class DimensionSectionUpdateStreamer(
 
             foreach (var ns in sockets.Span)
             {
-                var streamedChunks = ns.Ent.SocketStreamedChunks();
+                var streamedChunks = ns.SocketStreamedChunks;
                 if (streamedChunks == null || !streamedChunks.Contains(sloc.Xy))
                     continue;
 

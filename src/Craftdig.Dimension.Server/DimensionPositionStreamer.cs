@@ -9,10 +9,10 @@ public class DimensionPositionStreamer(DimensionSockets sockets)
         {
             ns.Send(new PositionUpdateCommand()
             {
-                Position = ns.Ent.SocketPlayer().Position(),
-                Velocity = ns.Ent.SocketPlayer().Velocity(),
-                IsFlying = ns.Ent.SocketPlayer().IsFlying(),
-                IsSprinting = ns.Ent.SocketPlayer().IsSprinting()
+                Position = ns.SocketPlayer.Position,
+                Velocity = ns.SocketPlayer.Velocity,
+                IsFlying = ns.SocketPlayer.IsFlying,
+                IsSprinting = ns.SocketPlayer.IsSprinting
             });
         }
     }

@@ -1,4 +1,4 @@
 namespace Craftdig.World;
 
 [World]
-public class WorldDimensionBag : EntBag<EntPtr, WorldComponents.DimensionBagIndexComponent>;
+public class WorldDimensionBag : EntBag<EntPtr, WorldComponents.DimensionBagIndex>;

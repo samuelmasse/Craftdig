@@ -28,20 +28,20 @@ public class RootUiScript(
     {
         ResetRoot();
         Traverse();
-        draw.Draw(ui.OffsetR(), ui);
+        draw.Draw(ui.OffsetR, ui);
     }
 
     private void ResetRoot()
     {
-        ui.IsOrderedV() = true;
-        ui.SizeV() = DrawArea.GetValueOrDefault();
-        ui.SizeRelativeV() = (0, 0);
+        ui.IsOrderedV = true;
+        ui.SizeV = DrawArea.GetValueOrDefault();
+        ui.SizeRelativeV = (0, 0);
     }
 
     private void Traverse()
     {
         traverse.Traverse(ui, 0);
-        size.Size(ui.SizeR(), ui);
-        position.Position(ui.SizeR(), ui);
+        size.Size(ui.SizeR, ui);
+        position.Position(ui.SizeR, ui);
     }
 }

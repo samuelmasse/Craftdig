@@ -21,8 +21,8 @@ public class RootUiMouse(RootMouse mouse, RootUiScale scale, RootUiFocus focus)
 
         if (hovered != prevHovered)
         {
-            prevHovered?.IsHoveredR(false);
-            hovered?.IsHoveredR(true);
+            prevHovered?.IsHoveredR = false;
+            hovered?.IsHoveredR = true;
         }
 
         if (mouse.IsMainDown())
@@ -68,7 +68,7 @@ public class RootUiMouse(RootMouse mouse, RootUiScale scale, RootUiFocus focus)
         prevHovered = hovered;
 
         mouse.Cursor = hovered != null
-            ? (Get(hovered.GetCursorV(), hovered.GetCursorF()) ?? MouseCursor.Default)
+            ? (Get(hovered.CursorV, hovered.CursorFDelegate) ?? MouseCursor.Default)
             : MouseCursor.Default;
     }
 
@@ -77,10 +77,10 @@ public class RootUiMouse(RootMouse mouse, RootUiScale scale, RootUiFocus focus)
         if (!InputEnabled(e))
             return;
 
-        if (Get(e.IsFocusableV(), e.IsFocusableF()))
+        if (Get(e.IsFocusableV, e.IsFocusableFDelegate))
             focus.Focus(e);
 
-        e.OnPressF()?.Invoke();
+        e.OnPressFDelegate?.Invoke();
     }
 
     private void OnLeftClick(EntObj e)
@@ -88,7 +88,7 @@ public class RootUiMouse(RootMouse mouse, RootUiScale scale, RootUiFocus focus)
         if (!InputEnabled(e))
             return;
 
-        e.OnClickF()?.Invoke();
+        e.OnClickFDelegate?.Invoke();
     }
 
     private void OnRightPress(EntObj e)
@@ -96,7 +96,7 @@ public class RootUiMouse(RootMouse mouse, RootUiScale scale, RootUiFocus focus)
         if (!InputEnabled(e))
             return;
 
-        e.OnSecondaryPressF()?.Invoke();
+        e.OnSecondaryPressFDelegate?.Invoke();
     }
 
     private void OnRightClick(EntObj e)
@@ -104,21 +104,21 @@ public class RootUiMouse(RootMouse mouse, RootUiScale scale, RootUiFocus focus)
         if (!InputEnabled(e))
             return;
 
-        e.OnSecondaryClickF()?.Invoke();
+        e.OnSecondaryClickFDelegate?.Invoke();
     }
 
     private EntObj? FindHovered(Vector2 o, EntObj n)
     {
-        var nOffset = o + n.OffsetR();
-        var nSize = n.SizeR();
+        var nOffset = o + n.OffsetR;
+        var nSize = n.SizeR;
         var box = new Box2(nOffset, nOffset + nSize);
 
         EntObj? hovered = null;
 
-        if (box.ContainsInclusive(position) && Get(n.GetIsSelectableV(), n.GetIsSelectableF()))
+        if (box.ContainsInclusive(position) && Get(n.IsSelectableV, n.IsSelectableFDelegate))
             hovered = n;
 
-        foreach (var c in n.GetNodesR().Span)
+        foreach (var c in n.NodesR.Span)
         {
             var child = FindHovered(nOffset, c);
             if (child != null)
@@ -128,5 +128,5 @@ public class RootUiMouse(RootMouse mouse, RootUiScale scale, RootUiFocus focus)
         return hovered;
     }
 
-    private bool InputEnabled(EntObj n) => !Get(n.IsInputDisabledV(), n.IsInputDisabledF());
+    private bool InputEnabled(EntObj n) => !Get(n.IsInputDisabledV, n.IsInputDisabledFDelegate);
 }

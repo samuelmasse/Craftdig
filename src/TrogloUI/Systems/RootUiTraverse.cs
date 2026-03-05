@@ -14,22 +14,25 @@ public class RootUiTraverse
         if (depth == 0)
             traverseBufferIndex = 0;
 
+        if (!n.HasNodes)
+            return;
+
         RemoveNodes(n);
         OrderNodes(n);
         StackNodes(n);
         CompileNodes(n);
 
-        foreach (var c in n.GetNodesR().Span)
+        foreach (var c in n.NodesR.Span)
             Traverse(c, depth + 1);
     }
 
     private void OrderNodes(EntObj n)
     {
-        var ordered = Get(n.GetIsOrderedV(), n.GetIsOrderedF());
+        var ordered = Get(n.IsOrderedV, n.IsOrderedFDelegate);
         if (!ordered)
             return;
 
-        var nodes = n.Nodes();
+        var nodes = n.Nodes;
         if (orderBufferKeys.Length <= nodes.Count)
         {
             Array.Resize(ref orderBufferKeys, MathHelper.NextPowerOfTwo(nodes.Count));
@@ -42,7 +45,7 @@ public class RootUiTraverse
         for (int i = 0; i < nodes.Count; i++)
         {
             keys[i] = nodes[i];
-            vals[i] = Get(nodes[i].OrderValueV(), nodes[i].OrderValueF());
+            vals[i] = Get(nodes[i].OrderValueV, nodes[i].OrderValueFDelegate);
         }
 
         vals.Sort(keys);
@@ -53,25 +56,26 @@ public class RootUiTraverse
 
     private void RemoveNodes(EntObj n)
     {
-        for (int i = n.Nodes().Count - 1; i >= 0; i--)
+        for (int i = n.Nodes.Count - 1; i >= 0; i--)
         {
-            var c = n.Nodes()[i];
+            var c = n.Nodes[i];
 
-            var isDeleted = Get(c.GetIsDeletedV(), c.GetIsDeletedF());
+            var isDeleted = Get(c.IsDeletedV, c.IsDeletedFDelegate);
             if (isDeleted)
-                n.Nodes().RemoveAt(i);
+                n.Nodes.RemoveAt(i);
         }
     }
 
     private void StackNodes(EntObj n)
     {
-        if (n.TryGetStackedNodeR(out var stackedNode))
-            n.Nodes().Remove(stackedNode);
+        var stackedNode = n.StackedNodeR;
+        if (stackedNode != null)
+            n.Nodes.Remove(stackedNode);
 
-        if (n.GetNodeStack().TryPeek(out var topStack))
+        if (n.HasNodeStack && n.NodeStack.TryPeek(out var topStack))
         {
-            n.Nodes().Add(topStack);
-            n.StackedNodeR() = topStack;
+            n.Nodes.Add(topStack);
+            n.StackedNodeR = topStack;
         }
     }
 
@@ -80,11 +84,11 @@ public class RootUiTraverse
         int start = traverseBufferIndex;
         int count = 0;
 
-        if (n.GetNodes().Count > 0)
+        if (n.Nodes.Count > 0)
         {
-            foreach (var c in n.GetNodes())
+            foreach (var c in n.Nodes)
             {
-                var disabled = Get(c.IsDisabledV(), c.IsDisabledF());
+                var disabled = Get(c.IsDisabledV, c.IsDisabledFDelegate);
                 if (disabled)
                     continue;
 
@@ -95,6 +99,6 @@ public class RootUiTraverse
             }
         }
 
-        n.NodesR() = traverseBuffer.AsMemory().Slice(start, count);
+        n.NodesR = traverseBuffer.AsMemory().Slice(start, count);
     }
 }

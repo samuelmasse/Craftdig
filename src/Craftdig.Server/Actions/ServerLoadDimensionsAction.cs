@@ -10,17 +10,17 @@ public class ServerLoadDimensionsAction(ModuleEnts ents, WorldScope worldScope)
         worldLoaderScope.Get<WorldBackendLoader>().Run();
 
         var dimensionScope = worldScope.Scope<DimensionScope>();
-        var dimensionEnt = new EntPtr().DimensionScope(dimensionScope);
+        var dimensionEnt = new EntPtr() { DimensionScope = dimensionScope };
         worldScope.Get<WorldDimensionBag>().Add(dimensionEnt);
 
         // For now just find the first dimension
-        var dimension = ents.Set.First(x => x.IsDimension());
+        var dimension = ents.Set.First(x => x.IsDimension);
 
-        dimensionScope.Add(new DimensionAir(dimension.Air()));
+        dimensionScope.Add(new DimensionAir(dimension.Air));
         dimensionScope.Add(new DimensionTerrainGenerator(
-            (ITerrainGenerator)dimensionScope.Get(dimension.TerrainGeneratorType())));
+            (ITerrainGenerator)dimensionScope.Get(dimension.TerrainGeneratorType)));
         dimensionScope.Add(new DimensionBiomeGenerator(
-            (IBiomeGenerator)dimensionScope.Get(dimension.BiomeGeneraetorType())));
+            (IBiomeGenerator)dimensionScope.Get(dimension.BiomeGeneraetorType)));
 
         dimensionScope.Get<DimensionChunkUnloaderHandlers>().Add(dimensionScope.Get<DimensionChunkBackendUnloader>().Unload);
 

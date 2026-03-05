@@ -13,15 +13,22 @@ public class DimensionSections(DimensionChunks chunks)
             return false;
         }
 
-        if (chunk.Sections().IsEmpty)
+        if (chunk.Sections.IsEmpty)
         {
-            chunk.Sections() = pool.Count > 0 ? pool.Dequeue() : new EntPtr[SectionHeight];
+            chunk.Sections = pool.Count > 0 ? pool.Dequeue() : new EntPtr[SectionHeight];
 
-            for (int z = 0; z < chunk.Sections().Length; z++)
-                chunk.Sections().Span[z] = new EntPtr().IsSection(true).Chunk(chunk).Sloc((sloc.X, sloc.Y, z));
+            for (int z = 0; z < chunk.Sections.Length; z++)
+            {
+                chunk.Sections.Span[z] = new EntPtr()
+                {
+                    IsSection = true,
+                    Chunk = chunk,
+                    Sloc = (sloc.X, sloc.Y, z)
+                };
+            }
         }
 
-        ent = chunk.Sections().Span[sloc.Z];
+        ent = chunk.Sections.Span[sloc.Z];
         return true;
     }
 

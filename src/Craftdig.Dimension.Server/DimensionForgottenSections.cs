@@ -3,7 +3,7 @@ namespace Craftdig.Dimension.Server;
 [Dimension]
 public class DimensionForgottenSections
 {
-    private readonly ConcurrentQueue<(EntMut, Vector3i)> queue = [];
+    private readonly ConcurrentQueue<(NetSocket, Vector3i)> queue = [];
 
     public void Tick()
     {
@@ -13,11 +13,8 @@ public class DimensionForgottenSections
         {
             var (ent, sloc) = entry;
 
-            ref var sections = ref ent.SocketForgottenSections();
-            sections ??= [];
-
-            ref var queue = ref ent.SocketForgottenSectionQueue();
-            queue ??= [];
+            var sections = ent.SocketForgottenSections ??= [];
+            var queue = ent.SocketForgottenSectionQueue ??= [];
 
             if (sections.Add(sloc))
                 queue.Enqueue(sloc);
@@ -26,5 +23,5 @@ public class DimensionForgottenSections
         }
     }
 
-    public void Add(EntMut ent, Vector3i cloc) => queue.Enqueue((ent, cloc));
+    public void Add(NetSocket ent, Vector3i cloc) => queue.Enqueue((ent, cloc));
 }

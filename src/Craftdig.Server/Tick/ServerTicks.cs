@@ -43,7 +43,7 @@ public class ServerTicks(AppLog log, WorldTick tick, WorldDimensionBag dimension
 
                 kicker.Tick();
                 foreach (var dimension in dimensions.Ents)
-                    dimension.DimensionScope().Get<DimensionServer>().Tick();
+                    dimension.DimensionScope.Get<DimensionServer>().Tick();
 
                 ticks--;
 

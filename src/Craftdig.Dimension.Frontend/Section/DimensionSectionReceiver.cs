@@ -27,11 +27,11 @@ public class DimensionSectionReceiver(
         if (!sections.TryGet(output.Sloc, out var section))
             return;
 
-        meshTransferer.Transfer(
+        section.TerrainMesh = meshTransferer.Transfer(
             CollectionsMarshal.AsSpan(output.Buffer),
-            ref section.TerrainMesh());
+            section.TerrainMesh);
 
-        if (section.TerrainMesh().Count > 0 && !section.Chunk().Rendered().ContainsKey(section.Sloc().Z))
-            section.Chunk().Rendered().Add(section.Sloc().Z, section.Sloc().Z);
+        if (section.TerrainMesh.Count > 0 && !section.Chunk.Rendered.ContainsKey(section.Sloc.Z))
+            section.Chunk.Rendered.Add(section.Sloc.Z, section.Sloc.Z);
     }
 }

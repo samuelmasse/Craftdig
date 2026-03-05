@@ -16,7 +16,7 @@ public class DimensionSectionMesher(RootCube cube, DimensionBlocks blocks)
     public void RenderBlock(List<BlockVertex> vertices, Vector3i origin, Vector3i loc)
     {
         blocks.TryGet(loc, out var block);
-        if (!block.IsSolid())
+        if (!block.IsSolid)
             return;
 
         var rloc = new Vector3i(loc.X, loc.Z, loc.Y) - (origin.X, origin.Z, origin.Y);
@@ -30,22 +30,22 @@ public class DimensionSectionMesher(RootCube cube, DimensionBlocks blocks)
         blocks.TryGet(loc + (0, 0, 1), out var top);
         blocks.TryGet(loc - (0, 0, 1), out var bottom);
 
-        var faces = block.Faces();
+        var faces = block.Faces;
 
-        if (!front.IsSolid())
-            AddQuad(cube.Front.Quad, 0.8f, faces.Front.FaceIndex());
-        if (!back.IsSolid())
-            AddQuad(cube.Back.Quad, 0.8f, faces.Back.FaceIndex());
+        if (!front.IsSolid)
+            AddQuad(cube.Front.Quad, 0.8f, faces.Front.FaceIndex);
+        if (!back.IsSolid)
+            AddQuad(cube.Back.Quad, 0.8f, faces.Back.FaceIndex);
 
-        if (!left.IsSolid())
-            AddQuad(cube.Left.Quad, 0.6f, faces.Left.FaceIndex());
-        if (!right.IsSolid())
-            AddQuad(cube.Right.Quad, 0.6f, faces.Right.FaceIndex());
+        if (!left.IsSolid)
+            AddQuad(cube.Left.Quad, 0.6f, faces.Left.FaceIndex);
+        if (!right.IsSolid)
+            AddQuad(cube.Right.Quad, 0.6f, faces.Right.FaceIndex);
 
-        if (!top.IsSolid())
-            AddQuad(cube.Top.Quad, 1f, faces.Top.FaceIndex());
-        if (!bottom.IsSolid())
-            AddQuad(cube.Bottom.Quad, 0.5f, faces.Bottom.FaceIndex());
+        if (!top.IsSolid)
+            AddQuad(cube.Top.Quad, 1f, faces.Top.FaceIndex);
+        if (!bottom.IsSolid)
+            AddQuad(cube.Bottom.Quad, 0.5f, faces.Bottom.FaceIndex);
 
         void AddQuad(Quad quad, float shadow, int texture)
         {

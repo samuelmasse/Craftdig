@@ -35,20 +35,20 @@ public class AppStyle(RootText text, RootKeyboard keyboard, AppMenuTextures menu
 
     public Font Font => monocraft.Font;
 
-    public void Text(EntObj ent) => ent
+    public void Text(EntObj ent) => ent.Mutate()
         .Tag(nameof(Text))
         .FontV(Font)
         .FontSizeV(FontSize)
         .FontPaddingV((ItemSpacingXS, 0, ItemSpacingXS, 0))
         .TextColorV(TextColor);
 
-    public void Label(EntObj ent) => ent
-        .Mut(Text)
+    public void Label(EntObj ent) => ent.Mutate()
+        .Mutate(Text)
         .Tag(nameof(Label))
         .SizeTextRelativeV((1, 1))
         .SizeRelativeV((0, 0));
 
-    public void InputItem(EntObj ent) => ent
+    public void InputItem(EntObj ent) => ent.Mutate()
         .SizeV((0, ItemHeight))
         .SizeRelativeV((1, 0))
         .IsSelectableV(true)
@@ -77,43 +77,43 @@ public class AppStyle(RootText text, RootKeyboard keyboard, AppMenuTextures menu
 
     public Vector4 InputItemBorderColor(EntObj ent)
     {
-        if (Get(ent.IsInputDisabledV(), ent.IsInputDisabledF()))
+        if (Get(ent.IsInputDisabledV, ent.IsInputDisabledFDelegate))
             return (0.2f, 0.2f, 0.2f, 1f);
 
-        if ((ent.IsFocusedR() || ent.IsHoveredR()))
+        if ((ent.IsFocusedR || ent.IsHoveredR))
             return (1, 1, 1, 1);
 
         return (0, 0, 0, 1);
     }
 
-    public void Textbox(EntObj ent) => ent
-        .Mut(InputItem)
-        .Mut(Text)
+    public void Textbox(EntObj ent) => ent.Mutate()
+        .Mutate(InputItem)
+        .Mutate(Text)
         .Tag(nameof(Textbox))
         .TextAlignmentV(Alignment.Left | Alignment.Vertical)
         .ColorV(ButtonColorDisabled)
-        .TextF(() => text.Format("{0}{1}", ent.StringBuilderV(), ent.CarretR()))
+        .TextF(() => text.Format("{0}{1}", ent.StringBuilderV, ent.CarretR))
         .TextPaddingV((ItemSpacingXS, ItemSpacingXS, ItemSpacingXS, ItemSpacingXS))
         .CursorV(MouseCursor.IBeam)
         .OnUpdateF(() =>
         {
-            ent.CarretR() = string.Empty;
+            ent.CarretR = string.Empty;
 
-            var sb = ent.StringBuilderV();
+            var sb = ent.StringBuilderV;
             if (sb == null)
                 return;
 
-            if (ent.IsFocusedR())
+            if (ent.IsFocusedR)
             {
-                if (!ent.WasFocusedR())
+                if (!ent.WasFocusedR)
                 {
-                    ent.FocusStartR() = DateTime.UtcNow;
-                    ent.WasFocusedR() = true;
+                    ent.FocusStartR = DateTime.UtcNow;
+                    ent.WasFocusedR = true;
                 }
 
-                int dt = (int)(DateTime.UtcNow - ent.FocusStartR()).TotalMilliseconds;
+                int dt = (int)(DateTime.UtcNow - ent.FocusStartR).TotalMilliseconds;
                 if ((dt / 500) % 2 == 0)
-                    ent.CarretR() = "_";
+                    ent.CarretR = "_";
 
                 if (keyboard.IsKeyPressedRepeated(Keys.Backspace) && sb.Length > 0)
                     sb.Remove(sb.Length - 1, 1);
@@ -127,57 +127,57 @@ public class AppStyle(RootText text, RootKeyboard keyboard, AppMenuTextures menu
                 if (keyboard.IsKeyDown(Keys.LeftControl) && keyboard.IsKeyPressed(Keys.V))
                     sb.Append(keyboard.Clipboard);
             }
-            else ent.WasFocusedR() = false;
+            else ent.WasFocusedR = false;
 
-            if (ent.MaxLengthV() > 0)
+            if (ent.MaxLengthV > 0)
             {
-                while (sb.Length > ent.MaxLengthV())
+                while (sb.Length > ent.MaxLengthV)
                     sb.Remove(sb.Length - 1, 1);
             }
         });
 
-    public void Button(EntObj ent) => ent
-        .Mut(InputItem)
-        .Mut(Text)
+    public void Button(EntObj ent) => ent.Mutate()
+        .Mutate(InputItem)
+        .Mutate(Text)
         .Tag(nameof(Button))
         .OnUpdateF(() =>
         {
-            if (ent.IsFocusedR() && keyboard.IsKeyPressedRepeated(Keys.Enter))
-                ent.OnPressF()?.Invoke();
+            if (ent.IsFocusedR && keyboard.IsKeyPressedRepeated(Keys.Enter))
+                ent.OnPressFDelegate?.Invoke();
         })
-        .CursorF(() => Get(ent.IsInputDisabledV(), ent.IsInputDisabledF()) ? MouseCursor.Default : MouseCursor.PointingHand)
+        .CursorF(() => Get(ent.IsInputDisabledV, ent.IsInputDisabledFDelegate) ? MouseCursor.Default : MouseCursor.PointingHand)
         .ColorF(() =>
         {
-            if (Get(ent.IsInputDisabledV(), ent.IsInputDisabledF()))
+            if (Get(ent.IsInputDisabledV, ent.IsInputDisabledFDelegate))
                 return ButtonColorDisabled;
 
             return ButtonColor;
         });
 
-    public void VerticalList(EntObj ent) => ent
+    public void VerticalList(EntObj ent) => ent.Mutate()
         .Tag(nameof(VerticalList))
         .InnerLayoutV(InnerLayout.VerticalList)
         .SizeInnerSumRelativeV(Vertical)
         .SizeRelativeV((0, 0));
 
-    public void HorizontalList(EntObj ent) => ent
+    public void HorizontalList(EntObj ent) => ent.Mutate()
         .Tag(nameof(HorizontalList))
         .InnerLayoutV(InnerLayout.HorizontalList)
         .SizeInnerSumRelativeV(Horizontal)
         .SizeRelativeV((0, 0));
 
-    public void Slot(EntObj ent) => ent
+    public void Slot(EntObj ent) => ent.Mutate()
         .Tag(nameof(Slot))
         .SizeV((SlotSize, SlotSize))
         .SizeRelativeV((0, 0))
         .TextureV(SlotTexture)
         .Nodes([Node()
-            .Mut(Text)
+            .Mutate(Text)
             .OffsetV((ItemSpacingXS, ItemSpacingXS))
             .SizeV((-ItemSpacingXS * 2, -ItemSpacingXS * 2))
             .TextF(() =>
             {
-                var c = ent.GetSlotValueF()?.Invoke() ?? default;
+                var c = ent.GetSlotValueFDelegate?.Invoke() ?? default;
 
                 if (c == default || c.Count == 1)
                     return string.Empty;
@@ -187,149 +187,149 @@ public class AppStyle(RootText text, RootKeyboard keyboard, AppMenuTextures menu
             .TextAlignmentV(Alignment.Bottom | Alignment.Right)
             .TextureF(() =>
             {
-                var c = ent.GetSlotValueF()?.Invoke() ?? default;
+                var c = ent.GetSlotValueFDelegate?.Invoke() ?? default;
 
-                if (c.Item.IsBlock())
-                    return c.Item.Faces().Front.FaceTexture();
+                if (c.Item.IsBlock)
+                    return c.Item.Faces.Front.FaceTexture;
 
                 return null;
             })]);
 
-    public void SlotTooltip(EntObj ent) => ent
-        .TooltipF(() => ent.SlotV().PlayerV().GetOffhand() == default ?
-            ent.SlotV().GetSlotValueF()?.Invoke().Item.Name() : null);
+    public void SlotTooltip(EntObj ent) => ent.Mutate()
+        .TooltipF(() => ent.SlotV.PlayerV.GetOffhand() == default ?
+            ent.SlotV.GetSlotValueFDelegate?.Invoke().Item.Name : null);
 
-    public void SlotButton(EntObj ent) => ent
+    public void SlotButton(EntObj ent) => ent.Mutate()
         .Tag(nameof(SlotButton))
         .IsSelectableV(true)
-        .ColorF(() => ent.IsHoveredR() ? (1, 1, 1, 0.5f) : default)
+        .ColorF(() => ent.IsHoveredR ? (1, 1, 1, 0.5f) : default)
         .OnPressF(() =>
         {
-            var val = ent.SlotV().GetSlotValueF()?.Invoke() ?? default;
-            var offhand = ent.SlotV().PlayerV().GetOffhand();
+            var val = ent.SlotV.GetSlotValueFDelegate?.Invoke() ?? default;
+            var offhand = ent.SlotV.PlayerV.GetOffhand();
 
-            if (ent.SlotV().PlayerV().GetOffhand() == default)
+            if (ent.SlotV.PlayerV.GetOffhand() == default)
             {
-                ent.SlotV().PlayerV().SetOffhand(val);
-                ent.SlotV().SetSlotValueF()?.Invoke(default);
-                ent.SlotAddedV() = true;
+                ent.SlotV.PlayerV.SetOffhand(val);
+                ent.SlotV.SetSlotValueFDelegate?.Invoke(default);
+                ent.SlotAddedV = true;
             }
         })
         .OnSecondaryPressF(() =>
         {
-            var val = ent.SlotV().GetSlotValueF()?.Invoke() ?? default;
-            var offhand = ent.SlotV().PlayerV().GetOffhand();
+            var val = ent.SlotV.GetSlotValueFDelegate?.Invoke() ?? default;
+            var offhand = ent.SlotV.PlayerV.GetOffhand();
 
             if (offhand == default && val.Count > 0)
             {
                 int give = (int)Math.Ceiling(val.Count / 2f);
-                ent.SlotV().PlayerV().SetOffhand(new(val.Item, give));
+                ent.SlotV.PlayerV.SetOffhand(new(val.Item, give));
 
                 if (val.Count - give > 0)
-                    ent.SlotV().SetSlotValueF()?.Invoke(new(val.Item, val.Count - give));
-                else ent.SlotV().SetSlotValueF()?.Invoke(default);
+                    ent.SlotV.SetSlotValueFDelegate?.Invoke(new(val.Item, val.Count - give));
+                else ent.SlotV.SetSlotValueFDelegate?.Invoke(default);
 
-                ent.SlotAddedV() = true;
+                ent.SlotAddedV = true;
             }
         })
         .OnClickF(() =>
         {
-            if (!ent.SlotAddedV())
+            if (!ent.SlotAddedV)
             {
-                var val = ent.SlotV().GetSlotValueF()?.Invoke() ?? default;
-                var offhand = ent.SlotV().PlayerV().GetOffhand();
+                var val = ent.SlotV.GetSlotValueFDelegate?.Invoke() ?? default;
+                var offhand = ent.SlotV.PlayerV.GetOffhand();
 
                 if (val.Item == offhand.Item)
                 {
-                    int give = Math.Min(offhand.Count, val.Item.MaxStack() - val.Count);
+                    int give = Math.Min(offhand.Count, val.Item.MaxStack - val.Count);
                     if (give > 0)
                     {
                         if (offhand.Count - give > 0)
                             offhand = new(offhand.Item, offhand.Count - give);
                         else offhand = default;
 
-                        ent.SlotV().PlayerV().SetOffhand(offhand);
-                        ent.SlotV().SetSlotValueF()?.Invoke(new(val.Item, val.Count + give));
+                        ent.SlotV.PlayerV.SetOffhand(offhand);
+                        ent.SlotV.SetSlotValueFDelegate?.Invoke(new(val.Item, val.Count + give));
                     }
                 }
                 else
                 {
-                    ent.SlotV().SetSlotValueF()?.Invoke(offhand);
-                    ent.SlotV().PlayerV().SetOffhand(val);
+                    ent.SlotV.SetSlotValueFDelegate?.Invoke(offhand);
+                    ent.SlotV.PlayerV.SetOffhand(val);
                 }
             }
 
-            ent.SlotAddedV() = false;
+            ent.SlotAddedV = false;
         })
         .OnSecondaryClickF(() =>
         {
-            if (!ent.SlotAddedV())
+            if (!ent.SlotAddedV)
             {
-                var val = ent.SlotV().GetSlotValueF()?.Invoke() ?? default;
-                var offhand = ent.SlotV().PlayerV().GetOffhand();
+                var val = ent.SlotV.GetSlotValueFDelegate?.Invoke() ?? default;
+                var offhand = ent.SlotV.PlayerV.GetOffhand();
 
                 if (offhand.Count == 0)
                     return;
 
                 if (val.Item == default || val.Item == offhand.Item)
                 {
-                    if (val.Count < offhand.Item.MaxStack())
+                    if (val.Count < offhand.Item.MaxStack)
                     {
-                        ent.SlotV().SetSlotValueF()?.Invoke(new(offhand.Item, val.Count + 1));
+                        ent.SlotV.SetSlotValueFDelegate?.Invoke(new(offhand.Item, val.Count + 1));
 
                         if (offhand.Count == 1)
                             offhand = default;
                         else offhand = new(offhand.Item, offhand.Count - 1);
 
-                        ent.SlotV().PlayerV().SetOffhand(offhand);
+                        ent.SlotV.PlayerV.SetOffhand(offhand);
                     }
                 }
                 else if (val.Item != offhand.Item)
                 {
-                    ent.SlotV().SetSlotValueF()?.Invoke(offhand);
-                    ent.SlotV().PlayerV().SetOffhand(val);
+                    ent.SlotV.SetSlotValueFDelegate?.Invoke(offhand);
+                    ent.SlotV.PlayerV.SetOffhand(val);
                 }
             }
 
-            ent.SlotAddedV() = false;
+            ent.SlotAddedV = false;
         });
 
-    public void SlotButtonInfinity(EntObj ent) => ent
-        .Mut(SlotButton)
+    public void SlotButtonInfinity(EntObj ent) => ent.Mutate()
+        .Mutate(SlotButton)
         .OnPressF(() =>
         {
-            var val = ent.SlotV().GetSlotValueF()?.Invoke() ?? default;
+            var val = ent.SlotV.GetSlotValueFDelegate?.Invoke() ?? default;
 
-            if (ent.SlotV().PlayerV().GetOffhand() == default)
+            if (ent.SlotV.PlayerV.GetOffhand() == default)
             {
-                ent.SlotV().PlayerV().SetOffhand(val);
-                ent.SlotAddedV() = true;
+                ent.SlotV.PlayerV.SetOffhand(val);
+                ent.SlotAddedV = true;
             }
         })
-        .OnSecondaryPressF(ent.OnPressF())
+        .OnSecondaryPressF(ent.OnPressFDelegate)
         .OnClickF(() =>
         {
-            if (!ent.SlotAddedV())
+            if (!ent.SlotAddedV)
             {
-                var val = ent.SlotV().GetSlotValueF()?.Invoke() ?? default;
-                var offhand = ent.SlotV().PlayerV().GetOffhand();
+                var val = ent.SlotV.GetSlotValueFDelegate?.Invoke() ?? default;
+                var offhand = ent.SlotV.PlayerV.GetOffhand();
 
                 if (val.Item == offhand.Item)
                 {
-                    if (offhand.Count < val.Item.MaxStack())
-                        ent.SlotV().PlayerV().SetOffhand(new(offhand.Item, offhand.Count + 1));
+                    if (offhand.Count < val.Item.MaxStack)
+                        ent.SlotV.PlayerV.SetOffhand(new(offhand.Item, offhand.Count + 1));
                 }
-                else ent.SlotV().PlayerV().SetOffhand(val);
+                else ent.SlotV.PlayerV.SetOffhand(val);
             }
 
-            ent.SlotAddedV() = false;
+            ent.SlotAddedV = false;
         })
         .OnSecondaryClickF(() =>
         {
-            if (!ent.SlotAddedV())
+            if (!ent.SlotAddedV)
             {
-                var val = ent.SlotV().GetSlotValueF()?.Invoke() ?? default;
-                var offhand = ent.SlotV().PlayerV().GetOffhand();
+                var val = ent.SlotV.GetSlotValueFDelegate?.Invoke() ?? default;
+                var offhand = ent.SlotV.PlayerV.GetOffhand();
 
                 if (offhand.Count == 0)
                     offhand = val;
@@ -340,9 +340,9 @@ public class AppStyle(RootText text, RootKeyboard keyboard, AppMenuTextures menu
                     else offhand = new(offhand.Item, offhand.Count - 1);
                 }
 
-                ent.SlotV().PlayerV().SetOffhand(offhand);
+                ent.SlotV.PlayerV.SetOffhand(offhand);
             }
 
-            ent.SlotAddedV() = false;
+            ent.SlotAddedV = false;
         });
 }

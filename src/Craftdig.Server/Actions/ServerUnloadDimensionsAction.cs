@@ -10,7 +10,7 @@ public class ServerUnloadDimensionsAction(
     {
         foreach (var dimension in dimensionBag.Ents)
         {
-            var dimensionLoaderScope = dimension.DimensionScope().Scope<DimensionLoaderScope>();
+            var dimensionLoaderScope = dimension.DimensionScope.Scope<DimensionLoaderScope>();
             dimensionLoaderScope.Get<DimensionBackendUnloader>().Run();
             dimensionLoaderScope.Get<DimensionUnloader>().Run();
             dimension.Dispose();

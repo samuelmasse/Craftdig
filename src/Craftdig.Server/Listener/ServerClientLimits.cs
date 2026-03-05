@@ -19,7 +19,7 @@ public class ServerClientLimits(AppLog log, ServerSockets sockets)
             int unauthCount = 0;
             foreach (var socket in buffer)
             {
-                if (!socket.Ent.IsAuthenticated())
+                if (!socket.IsAuthenticated)
                     unauthCount++;
             }
 

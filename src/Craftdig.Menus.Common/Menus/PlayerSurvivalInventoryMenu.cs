@@ -6,7 +6,7 @@ public class PlayerSurvivalInventoryMenu(AppStyle s, PlayerEnt player)
     public void Create(EntObj root)
     {
         Node(root, out var vert)
-            .Mut(s.VerticalList)
+            .Mutate(s.VerticalList)
             .SizeInnerMaxRelativeV(s.Horizontal)
             .PaddingV((s.ItemSpacing, s.ItemSpacing, s.ItemSpacing, s.ItemSpacing))
             .InnerSpacingV(s.ItemSpacing)
@@ -16,7 +16,7 @@ public class PlayerSurvivalInventoryMenu(AppStyle s, PlayerEnt player)
             .OffsetMultiplierV(s.ItemSpacingXS);
 
         Node(vert, out var playerHor)
-            .Mut(s.HorizontalList)
+            .Mutate(s.HorizontalList)
             .InnerSizingV(InnerSizing.HorizontalWeight)
             .InnerSpacingV(s.ItemSpacingS)
             .SizeInnerMaxRelativeV(s.Vertical)
@@ -25,7 +25,7 @@ public class PlayerSurvivalInventoryMenu(AppStyle s, PlayerEnt player)
             .IsPostSizedV(true);
         {
             Node(playerHor, out var armorVert)
-                .Mut(s.VerticalList)
+                .Mutate(s.VerticalList)
                 .SizeInnerMaxRelativeV(s.Horizontal)
                 .SizeWeightTypeV(SizeWeightType.Self);
             for (int i = 0; i < ArmorSlots.Count; i++)
@@ -33,15 +33,15 @@ public class PlayerSurvivalInventoryMenu(AppStyle s, PlayerEnt player)
                 int x = i;
 
                 Node(armorVert, out var square)
-                    .Mut(s.Button)
-                    .Mut(s.Slot)
-                    .PlayerV((EntMut)player.Ent)
-                    .GetSlotValueF(() => player.Ent.GetArmorSlot(x))
-                    .SetSlotValueF((v) => player.Ent.SetArmorSlot(x, v));
+                    .Mutate(s.Button)
+                    .Mutate(s.Slot)
+                    .PlayerV(player)
+                    .GetSlotValueF(() => player.GetArmorSlot(x))
+                    .SetSlotValueF((v) => player.SetArmorSlot(x, v));
                 {
                     Node(square)
-                        .Mut(s.SlotButton)
-                        .Mut(s.SlotTooltip)
+                        .Mutate(s.SlotButton)
+                        .Mutate(s.SlotTooltip)
                         .SlotV(square);
                 }
             }
@@ -58,18 +58,18 @@ public class PlayerSurvivalInventoryMenu(AppStyle s, PlayerEnt player)
                 .IsPostSizedV(true);
             {
                 Node(craftingArea, out var craftingHor)
-                    .Mut(s.HorizontalList)
+                    .Mutate(s.HorizontalList)
                     .SizeRelativeV(s.Vertical)
                     .InnerSpacingV(s.ItemSpacingS)
                     .AlignmentV(Alignment.Horizontal);
 
                 Node(craftingHor, out var craftingVert)
-                    .Mut(s.VerticalList)
+                    .Mutate(s.VerticalList)
                     .SizeInnerMaxRelativeV(s.Horizontal)
                     .AlignmentV(Alignment.Vertical);
                 {
                     Node(craftingVert, out var title)
-                        .Mut(s.Label)
+                        .Mutate(s.Label)
                         .TextV("Crafting")
                         .IsFloatingV(true)
                         .AlignmentV(Alignment.Horizontal)
@@ -79,7 +79,7 @@ public class PlayerSurvivalInventoryMenu(AppStyle s, PlayerEnt player)
                     for (int y = 0; y < 2; y++)
                     {
                         Node(craftingVert, out var craftingGridHor)
-                            .Mut(s.HorizontalList)
+                            .Mutate(s.HorizontalList)
                             .SizeInnerMaxRelativeV(s.Vertical);
 
                         for (int x = 0; x < 2; x++)
@@ -88,15 +88,15 @@ public class PlayerSurvivalInventoryMenu(AppStyle s, PlayerEnt player)
                             ItemSlot val = default;
 
                             Node(craftingGridHor, out var square)
-                                .Mut(s.Button)
-                                .Mut(s.Slot)
-                                .PlayerV((EntMut)player.Ent)
+                                .Mutate(s.Button)
+                                .Mutate(s.Slot)
+                                .PlayerV(player)
                                 .GetSlotValueF(() => val)
                                 .SetSlotValueF((v) => val = v);
                             {
                                 Node(square)
-                                    .Mut(s.SlotButton)
-                                    .Mut(s.SlotTooltip)
+                                    .Mutate(s.SlotButton)
+                                    .Mutate(s.SlotTooltip)
                                     .SlotV(square);
                             }
                         }
@@ -112,28 +112,28 @@ public class PlayerSurvivalInventoryMenu(AppStyle s, PlayerEnt player)
                 ItemSlot outputVal = default;
 
                 Node(craftingHor, out var output)
-                    .Mut(s.Button)
-                    .Mut(s.Slot)
-                    .PlayerV((EntMut)player.Ent)
+                    .Mutate(s.Button)
+                    .Mutate(s.Slot)
+                    .PlayerV(player)
                     .AlignmentV(Alignment.Vertical)
                     .GetSlotValueF(() => outputVal)
                     .SetSlotValueF((v) => outputVal = v);
                 {
                     Node(output)
-                        .Mut(s.SlotButton)
-                        .Mut(s.SlotTooltip)
+                        .Mutate(s.SlotButton)
+                        .Mutate(s.SlotTooltip)
                         .SlotV(output);
                 }
             }
         }
 
         Node(vert, out var inventoryVert)
-            .Mut(s.VerticalList)
+            .Mutate(s.VerticalList)
             .SizeInnerMaxRelativeV(s.Horizontal);
         for (int y = 0; y < InventorySlots.Rows; y++)
         {
             Node(inventoryVert, out var inventoryHor)
-                .Mut(s.HorizontalList)
+                .Mutate(s.HorizontalList)
                 .SizeInnerMaxRelativeV(s.Vertical);
 
             for (int x = 0; x < HotBarSlots.Count; x++)
@@ -141,37 +141,37 @@ public class PlayerSurvivalInventoryMenu(AppStyle s, PlayerEnt player)
                 Vector2i loc = (x, y);
 
                 Node(inventoryHor, out var square)
-                    .Mut(s.Button)
-                    .Mut(s.Slot)
-                    .PlayerV((EntMut)player.Ent)
-                    .GetSlotValueF(() => player.Ent.GetInventorySlot(loc.Y * HotBarSlots.Count + loc.X))
-                    .SetSlotValueF((v) => player.Ent.SetInventorySlot(loc.Y * HotBarSlots.Count + loc.X, v));
+                    .Mutate(s.Button)
+                    .Mutate(s.Slot)
+                    .PlayerV(player)
+                    .GetSlotValueF(() => player.GetInventorySlot(loc.Y * HotBarSlots.Count + loc.X))
+                    .SetSlotValueF((v) => player.SetInventorySlot(loc.Y * HotBarSlots.Count + loc.X, v));
                 {
                     Node(square)
-                        .Mut(s.SlotButton)
-                        .Mut(s.SlotTooltip)
+                        .Mutate(s.SlotButton)
+                        .Mutate(s.SlotTooltip)
                         .SlotV(square);
                 }
             }
         }
 
         Node(vert, out var hotbar)
-            .Mut(s.HorizontalList)
+            .Mutate(s.HorizontalList)
             .SizeInnerMaxRelativeV(s.Vertical);
         for (int x = 0; x < HotBarSlots.Count; x++)
         {
             int i = x;
 
             Node(hotbar, out var square)
-                .Mut(s.Button)
-                .Mut(s.Slot)
-                .GetSlotValueF(() => player.Ent.GetHotBarSlot(i))
-                .SetSlotValueF((v) => player.Ent.SetHotBarSlot(i, v))
-                .PlayerV((EntMut)player.Ent);
+                .Mutate(s.Button)
+                .Mutate(s.Slot)
+                .GetSlotValueF(() => player.GetHotBarSlot(i))
+                .SetSlotValueF((v) => player.SetHotBarSlot(i, v))
+                .PlayerV(player);
             {
                 Node(square)
-                    .Mut(s.SlotButton)
-                    .Mut(s.SlotTooltip)
+                    .Mutate(s.SlotButton)
+                    .Mutate(s.SlotTooltip)
                     .SlotV(square);
             }
         }

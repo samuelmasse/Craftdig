@@ -26,9 +26,9 @@ public class ServerRegisterHandlersAction(
 
     private Action<NetSocket, C> Authenticated<C>(Action<NetSocket, C> handler) where C : unmanaged => (ns, cmd) =>
     {
-        if (!ns.Ent.IsAuthenticated())
+        if (!ns.IsAuthenticated)
         {
-            log.Warn("Socket {0} tried to perform an authenticated action before authenticating", ns.Ent.Tag());
+            log.Warn("Socket {0} tried to perform an authenticated action before authenticating", ns.Tag);
             ns.Disconnect();
             return;
         }
@@ -42,13 +42,13 @@ public class ServerRegisterHandlersAction(
     private Action<NetSocket, C> DimensionHandler<T, C>()
         where T : DimensionReceiver<C> where C : unmanaged => (ns, cmd) =>
     {
-        if (ns.Ent.SocketPlayer() == null)
+        if (ns.SocketPlayer == null)
         {
-            log.Warn("Socket {0} tried to perform a dimension action before spawning", ns.Ent.Tag());
+            log.Warn("Socket {0} tried to perform a dimension action before spawning", ns.Tag);
             ns.Disconnect();
             return;
         }
 
-        ns.Ent.DimensionScope().Get<T>().Receive(ns, cmd);
+        ns.DimensionScope.Get<T>().Receive(ns, cmd);
     };
 }

@@ -6,31 +6,34 @@ public class DimensionRigids(DimensionBlocks blocks, DimensionRigidBag rigidBag)
     public void Tick()
     {
         foreach (var ent in rigidBag.Ents)
-        {
-            ent.PrevPosition() = ent.Position();
-            ent.CollisionNormal() = default;
-            Collide((EntMut)ent);
-            ent.Position() += ent.Velocity();
+            Tick((EntMut)ent);
+    }
 
-            if (ent.IsProjectile())
-            {
-                float drag = 1;
-                if (ent.CollisionNormal().Z == 1)
-                    drag = 0.6f;
-                ent.Velocity() *= 0.98 * drag;
-                ent.Velocity().Z -= 0.08;
-            }
-            else if (ent.GetIsFlying())
-            {
-                double v = ent.Velocity().Z;
-                ent.Velocity() *= (0.91f, 0.91f, 0.98f);
-                ent.Velocity().Z = v * 0.6f;
-            }
-            else
-            {
-                ent.Velocity() *= (0.91f * 0.6f, 0.91f * 0.6f, 0.98f);
-                ent.Velocity().Z -= 0.08;
-            }
+    private void Tick(EntMut ent)
+    {
+        ent.PrevPosition = ent.Position;
+        ent.CollisionNormal = default;
+        Collide(ent);
+        ent.Position += ent.Velocity;
+
+        if (ent.IsProjectile)
+        {
+            float drag = 1;
+            if (ent.CollisionNormal.Z == 1)
+                drag = 0.6f;
+            ent.Velocity *= 0.98 * drag;
+            ent.Velocity -= (0, 0, 0.08);
+        }
+        else if (ent.IsFlying)
+        {
+            double v = ent.Velocity.Z;
+            ent.Velocity *= (0.91f, 0.91f, 0.98f);
+            ent.Velocity = ent.Velocity with { Z = v * 0.6f };
+        }
+        else
+        {
+            ent.Velocity *= (0.91f * 0.6f, 0.91f * 0.6f, 0.98f);
+            ent.Velocity -= (0, 0, 0.08);
         }
     }
 
@@ -42,11 +45,8 @@ public class DimensionRigids(DimensionBlocks blocks, DimensionRigidBag rigidBag)
 
     private void CollideAxis(EntMut ent)
     {
-        ref var vel = ref ent.Velocity();
-        ref var pos = ref ent.Position();
-
-        var box = new Box3d(ent.HitBox().Min + pos, ent.HitBox().Max + pos);
-        var tbox = new Box3d(box.Min + vel, box.Max + vel);
+        var box = new Box3d(ent.HitBox.Min + ent.Position, ent.HitBox.Max + ent.Position);
+        var tbox = new Box3d(box.Min + ent.Velocity, box.Max + ent.Velocity);
 
         var smin = Vector3d.ComponentMin(box.Min, tbox.Min).ToLoc() - Vector3i.One;
         var smax = Vector3d.ComponentMax(box.Max, tbox.Max).ToLoc() + Vector3i.One;
@@ -62,11 +62,11 @@ public class DimensionRigids(DimensionBlocks blocks, DimensionRigidBag rigidBag)
                 {
                     var loc = new Vector3i(x, y, z);
 
-                    if (!blocks.TryGet(loc, out var block) || !block.IsSolid())
+                    if (!blocks.TryGet(loc, out var block) || !block.IsSolid)
                         continue;
 
                     var bbox = new Box3d(loc, loc + Vector3i.One);
-                    if (!Collide(box, vel, bbox, out var t, out var n) || t >= tmin)
+                    if (!Collide(box, ent.Velocity, bbox, out var t, out var n) || t >= tmin)
                         continue;
 
                     tmin = t;
@@ -79,9 +79,9 @@ public class DimensionRigids(DimensionBlocks blocks, DimensionRigidBag rigidBag)
             return;
 
         tmin -= 0.001;
-        pos += vel * tmin * Vector3i.Abs(nmin);
-        vel *= Vector3i.One - Vector3i.Abs(nmin);
-        ent.CollisionNormal() = Vector3i.Clamp(ent.CollisionNormal() + nmin, -Vector3i.One, Vector3i.One);
+        ent.Position += ent.Velocity * tmin * Vector3i.Abs(nmin);
+        ent.Velocity *= Vector3i.One - Vector3i.Abs(nmin);
+        ent.CollisionNormal = Vector3i.Clamp(ent.CollisionNormal + nmin, -Vector3i.One, Vector3i.One);
     }
 
     private static bool Collide(Box3d moving, Vector3d vel, Box3d solid, out double time, out Vector3i normal)

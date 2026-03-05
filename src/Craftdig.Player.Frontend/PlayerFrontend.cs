@@ -38,10 +38,10 @@ public class PlayerFrontend(
         {
             var key = Keys.D1 + i;
             if (keyboard.IsKeyPressed(key))
-                ent.Ent.HotBarIndex() = i;
+                ent.HotBarIndex = i;
         }
 
-        ref var index = ref ent.Ent.HotBarIndex();
+        var index = ent.HotBarIndex;
 
         if (mouse.Wheel.Y < 0)
             index++;
@@ -53,6 +53,7 @@ public class PlayerFrontend(
         if (index >= HotBarSlots.Count)
             index = 0;
 
+        ent.HotBarIndex = index;
         teleporter.Update();
     }
 }

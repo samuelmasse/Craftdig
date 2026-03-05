@@ -1,6 +1,6 @@
 namespace Craftdig.Protocol;
 
-public class NetSocket(AppLog log, TcpClient tcp, Stream stream)
+public class NetSocket(AppLog log, TcpClient tcp, Stream stream) : IEntMut
 {
     private readonly EntObj ent = new();
     private byte[] buffer = [];
@@ -19,7 +19,6 @@ public class NetSocket(AppLog log, TcpClient tcp, Stream stream)
     private long outSegmentIndex;
     private long outSegmentSendIndex;
 
-    public EntMut Ent => (EntMut)ent;
     public bool Connected => tcp.Connected;
     public EndPoint? Ip => tcp.Client.RemoteEndPoint;
     public ref long MaxMessageSize => ref maxMessageSize;
@@ -117,7 +116,7 @@ public class NetSocket(AppLog log, TcpClient tcp, Stream stream)
 
                 if (commitIndex != 0)
                 {
-                    log.Trace("Socket {0} unable to send ({1}) {2} bytes", ent.Tag(), type, needed);
+                    log.Trace("Socket {0} unable to send ({1}) {2} bytes", ent.Tag, type, needed);
                     Disconnect();
                     return;
                 }
@@ -144,7 +143,7 @@ public class NetSocket(AppLog log, TcpClient tcp, Stream stream)
         var cmdBytes = MemoryMarshal.AsBytes(MemoryMarshal.CreateSpan(ref cmd, 1));
         var dataBytes = MemoryMarshal.AsBytes(data);
         var bytes = cmdBytes.Length + dataBytes.Length + sizeof(ushort) + sizeof(int);
-        log.Trace("Socket {0} -> {1} ({2}) {3} bytes", ent.Tag(), typeof(C).Name, C.CommandId, bytes);
+        log.Trace("Socket {0} -> {1} ({2}) {3} bytes", ent.Tag, typeof(C).Name, C.CommandId, bytes);
 
         Send(C.CommandId, cmdBytes, dataBytes);
     }
@@ -188,4 +187,11 @@ public class NetSocket(AppLog log, TcpClient tcp, Stream stream)
         try { tcp.Dispose(); } catch { }
         outSemaphore.Release(ushort.MaxValue);
     }
+
+    public EntHandle Handle => ent.Handle;
+    public bool IsAlive => ent.IsAlive;
+    public bool Has<T, N>() => ent.Has<T, N>();
+    public T? Get<T, N>() => ent.Get<T, N>();
+    public void Set<T, N>(in T value) => ent.Set<T, N>(value);
+    public bool Unset<T, N>() => ent.Unset<T, N>();
 }

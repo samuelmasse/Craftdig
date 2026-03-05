@@ -38,7 +38,7 @@ public class DimensionBlocksRaw(DimensionChunks chunks)
     public bool TryGetChunkBlocks(Vector2i cloc, [NotNullWhen(true)] out ChunkBlocks? blocks)
     {
         chunks.TryGet(cloc, out var chunk);
-        blocks = chunk.GetChunkBlocks();
+        blocks = chunk.ChunkBlocks;
         return blocks != null;
     }
 }

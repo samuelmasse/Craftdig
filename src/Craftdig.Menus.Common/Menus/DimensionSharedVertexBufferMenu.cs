@@ -12,7 +12,7 @@ public class DimensionSharedVertexBufferMenu(
     public void Create(EntObj root)
     {
         Node(root, out var menu)
-            .Mut(s.VerticalList)
+            .Mutate(s.VerticalList)
             .SizeRelativeV((1, 0))
             .AlignmentV(Alignment.Bottom)
             .ColorV((0, 0, 0, 1))
@@ -27,8 +27,8 @@ public class DimensionSharedVertexBufferMenu(
                     if (slot.Index != 0)
                     {
                         sprites.Batch.Draw((
-                            o.X + (slot.Index / (float)svb.Size) * menu.SizeR().X, o.Y),
-                            ((slot.Size / (float)svb.Size) * menu.SizeR().X, menu.SizeR().Y), (1, 0, 0, 1));
+                            o.X + (slot.Index / (float)svb.Size) * menu.SizeR.X, o.Y),
+                            ((slot.Size / (float)svb.Size) * menu.SizeR.X, menu.SizeR.Y), (1, 0, 0, 1));
                     }
                 }
             });
@@ -58,7 +58,7 @@ public class DimensionSharedVertexBufferMenu(
                 foreach (var col in row)
                 {
                     Node(hor)
-                        .Mut(s.Label)
+                        .Mutate(s.Label)
                         .FontV(roboto.Font)
                         .FontSizeV(24)
                         .TextAlignmentV(Alignment.Left)
@@ -70,7 +70,7 @@ public class DimensionSharedVertexBufferMenu(
         Node(root).OnUpdateF(() =>
         {
             if (keyboard.IsKeyPressed(Keys.F7))
-                menu.IsDisabledV() = !menu.IsDisabledV();
+                menu.IsDisabledV = !menu.IsDisabledV;
         });
     }
 }

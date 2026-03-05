@@ -10,8 +10,8 @@ public class RootUiFocus(RootKeyboard keyboard)
 
     public void Focus(EntObj? ent)
     {
-        focused?.IsFocusedR(false);
-        ent?.IsFocusedR(true);
+        focused?.IsFocusedR = false;
+        ent?.IsFocusedR = true;
         focused = ent;
     }
 
@@ -48,18 +48,18 @@ public class RootUiFocus(RootKeyboard keyboard)
 
     private void CollectFocusables(EntObj n)
     {
-        var isFocusable = Get(n.GetIsFocusableV(), n.GetIsFocusableF());
-        var isInputDisabled = Get(n.GetIsInputDisabledV(), n.GetIsInputDisabledF());
+        var isFocusable = Get(n.IsFocusableV, n.IsFocusableFDelegate);
+        var isInputDisabled = Get(n.IsInputDisabledV, n.IsInputDisabledFDelegate);
 
         if (isFocusable && !isInputDisabled)
         {
             focusables.Add(n);
 
-            if (Get(n.GetIsInitialFocusV(), n.GetIsInitialFocusF()))
+            if (Get(n.IsInitialFocusV, n.IsInitialFocusFDelegate))
                 newInits.Add(n);
         }
 
-        foreach (var c in n.GetNodesR().Span)
+        foreach (var c in n.NodesR.Span)
             CollectFocusables(c);
     }
 }

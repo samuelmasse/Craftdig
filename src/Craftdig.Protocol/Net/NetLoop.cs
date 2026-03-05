@@ -28,7 +28,7 @@ public class NetLoop(AppLog log)
 
         Register(C.CommandId, (ns, msg) =>
         {
-            log.Trace("Socket {0} <- {1} ({2}) {3} bytes", ns.Ent.Tag(), typeof(C).Name, C.CommandId, msg.Data.Length);
+            log.Trace("Socket {0} <- {1} ({2}) {3} bytes", ns.Tag, typeof(C).Name, C.CommandId, msg.Data.Length);
 
             var cmd = MemoryMarshal.AsRef<C>(msg.Data[..header]);
             var data = msg.Data[header..];

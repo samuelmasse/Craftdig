@@ -23,9 +23,9 @@ public class WorldModuleIndicesLoader(ModuleEnts ents, WorldPaths paths, WorldMo
 
         foreach (var ent in ents.Span)
         {
-            if (!set.Contains(ent.ModuleName()))
+            if (!set.Contains(ent.ModuleName))
             {
-                names.Add(ent.ModuleName());
+                names.Add(ent.ModuleName);
                 changed = true;
             }
         }

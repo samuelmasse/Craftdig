@@ -11,16 +11,16 @@ public class ServerKicker(AppLog log, ServerSockets sockets)
 
         sockets.ForEach(ns =>
         {
-            if (ns.Ent.IsAuthenticated())
+            if (ns.IsAuthenticated)
                 return;
 
             count++;
 
-            var dt = now - ns.Ent.ConnectedTime();
+            var dt = now - ns.ConnectedTime;
             if (dt.TotalSeconds < 30)
                 return;
 
-            log.Warn("Kicking socket {0}", ns.Ent.Tag());
+            log.Warn("Kicking socket {0}", ns.Tag);
             ns.Disconnect();
             kicked++;
         });

@@ -17,11 +17,11 @@ public class ModuleEntsMut
             if (entities.TryGetValue(name, out var val))
                 return (EntMut)val;
 
-            var ent = new EntObj().ModuleName(name);
+            var ent = new EntObj() { ModuleName = name };
             entities.Add(name, ent);
             set.Add((EntMut)ent);
             list.Add((EntMut)ent);
-            ent.RuntimeIndex() = list.Count;
+            ent.RuntimeIndex = list.Count;
 
             return (EntMut)ent;
         }

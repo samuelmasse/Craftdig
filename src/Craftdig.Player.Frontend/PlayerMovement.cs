@@ -9,31 +9,37 @@ public class PlayerMovement(
 {
     public void Input()
     {
+        var movement = ent.Movement;
+
         if (doublePress.IsDoublePressed(Keys.W))
-            ent.Ent.Movement().Sprint = MovementAction.Start;
+            movement.Sprint = MovementAction.Start;
 
         if (doublePress.IsDoublePressed(Keys.Space))
-            ent.Ent.Movement().Fly = MovementAction.Toggle;
+            movement.Fly = MovementAction.Toggle;
+
+        ent.Movement = movement;
     }
 
     public void Tick()
     {
+        var movement = ent.Movement;
+
         if (controls.CameraUp.Run())
-            ent.Ent.Movement().FlyUp = true;
+            movement.FlyUp = true;
         if (controls.CameraDown.Run())
-            ent.Ent.Movement().FlyDown = true;
+            movement.FlyDown = true;
         if (controls.CameraJump.Run())
-            ent.Ent.Movement().Jump = true;
+            movement.Jump = true;
 
         Vector3d mov = default;
         if (controls.CameraFront.Run())
         {
             if (controls.CameraFast.Run())
-                ent.Ent.Movement().Sprint = MovementAction.Start;
+                movement.Sprint = MovementAction.Start;
 
             mov += camera.Front;
         }
-        else ent.Ent.Movement().Sprint = MovementAction.Stop;
+        else movement.Sprint = MovementAction.Stop;
 
         if (controls.CameraLeft.Run())
             mov -= camera.Right;
@@ -42,12 +48,16 @@ public class PlayerMovement(
         if (controls.CameraRight.Run())
             mov += camera.Right;
 
-        ent.Ent.Movement().Vector += (Vector3)mov.Swizzle();
-        ent.Ent.Movement().LookAt = camera.LookAt.Swizzle();
+        movement.Vector += (Vector3)mov.Swizzle();
+        movement.LookAt = camera.LookAt.Swizzle();
+
+        ent.Movement = movement;
     }
 
     public void NoTick()
     {
-        ent.Ent.Movement().Sprint = MovementAction.Stop;
+        var movement = ent.Movement;
+        movement.Sprint = MovementAction.Stop;
+        ent.Movement = movement;
     }
 }

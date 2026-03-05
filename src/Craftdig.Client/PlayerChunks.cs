@@ -16,7 +16,7 @@ public class PlayerChunks(
 
             chunks.Alloc(cloc);
             var chunk = chunks[cloc];
-            chunk.ChunkBlocks() = blocks;
+            chunk.ChunkBlocks = blocks;
             chunkBag.Add(chunk);
             chunkReceiverHandler.Receive(chunk);
 

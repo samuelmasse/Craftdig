@@ -10,8 +10,8 @@ public class ModuleSingleplayerNewWorldMenu(
 {
     public void Create(EntObj root)
     {
-        var gameModes = ents.Set.Where(x => x.IsGameMode()).OrderBy(x => x.Order()).ToList();
-        var difficulties = ents.Set.Where(x => x.IsDifficulty()).OrderBy(x => x.Order()).ToList();
+        var gameModes = ents.Set.Where(x => x.IsGameMode).OrderBy(x => x.Order).ToList();
+        var difficulties = ents.Set.Where(x => x.IsDifficulty).OrderBy(x => x.Order).ToList();
 
         string defaultName = "New World";
         var name = new StringBuilder(defaultName);
@@ -20,47 +20,47 @@ public class ModuleSingleplayerNewWorldMenu(
         int difficultyIndex = 0;
 
         Node(root, out var form)
-            .Mut(s.VerticalList)
+            .Mutate(s.VerticalList)
             .OffsetV((0, s.ItemHeight))
             .SizeV((s.ItemWidth * 2, 0))
             .InnerSpacingV(s.ItemSpacing)
             .AlignmentV(Alignment.Horizontal);
         {
             Node(form)
-                .Mut(s.Label)
+                .Mutate(s.Label)
                 .TextV("World Name");
 
             Node(form)
-                .Mut(s.Textbox)
+                .Mutate(s.Textbox)
                 .MaxLengthV(29)
                 .StringBuilderV(name)
                 .IsInitialFocusV(true);
 
             Node(form)
-                .Mut(s.Label)
+                .Mutate(s.Label)
                 .TextV("Seed");
 
             Node(form)
-                .Mut(s.Textbox)
+                .Mutate(s.Textbox)
                 .MaxLengthV(29)
                 .StringBuilderV(seed);
 
             Node(form)
-                .Mut(s.Button)
+                .Mutate(s.Button)
                 .OnPressF(() => gameModeIndex = (gameModeIndex + 1) % gameModes.Count)
-                .TextF(() => text.Format("Game Mode: {0}", gameModes[gameModeIndex].Name()));
+                .TextF(() => text.Format("Game Mode: {0}", gameModes[gameModeIndex].Name));
 
             Node(form)
-                .Mut(s.Button)
+                .Mutate(s.Button)
                 .OnPressF(() =>
                 {
-                    if (gameModes[gameModeIndex].LockedDifficulty() == default)
+                    if (gameModes[gameModeIndex].LockedDifficulty == default)
                         difficultyIndex = (difficultyIndex + 1) % difficulties.Count;
                 })
-                .TextF(() => text.Format("Difficulty: {0}", gameModes[gameModeIndex].LockedDifficulty() == default ?
-                    difficulties[difficultyIndex].Name() :
-                    gameModes[gameModeIndex].LockedDifficulty().Name()))
-                .IsInputDisabledF(() => gameModes[gameModeIndex].LockedDifficulty() != default);
+                .TextF(() => text.Format("Difficulty: {0}", gameModes[gameModeIndex].LockedDifficulty == default ?
+                    difficulties[difficultyIndex].Name :
+                    gameModes[gameModeIndex].LockedDifficulty.Name))
+                .IsInputDisabledF(() => gameModes[gameModeIndex].LockedDifficulty != default);
         }
 
         Node(root, out var bottomBar)
@@ -70,7 +70,7 @@ public class ModuleSingleplayerNewWorldMenu(
             .ColorV(s.BoardColor);
         {
             Node(bottomBar, out var buttonsList)
-                .Mut(s.HorizontalList)
+                .Mutate(s.HorizontalList)
                 .AlignmentV(Alignment.Center)
                 .OffsetMultiplierV(s.ItemSpacingXS)
                 .SizeInnerMaxRelativeV(s.Vertical)
@@ -78,7 +78,7 @@ public class ModuleSingleplayerNewWorldMenu(
                 .ColorV(s.BoardColor2);
             {
                 Node(buttonsList, out var leftButtonsVertical)
-                    .Mut(s.VerticalList)
+                    .Mutate(s.VerticalList)
                     .SizeV((s.ItemWidthL, 0))
                     .InnerSpacingV(s.ItemSpacing);
                 {
@@ -93,8 +93,8 @@ public class ModuleSingleplayerNewWorldMenu(
                             if (string.IsNullOrEmpty(worldName))
                                 worldName = defaultName;
 
-                            if (gameMode.LockedDifficulty() != default)
-                                difficulty = gameMode.LockedDifficulty();
+                            if (gameMode.LockedDifficulty != default)
+                                difficulty = gameMode.LockedDifficulty;
 
                             if (!int.TryParse(worldSeed, out int numberSeed))
                             {
@@ -107,18 +107,18 @@ public class ModuleSingleplayerNewWorldMenu(
                             singleplayerLoadWorldAction.Run(paths);
                         })
                         .TextV("Create New World")
-                        .Mut(s.Button);
+                        .Mutate(s.Button);
                 }
 
                 Node(buttonsList, out var rightButtonsVertical)
-                    .Mut(s.VerticalList)
+                    .Mutate(s.VerticalList)
                     .SizeV((s.ItemWidthL, 0))
                     .InnerSpacingV(s.ItemSpacing);
                 {
                     Node(rightButtonsVertical)
-                        .OnPressF(() => root.StackRootV()?.NodeStack().Pop())
+                        .OnPressF(() => root.StackRootV?.NodeStack.Pop())
                         .TextV("Cancel")
-                        .Mut(s.Button);
+                        .Mutate(s.Button);
                 }
             }
         }

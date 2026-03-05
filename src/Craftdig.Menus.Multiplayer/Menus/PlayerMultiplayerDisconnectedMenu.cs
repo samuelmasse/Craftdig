@@ -8,20 +8,20 @@ public class PlayerMultiplayerDisconnectedMenu(
     public void Create(EntObj root)
     {
         Node(root, out var form)
-            .Mut(s.VerticalList)
+            .Mutate(s.VerticalList)
             .SizeV((s.ItemWidth * 2, 0))
             .InnerSpacingV(s.ItemSpacing)
             .AlignmentV(Alignment.Center);
         {
             Node(form)
-                .Mut(s.Label)
+                .Mutate(s.Label)
                 .AlignmentV(Alignment.Horizontal)
                 .TextV("Connection lost");
 
             Node(form)
                 .OnPressF(reset.Run)
                 .TextV("Ok")
-                .Mut(s.Button);
+                .Mutate(s.Button);
         }
     }
 }

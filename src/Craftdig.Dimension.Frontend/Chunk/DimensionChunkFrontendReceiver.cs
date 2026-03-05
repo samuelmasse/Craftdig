@@ -7,8 +7,8 @@ public class DimensionChunkFrontendReceiver(
 {
     public void Receive(EntMut chunk)
     {
-        chunk.Unrendered() = chunkSortedLists.Take();
-        chunk.Rendered() = chunkSortedLists.Take();
-        chunkRenderScheduler.Add(chunk.Cloc());
+        chunk.Unrendered = chunkSortedLists.Take();
+        chunk.Rendered = chunkSortedLists.Take();
+        chunkRenderScheduler.Add(chunk.Cloc);
     }
 }

@@ -9,8 +9,8 @@ public class ModuleWriteWorldMetaAction
         {
             Name = args.Name,
             Seed = args.Seed,
-            GameMode = args.GameMode.ModuleName(),
-            Difficulty = args.Difficulty.ModuleName()
+            GameMode = args.GameMode.ModuleName,
+            Difficulty = args.Difficulty.ModuleName
         }, new() { ConvertPropertyName = (s) => s });
 
         Directory.CreateDirectory(paths.Root);

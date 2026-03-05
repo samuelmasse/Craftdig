@@ -16,7 +16,7 @@ public class DimensionNativeBiomeGenerator(ModuleNative m) : IBiomeGenerator
                 {
                     var block = blocks[(x, y, z)];
 
-                    if (block.IsSolid())
+                    if (block.IsSolid)
                     {
                         if (wasAir)
                             Generate(blocks, (x, y, z));
@@ -33,7 +33,7 @@ public class DimensionNativeBiomeGenerator(ModuleNative m) : IBiomeGenerator
     {
         for (int sz = SectionHeight - 1; sz >= 0; sz--)
         {
-            if (blocks.Uniform(sz) == default || blocks.Uniform(sz).IsSolid())
+            if (blocks.Uniform(sz) == default || blocks.Uniform(sz).IsSolid)
                 return (sz + 1) * SectionSize - 1;
         }
 

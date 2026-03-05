@@ -5,10 +5,10 @@ public class ModuleFaceLoader(ModuleEntsMut entsMut, ModuleFaceAtlas faceAtlas, 
 {
     public void Run()
     {
-        var faces = entsMut.Set.Where(x => x.GetIsFace()).ToList();
+        var faces = entsMut.Set.Where(x => x.IsFace).ToList();
 
-        faces.ForEach(x => x
-            .FaceIndex(faceAtlas[x.FaceFile()])
-            .FaceTexture(faceTextures[x.FaceFile()]));
+        faces.ForEach(x => x.Mutate()
+            .FaceIndex(faceAtlas[x.FaceFile])
+            .FaceTexture(faceTextures[x.FaceFile]));
     }
 }

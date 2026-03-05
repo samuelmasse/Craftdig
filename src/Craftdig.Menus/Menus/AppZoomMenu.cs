@@ -24,7 +24,7 @@ public class AppZoomMenu(RootKeyboard keyboard, RootText text, RootUiScale scale
             });
 
         Node(root)
-            .Mut(s.Label)
+            .Mutate(s.Label)
             .AlignmentV(Alignment.Top | Alignment.Right)
             .TextF(() => text.Format("{0}%", scale.Scale * 100))
             .OnUpdateF(() =>

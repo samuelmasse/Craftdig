@@ -11,8 +11,8 @@ public class DimensionPendingMovement(AppLog log, DimensionSockets sockets)
 
     private void ProcessMovement(NetSocket ns)
     {
-        var ent = ns.Ent.SocketPlayer();
-        var pending = ent.PendingMovement();
+        var ent = ns.SocketPlayer;
+        var pending = ent.PendingMovement;
         if (pending == null)
             return;
 
@@ -23,22 +23,22 @@ public class DimensionPendingMovement(AppLog log, DimensionSockets sockets)
             ahead--;
         }
 
-        log.Debug("{0} ahead by {1}", ent.Tag(), ahead);
+        log.Debug("{0} ahead by {1}", ent.Tag, ahead);
 
         if (ahead > 2)
         {
-            if (ent.PendingMovementWait() > Wait(ahead))
+            if (ent.PendingMovementWait > Wait(ahead))
             {
                 ns.Send<SlowTickCommand>();
-                ent.PendingMovementWait() = 0;
+                ent.PendingMovementWait = 0;
             }
 
-            ent.PendingMovementWait()++;
+            ent.PendingMovementWait++;
         }
-        else ent.PendingMovementWait() = 0;
+        else ent.PendingMovementWait = 0;
 
-        ref var mov = ref ent.Movement();
-        ref var constr = ref ent.Construction();
+        var mov = ent.Movement;
+        var constr = ent.Construction;
 
         if (pending.TryDequeue(out var cmd))
         {
@@ -60,6 +60,9 @@ public class DimensionPendingMovement(AppLog log, DimensionSockets sockets)
             constr.Action = cconstr.Action;
             constr.Arg = cconstr.Arg;
         }
+
+        ent.Movement = mov;
+        ent.Construction = constr;
     }
 
     private int Wait(int ahead) => ahead switch

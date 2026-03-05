@@ -5,8 +5,7 @@ public class DimensionMovePlayerReceiver : DimensionReceiver<MovePlayerCommand>
 {
     public override void Receive(NetSocket ns, MovePlayerCommand cmd)
     {
-        ref var pending = ref ns.Ent.SocketPlayer().PendingMovement();
-        pending ??= [];
+        var pending = ns.SocketPlayer.PendingMovement ??= [];
         pending.Enqueue(cmd);
     }
 }

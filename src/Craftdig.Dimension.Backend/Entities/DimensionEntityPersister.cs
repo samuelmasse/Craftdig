@@ -14,7 +14,7 @@ public class DimensionEntityPersister(AppLog log, DimensionEntityRegionWriter en
         while (pq.Count > 0 && pq.Peek().Time < pass)
         {
             var (ent, rloc, prevRloc, _, persistId) = pq.Dequeue();
-            if (persistId != ent.RigidPersistId())
+            if (persistId != ent.RigidPersistId)
                 continue;
 
             log.Warn("Persist ent {0} into rloc {1}", ent, prevRloc);
@@ -33,10 +33,10 @@ public class DimensionEntityPersister(AppLog log, DimensionEntityRegionWriter en
 
     public void Schedule(EntRef ent, Vector2i rloc, DateTime time)
     {
-        var prevRloc = ent.RigidRloc();
+        var prevRloc = ent.RigidRloc;
 
-        log.Warn("Persist {0} {1} {2} {3} {4}", ent, rloc, prevRloc, time, ent.RigidPersistId());
-        pq.Enqueue(new(ent, rloc, prevRloc, time, ent.RigidPersistId()), time);
+        log.Warn("Persist {0} {1} {2} {3} {4}", ent, rloc, prevRloc, time, ent.RigidPersistId);
+        pq.Enqueue(new(ent, rloc, prevRloc, time, ent.RigidPersistId), time);
     }
 
     private readonly record struct Persistance(EntRef Ent, Vector2i Rloc, Vector2i? PrevRloc, DateTime Time, long PersistId);

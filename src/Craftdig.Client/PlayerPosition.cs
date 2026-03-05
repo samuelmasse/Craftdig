@@ -26,10 +26,10 @@ public class PlayerPosition(
     {
         expected.Add(new()
         {
-            Position = ent.Ent.Position(),
-            Velocity = ent.Ent.Velocity(),
-            IsFlying = ent.Ent.IsFlying(),
-            IsSprinting = ent.Ent.IsSprinting()
+            Position = ent.Position,
+            Velocity = ent.Velocity,
+            IsFlying = ent.IsFlying,
+            IsSprinting = ent.IsSprinting
         });
 
         if (expected.Count > tolerance)
@@ -67,17 +67,14 @@ public class PlayerPosition(
 
     public void Stream()
     {
-        ref var movement = ref ent.Ent.Movement();
-        ref var construction = ref ent.Ent.Construction();
-
         if (listen > 0)
         {
-            movement = default;
-            construction = default;
+            ent.Movement = default;
+            ent.Construction = default;
             listen--;
         }
 
-        socket.Send(new MovePlayerCommand() { Movement = movement, Construction = construction });
+        socket.Send(new MovePlayerCommand() { Movement = ent.Movement, Construction = ent.Construction });
     }
 
     private bool HasMatchingCommand()
@@ -102,9 +99,9 @@ public class PlayerPosition(
 
     private void ApplyServerPosition(PositionUpdateCommand server)
     {
-        ent.Ent.Position() = server.Position;
-        ent.Ent.Velocity() = server.Velocity;
-        ent.Ent.IsFlying() = server.IsFlying;
-        ent.Ent.IsSprinting() = server.IsSprinting;
+        ent.Position = server.Position;
+        ent.Velocity = server.Velocity;
+        ent.IsFlying = server.IsFlying;
+        ent.IsSprinting = server.IsSprinting;
     }
 }

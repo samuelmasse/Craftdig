@@ -15,8 +15,8 @@ public class ServerClientLoop(
         lock (this)
         {
             ns.MaxMessageSize = 4096;
-            ns.Ent.ConnectedTime() = DateTime.UtcNow;
-            ns.Ent.Tag() = $"s{++nextSocketId}";
+            ns.ConnectedTime = DateTime.UtcNow;
+            ns.Tag = $"s{++nextSocketId}";
 
             clientThreadPool.Start((execution) => Loop(execution, ns));
             clientThreadPool.Start((execution) => Push(execution, ns));
@@ -27,23 +27,23 @@ public class ServerClientLoop(
     {
         sockets.Add(ns);
         clientLimits.Pulse();
-        ns.Ent.SocketThread() = execution;
+        ns.SocketThread = execution;
 
         try
         {
-            log.Debug("Socket {0} loop running on thread {1}", ns.Ent.Tag(), execution.ClientThread.Id);
-            log.Info("Socket {0} connected : {1}", ns.Ent.Tag(), ns.Ip);
+            log.Debug("Socket {0} loop running on thread {1}", ns.Tag, execution.ClientThread.Id);
+            log.Info("Socket {0} connected : {1}", ns.Tag, ns.Ip);
             loop.Run(ns);
         }
         catch (Exception e)
         {
             if (ns.Connected)
-                log.Warn("Socket {0} crashed", ns.Ent.Tag(), e);
+                log.Warn("Socket {0} crashed", ns.Tag, e);
         }
         finally
         {
             ns.Disconnect();
-            log.Info("Socket {0} disconnected", ns.Ent.Tag());
+            log.Info("Socket {0} disconnected", ns.Tag);
 
             sockets.Remove(ns);
             clientLimits.Pulse();
@@ -54,13 +54,13 @@ public class ServerClientLoop(
     {
         try
         {
-            log.Debug("Socket {0} push running on thread {1}", ns.Ent.Tag(), execution.ClientThread.Id);
+            log.Debug("Socket {0} push running on thread {1}", ns.Tag, execution.ClientThread.Id);
             ns.Push(default);
         }
         catch (Exception e)
         {
             if (ns.Connected)
-                log.Warn("Socket {0} push crashed", ns.Ent.Tag(), e);
+                log.Warn("Socket {0} push crashed", ns.Tag, e);
         }
         finally
         {

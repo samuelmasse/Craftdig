@@ -11,12 +11,12 @@ public class PlayerCreativeInventoryMenu(ModuleEnts ents, AppStyle s, PlayerEnt 
 
         foreach (var ent in ents.Span)
         {
-            if (ent.IsBlock() && ent.IsBuildable())
+            if (ent.IsBlock && ent.IsBuildable)
                 blocks[count++] = new(ent, 1);
         }
 
         Node(root, out var vert)
-            .Mut(s.VerticalList)
+            .Mutate(s.VerticalList)
             .SizeInnerMaxRelativeV(s.Horizontal)
             .PaddingV((s.ItemSpacing, s.ItemSpacing, s.ItemSpacing, s.ItemSpacing))
             .InnerSpacingV(s.ItemSpacing)
@@ -26,16 +26,16 @@ public class PlayerCreativeInventoryMenu(ModuleEnts ents, AppStyle s, PlayerEnt 
             .OffsetMultiplierV(s.ItemSpacingXS);
 
         Node(vert, out var title)
-            .Mut(s.Label)
+            .Mutate(s.Label)
             .TextV("Building Blocks");
 
         Node(vert, out var blocksVert)
-            .Mut(s.VerticalList)
+            .Mutate(s.VerticalList)
             .SizeInnerMaxRelativeV(s.Horizontal);
         for (int y = 0; y < rows; y++)
         {
             Node(blocksVert, out var blocksHor)
-                .Mut(s.HorizontalList)
+                .Mutate(s.HorizontalList)
                 .SizeInnerMaxRelativeV(s.Vertical);
 
             for (int x = 0; x < HotBarSlots.Count; x++)
@@ -43,36 +43,36 @@ public class PlayerCreativeInventoryMenu(ModuleEnts ents, AppStyle s, PlayerEnt 
                 Vector2i loc = (x, y);
 
                 Node(blocksHor, out var square)
-                    .Mut(s.Button)
-                    .Mut(s.Slot)
-                    .PlayerV((EntMut)player.Ent)
+                    .Mutate(s.Button)
+                    .Mutate(s.Slot)
+                    .PlayerV(player)
                     .GetSlotValueF(() => blocks[loc.Y * HotBarSlots.Count + loc.X]);
                 {
                     Node(square)
-                        .Mut(s.SlotButtonInfinity)
-                        .Mut(s.SlotTooltip)
+                        .Mutate(s.SlotButtonInfinity)
+                        .Mutate(s.SlotTooltip)
                         .SlotV(square);
                 }
             }
         }
 
         Node(vert, out var hotbar)
-            .Mut(s.HorizontalList)
+            .Mutate(s.HorizontalList)
             .SizeInnerMaxRelativeV(s.Vertical);
         for (int x = 0; x < HotBarSlots.Count; x++)
         {
             int i = x;
 
             Node(hotbar, out var square)
-                .Mut(s.Button)
-                .Mut(s.Slot)
-                .GetSlotValueF(() => player.Ent.GetHotBarSlot(i))
-                .SetSlotValueF((v) => player.Ent.SetHotBarSlot(i, v))
-                .PlayerV((EntMut)player.Ent);
+                .Mutate(s.Button)
+                .Mutate(s.Slot)
+                .GetSlotValueF(() => player.GetHotBarSlot(i))
+                .SetSlotValueF((v) => player.SetHotBarSlot(i, v))
+                .PlayerV(player);
             {
                 Node(square)
-                    .Mut(s.SlotButton)
-                    .Mut(s.SlotTooltip)
+                    .Mutate(s.SlotButton)
+                    .Mutate(s.SlotTooltip)
                     .SlotV(square);
             }
         }

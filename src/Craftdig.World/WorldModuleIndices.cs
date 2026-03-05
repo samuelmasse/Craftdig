@@ -8,7 +8,7 @@ public class WorldModuleIndices(ModuleEnts ents)
     private int[] indexToRt = [];
 
     public ReadOnlySpan<string> Names => names;
-    public int this[Ent block] => rtToIndex[block.RuntimeIndex()];
+    public int this[Ent block] => rtToIndex[block.RuntimeIndex];
     public Ent this[int index] => ents[indexToRt[index]];
 
     public void Apply(string[] names)
@@ -24,15 +24,15 @@ public class WorldModuleIndices(ModuleEnts ents)
 
         foreach (var ent in ents.Span)
         {
-            if (dict.TryGetValue(ent.ModuleName(), out int index))
-                rtToIndex[ent.RuntimeIndex()] = index;
+            if (dict.TryGetValue(ent.ModuleName, out int index))
+                rtToIndex[ent.RuntimeIndex] = index;
         }
 
         for (int i = 0; i < names.Length; i++)
         {
             var name = names[i];
             if (ents.Contains(name))
-                indexToRt[i] = ents[name].RuntimeIndex();
+                indexToRt[i] = ents[name].RuntimeIndex;
         }
     }
 }

@@ -34,9 +34,9 @@ public class DimensionChunkCollector(
 
         foreach (var player in playerBag.Ents)
         {
-            var pcloc = player.Position().ToLoc().Xy.ToCloc();
+            var pcloc = player.Position.ToLoc().Xy.ToCloc();
 
-            var delta = Vector2i.Abs(chunk.Cloc() - pcloc);
+            var delta = Vector2i.Abs(chunk.Cloc - pcloc);
             var dist = delta.X + delta.Y;
             if (dist < far + 5)
                 return false;
@@ -45,5 +45,5 @@ public class DimensionChunkCollector(
         return true;
     }
 
-    private void Collect(Ent chunk) => chunkUnloader.Unload(chunk.Cloc());
+    private void Collect(Ent chunk) => chunkUnloader.Unload(chunk.Cloc);
 }

@@ -15,7 +15,7 @@ public class ModuleMainMenu(
     public void Create(EntObj root)
     {
         Node(root, out var list)
-            .Mut(s.VerticalList)
+            .Mutate(s.VerticalList)
             .AlignmentV(Alignment.Center)
             .OffsetMultiplierV(s.ItemSpacingXS)
             .InnerSpacingV(s.ItemSpacingXXL)
@@ -23,7 +23,7 @@ public class ModuleMainMenu(
             .ColorV(s.BoardColor);
         {
             Node(list)
-                .Mut(s.Label)
+                .Mutate(s.Label)
                 .TextV("Craftdig")
                 .FontSizeV(s.FontSizeTitle)
                 .FontPaddingV((s.ItemSpacing, 0, s.ItemSpacing, 0))
@@ -31,24 +31,24 @@ public class ModuleMainMenu(
                 .AlignmentV(Alignment.Horizontal);
 
             Node(list, out var list2)
-                .Mut(s.VerticalList)
+                .Mutate(s.VerticalList)
                 .AlignmentV(Alignment.Horizontal)
                 .InnerSpacingV(s.ItemSpacing)
                 .SizeV((s.ItemWidth, 0))
                 .ColorV(s.BoardColor2);
             {
                 Node(list2)
-                    .Mut(s.Button)
-                    .OnPressF(() => root.StackRootV()?.NodeStack().Push(
-                        Node().StackRootV(root.StackRootV()).Mut(worldSelectMenu.Create)))
+                    .Mutate(s.Button)
+                    .OnPressF(() => root.StackRootV?.NodeStack.Push(
+                        Node().StackRootV(root.StackRootV).Mutate(worldSelectMenu.Create)))
                     .TextV("Singleplayer");
 
                 Node(list2)
-                    .Mut(s.Button)
+                    .Mutate(s.Button)
                     .TextV("Multiplayer")
                     .OnPressF(() =>
                     {
-                        var node = Node().StackRootV(root.StackRootV());
+                        var node = Node().StackRootV(root.StackRootV);
 
                         if (clientOptions.NoAuthUser == null)
                         {
@@ -56,24 +56,24 @@ public class ModuleMainMenu(
                             {
                                 multiplayerCredentials.StartLogin();
                                 multiplayerCredentials.WaitLogin();
-                                node.Mut(connectMenu.Create);
+                                node.Mutate(connectMenu.Create);
                             }
-                            else node.Mut(loginMenu.Create);
+                            else node.Mutate(loginMenu.Create);
                         }
-                        else node.Mut(connectMenu.Create);
+                        else node.Mutate(connectMenu.Create);
 
-                        root.StackRootV()?.NodeStack().Push(node);
+                        root.StackRootV?.NodeStack.Push(node);
                     });
 
                 Node(list2)
-                    .Mut(s.Button)
+                    .Mutate(s.Button)
                     .OnPressF(screen.Close)
                     .TextV("Quit");
             }
         }
 
         Node(root)
-            .Mut(s.Label)
+            .Mutate(s.Label)
             .TextV("Craftdig 0.1")
             .AlignmentV(Alignment.Left | Alignment.Bottom)
             .OffsetV((s.ItemSpacingS, -s.ItemSpacingXS));
@@ -81,7 +81,7 @@ public class ModuleMainMenu(
         if (clientOptions.AllowNoAuth || clientOptions.AllowRawTcp)
         {
             Node(root)
-                .Mut(s.Label)
+                .Mutate(s.Label)
                 .TextF(() => text.Format("UseRawTcp = {0}, NoAuthUser = {1}", clientOptions.UseRawTcp, clientOptions.NoAuthUser))
                 .AlignmentV(Alignment.Right | Alignment.Bottom)
                 .OffsetV((-s.ItemSpacingS, -s.ItemSpacingXS))

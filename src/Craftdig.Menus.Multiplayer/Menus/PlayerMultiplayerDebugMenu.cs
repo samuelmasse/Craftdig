@@ -22,7 +22,7 @@ public class PlayerMultiplayerDebugMenu(
             () => text.Format("Slow: {0}", slowTickReceiver.Count),
             () => text.Format("Listen: {0}", playerPosition.Listen),
             () => text.Format("Debounce: {0}", playerPosition.Debounce),
-            () => text.Format("Client: {0:0.00}", playerEnt.Ent.Position()),
+            () => text.Format("Client: {0:0.00}", playerEnt.Position),
             () => text.Format("Server: {0:0.00}", playerPositionUpdateReceiver.Latest.Position),
         ];
 
@@ -38,7 +38,7 @@ public class PlayerMultiplayerDebugMenu(
             });
         {
             lines.ForEach(x => Node(list)
-                .Mut(s.Label)
+                .Mutate(s.Label)
                 .ColorV((0.5f, 0.5f, 0.5f, 0.5f))
                 .TextF(x));
 
@@ -62,7 +62,7 @@ public class PlayerMultiplayerDebugMenu(
                 }
 
                 Node(list)
-                    .Mut(s.Label)
+                    .Mutate(s.Label)
                     .ColorF(() =>
                     {
                         var (cmd, dist) = Process();
@@ -82,7 +82,7 @@ public class PlayerMultiplayerDebugMenu(
         Node(root).OnUpdateF(() =>
         {
             if (keyboard.IsKeyPressed(Keys.F4))
-                list.IsDisabledV() = !list.IsDisabledV();
+                list.IsDisabledV = !list.IsDisabledV;
         });
     }
 }

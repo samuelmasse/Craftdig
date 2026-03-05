@@ -15,22 +15,22 @@ public class ModuleMenuState(
     public override void Load()
     {
         GC.Collect(GC.MaxGeneration);
-        Node(menus).Mut(mainBackgroundMenu.Create);
-        menus.NodeStack().Push(Node().StackRootV(menus).Mut(mainMenu.Create));
+        Node(menus).Mutate(mainBackgroundMenu.Create);
+        menus.NodeStack.Push(Node().StackRootV(menus).Mutate(mainMenu.Create));
         watch.Start();
     }
 
     public override void Unload()
     {
-        ui.Nodes().Remove(menus);
+        ui.Nodes.Remove(menus);
     }
 
     public override void Update(double time)
     {
         if (keyboard.IsKeyPressed(Keys.Escape))
         {
-            if (menus.NodeStack().Count > 1)
-                menus.NodeStack().Pop();
+            if (menus.NodeStack.Count > 1)
+                menus.NodeStack.Pop();
         }
 
         if (watch.ElapsedMilliseconds > 30)

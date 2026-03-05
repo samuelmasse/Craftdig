@@ -11,26 +11,26 @@ public class ModuleNativeFrontendLoader(ModuleNative m) : ModLoader
 
     private void LoadFaces()
     {
-        m.GrassFace
+        m.GrassFace.Mutate()
             .IsFace(true)
             .FaceFile("Grass");
 
-        m.GrassSideFace
+        m.GrassSideFace.Mutate()
             .IsFace(true)
             .FaceFile("GrassSide");
 
-        m.StoneFace
+        m.StoneFace.Mutate()
             .IsFace(true)
             .FaceFile("Stone");
 
-        m.DirtFace
+        m.DirtFace.Mutate()
             .IsFace(true)
             .FaceFile("Dirt");
     }
 
     private void LoadBlocks()
     {
-        m.GrassBlock
+        m.GrassBlock.Mutate()
             .Faces(new()
             {
                 Top = m.GrassFace,
@@ -41,10 +41,10 @@ public class ModuleNativeFrontendLoader(ModuleNative m) : ModLoader
                 Back = m.GrassSideFace
             });
 
-        m.DirtBlock
+        m.DirtBlock.Mutate()
             .Faces(new(m.DirtFace));
 
-        m.StoneBlock
+        m.StoneBlock.Mutate()
             .Faces(new(m.StoneFace));
     }
 }

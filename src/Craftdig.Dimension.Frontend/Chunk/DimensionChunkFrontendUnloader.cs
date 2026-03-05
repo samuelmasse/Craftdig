@@ -9,20 +9,20 @@ public class DimensionChunkFrontendUnloader(
 {
     public void Unload(EntMut chunk)
     {
-        foreach (var section in chunk.GetSections().Span)
+        foreach (ref var section in chunk.Sections.Span)
         {
             if (section != default)
-                meshTransferer.Free(ref section.TerrainMesh());
+                section.TerrainMesh = meshTransferer.Free(section.TerrainMesh);
 
             section.Dispose();
         }
 
-        if (!chunk.Sections().IsEmpty)
-            sections.ReturnSections(chunk.Sections());
+        if (!chunk.Sections.IsEmpty)
+            sections.ReturnSections(chunk.Sections);
 
-        chunkSortedLists.Return(chunk.Unrendered());
-        chunkSortedLists.Return(chunk.Rendered());
+        chunkSortedLists.Return(chunk.Unrendered);
+        chunkSortedLists.Return(chunk.Rendered);
 
-        chunkRenderDescheduler.Remove(chunk.Cloc());
+        chunkRenderDescheduler.Remove(chunk.Cloc);
     }
 }

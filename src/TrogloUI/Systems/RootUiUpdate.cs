@@ -5,10 +5,10 @@ public class RootUiUpdate
 {
     internal void Update(EntObj n)
     {
-        if (n.HasOnUpdateF())
-            n.OnUpdateF()?.Invoke();
+        if (n.HasOnUpdateF)
+            n.OnUpdateFDelegate?.Invoke();
 
-        foreach (var c in n.GetNodesR().Span)
+        foreach (var c in n.NodesR.Span)
             Update(c);
     }
 }

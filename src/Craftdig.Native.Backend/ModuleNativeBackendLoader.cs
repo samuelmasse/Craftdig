@@ -5,7 +5,7 @@ public class ModuleNativeBackendLoader(ModuleNative m) : ModLoader
 {
     public override void Load()
     {
-        m.OverworldDimension
+        m.OverworldDimension.Mutate()
             .TerrainGeneratorType(typeof(DimensionNativeTerrainGenerator))
             .BiomeGeneraetorType(typeof(DimensionNativeBiomeGenerator));
     }

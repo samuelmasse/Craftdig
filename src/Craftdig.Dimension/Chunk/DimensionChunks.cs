@@ -31,8 +31,11 @@ public class DimensionChunks(WorldEntArena entArena)
             return;
 
         var chunk = entArena.Arena.Alloc()
+            .Mutate()
             .IsChunk(true)
-            .Cloc(cloc);
+            .Cloc(cloc)
+            .Ent;
+
         map.Add(cloc, chunk);
     }
 

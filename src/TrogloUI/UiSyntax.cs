@@ -2,37 +2,32 @@ namespace TrogloUI;
 
 public static class UiSyntax
 {
-    public static EntObj Node()
+    public static EntMutator<EntObj> Node()
     {
         var val = new EntObj();
-        return val;
+        return val.Mutate();
     }
 
-    public static EntObj Node(out EntObj val)
+    public static EntMutator<EntObj> Node(out EntObj val)
     {
         val = new();
-        return val;
+        return val.Mutate();
     }
 
-    public static EntObj Node(EntObj parent)
+    public static EntMutator<EntObj> Node(EntObj parent)
     {
         var val = new EntObj();
-        parent.Nodes().Add(val);
-        return val;
+        parent.Nodes.Add(val);
+        return val.Mutate();
     }
 
-    public static EntObj Node(EntObj parent, out EntObj val)
+    public static EntMutator<EntObj> Node(EntObj parent, out EntObj val)
     {
         val = new();
-        parent.Nodes().Add(val);
-        return val;
+        parent.Nodes.Add(val);
+        return val.Mutate();
     }
 
-    public static EntObj Mut(this EntObj ent, Action<EntObj> action)
-    {
-        action.Invoke(ent);
-        return ent;
-    }
 
     public static T? Get<T>(T? value, Func<T>? func) where T : allows ref struct
     {

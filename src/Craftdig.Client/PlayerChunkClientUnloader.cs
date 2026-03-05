@@ -5,9 +5,9 @@ public class PlayerChunkClientUnloader(DimensionBlocksRaw blocksRaw, PlayerSocke
 {
     public void Unload(EntMut ent)
     {
-        socket.Send(new ForgetChunkCommand() { Cloc = ent.Cloc() });
+        socket.Send(new ForgetChunkCommand() { Cloc = ent.Cloc });
 
-        if (blocksRaw.TryGetChunkBlocks(ent.Cloc(), out var blocks))
+        if (blocksRaw.TryGetChunkBlocks(ent.Cloc, out var blocks))
             blocks.Fill(default);
     }
 }

@@ -38,7 +38,7 @@ public class PlayerRenderer(
         blockProgram.Projection = perspective.Projection;
         blockAtlas.Bind(blockProgram.SamplerTexture);
 
-        var pos = Vector3d.Lerp(ent.Ent.PrevPosition(), ent.Ent.Position(), (float)tick.Alpha);
+        var pos = Vector3d.Lerp(ent.PrevPosition, ent.Position, (float)tick.Alpha);
         var cloc = pos.ToLoc().Xy.ToCloc();
         pos = pos.Swizzle();
 
@@ -59,16 +59,16 @@ public class PlayerRenderer(
                 if (!chunks.TryGet(ncloc, out var chunk))
                     continue;
 
-                for (int i = 0; i < chunk.Rendered().Count; i++)
+                for (int i = 0; i < chunk.Rendered.Count; i++)
                 {
-                    var z = chunk.Rendered()[chunk.Rendered().Keys[i]];
+                    var z = chunk.Rendered[chunk.Rendered.Keys[i]];
                     var nsloc = new Vector3i(ncloc.X, ncloc.Y, z);
-                    if (!sections.TryGet(nsloc, out var section) || section.TerrainMesh().Count <= 0)
+                    if (!sections.TryGet(nsloc, out var section) || section.TerrainMesh.Count <= 0)
                         continue;
 
                     blockProgram.Offset = (Vector3)(nsloc.Swizzle() * SectionSize - pos);
 
-                    var mesh = section.TerrainMesh();
+                    var mesh = section.TerrainMesh;
                     int addr = (int)svb.Addr(mesh.Alloc);
 
                     GL.DrawElementsBaseVertex(

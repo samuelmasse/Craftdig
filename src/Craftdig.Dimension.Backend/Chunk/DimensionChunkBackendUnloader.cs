@@ -8,7 +8,7 @@ public class DimensionChunkBackendUnloader(
 {
     public void Unload(EntMut ent)
     {
-        var cloc = ent.Cloc();
+        var cloc = ent.Cloc;
 
         for (int sz = 0; sz < SectionHeight; sz++)
             regionInvalidation.Drain(new(cloc, sz));

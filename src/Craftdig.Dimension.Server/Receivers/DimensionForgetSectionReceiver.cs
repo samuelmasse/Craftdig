@@ -6,7 +6,7 @@ public class DimensionForgetSectionReceiver(DimensionForgottenSections forgotten
     public override void Receive(NetSocket ns, ForgetSectionCommand cmd)
     {
         forgottenSections.Add(
-            ns.Ent,
+            ns,
             cmd.Sloc);
     }
 }

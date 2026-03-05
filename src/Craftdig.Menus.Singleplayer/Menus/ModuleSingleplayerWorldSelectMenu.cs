@@ -36,14 +36,14 @@ public class ModuleSingleplayerWorldSelectMenu(
             }
 
             Node(middle, out var select)
-                .Mut(s.VerticalList)
+                .Mutate(s.VerticalList)
                 .SizeInnerMaxRelativeV((1, 0))
                 .InnerSpacingV(s.ItemSpacing)
                 .AlignmentV(Alignment.Horizontal);
             foreach (var (paths, meta) in worlds)
             {
                 Node(select)
-                    .Mut(s.Button)
+                    .Mutate(s.Button)
                     .SizeV((s.ItemWidthL, s.ItemHeight))
                     .TextV(meta.Name)
                     .TooltipV(Path.GetFileName(paths.Root))
@@ -58,7 +58,7 @@ public class ModuleSingleplayerWorldSelectMenu(
             .ColorV(s.BoardColor);
         {
             Node(bottomBar, out var buttonsList)
-                .Mut(s.HorizontalList)
+                .Mutate(s.HorizontalList)
                 .AlignmentV(Alignment.Center)
                 .OffsetMultiplierV(s.ItemSpacingXS)
                 .SizeInnerMaxRelativeV(s.Vertical)
@@ -66,13 +66,13 @@ public class ModuleSingleplayerWorldSelectMenu(
                 .ColorV(s.BoardColor2);
             {
                 Node(buttonsList, out var leftButtonsVertical)
-                    .Mut(s.VerticalList)
+                    .Mutate(s.VerticalList)
                     .SizeV((s.ItemWidthL, 0))
                     .InnerSpacingV(s.ItemSpacing);
                 {
                     Node(leftButtonsVertical)
                         .TextV("Play Selected World")
-                        .Mut(s.Button)
+                        .Mutate(s.Button)
                         .IsInputDisabledV(true);
 
                     Node(leftButtonsVertical, out var leftButtonsHorizontal)
@@ -84,26 +84,26 @@ public class ModuleSingleplayerWorldSelectMenu(
                     {
                         Node(leftButtonsHorizontal)
                             .TextV("Edit")
-                            .Mut(s.Button)
+                            .Mutate(s.Button)
                             .IsInputDisabledV(true);
 
                         Node(leftButtonsHorizontal)
                             .TextV("Delete")
-                            .Mut(s.Button)
+                            .Mutate(s.Button)
                             .IsInputDisabledV(true);
                     }
                 }
 
                 Node(buttonsList, out var rightButtonsVertical)
-                    .Mut(s.VerticalList)
+                    .Mutate(s.VerticalList)
                     .SizeV((s.ItemWidthL, 0))
                     .InnerSpacingV(s.ItemSpacing);
                 {
                     Node(rightButtonsVertical)
-                        .OnPressF(() => root.StackRootV()?.NodeStack().Push(
-                            new EntObj().StackRootV(root.StackRootV()).Mut(newWorldMenu.Create)))
+                        .OnPressF(() => root.StackRootV?.NodeStack.Push(
+                            new EntObj() { StackRootV = root.StackRootV}.Mutate(newWorldMenu.Create)))
                         .TextV("Create New World")
-                        .Mut(s.Button);
+                        .Mutate(s.Button);
 
                     Node(rightButtonsVertical, out var rightButtonsHorizontal)
                         .SizeRelativeV(s.Horizontal)
@@ -114,13 +114,13 @@ public class ModuleSingleplayerWorldSelectMenu(
                     {
                         Node(rightButtonsHorizontal)
                             .TextV("Re-Create")
-                            .Mut(s.Button)
+                            .Mutate(s.Button)
                             .IsInputDisabledV(true);
 
                         Node(rightButtonsHorizontal)
-                            .OnPressF(() => root.StackRootV()?.NodeStack().Pop())
+                            .OnPressF(() => root.StackRootV?.NodeStack.Pop())
                             .TextV("Back")
-                            .Mut(s.Button);
+                            .Mutate(s.Button);
                     }
                 }
             }

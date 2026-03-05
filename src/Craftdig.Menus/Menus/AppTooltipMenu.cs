@@ -6,7 +6,7 @@ public class AppTooltipMenu(RootUiMouse uiMouse, AppStyle s)
     public void Create(EntObj root)
     {
         Node(root, out var text)
-            .Mut(s.Label)
+            .Mutate(s.Label)
             .OffsetF(() => uiMouse.Position + (s.ItemSpacing, -s.ItemSpacingXL))
             .TextF(Value)
             .IsDisabledF(() => Value().Length == 0)
@@ -18,10 +18,10 @@ public class AppTooltipMenu(RootUiMouse uiMouse, AppStyle s)
             if (hovered == null)
                 return string.Empty;
 
-            if (!hovered.HasTooltipV() && !hovered.HasTooltipF())
+            if (!hovered.HasTooltipV && !hovered.HasTooltipF)
                 return string.Empty;
 
-            return Get(hovered.TooltipV() ?? string.Empty, hovered.TooltipF());
+            return Get(hovered.TooltipV ?? string.Empty, hovered.TooltipFDelegate);
         }
     }
 }

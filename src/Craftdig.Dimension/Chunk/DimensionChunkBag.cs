@@ -1,4 +1,4 @@
 namespace Craftdig.Dimension;
 
 [Dimension]
-public class DimensionChunkBag : EntBag<EntMut, DimensionComponents.ChunkBagIndexComponent>;
+public class DimensionChunkBag : EntBag<EntMut, DimensionComponents.ChunkBagIndex>;

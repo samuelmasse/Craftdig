@@ -19,7 +19,7 @@ public class ModuleMultiplayerConnectMenu(
         var user = new StringBuilder(clientOptions.NoAuthUser);
 
         Node(root, out var form)
-            .Mut(s.VerticalList)
+            .Mutate(s.VerticalList)
             .OffsetV((0, s.ItemHeight))
             .SizeV((s.ItemWidth * 2, 0))
             .InnerSpacingV(s.ItemSpacing)
@@ -28,7 +28,7 @@ public class ModuleMultiplayerConnectMenu(
             if (clientOptions.NoAuthUser == null)
             {
                 Node(form)
-                    .Mut(s.Label)
+                    .Mutate(s.Label)
                     .TextV(multiplayerCredentials.Email ?? string.Empty);
 
                 Node(form)
@@ -36,40 +36,40 @@ public class ModuleMultiplayerConnectMenu(
                     {
                         multiplayerCredentials.Logout();
 
-                        root.StackRootV()?.NodeStack().Pop();
-                        root.StackRootV()?.NodeStack().Push(
-                            Node().StackRootV(root.StackRootV()).Mut(module.Get<ModuleMultiplayerLoginMenu>().Create));
+                        root.StackRootV?.NodeStack.Pop();
+                        root.StackRootV?.NodeStack.Push(
+                            Node().StackRootV(root.StackRootV).Mutate(module.Get<ModuleMultiplayerLoginMenu>().Create));
                     })
                     .TextV("Logout")
-                    .Mut(s.Button);
+                    .Mutate(s.Button);
             }
             else
             {
                 Node(form)
-                    .Mut(s.Label)
+                    .Mutate(s.Label)
                     .TextV("User");
 
                 Node(form)
-                    .Mut(s.Textbox)
+                    .Mutate(s.Textbox)
                     .StringBuilderV(user);
             }
 
             Node(form)
-                .Mut(s.Label)
+                .Mutate(s.Label)
                 .TextV("Host");
 
             Node(form)
-                .Mut(s.Textbox)
+                .Mutate(s.Textbox)
                 .MaxLengthV(120)
                 .StringBuilderV(host)
                 .IsInitialFocusV(true);
 
             Node(form)
-                .Mut(s.Label)
+                .Mutate(s.Label)
                 .TextV("Port");
 
             Node(form)
-                .Mut(s.Textbox)
+                .Mutate(s.Textbox)
                 .MaxLengthV(6)
                 .StringBuilderV(port);
         }
@@ -81,7 +81,7 @@ public class ModuleMultiplayerConnectMenu(
             .ColorV(s.BoardColor);
         {
             Node(bottomBar, out var buttonsList)
-                .Mut(s.HorizontalList)
+                .Mutate(s.HorizontalList)
                 .AlignmentV(Alignment.Center)
                 .OffsetMultiplierV(s.ItemSpacingXS)
                 .SizeInnerMaxRelativeV(s.Vertical)
@@ -89,7 +89,7 @@ public class ModuleMultiplayerConnectMenu(
                 .ColorV(s.BoardColor2);
             {
                 Node(buttonsList, out var leftButtonsVertical)
-                    .Mut(s.VerticalList)
+                    .Mutate(s.VerticalList)
                     .SizeV((s.ItemWidthL, 0))
                     .InnerSpacingV(s.ItemSpacing);
                 {
@@ -109,8 +109,8 @@ public class ModuleMultiplayerConnectMenu(
 
                             multiplayerConnectAction.Start(connHost, connPort);
 
-                            root.StackRootV()?.NodeStack().Push(
-                                Node().StackRootV(root.StackRootV()).Mut(multiplayerConnectingMenu.Create));
+                            root.StackRootV?.NodeStack.Push(
+                                Node().StackRootV(root.StackRootV).Mutate(multiplayerConnectingMenu.Create));
                         })
                         .IsInputDisabledF(() =>
                         {
@@ -118,18 +118,18 @@ public class ModuleMultiplayerConnectMenu(
                             return !int.TryParse(portChars.AsSpan()[..port.Length], out _);
                         })
                         .TextV("Connect")
-                        .Mut(s.Button);
+                        .Mutate(s.Button);
                 }
 
                 Node(buttonsList, out var rightButtonsVertical)
-                    .Mut(s.VerticalList)
+                    .Mutate(s.VerticalList)
                     .SizeV((s.ItemWidthL, 0))
                     .InnerSpacingV(s.ItemSpacing);
                 {
                     Node(rightButtonsVertical)
-                        .OnPressF(() => root.StackRootV()?.NodeStack().Pop())
+                        .OnPressF(() => root.StackRootV?.NodeStack.Pop())
                         .TextV("Cancel")
-                        .Mut(s.Button);
+                        .Mutate(s.Button);
                 }
             }
         }

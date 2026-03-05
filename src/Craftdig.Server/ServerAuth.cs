@@ -23,10 +23,10 @@ public class ServerAuth(AppLog log, ServerSockets sockets, ServerClientLimits cl
 
         // Generate a random nonce
         var nonce = GenerateNonce();
-        log.Info("Socket {0} generated nonce", ns.Ent.Tag());
+        log.Info("Socket {0} generated nonce", ns.Tag);
 
         // Remember the nonce for this socket
-        ns.Ent.AuthNonce() = nonce;
+        ns.AuthNonce = nonce;
 
         // Send the nonce to the client to be included in future JWT
         ns.Send<ReadyAuthCommand, byte>(Encoding.UTF8.GetBytes(nonce));
@@ -67,18 +67,18 @@ public class ServerAuth(AppLog log, ServerSockets sockets, ServerClientLimits cl
         DisconnectSocketsWithSameUidOrUsername(uid, username);
 
         // Strongly associate this socket as being authenticated with this uid and username
-        ns.Ent.AuthenticatedUid() = uid;
-        ns.Ent.AuthenticatedUsername() = username;
+        ns.AuthenticatedUid = uid;
+        ns.AuthenticatedUsername = username;
         // After this is set to true a client is allowed to ask to spawn
-        ns.Ent.IsAuthenticated() = true;
-        log.Info("Socket {0} authenticated : {1}", ns.Ent.Tag(), uid);
-        log.Info("Socket {0} username : {1}", ns.Ent.Tag(), username);
+        ns.IsAuthenticated = true;
+        log.Info("Socket {0} authenticated : {1}", ns.Tag, uid);
+        log.Info("Socket {0} username : {1}", ns.Tag, username);
 
         // Forget nonce
-        ns.Ent.AuthNonce() = null;
+        ns.AuthNonce = null;
 
         // Also set a friendly tag for this socket to the username
-        ns.Ent.Tag() = username;
+        ns.Tag = username;
 
         // Let the client know that the auth was successful
         ns.Send<ResultAuthCommand>();
@@ -101,13 +101,13 @@ public class ServerAuth(AppLog log, ServerSockets sockets, ServerClientLimits cl
         DisconnectSocketsWithSameUidOrUsername(uid, uid);
 
         // Strongly associate this socket as being authenticated with this uid and username
-        ns.Ent.AuthenticatedUid() = uid;
-        ns.Ent.AuthenticatedUsername() = uid;
-        ns.Ent.IsAuthenticated() = true;
-        log.Info("Socket {0} no auth authenticated : {1}", ns.Ent.Tag(), uid);
+        ns.AuthenticatedUid = uid;
+        ns.AuthenticatedUsername = uid;
+        ns.IsAuthenticated = true;
+        log.Info("Socket {0} no auth authenticated : {1}", ns.Tag, uid);
 
         // Also set a friendly tag for this socket to the username
-        ns.Ent.Tag() = uid;
+        ns.Tag = uid;
 
         // Let the client know that the auth was successful
         ns.Send<ResultAuthCommand>();
@@ -125,9 +125,9 @@ public class ServerAuth(AppLog log, ServerSockets sockets, ServerClientLimits cl
 
     private bool GuardAlreadyAuthenticated(NetSocket ns)
     {
-        if (ns.Ent.IsAuthenticated())
+        if (ns.IsAuthenticated)
         {
-            log.Warn("Socket {0} tried to re-authenticate", ns.Ent.Tag());
+            log.Warn("Socket {0} tried to re-authenticate", ns.Tag);
             ns.Disconnect();
             return true;
         }
@@ -136,9 +136,9 @@ public class ServerAuth(AppLog log, ServerSockets sockets, ServerClientLimits cl
 
     private bool GuardNonceExists(NetSocket ns)
     {
-        if (ns.Ent.AuthNonce() != null)
+        if (ns.AuthNonce != null)
         {
-            log.Warn("Socket {0} tried to get a new nonce", ns.Ent.Tag());
+            log.Warn("Socket {0} tried to get a new nonce", ns.Tag);
             ns.Disconnect();
             return true;
         }
@@ -147,9 +147,9 @@ public class ServerAuth(AppLog log, ServerSockets sockets, ServerClientLimits cl
 
     private bool GuardNonceNotSet(NetSocket ns)
     {
-        if (ns.Ent.AuthNonce() == null)
+        if (ns.AuthNonce == null)
         {
-            log.Warn("Socket {0} tried to auth without a nonce", ns.Ent.Tag());
+            log.Warn("Socket {0} tried to auth without a nonce", ns.Tag);
             ns.Disconnect();
             return true;
         }
@@ -185,7 +185,7 @@ public class ServerAuth(AppLog log, ServerSockets sockets, ServerClientLimits cl
             catch { }
         }
 
-        log.Warn("Socket {0} tried to authenticate with an invalid JWT", ns.Ent.Tag());
+        log.Warn("Socket {0} tried to authenticate with an invalid JWT", ns.Tag);
         ns.Disconnect();
         token = null;
         return true;
@@ -215,9 +215,9 @@ public class ServerAuth(AppLog log, ServerSockets sockets, ServerClientLimits cl
     {
         var nonceClaim = token.Claims.FirstOrDefault(x => x.Type == "nonce");
 
-        if (nonceClaim == null || nonceClaim.Value != ns.Ent.AuthNonce())
+        if (nonceClaim == null || nonceClaim.Value != ns.AuthNonce)
         {
-            log.Warn("Socket {0} tried to authenticate with a wrong nonce", ns.Ent.Tag());
+            log.Warn("Socket {0} tried to authenticate with a wrong nonce", ns.Tag);
             ns.Disconnect();
             return true;
         }
@@ -233,7 +233,7 @@ public class ServerAuth(AppLog log, ServerSockets sockets, ServerClientLimits cl
         if (!allowlist.Allow(uid) && !allowlist.Allow(username))
         {
             log.Warn("Socket {0} tried to join but is not allowisted by either {1} or {2}",
-                ns.Ent.Tag(), uid, username);
+                ns.Tag, uid, username);
 
             ns.Disconnect();
             return true;
@@ -253,10 +253,10 @@ public class ServerAuth(AppLog log, ServerSockets sockets, ServerClientLimits cl
     {
         sockets.ForEach(ns =>
         {
-            if (ns.Ent.AuthenticatedUid() == uid || ns.Ent.AuthenticatedUsername() == username)
+            if (ns.AuthenticatedUid == uid || ns.AuthenticatedUsername == username)
             {
                 ns.Disconnect();
-                log.Info("Socket {0} kicked due to conflict", ns.Ent.Tag());
+                log.Info("Socket {0} kicked due to conflict", ns.Tag);
             }
         });
     }

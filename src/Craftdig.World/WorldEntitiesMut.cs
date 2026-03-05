@@ -24,7 +24,11 @@ public class WorldEntitiesMut(WorldEntArena entArena)
                 lock (level3)
                 {
                     if (level3[i3] == default)
-                        level3[i3] = entArena.Arena.Alloc().WorldId(worldId);
+                    {
+                        var ent = entArena.Arena.Alloc();
+                        ent.WorldId = worldId;
+                        level3[i3] = ent;
+                    }
                 }
             }
 

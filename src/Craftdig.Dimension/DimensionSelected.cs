@@ -8,26 +8,29 @@ public class DimensionSelected(DimensionBlocks blocks, DimensionPlayerBag player
     public void Tick()
     {
         foreach (var player in playerBag.Ents)
-        {
-            player.BlockSelectionPosition() = player.Position();
-            player.BlockSelectionLookAt() = player.Movement().LookAt;
-            player.BlockSelection() = null;
-        }
+            Tick((EntMut)player);
 
         time++;
+    }
+
+    private void Tick(EntMut player)
+    {
+        player.BlockSelectionPosition = player.Position;
+        player.BlockSelectionLookAt = player.Movement.LookAt;
+        player.BlockSelection = null;
     }
 
     public BlockSelection? this[EntMut player]
     {
         get
         {
-            if (player.BlockSelectionLastComputed() != time)
+            if (player.BlockSelectionLastComputed != time)
             {
-                player.BlockSelection() = Select(player.BlockSelectionPosition(), player.BlockSelectionLookAt());
-                player.BlockSelectionLastComputed() = time;
+                player.BlockSelection = Select(player.BlockSelectionPosition, player.BlockSelectionLookAt);
+                player.BlockSelectionLastComputed = time;
             }
 
-            return player.BlockSelection();
+            return player.BlockSelection;
         }
     }
 
@@ -51,7 +54,7 @@ public class DimensionSelected(DimensionBlocks blocks, DimensionPlayerBag player
 
         while (step < 1024)
         {
-            if (blocks.TryGet(nloc, out var block) && block.IsSolid())
+            if (blocks.TryGet(nloc, out var block) && block.IsSolid)
             {
                 found = true;
                 break;

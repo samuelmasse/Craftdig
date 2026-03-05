@@ -25,7 +25,7 @@ public class DimensionSectionRequester(
     private Vector3i RandomPlayerSectionLocation()
     {
         var player = playerBag.Ents[rng.Next(playerBag.Ents.Length)];
-        return (Vector3i)player.Position() / SectionSize;
+        return (Vector3i)player.Position / SectionSize;
     }
 
     private bool LoadNearestChunk(Vector3i sloc)
@@ -35,10 +35,10 @@ public class DimensionSectionRequester(
 
         chunks.TryGet(cloc, out var chunk);
 
-        for (var i = 0; i < chunk.Unrendered().Count; i++)
+        for (var i = 0; i < chunk.Unrendered.Count; i++)
         {
-            int sz = chunk.Unrendered().Values[i];
-            var nsloc = new Vector3i(chunk.Cloc().X, chunk.Cloc().Y, sz);
+            int sz = chunk.Unrendered.Values[i];
+            var nsloc = new Vector3i(chunk.Cloc.X, chunk.Cloc.Y, sz);
 
             sections.TryGet(nsloc, out var section);
             sectionLoader.Load(section);
@@ -70,7 +70,7 @@ public class DimensionSectionRequester(
                 }
 
                 bool Visit(Vector2i delta) =>
-                    chunks.TryGet(center + delta, out var chunk) && chunk.IsReadyToRender() && chunk.Unrendered().Count != 0;
+                    chunks.TryGet(center + delta, out var chunk) && chunk.IsReadyToRender && chunk.Unrendered.Count != 0;
             }
         }
 

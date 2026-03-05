@@ -5,7 +5,7 @@ public class DimensionSectionLoader(DimensionSectionThreadWorkQueue sectionThrea
 {
     public void Load(EntMut section)
     {
-        sectionThreadWorkQueue.Enqeue(section.Sloc());
-        section.Chunk().Unrendered().Remove(section.Sloc().Z);
+        sectionThreadWorkQueue.Enqeue(section.Sloc);
+        section.Chunk.Unrendered.Remove(section.Sloc.Z);
     }
 }

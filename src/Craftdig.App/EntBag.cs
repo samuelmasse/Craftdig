@@ -1,6 +1,6 @@
 namespace Craftdig.App;
 
-public class EntBag<E, N> where E : IEntSet<E>
+public class EntBag<E, N> where E : IEntMut
 {
     private E[] ents = [default!, default!];
     private int count = 1;

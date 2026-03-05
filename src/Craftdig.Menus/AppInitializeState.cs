@@ -22,9 +22,9 @@ public class AppInitializeState(
         screen.Size = screen.MonitorSize / 4 * 3;
 
         scripts.Add(root.Get<RootUiScript>());
-        ui.Nodes().Add(Node().Mut(mouseTrackMenu.Create));
-        ui.Nodes().Add(Node().OrderValueV(2).Mut(tooltipMenu.Create));
-        ui.Nodes().Add(Node().OrderValueV(5).Mut(zoomMenu.Create));
+        ui.Nodes.Add(Node().Mutate(mouseTrackMenu.Create));
+        ui.Nodes.Add(Node().OrderValueV(2).Mutate(tooltipMenu.Create));
+        ui.Nodes.Add(Node().OrderValueV(5).Mutate(zoomMenu.Create));
 
         var module = scope.Scope<ModuleScope>();
         module.Handler(module.Get<ModuleEntMutInjector>());

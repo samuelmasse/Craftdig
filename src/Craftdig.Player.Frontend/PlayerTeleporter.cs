@@ -12,19 +12,19 @@ public class PlayerTeleporter(
     public void Update()
     {
         if (history.Count == 0)
-            history.Add(player.Ent.Position());
+            history.Add(player.Position);
 
         if (keyboard.IsKeyPressedRepeated(Keys.T))
         {
             while (history.Count > index + 1)
                 history.RemoveAt(history.Count - 1);
 
-            player.Ent.Position() = (
+            player.Position = (
                 rng.Next(-500_000_000, 500_000_000),
                 rng.Next(-500_000_000, 500_000_000),
-                player.Ent.Position().Z);
+                player.Position.Z);
 
-            history.Add(player.Ent.Position());
+            history.Add(player.Position);
             index++;
         }
 
@@ -34,7 +34,7 @@ public class PlayerTeleporter(
             if (index < 0)
                 index = history.Count - 1;
 
-            player.Ent.Position() = history[index];
+            player.Position = history[index];
         }
 
         if (keyboard.IsKeyPressedRepeated(Keys.Y))
@@ -43,7 +43,7 @@ public class PlayerTeleporter(
             if (index >= history.Count)
                 index = 0;
 
-            player.Ent.Position() = history[index];
+            player.Position = history[index];
         }
     }
 }

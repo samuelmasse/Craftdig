@@ -14,28 +14,28 @@ public class PlayerTestCubeRenderer(
 
     public void Mesh(Ent chunk, Vector3d origin)
     {
-        var rigids = chunk.ChunkRigids();
+        var rigids = chunk.ChunkRigids;
         if (rigids == null)
             return;
 
         foreach (var rigid in rigids)
         {
-            if (!rigid.IsTestCube())
+            if (!rigid.IsTestCube)
                 continue;
 
-            var block = rigid.TestCubeMaterial();
-            var faces = block.Faces();
-            var size = rigid.TestCubeSize();
-            var pos = Vector3d.Lerp(rigid.PrevPosition(), rigid.Position(), (float)tick.Alpha).Swizzle();
+            var block = rigid.TestCubeMaterial;
+            var faces = block.Faces;
+            var size = rigid.TestCubeSize;
+            var pos = Vector3d.Lerp(rigid.PrevPosition, rigid.Position, (float)tick.Alpha).Swizzle();
 
-            AddQuad(cube.Front.Quad, 0.8f, faces.Front.FaceIndex());
-            AddQuad(cube.Back.Quad, 0.8f, faces.Back.FaceIndex());
+            AddQuad(cube.Front.Quad, 0.8f, faces.Front.FaceIndex);
+            AddQuad(cube.Back.Quad, 0.8f, faces.Back.FaceIndex);
 
-            AddQuad(cube.Left.Quad, 0.6f, faces.Left.FaceIndex());
-            AddQuad(cube.Right.Quad, 0.6f, faces.Right.FaceIndex());
+            AddQuad(cube.Left.Quad, 0.6f, faces.Left.FaceIndex);
+            AddQuad(cube.Right.Quad, 0.6f, faces.Right.FaceIndex);
 
-            AddQuad(cube.Top.Quad, 1f, faces.Top.FaceIndex());
-            AddQuad(cube.Bottom.Quad, 0.5f, faces.Bottom.FaceIndex());
+            AddQuad(cube.Top.Quad, 1f, faces.Top.FaceIndex);
+            AddQuad(cube.Bottom.Quad, 0.5f, faces.Bottom.FaceIndex);
 
             void AddQuad(Quad quad, float shadow, int texture)
             {

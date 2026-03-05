@@ -10,13 +10,13 @@ public class ModuleMultiplayerConnectingMenu(
     public void Create(EntObj root)
     {
         Node(root, out var form)
-            .Mut(s.VerticalList)
+            .Mutate(s.VerticalList)
             .SizeV((s.ItemWidth * 2, 0))
             .InnerSpacingV(s.ItemSpacing)
             .AlignmentV(Alignment.Center);
         {
             Node(form)
-                .Mut(s.Label)
+                .Mutate(s.Label)
                 .AlignmentV(Alignment.Horizontal)
                 .TextF(() =>
                 {
@@ -45,10 +45,10 @@ public class ModuleMultiplayerConnectingMenu(
                 .OnPressF(() =>
                 {
                     multiplayerConnectAction.Cancel();
-                    root.StackRootV()?.NodeStack().Pop();
+                    root.StackRootV?.NodeStack.Pop();
                 })
                 .TextV("Cancel")
-                .Mut(s.Button);
+                .Mutate(s.Button);
         }
     }
 }

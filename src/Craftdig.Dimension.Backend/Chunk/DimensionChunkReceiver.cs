@@ -39,7 +39,7 @@ public class DimensionChunkReceiver(
 
         chunks.Alloc(cloc);
         var chunk = chunks[cloc];
-        chunk.ChunkBlocks() = output.Blocks;
+        chunk.ChunkBlocks = output.Blocks;
         chunkBag.Add(chunk);
         chunkPending.Remove(cloc);
         chunkReceiverHandlers.Run(chunk);

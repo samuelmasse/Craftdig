@@ -46,9 +46,8 @@ public class DimensionChunkStreamerRequester(
 
     private bool StreamNearestChunk(NetSocket ns)
     {
-        var cloc = ns.Ent.SocketPlayer().Position().ToLoc().ToSloc().Xy;
-        ref var streamed = ref ns.Ent.SocketStreamedChunks();
-        streamed ??= [];
+        var cloc = ns.SocketPlayer.Position.ToLoc().ToSloc().Xy;
+        var streamed = ns.SocketStreamedChunks ??= [];
 
         if (!TryGetNearestNotStreamedChunk(cloc, streamed, out var nearest))
             return false;

@@ -44,8 +44,8 @@ public class DimensionSectionReminder(
 
     private bool StreamForgottenSection(NetSocket ns)
     {
-        var sections = ns.Ent.SocketForgottenSections();
-        var queue = ns.Ent.SocketForgottenSectionQueue();
+        var sections = ns.SocketForgottenSections;
+        var queue = ns.SocketForgottenSectionQueue;
 
         if (sections == null || queue == null)
             return false;

@@ -34,18 +34,18 @@ public class DimensionChunkRenderScheduler(DimensionChunks chunks, DimensionBloc
         if (!blocksRaw.TryGetChunkBlocks(cloc, out var blocks))
             return;
 
-        if (!chunk.IsUnrenderedListBuilt())
+        if (!chunk.IsUnrenderedListBuilt)
         {
             for (int sz = 0; sz < SectionHeight; sz++)
             {
-                if (blocks.Uniform(sz) == default || blocks.Uniform(sz).IsSolid())
-                    chunk.Unrendered().Add(sz, sz);
+                if (blocks.Uniform(sz) == default || blocks.Uniform(sz).IsSolid)
+                    chunk.Unrendered.Add(sz, sz);
             }
 
-            chunk.IsUnrenderedListBuilt() = true;
+            chunk.IsUnrenderedListBuilt = true;
         }
 
-        chunk.IsReadyToRender() = true;
+        chunk.IsReadyToRender = true;
     }
 
     private bool IsNull(Vector2i cloc) => !chunks.TryGet(cloc, out _);

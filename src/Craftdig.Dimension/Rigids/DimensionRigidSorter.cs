@@ -6,19 +6,20 @@ public class DimensionRigidSorter(DimensionChunks chunks, DimensionRigidBag rigi
     public void Tick()
     {
         foreach (var ent in rigidBag.Ents)
-        {
-            var cloc = ent.Position().ToLoc().Xy.ToCloc();
-            if (ent.RigidCloc() == cloc)
-                continue;
+            Tick(ent);
+    }
 
-            if (!chunks.TryGet(cloc, out var chunk))
-                continue;
+    private void Tick(EntRefMut ent)
+    {
+        var cloc = ent.Position.ToLoc().Xy.ToCloc();
+        if (ent.RigidCloc == cloc)
+            return;
 
-            ref var chunkRigids = ref chunk.ChunkRigids();
-            chunkRigids ??= [];
+        if (!chunks.TryGet(cloc, out var chunk))
+            return;
 
-            chunkRigids.Add(ent);
-            ent.RigidCloc() = cloc;
-        }
+        var chunkRigids = chunk.ChunkRigids ??= [];
+        chunkRigids.Add(ent);
+        ent.RigidCloc = cloc;
     }
 }

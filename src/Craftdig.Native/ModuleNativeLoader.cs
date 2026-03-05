@@ -5,7 +5,7 @@ public class ModuleNativeLoader(ModuleNative m) : ModLoader
 {
     public override void Load()
     {
-        m.OverworldDimension
+        m.OverworldDimension.Mutate()
             .IsDimension(true)
             .Air(m.AirBlock);
 
@@ -16,17 +16,17 @@ public class ModuleNativeLoader(ModuleNative m) : ModLoader
 
     private void LoadGameModes()
     {
-        m.SurvivalGameMode
+        m.SurvivalGameMode.Mutate()
             .IsGameMode(true)
             .Name("Survival")
             .Order(0);
 
-        m.CreativeGameMode
+        m.CreativeGameMode.Mutate()
             .IsGameMode(true)
             .Name("Creative")
             .Order(1);
 
-        m.HardcoreGameMode
+        m.HardcoreGameMode.Mutate()
             .IsGameMode(true)
             .Name("Hardcore")
             .Order(2)
@@ -35,22 +35,22 @@ public class ModuleNativeLoader(ModuleNative m) : ModLoader
 
     private void LoadDifficulties()
     {
-        m.NormalDifficulty
+        m.NormalDifficulty.Mutate()
             .IsDifficulty(true)
             .Name("Normal")
             .Order(0);
 
-        m.HardDifficulty
+        m.HardDifficulty.Mutate()
             .IsDifficulty(true)
             .Name("Hard")
             .Order(1);
 
-        m.PeacefulDifficulty
+        m.PeacefulDifficulty.Mutate()
             .IsDifficulty(true)
             .Name("Peaceful")
             .Order(2);
 
-        m.EasyDifficulty
+        m.EasyDifficulty.Mutate()
             .IsDifficulty(true)
             .Name("Easy")
             .Order(3);
@@ -58,25 +58,25 @@ public class ModuleNativeLoader(ModuleNative m) : ModLoader
 
     private void LoadBlocks()
     {
-        m.AirBlock
+        m.AirBlock.Mutate()
             .Name("Air")
             .IsBlock(true);
 
-        m.GrassBlock
+        m.GrassBlock.Mutate()
             .Name("Grass")
             .MaxStack(64)
             .IsBlock(true)
             .IsSolid(true)
             .IsBuildable(true);
 
-        m.DirtBlock
+        m.DirtBlock.Mutate()
             .Name("Dirt")
             .MaxStack(64)
             .IsBlock(true)
             .IsSolid(true)
             .IsBuildable(true);
 
-        m.StoneBlock
+        m.StoneBlock.Mutate()
             .Name("Stone")
             .MaxStack(64)
             .IsBlock(true)

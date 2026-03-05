@@ -5,19 +5,18 @@ public class ServerSpawnPlayerReceiver(AppLog log, WorldDimensionBag dimensionBa
 {
     public void Receive(NetSocket ns)
     {
-        if (ns.Ent.SocketPlayer() != null)
+        if (ns.SocketPlayer != null)
         {
-            log.Warn("Player {0} tried to spawn again", ns.Ent.Tag());
+            log.Warn("Player {0} tried to spawn again", ns.Tag);
             ns.Disconnect();
             return;
         }
 
-        log.Info("Player {0} requested to spawn", ns.Ent.Tag());
+        log.Info("Player {0} requested to spawn", ns.Tag);
 
-        var dimensionScope = dimensionBag.Ents[0].DimensionScope();
-        ns.Ent.DimensionScope() = dimensionScope;
-        ns.Ent.SocketPlayer() = new EntObj();
-        ns.Ent.SocketPlayer().Tag(ns.Ent.Tag());
+        var dimensionScope = dimensionBag.Ents[0].DimensionScope;
+        ns.DimensionScope = dimensionScope;
+        ns.SocketPlayer = new EntObj() { Tag = ns.Tag };
         dimensionScope.Get<DimensionPlayerSpawner>().Add(ns);
     }
 }

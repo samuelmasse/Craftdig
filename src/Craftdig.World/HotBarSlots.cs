@@ -6,8 +6,8 @@ public static class HotBarSlots
 
     public static ItemSlot GetHotBarSlot<T>(this T ent, int index) where T : IEntMut
     {
-        var hotBarSlotCounts = ent.GetHotBarSlotCounts();
-        var hotBarSlotEntities = ent.GetHotBarSlotEntities();
+        var hotBarSlotCounts = ent.HotBarSlotCounts;
+        var hotBarSlotEntities = ent.HotBarSlotEntities;
         if (hotBarSlotCounts == null || hotBarSlotEntities == null)
             return default;
 
@@ -16,11 +16,8 @@ public static class HotBarSlots
 
     public static void SetHotBarSlot<T>(this T ent, int index, ItemSlot val) where T : IEntMut
     {
-        ref var hotBarSlotCounts = ref ent.HotBarSlotCounts();
-        ref var hotBarSlotEntities = ref ent.HotBarSlotEntities();
-
-        hotBarSlotCounts ??= new int[Count];
-        hotBarSlotEntities ??= new Ent[Count];
+        var hotBarSlotCounts = ent.HotBarSlotCounts ??= new int[Count];
+        var hotBarSlotEntities = ent.HotBarSlotEntities ??= new Ent[Count];
 
         hotBarSlotEntities[index] = val.Item;
         hotBarSlotCounts[index] = val.Count;

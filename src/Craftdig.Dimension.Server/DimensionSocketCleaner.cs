@@ -15,11 +15,11 @@ public class DimensionSocketCleaner(AppLog log, DimensionSockets sockets, Dimens
 
         foreach (var ns in remove)
         {
-            playerBag.Remove(ns.Ent.SocketPlayer());
-            rigidBag.Remove(ns.Ent.SocketPlayer());
+            playerBag.Remove(ns.SocketPlayer);
+            rigidBag.Remove(ns.SocketPlayer);
             sockets.Remove(ns);
 
-            log.Info("Player {0} left", ns.Ent.SocketPlayer().Tag());
+            log.Info("Player {0} left", ns.SocketPlayer.Tag);
         }
 
         remove.Clear();

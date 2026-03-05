@@ -8,9 +8,9 @@ public class PlayerFov(PlayerEnt ent, PlayerPerspective perspective)
     public void Update(double delta)
     {
         float fov = 70;
-        if (ent.Ent.IsFlying())
+        if (ent.IsFlying)
             fov += 10;
-        if (ent.Ent.IsSprinting())
+        if (ent.IsSprinting)
             fov += 10;
 
         if (!init)

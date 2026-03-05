@@ -12,28 +12,29 @@ public class DimensionConstruction(
     public void Tick()
     {
         foreach (var ent in playerBag.Ents)
-        {
             Tick((EntMut)ent);
-            ent.Construction() = default;
-        }
     }
 
     private void Tick(EntMut ent)
     {
-        var constr = ent.Construction();
+        var constr = ent.Construction;
+        ent.Construction = default;
+
         if (constr.Action == ConstructionAction.None)
             return;
 
         if (constr.Action == ConstructionAction.Drop)
         {
             rigidBag.Add(new EntPtr()
+                .Mutate()
                 .IsTestCube(true)
                 .TestCubeMaterial(moduleIndices[constr.Arg])
                 .TestCubeSize(0.5f)
                 .IsProjectile(true)
                 .HitBox(new Box3d((-0.25, -0.25, -0.25), (0.25, 0.25, 0.25)))
-                .Position(ent.Position())
-                .Velocity(ent.Velocity() + ent.Movement().LookAt / 2));
+                .Position(ent.Position)
+                .Velocity(ent.Velocity + ent.Movement.LookAt / 2)
+                .Ent);
 
             return;
         }

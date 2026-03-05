@@ -20,7 +20,7 @@ public class PlayerMultiplayerState(
     public override void Load()
     {
         commonState.Load();
-        Node(commonState.Menus).Mut(multiplayerDebugMenu.Create);
+        Node(commonState.Menus).Mutate(multiplayerDebugMenu.Create);
     }
 
     public override void Unload()

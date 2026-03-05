@@ -28,8 +28,8 @@ public class PlayerCommonState(
         [Keys.E] = survivalInventoryMenu.Create,
     };
     private readonly EntObj menus = Node(ui).OrderValueV(1);
-    private readonly EntObj overlay = Node(ui).Mut(playerOverlayMenu.Create);
-    private readonly EntObj hand = Node(ui).OrderValueV(1.5f).Mut(playerHandMenu.Create);
+    private readonly EntObj overlay = Node(ui).Mutate(playerOverlayMenu.Create);
+    private readonly EntObj hand = Node(ui).OrderValueV(1.5f).Mutate(playerHandMenu.Create);
     private readonly EntObj dark = Node().ColorV((0.3f, 0.3f, 0.3f, 0.3f));
 
     private Action<EntObj>? currentKeyMenu;
@@ -42,36 +42,36 @@ public class PlayerCommonState(
 
     public override void Load()
     {
-        ent.Ent.HitBox() = new Box3d((-0.3, -0.3, -1.62), (0.3, 0.3, 0.18));
-        ent.Ent.Position() = (15, 0, 120);
-        ent.Ent.IsFlying() = true;
-        ent.Ent.CanMove() = true;
-        ent.Ent.CanFly() = true;
-        ent.Ent.CanJump() = true;
-        ent.Ent.CanSprint() = true;
-        rigidBag.Add(ent.Ent);
+        ent.HitBox = new Box3d((-0.3, -0.3, -1.62), (0.3, 0.3, 0.18));
+        ent.Position = (15, 0, 120);
+        ent.IsFlying = true;
+        ent.CanMove = true;
+        ent.CanFly = true;
+        ent.CanJump = true;
+        ent.CanSprint = true;
+        rigidBag.Add(ent);
 
-        Node(menus).Mut(debugMenu.Create);
-        Node(menus).Mut(dimensionSharedVertexBufferMenu.Create);
+        Node(menus).Mutate(debugMenu.Create);
+        Node(menus).Mutate(dimensionSharedVertexBufferMenu.Create);
     }
 
     public override void Unload()
     {
-        ui.Nodes().Remove(hand);
-        ui.Nodes().Remove(menus);
-        ui.Nodes().Remove(overlay);
+        ui.Nodes.Remove(hand);
+        ui.Nodes.Remove(menus);
+        ui.Nodes.Remove(overlay);
     }
 
     public override void Update(double time)
     {
         if (keyboard.IsKeyPressed(Keys.Escape))
         {
-            if (menus.NodeStack().Count > 0)
-                menus.NodeStack().Pop();
+            if (menus.NodeStack.Count > 0)
+                menus.NodeStack.Pop();
             else
             {
                 paused = true;
-                menus.NodeStack().Push(Node().StackRootV(menus).Mut(escapeMenu.Create));
+                menus.NodeStack.Push(Node().StackRootV(menus).Mutate(escapeMenu.Create));
             }
         }
 
@@ -79,12 +79,12 @@ public class PlayerCommonState(
         {
             if (keyboard.IsKeyPressed(key))
             {
-                if (menus.NodeStack().Count > 0)
+                if (menus.NodeStack.Count > 0)
                 {
                     if (inv && currentKeyMenu == keyMenus[key])
                     {
-                        while (menus.NodeStack().Count > 0)
-                            menus.NodeStack().Pop();
+                        while (menus.NodeStack.Count > 0)
+                            menus.NodeStack.Pop();
 
                         inv = false;
                     }
@@ -93,21 +93,21 @@ public class PlayerCommonState(
                 {
                     inv = true;
                     currentKeyMenu = keyMenus[key];
-                    menus.NodeStack().Push(Node().Mut(keyMenus[key]));
+                    menus.NodeStack.Push(Node().Mutate(keyMenus[key]));
                 }
             }
         }
 
-        if (menus.NodeStack().Count > 0 && !menus.Nodes().Contains(dark))
-            menus.Nodes().Add(dark);
+        if (menus.NodeStack.Count > 0 && !menus.Nodes.Contains(dark))
+            menus.Nodes.Add(dark);
 
-        if (menus.NodeStack().Count == 0 && menus.Nodes().Contains(dark))
+        if (menus.NodeStack.Count == 0 && menus.Nodes.Contains(dark))
         {
             paused = false;
             inv = false;
             currentKeyMenu = null;
-            ent.Ent.SetOffhand(default);
-            menus.Nodes().Remove(dark);
+            ent.SetOffhand(default);
+            menus.Nodes.Remove(dark);
         }
 
         mouse.Track = !paused && !inv;

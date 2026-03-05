@@ -21,11 +21,12 @@ public class PlayerConstruction(RootMouse mouse, WorldModuleIndices moduleIndice
         if (reject)
             return;
 
-        var hand = ent.Ent.GetHotBarSlot(ent.Ent.HotBarIndex()).Item;
+        var hand = ent.GetHotBarSlot(ent.HotBarIndex).Item;
+
         if (drop)
         {
-            if (hand.IsBuildable())
-                ent.Ent.Construction() = new() { Action = ConstructionAction.Drop, Arg = moduleIndices[hand] };
+            if (hand.IsBuildable)
+                ent.Construction = new() { Action = ConstructionAction.Drop, Arg = moduleIndices[hand] };
 
             drop = false;
             return;
@@ -33,13 +34,13 @@ public class PlayerConstruction(RootMouse mouse, WorldModuleIndices moduleIndice
 
         if (mouse.IsMainDown() && mainCooldown <= 0)
         {
-            ent.Ent.Construction() = new() { Action = ConstructionAction.Remove };
+            ent.Construction = new() { Action = ConstructionAction.Remove };
             mainCooldown = 5;
         }
 
-        if (hand.IsBuildable() && mouse.IsSecondaryDown() && secondaryCooldown <= 0)
+        if (hand.IsBuildable && mouse.IsSecondaryDown() && secondaryCooldown <= 0)
         {
-            ent.Ent.Construction() = new() { Action = ConstructionAction.Place, Arg = moduleIndices[hand] };
+            ent.Construction = new() { Action = ConstructionAction.Place, Arg = moduleIndices[hand] };
             secondaryCooldown = 4;
         }
     }

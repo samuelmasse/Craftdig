@@ -6,7 +6,7 @@ public class DimensionForgetChunkReceiver(DimensionForgottenChunks forgottenChun
     public override void Receive(NetSocket ns, ForgetChunkCommand cmd)
     {
         forgottenChunks.Add(
-            ns.Ent,
+            ns,
             cmd.Cloc);
     }
 }

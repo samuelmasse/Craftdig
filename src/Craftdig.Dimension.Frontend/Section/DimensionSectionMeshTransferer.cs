@@ -3,13 +3,10 @@ namespace Craftdig.Dimension.Frontend;
 [Dimension]
 public class DimensionSectionMeshTransferer(RootQuadIndexBuffer quadIndexBuffer, DimensionSharedVertexBuffer svb, DimensionGlw gl)
 {
-    public void Transfer(ReadOnlySpan<BlockVertex> vertices, ref SectionMesh dst)
+    public SectionMesh Transfer(ReadOnlySpan<BlockVertex> vertices, SectionMesh dst)
     {
         if (vertices.Length == 0)
-        {
-            Free(ref dst);
-            return;
-        }
+            return Free(dst);
 
         quadIndexBuffer.EnsureCapacity(vertices.Length);
 
@@ -21,11 +18,12 @@ public class DimensionSectionMeshTransferer(RootQuadIndexBuffer quadIndexBuffer,
         gl.UnbindBuffer(BufferTarget.ArrayBuffer);
 
         dst.Count = vertices.Length;
+        return dst;
     }
 
-    public void Free(ref SectionMesh dst)
+    public SectionMesh Free(SectionMesh dst)
     {
         svb.Free(dst.Alloc);
-        dst = default;
+        return default;
     }
 }

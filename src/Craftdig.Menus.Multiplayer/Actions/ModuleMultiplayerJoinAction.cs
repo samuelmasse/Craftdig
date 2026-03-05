@@ -5,7 +5,7 @@ public class ModuleMultiplayerJoinAction(RootState state, ModuleEnts ents, Modul
 {
     public void Run(PlayerSocket socket)
     {
-        socket.Ent.Tag() = "sc";
+        socket.Tag = "sc";
 
         var worldScope = scope.Scope<WorldScope>();
 
@@ -14,14 +14,13 @@ public class ModuleMultiplayerJoinAction(RootState state, ModuleEnts ents, Modul
 
         var dimensionScope = worldScope.Scope<DimensionScope>();
 
-        var dimensionEnt = new EntPtr()
-            .DimensionScope(dimensionScope);
+        var dimensionEnt = new EntPtr() { DimensionScope = dimensionScope };
         worldScope.Get<WorldDimensionBag>().Add(dimensionEnt);
 
         // For now just find the first dimension
-        var dimension = ents.Set.First(x => x.IsDimension());
+        var dimension = ents.Set.First(x => x.IsDimension);
 
-        dimensionScope.Add(new DimensionAir(dimension.Air()));
+        dimensionScope.Add(new DimensionAir(dimension.Air));
         dimensionScope.Get<DimensionChunkUnloaderHandlers>().Add(dimensionScope.Get<DimensionChunkFrontendUnloader>().Unload);
 
         var dimensionLoaderScope = dimensionScope.Scope<DimensionLoaderScope>();
