@@ -5,7 +5,6 @@ public class DimensionChunkStreamerRequester(
     DimensionDrawDistance drawDistance,
     DimensionSockets sockets,
     DimensionChunks chunks,
-    DimensionChunkBag chunkBag,
     DimensionChunkStreamer chunkStreamer)
 {
     private readonly Stopwatch watch = new();
@@ -82,7 +81,7 @@ public class DimensionChunkStreamerRequester(
 
                 bool Visit(Vector2i delta) =>
                     chunks.TryGet(center + delta, out var chunk) &&
-                    chunkBag.Contains(chunk) &&
+                    chunk.IsChunkLoaded &&
                     !streamed.Contains(center + delta);
             }
         }

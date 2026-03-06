@@ -3,8 +3,6 @@ namespace Craftdig.Dimension.Server;
 [Dimension]
 public class DimensionPlayerSpawner(
     WorldIndicesWrapper indicesWrapper,
-    DimensionPlayerBag playerBag,
-    DimensionRigidBag rigidBag,
     DimensionSockets sockets)
 {
     private readonly ConcurrentQueue<NetSocket> queue = [];
@@ -28,6 +26,8 @@ public class DimensionPlayerSpawner(
     private void Spawn(NetSocket ns)
     {
         var player = ns.SocketPlayer;
+        player.IsRigid = true;
+        player.IsPlayer = true;
         player.HitBox = new Box3d((-0.3, -0.3, -1.62), (0.3, 0.3, 0.18));
         player.Position = (15, 0, 120);
         player.IsFlying = true;
@@ -35,8 +35,6 @@ public class DimensionPlayerSpawner(
         player.CanMove = true;
         player.CanSprint = true;
         player.CanJump = true;
-        playerBag.Add(player);
-        rigidBag.Add(player);
         sockets.Add(ns);
 
         ns.Send<WorldIndicesUpdateCommand, byte>(indicesWrapper.Wrap());

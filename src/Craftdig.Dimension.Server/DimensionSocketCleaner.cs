@@ -1,7 +1,7 @@
 namespace Craftdig.Dimension.Server;
 
 [Dimension]
-public class DimensionSocketCleaner(AppLog log, DimensionSockets sockets, DimensionPlayerBag playerBag, DimensionRigidBag rigidBag)
+public class DimensionSocketCleaner(AppLog log, DimensionSockets sockets)
 {
     private readonly List<NetSocket> remove = [];
 
@@ -15,11 +15,9 @@ public class DimensionSocketCleaner(AppLog log, DimensionSockets sockets, Dimens
 
         foreach (var ns in remove)
         {
-            playerBag.Remove(ns.SocketPlayer);
-            rigidBag.Remove(ns.SocketPlayer);
             sockets.Remove(ns);
-
             log.Info("Player {0} left", ns.SocketPlayer.Tag);
+            ns.SocketPlayer.Dispose();
         }
 
         remove.Clear();

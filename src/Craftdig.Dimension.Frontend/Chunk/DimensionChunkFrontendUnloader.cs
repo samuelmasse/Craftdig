@@ -7,7 +7,7 @@ public class DimensionChunkFrontendUnloader(
     DimensionChunkSortedLists chunkSortedLists,
     DimensionChunkRenderDescheduler chunkRenderDescheduler)
 {
-    public void Unload(EntMut chunk)
+    public void Unload(EntMutIdx chunk)
     {
         foreach (ref var section in chunk.Sections.Span)
         {

@@ -42,7 +42,7 @@ public class ServerRegisterHandlersAction(
     private Action<NetSocket, C> DimensionHandler<T, C>()
         where T : DimensionReceiver<C> where C : unmanaged => (ns, cmd) =>
     {
-        if (ns.SocketPlayer == null)
+        if (ns.SocketPlayer == default)
         {
             log.Warn("Socket {0} tried to perform a dimension action before spawning", ns.Tag);
             ns.Disconnect();

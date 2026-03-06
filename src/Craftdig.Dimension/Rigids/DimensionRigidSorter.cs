@@ -9,7 +9,7 @@ public class DimensionRigidSorter(DimensionChunks chunks, DimensionRigidBag rigi
             Tick(ent);
     }
 
-    private void Tick(EntRefMut ent)
+    private void Tick(EntMutIdx ent)
     {
         var cloc = ent.Position.ToLoc().Xy.ToCloc();
         if (ent.RigidCloc == cloc)

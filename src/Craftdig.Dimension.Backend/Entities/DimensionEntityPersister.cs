@@ -18,12 +18,12 @@ public class DimensionEntityPersister(AppLog log, DimensionEntityRegionWriter en
                 continue;
 
             log.Warn("Persist ent {0} into rloc {1}", ent, prevRloc);
-            entityRegionWriter.Write((Ent)ent, rloc);
+            entityRegionWriter.Write(ent, rloc);
 
             if (prevRloc != null && prevRloc != rloc)
             {
                 log.Warn("Remove ent {0} from rloc {1}", ent, prevRloc);
-                entityRegionWriter.Erase((Ent)ent, prevRloc.Value);
+                entityRegionWriter.Erase(ent, prevRloc.Value);
             }
 
             var nextTime = now + TimeSpan.FromMilliseconds(rng.Next(250, 500));
@@ -31,7 +31,7 @@ public class DimensionEntityPersister(AppLog log, DimensionEntityRegionWriter en
         }
     }
 
-    public void Schedule(EntRef ent, Vector2i rloc, DateTime time)
+    public void Schedule(Ent ent, Vector2i rloc, DateTime time)
     {
         var prevRloc = ent.RigidRloc;
 
@@ -39,5 +39,5 @@ public class DimensionEntityPersister(AppLog log, DimensionEntityRegionWriter en
         pq.Enqueue(new(ent, rloc, prevRloc, time, ent.RigidPersistId), time);
     }
 
-    private readonly record struct Persistance(EntRef Ent, Vector2i Rloc, Vector2i? PrevRloc, DateTime Time, long PersistId);
+    private readonly record struct Persistance(Ent Ent, Vector2i Rloc, Vector2i? PrevRloc, DateTime Time, long PersistId);
 }

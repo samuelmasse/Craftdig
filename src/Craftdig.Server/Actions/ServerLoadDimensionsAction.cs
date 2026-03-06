@@ -1,7 +1,7 @@
 namespace Craftdig.Server;
 
 [Server]
-public class ServerLoadDimensionsAction(ModuleEnts ents, WorldScope worldScope)
+public class ServerLoadDimensionsAction(ModuleEnts ents, WorldScope worldScope, WorldEntArena arena)
 {
     public void Run()
     {
@@ -10,8 +10,7 @@ public class ServerLoadDimensionsAction(ModuleEnts ents, WorldScope worldScope)
         worldLoaderScope.Get<WorldBackendLoader>().Run();
 
         var dimensionScope = worldScope.Scope<DimensionScope>();
-        var dimensionEnt = new EntObj() { DimensionScope = dimensionScope };
-        worldScope.Get<WorldDimensionBag>().Add(dimensionEnt);
+        var dimensionEnt = arena.Alloc().Mutate().DimensionScope(dimensionScope).IsDimensionScope(true);
 
         // For now just find the first dimension
         var dimension = ents.Set.First(x => x.IsDimension);

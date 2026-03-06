@@ -3,7 +3,6 @@ namespace Craftdig.Client;
 [Player]
 public class PlayerChunks(
     DimensionChunks chunks,
-    DimensionChunkBag chunkBag,
     DimensionChunkFrontendReceiver chunkReceiverHandler,
     PlayerChunkUpdateQueue chunkUpdateQueue)
 {
@@ -17,7 +16,7 @@ public class PlayerChunks(
             chunks.Alloc(cloc);
             var chunk = chunks[cloc];
             chunk.ChunkBlocks = blocks;
-            chunkBag.Add(chunk);
+            chunk.IsChunkLoaded = true;
             chunkReceiverHandler.Receive(chunk);
 
             count--;

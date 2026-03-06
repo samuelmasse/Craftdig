@@ -1,7 +1,11 @@
 namespace Craftdig.Menus.Singleplayer;
 
 [Module]
-public class ModuleSingleplayerLoadWorldAction(RootState state, ModuleEnts ents, ModuleScope scope, ModuleReadWorldMetaAction readWorldMetaAction)
+public class ModuleSingleplayerLoadWorldAction(
+    RootState state,
+    ModuleEnts ents,
+    ModuleScope scope,
+    ModuleReadWorldMetaAction readWorldMetaAction)
 {
     public void Run(WorldPaths paths)
     {
@@ -17,8 +21,9 @@ public class ModuleSingleplayerLoadWorldAction(RootState state, ModuleEnts ents,
 
         var dimensionScope = worldScope.Scope<DimensionScope>();
 
-        var dimensionEnt = new EntObj() { DimensionScope = dimensionScope };
-        worldScope.Get<WorldDimensionBag>().Add(dimensionEnt);
+        var dimensionEnt = worldScope.Get<WorldEntArena>().Alloc().Mutate()
+            .DimensionScope(dimensionScope)
+            .IsDimensionScope(true);
 
         // For now just find the first dimension
         var dimension = ents.Set.First(x => x.IsDimension);
@@ -38,9 +43,8 @@ public class ModuleSingleplayerLoadWorldAction(RootState state, ModuleEnts ents,
         dimensionLoaderScope.Get<DimensionBackendLoader>().Run();
         dimensionLoaderScope.Get<DimensionFrontendLoader>().Run();
 
-        var players = dimensionScope.Get<DimensionPlayerBag>();
-        var player = new EntObj();
-        players.Add(player);
+        var player = dimensionScope.Get<DimensionEntArena>().Alloc();
+        player.IsPlayer = true;
 
         var playerScope = dimensionScope.Scope<PlayerScope>();
         playerScope.Get<PlayerMetrics>().Start();

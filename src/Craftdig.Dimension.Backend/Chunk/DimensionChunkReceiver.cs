@@ -5,7 +5,6 @@ public class DimensionChunkReceiver(
     DimensionChunkThreadOutputBag outputBag,
     DimensionChunks chunks,
     DimensionChunkPending chunkPending,
-    DimensionChunkBag chunkBag,
     DimensionRegionThreadWorkQueue regionThreadWorkQueue,
     DimensionChunkReceiverHandlers chunkReceiverHandlers)
 {
@@ -40,7 +39,7 @@ public class DimensionChunkReceiver(
         chunks.Alloc(cloc);
         var chunk = chunks[cloc];
         chunk.ChunkBlocks = output.Blocks;
-        chunkBag.Add(chunk);
+        chunk.IsChunkLoaded = true;
         chunkPending.Remove(cloc);
         chunkReceiverHandlers.Run(chunk);
     }

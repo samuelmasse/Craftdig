@@ -6,17 +6,17 @@ public class DimensionMovement(DimensionPlayerBag bag)
     public void Tick()
     {
         foreach (var ent in bag.Ents)
-            Tick((EntMut)ent);
+            Tick(ent);
     }
 
-    private void Tick(EntMut ent)
+    private void Tick(EntMutIdx ent)
     {
         Move(ent);
         Collide(ent);
         ent.Movement = default;
     }
 
-    private void Collide(EntMut ent)
+    private void Collide(EntMutIdx ent)
     {
         if (ent.CollisionNormal.Z == 1)
             ent.IsFlying = false;
@@ -25,7 +25,7 @@ public class DimensionMovement(DimensionPlayerBag bag)
             ent.IsSprinting = false;
     }
 
-    private void Move(EntMut ent)
+    private void Move(EntMutIdx ent)
     {
         Fly(ent);
         Sprint(ent);
@@ -33,7 +33,7 @@ public class DimensionMovement(DimensionPlayerBag bag)
         Vector(ent);
     }
 
-    private void Fly(EntMut ent)
+    private void Fly(EntMutIdx ent)
     {
         if (!ent.CanFly)
         {
@@ -72,7 +72,7 @@ public class DimensionMovement(DimensionPlayerBag bag)
         }
     }
 
-    private void Sprint(EntMut ent)
+    private void Sprint(EntMutIdx ent)
     {
         if (!ent.CanSprint)
         {
@@ -96,7 +96,7 @@ public class DimensionMovement(DimensionPlayerBag bag)
         }
     }
 
-    private void Jump(EntMut ent)
+    private void Jump(EntMutIdx ent)
     {
         if (!ent.CanJump)
             return;
@@ -105,7 +105,7 @@ public class DimensionMovement(DimensionPlayerBag bag)
             ent.Velocity = ent.Velocity with { Z = 0.42 };
     }
 
-    private void Vector(EntMut ent)
+    private void Vector(EntMutIdx ent)
     {
         if (!ent.CanMove)
             return;

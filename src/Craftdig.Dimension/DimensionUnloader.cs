@@ -5,6 +5,6 @@ public class DimensionUnloader(DimensionEntArena entArena)
 {
     public void Run()
     {
-        entArena.Arena.Dispose();
+        entArena.Dispose();
     }
 }

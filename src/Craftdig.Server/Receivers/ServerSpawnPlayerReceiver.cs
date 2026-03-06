@@ -5,7 +5,7 @@ public class ServerSpawnPlayerReceiver(AppLog log, WorldDimensionBag dimensionBa
 {
     public void Receive(NetSocket ns)
     {
-        if (ns.SocketPlayer != null)
+        if (ns.SocketPlayer != default)
         {
             log.Warn("Player {0} tried to spawn again", ns.Tag);
             ns.Disconnect();
@@ -16,7 +16,9 @@ public class ServerSpawnPlayerReceiver(AppLog log, WorldDimensionBag dimensionBa
 
         var dimensionScope = dimensionBag.Ents[0].DimensionScope;
         ns.DimensionScope = dimensionScope;
-        ns.SocketPlayer = new EntObj() { Tag = ns.Tag };
+        var player = dimensionScope.Get<DimensionEntArena>().Alloc();
+        player.Tag = ns.Tag;
+        ns.SocketPlayer = player;
         dimensionScope.Get<DimensionPlayerSpawner>().Add(ns);
     }
 }

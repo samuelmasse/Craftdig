@@ -2,13 +2,12 @@ namespace Craftdig.Player.Frontend;
 
 [Player]
 [DebuggerTypeProxy(typeof(EntDebugView))]
-public class PlayerEnt(EntRefMut ent) : IEntMut
+public class PlayerEnt(EntMutIdx ent) : IEntMut
 {
-    private readonly EntRefMut ent = ent;
+    private readonly EntMutIdx ent = ent;
 
     public static implicit operator Ent(PlayerEnt a) => (Ent)a.ent;
-    public static implicit operator EntMut(PlayerEnt a) => (EntMut)a.ent;
-    public static implicit operator EntRefMut(PlayerEnt a) => a.ent;
+    public static implicit operator EntMutIdx(PlayerEnt a) => a.ent;
 
     public EntHandle Handle => ent.Handle;
     public bool IsAlive => ent.IsAlive;

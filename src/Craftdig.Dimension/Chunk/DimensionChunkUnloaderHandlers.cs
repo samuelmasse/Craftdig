@@ -3,13 +3,13 @@ namespace Craftdig.Dimension;
 [Dimension]
 public class DimensionChunkUnloaderHandlers
 {
-    private readonly List<Action<EntMut>> handlers = [];
+    private readonly List<Action<EntMutIdx>> handlers = [];
 
-    public void Run(EntMut ent)
+    public void Run(EntMutIdx ent)
     {
         foreach (var handler in handlers)
             handler.Invoke(ent);
     }
 
-    public void Add(Action<EntMut> handler) => handlers.Add(handler);
+    public void Add(Action<EntMutIdx> handler) => handlers.Add(handler);
 }

@@ -3,9 +3,9 @@ namespace Craftdig.Dimension;
 [Dimension]
 public class DimensionChunks(DimensionEntArena entArena)
 {
-    private readonly L3Map512<EntPtr> map = new();
+    private readonly L3Map512<EntPtrIdx> map = new();
 
-    public EntMut this[Vector2i cloc]
+    public EntMutIdx this[Vector2i cloc]
     {
         get
         {
@@ -16,10 +16,10 @@ public class DimensionChunks(DimensionEntArena entArena)
         }
     }
 
-    public bool TryGet(Vector2i cloc, out EntMut chunk)
+    public bool TryGet(Vector2i cloc, out EntMutIdx chunk)
     {
         bool res = map.TryGetValue(cloc, out var val);
-        chunk = (EntMut)val;
+        chunk = val;
         return res;
     }
 
@@ -30,7 +30,7 @@ public class DimensionChunks(DimensionEntArena entArena)
         if (Contains(cloc))
             return;
 
-        var chunk = entArena.Arena.Alloc()
+        var chunk = entArena.Alloc()
             .Mutate()
             .IsChunk(true)
             .Cloc(cloc)

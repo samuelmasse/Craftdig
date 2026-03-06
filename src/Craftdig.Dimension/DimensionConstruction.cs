@@ -6,17 +6,16 @@ public class DimensionConstruction(
     DimensionAir air,
     DimensionBlocks blocks,
     DimensionPlayerBag playerBag,
-    DimensionRigidBag rigidBag,
     DimensionSelected selected,
     DimensionEntArena entArena)
 {
     public void Tick()
     {
         foreach (var ent in playerBag.Ents)
-            Tick((EntMut)ent);
+            Tick(ent);
     }
 
-    private void Tick(EntMut ent)
+    private void Tick(EntMutIdx ent)
     {
         var constr = ent.Construction;
         ent.Construction = default;
@@ -26,15 +25,15 @@ public class DimensionConstruction(
 
         if (constr.Action == ConstructionAction.Drop)
         {
-            rigidBag.Add(entArena.Arena.Alloc().Mutate()
+            entArena.Alloc().Mutate()
                 .IsTestCube(true)
                 .TestCubeMaterial(moduleIndices[constr.Arg])
                 .TestCubeSize(0.5f)
+                .IsRigid(true)
                 .IsProjectile(true)
                 .HitBox(new Box3d((-0.25, -0.25, -0.25), (0.25, 0.25, 0.25)))
                 .Position(ent.Position)
-                .Velocity(ent.Velocity + ent.Movement.LookAt / 2)
-                .Ent);
+                .Velocity(ent.Velocity + ent.Movement.LookAt / 2);
 
             return;
         }

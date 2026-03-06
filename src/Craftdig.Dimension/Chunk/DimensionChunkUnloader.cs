@@ -3,7 +3,6 @@ namespace Craftdig.Dimension;
 [Dimension]
 public class DimensionChunkUnloader(
     DimensionChunks chunks,
-    DimensionChunkBag chunkBag,
     DimensionChunkUnloaderHandlers chunkUnloaderHandlers)
 {
     public void Unload(Vector2i cloc)
@@ -12,7 +11,6 @@ public class DimensionChunkUnloader(
             return;
 
         chunkUnloaderHandlers.Run(chunk);
-        chunkBag.Remove(chunk);
         chunks.Free(cloc);
     }
 }

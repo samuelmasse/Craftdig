@@ -36,8 +36,8 @@ public class PlayerDebugMenu(
             () => text.Format("Selected Normal: {0}", selected[ent].GetValueOrDefault().Normal),
             () => text.Format("TPS: {0}", playerMetrics.TickMetricWindow.Value.Ticks),
             () => text.Format("SVB: {0}", svb.Allocator.Used),
-            () => text.Format("World Arena: {0}", worldEntArena.Arena.Allocated),
-            () => text.Format("Dimension Arena: {0}", dimensionEntArena.Arena.Allocated),
+            () => text.Format("World Arena: {0}", worldEntArena.Allocated),
+            () => text.Format("Dimension Arena: {0}", dimensionEntArena.Allocated),
         ];
 
         Node(root, out var list)

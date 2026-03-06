@@ -3,11 +3,9 @@ namespace Craftdig.World;
 [Components]
 public interface IWorldComponents
 {
-    [ComponentToString]
-    ulong WorldId { get; set; }
+    HashSet<EntPtrIdx> ContextEntLiveSet { get; set; }
 
-    int WorldEntPtrBagIndex { get; set; }
-    int DimensionBagIndex { get; set; }
+    bool IsDimensionScope { get; set; }
 
     Ent[] ArmorSlotEntities { get; set; }
     int[] ArmorSlotCounts { get; set; }

@@ -3,18 +3,20 @@ namespace Craftdig.Dimension;
 [Components]
 public interface IDimensionComponents
 {
+    // Context
+    HashSet<EntPtrIdx> ContextEntLiveSet { get; set; }
+
     DimensionScope DimensionScope { get; set; }
 
     // Chunk
     [ComponentToString] bool IsChunk { get; set; }
     [ComponentToString] Vector2i Cloc { get; set; }
     ChunkBlocks? ChunkBlocks { get; set; }
-    int ChunkBagIndex { get; set; }
-    HashSet<EntRef>? ChunkRigids { get; set; }
+    bool IsChunkLoaded { get; set; }
+    HashSet<Ent>? ChunkRigids { get; set; }
 
     // Rigid
     [ComponentToString] bool IsRigid { get; set; }
-    int RigidBagIndex { get; set; }
     Vector2i RigidCloc { get; set; }
     Vector3d Position { get; set; }
     Vector3d PrevPosition { get; set; }
@@ -33,7 +35,7 @@ public interface IDimensionComponents
     bool CanMoveVertically { get; set; }
 
     // Player
-    int PlayerBagIndex { get; set; }
+    bool IsPlayer { get; set; }
     long BlockSelectionLastComputed { get; set; }
     BlockSelection? BlockSelection { get; set; }
     Vector3d BlockSelectionPosition { get; set; }

@@ -1,4 +1,7 @@
 namespace Craftdig.Dimension;
 
 [Dimension]
-public class DimensionRigidBag : EntBag<EntRefMut, DimensionComponents.RigidBagIndex>;
+public class DimensionRigidBagMut : EntIdxBagMut<DimensionComponents.IsRigid>;
+
+[Dimension]
+public class DimensionRigidBag(DimensionRigidBagMut bag) : EntIdxBag<DimensionComponents.IsRigid>(bag);

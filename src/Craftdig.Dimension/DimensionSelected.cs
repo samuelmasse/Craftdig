@@ -8,19 +8,19 @@ public class DimensionSelected(DimensionBlocks blocks, DimensionPlayerBag player
     public void Tick()
     {
         foreach (var player in playerBag.Ents)
-            Tick((EntMut)player);
+            Tick(player);
 
         time++;
     }
 
-    private void Tick(EntMut player)
+    private void Tick(EntMutIdx player)
     {
         player.BlockSelectionPosition = player.Position;
         player.BlockSelectionLookAt = player.Movement.LookAt;
         player.BlockSelection = null;
     }
 
-    public BlockSelection? this[EntMut player]
+    public BlockSelection? this[EntMutIdx player]
     {
         get
         {

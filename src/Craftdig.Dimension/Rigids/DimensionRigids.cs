@@ -6,10 +6,10 @@ public class DimensionRigids(DimensionBlocks blocks, DimensionRigidBag rigidBag)
     public void Tick()
     {
         foreach (var ent in rigidBag.Ents)
-            Tick((EntMut)ent);
+            Tick(ent);
     }
 
-    private void Tick(EntMut ent)
+    private void Tick(EntMutIdx ent)
     {
         ent.PrevPosition = ent.Position;
         ent.CollisionNormal = default;
@@ -37,13 +37,13 @@ public class DimensionRigids(DimensionBlocks blocks, DimensionRigidBag rigidBag)
         }
     }
 
-    private void Collide(EntMut ent)
+    private void Collide(EntMutIdx ent)
     {
         for (var i = 0; i < 3; i++)
             CollideAxis(ent);
     }
 
-    private void CollideAxis(EntMut ent)
+    private void CollideAxis(EntMutIdx ent)
     {
         var box = new Box3d(ent.HitBox.Min + ent.Position, ent.HitBox.Max + ent.Position);
         var tbox = new Box3d(box.Min + ent.Velocity, box.Max + ent.Velocity);

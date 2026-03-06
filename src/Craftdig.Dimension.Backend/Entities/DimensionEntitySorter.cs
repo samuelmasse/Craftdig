@@ -9,7 +9,7 @@ public class DimensionEntitySorter(DimensionRigidBag rigidBag, DimensionEntityPe
             Tick(ent);
     }
 
-    private void Tick(EntRefMut ent)
+    private void Tick(EntMutIdx ent)
     {
         var rloc = ent.Position.ToLoc().Xy.ToCloc().ToRloc();
         if (ent.RigidRloc == rloc)

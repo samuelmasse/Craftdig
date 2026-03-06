@@ -5,6 +5,6 @@ public class WorldUnloader(WorldEntArena entArena)
 {
     public void Run()
     {
-        entArena.Arena.Dispose();
+        entArena.Dispose();
     }
 }
