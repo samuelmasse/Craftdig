@@ -9,6 +9,4 @@ public interface IWorldComponents
 
     // Dimension scope
     [ComponentToString] bool IsDimensionScope { get; set; }
-
-    HashSet<EntPtrIdx> ContextEntLiveSet { get; set; } // TODO: remove this
 }

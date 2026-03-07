@@ -2,7 +2,7 @@ namespace Craftdig.World;
 
 public class EntIdxContextBuilder
 {
-    private readonly EntObj ent = new EntObj().Mutate().ContextEntLiveSet([]);
+    private readonly EntObj ent = new();
 
     public EntObj Ent => ent;
 

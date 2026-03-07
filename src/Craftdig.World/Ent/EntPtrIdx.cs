@@ -41,7 +41,6 @@ public readonly record struct EntPtrIdx : IEntMut, IDisposable
     {
         this.Clear();
         ent.Dispose();
-        context.ContextEntLiveSet.Remove(this);
     }
 
     public T? Get<T, N>() => ent.Get<T, N>();
