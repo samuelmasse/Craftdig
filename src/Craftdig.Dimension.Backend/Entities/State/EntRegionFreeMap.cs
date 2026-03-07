@@ -1,10 +1,10 @@
 namespace Craftdig.Dimension.Backend;
 
-public class EntityRegionFreeMap
+public class EntRegionFreeMap
 {
     private readonly (int Next, HashSet<int> Holes)[] free;
 
-    public EntityRegionFreeMap(int levels)
+    public EntRegionFreeMap(int levels)
     {
         free = new (int Next, HashSet<int> Holes)[levels];
         for (int i = 0; i < levels; i++)

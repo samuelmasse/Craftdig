@@ -9,15 +9,15 @@ public interface IWorldComponents
 
     bool IsDimensionScope { get; set; }
 
-    Ent[] ArmorSlotEntities { get; set; }
+    Ent[] ArmorSlotEnts { get; set; }
     int[] ArmorSlotCounts { get; set; }
-    Ent[] InventorySlotEntities { get; set; }
+    Ent[] InventorySlotEnts { get; set; }
     int[] InventorySlotCounts { get; set; }
-    Ent[] HotBarSlotEntities { get; set; }
+    Ent[] HotBarSlotEnts { get; set; }
     int[] HotBarSlotCounts { get; set; }
 
     int HotBarIndex { get; set; }
 
-    Ent OffhandEntity { get; set; }
+    Ent OffhandEnt { get; set; }
     int OffhandCount { get; set; }
 }

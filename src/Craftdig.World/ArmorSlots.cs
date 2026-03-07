@@ -7,19 +7,19 @@ public static class ArmorSlots
     public static ItemSlot GetArmorSlot<T>(this T ent, int index) where T : IEntMut
     {
         var armorSlotCounts = ent.ArmorSlotCounts;
-        var armorSlotEntities = ent.ArmorSlotEntities;
-        if (armorSlotCounts == null || armorSlotEntities == null)
+        var armorSlotEnts = ent.ArmorSlotEnts;
+        if (armorSlotCounts == null || armorSlotEnts == null)
             return default;
 
-        return new(armorSlotEntities[index], armorSlotCounts[index]);
+        return new(armorSlotEnts[index], armorSlotCounts[index]);
     }
 
     public static void SetArmorSlot<T>(this T ent, int index, ItemSlot val) where T : IEntMut
     {
         var armorSlotCounts = ent.ArmorSlotCounts ??= new int[Count];
-        var armorSlotEntities = ent.ArmorSlotEntities ??= new Ent[Count];
+        var armorSlotEnts = ent.ArmorSlotEnts ??= new Ent[Count];
 
-        armorSlotEntities[index] = val.Item;
+        armorSlotEnts[index] = val.Item;
         armorSlotCounts[index] = val.Count;
     }
 }

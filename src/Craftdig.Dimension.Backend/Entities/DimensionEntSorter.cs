@@ -1,7 +1,7 @@
 namespace Craftdig.Dimension.Backend;
 
 [Dimension]
-public class DimensionEntitySorter(DimensionRigidBag rigidBag, DimensionEntityPersister entityPersister)
+public class DimensionEntSorter(DimensionRigidBag rigidBag, DimensionEntPersister entPersister)
 {
     public void Tick()
     {
@@ -16,7 +16,7 @@ public class DimensionEntitySorter(DimensionRigidBag rigidBag, DimensionEntityPe
             return;
 
         ent.RigidPersistId++;
-        entityPersister.Schedule(ent, rloc, DateTime.MinValue);
+        entPersister.Schedule(ent, rloc, DateTime.MinValue);
         ent.RigidRloc = rloc;
     }
 }

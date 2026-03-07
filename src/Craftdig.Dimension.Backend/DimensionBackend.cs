@@ -2,8 +2,8 @@ namespace Craftdig.Dimension.Backend;
 
 [Dimension]
 public class DimensionBackend(
-    DimensionEntitySorter entitySorter,
-    DimensionEntityPersister entityPersister,
+    DimensionEntSorter entSorter,
+    DimensionEntPersister entPersister,
     DimensionChunkRequester chunkRequester,
     DimensionChunkReceiver chunkReceiver,
     DimensionRegionReceiver regionReceiver,
@@ -11,12 +11,12 @@ public class DimensionBackend(
 {
     public void Tick()
     {
-        entitySorter.Tick();
+        entSorter.Tick();
     }
 
     public void Frame()
     {
-        entityPersister.Frame();
+        entPersister.Frame();
         regionInvalidation.Frame();
         chunkRequester.Frame();
         chunkReceiver.Frame();

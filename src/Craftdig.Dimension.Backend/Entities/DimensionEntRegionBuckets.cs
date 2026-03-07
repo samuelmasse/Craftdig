@@ -1,6 +1,6 @@
 namespace Craftdig.Dimension.Backend;
 
-public class DimensionEntityRegionBuckets
+public class DimensionEntRegionBuckets
 {
     private readonly int[] sizes;
     private readonly int unit;
@@ -9,7 +9,7 @@ public class DimensionEntityRegionBuckets
     public ReadOnlySpan<int> Sizes => sizes;
     public int Unit => unit;
 
-    public DimensionEntityRegionBuckets()
+    public DimensionEntRegionBuckets()
     {
         unit = RegionBlockEntry.Size;
 

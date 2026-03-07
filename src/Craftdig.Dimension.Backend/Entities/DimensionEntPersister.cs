@@ -1,7 +1,7 @@
 namespace Craftdig.Dimension.Backend;
 
 [Dimension]
-public class DimensionEntityPersister(AppLog log, DimensionEntityRegionWriter entityRegionWriter)
+public class DimensionEntPersister(AppLog log, DimensionEntRegionWriter entRegionWriter)
 {
     private readonly PriorityQueue<Persistence, DateTime> pq = new();
     private readonly Random rng = new();
@@ -18,12 +18,12 @@ public class DimensionEntityPersister(AppLog log, DimensionEntityRegionWriter en
                 continue;
 
             log.Warn("Persist ent {0} into rloc {1}", ent, prevRloc);
-            entityRegionWriter.Write(ent, rloc);
+            entRegionWriter.Write(ent, rloc);
 
             if (prevRloc != null && prevRloc != rloc)
             {
                 log.Warn("Remove ent {0} from rloc {1}", ent, prevRloc);
-                entityRegionWriter.Erase(ent, prevRloc.Value);
+                entRegionWriter.Erase(ent, prevRloc.Value);
             }
 
             var nextTime = now + TimeSpan.FromMilliseconds(rng.Next(250, 500));

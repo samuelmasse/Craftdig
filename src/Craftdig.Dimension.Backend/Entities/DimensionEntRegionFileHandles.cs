@@ -1,7 +1,7 @@
 namespace Craftdig.Dimension.Backend;
 
 [Dimension]
-public class DimensionEntityRegionFileHandles
+public class DimensionEntRegionFileHandles
 {
     private readonly Dictionary<string, SafeFileHandle> handles = [];
 

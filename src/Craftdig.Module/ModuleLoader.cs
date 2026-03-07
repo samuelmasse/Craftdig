@@ -8,6 +8,6 @@ public class ModuleLoader(AppLog log, AppMods mods, ModuleEnts ents, ModuleLoade
         foreach (var entry in mods.Entries)
             ((ModLoader)scope.Get(entry.Loader)).Load();
 
-        log.Info("Loaded {0} entities", ents.Span.Length);
+        log.Info("Loaded {0} ents", ents.Span.Length);
     }
 }
