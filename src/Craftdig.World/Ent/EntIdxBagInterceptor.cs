@@ -11,4 +11,10 @@ public class EntIdxBagInterceptor<N>(EntIdxBagMut<N> bag)
             bag.Add(ent);
         else bag.Remove(ent);
     }
+
+    public void InterceptNoIndex(EntMutIdx ent, int value)
+    {
+        if (value == 0)
+            bag.Remove(ent);
+    }
 }

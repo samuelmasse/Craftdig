@@ -17,7 +17,7 @@ public interface IDimensionComponents
 
     // Rigid
     [ComponentToString] bool IsRigid { get; set; }
-    Vector2i RigidCloc { get; set; }
+    Vector2i? RigidCloc { get; set; }
     Vector3d Position { get; set; }
     Vector3d PrevPosition { get; set; }
     Vector3d Velocity { get; set; }

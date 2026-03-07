@@ -35,7 +35,7 @@ public class DimensionEntityPersister(AppLog log, DimensionEntityRegionWriter en
     {
         var prevRloc = ent.RigidRloc;
 
-        log.Warn("Persist {0} {1} {2} {3} {4}", ent, rloc, prevRloc, time, ent.RigidPersistId);
+        log.Warn("Persisting {0} {1} {2} {3} {4}", ent, rloc, prevRloc, time, ent.RigidPersistId);
         pq.Enqueue(new(ent, rloc, prevRloc, time, ent.RigidPersistId), time);
     }
 

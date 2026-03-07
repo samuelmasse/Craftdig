@@ -6,14 +6,14 @@ public class EntIdxArena(EntObj context)
 
     public int Allocated => arena.Allocated;
 
-    public EntPtrIdx Alloc()
+    public virtual EntPtrIdx Alloc()
     {
         var ent = new EntPtrIdx(arena.Alloc(), (Ent)context);
         context.ContextEntLiveSet.Add(ent);
         return ent;
     }
 
-    public void Dispose()
+    public virtual void Dispose()
     {
         foreach (var ent in context.ContextEntLiveSet.ToArray())
             ent.Dispose();

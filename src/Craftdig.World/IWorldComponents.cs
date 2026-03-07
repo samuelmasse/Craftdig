@@ -3,6 +3,7 @@ namespace Craftdig.World;
 [Components]
 public interface IWorldComponents
 {
+    [ComponentToString] Guid Id { get; set; }
     HashSet<EntPtrIdx> ContextEntLiveSet { get; set; }
 
     bool IsDimensionScope { get; set; }

@@ -1,4 +1,4 @@
 namespace Craftdig.World;
 
 [Dimension]
-public class DimensionEntIdxContextBuilder : EntIdxContextBuilder;
+public class DimensionEntIdxContextBuilder : WorldEntIdxContextBuilder;

@@ -1,4 +1,4 @@
 namespace Craftdig.World;
 
 [Dimension]
-public class DimensionEntArena(DimensionEntIdxContextBuilder context) : EntIdxArena(context.Ent);
+public class DimensionEntArena(DimensionEntIdxContextBuilder context) : WorldEntArena(context);

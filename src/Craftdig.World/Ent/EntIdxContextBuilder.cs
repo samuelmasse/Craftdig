@@ -6,8 +6,12 @@ public class EntIdxContextBuilder
 
     public EntObj Ent => ent;
 
-    public void AddBag<N>(EntIdxBagMut<N> bag) =>
-        AddInterceptor<bool, N>(new EntIdxBagInterceptor<N>(bag).Intercept);
+    public void AddBag<N>(EntIdxBagMut<N> bag)
+    {
+        var inter = new EntIdxBagInterceptor<N>(bag);
+        AddInterceptor<bool, N>(inter.Intercept);
+        AddInterceptor<int, EntIdxBagIndex<N>>(inter.InterceptNoIndex);
+    }
 
     public void AddInterceptor<T, N>(Action<EntMutIdx, T> action)
     {
