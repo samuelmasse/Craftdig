@@ -16,7 +16,7 @@ public class PlayerChunks(
             chunks.Alloc(cloc);
             var chunk = chunks[cloc];
             chunk.ChunkBlocks = blocks;
-            chunk.IsChunkLoaded = true;
+            chunk.IsLoaded = true;
             chunkReceiverHandler.Receive(chunk);
 
             count--;

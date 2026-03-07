@@ -1,17 +1,17 @@
 namespace Craftdig.Dimension;
 
 [Dimension]
-public class DimensionRigidSorter(DimensionChunks chunks)
+public class DimensionRigidSorter(DimensionChunks chunks, DimensionRigidBag rigidBag)
 {
-    public void SortPosition(EntMutIdx ent, Vector3d position) =>
-        Sort(ent, ent.IsRigid, position);
-
-    public void SortIsRigid(EntMutIdx ent, bool isRigid) =>
-        Sort(ent, isRigid, ent.Position);
-
-    private void Sort(EntMutIdx ent, bool isRigid, Vector3d position)
+    public void Tick()
     {
-        Vector2i? cloc = isRigid ? position.ToLoc().Xy.ToCloc() : null;
+        foreach (var rigid in rigidBag.Ents)
+            Tick(rigid);
+    }
+
+    public void Tick(EntMutIdx ent)
+    {
+        Vector2i? cloc = (ent.IsLoaded && ent.IsRigid) ? ent.Position.ToLoc().Xy.ToCloc() : null;
         var prevCloc = ent.RigidCloc;
 
         if (prevCloc == cloc)
@@ -19,22 +19,20 @@ public class DimensionRigidSorter(DimensionChunks chunks)
 
         if (prevCloc != null)
         {
-            if (!chunks.TryGet(prevCloc.Value, out var prevChunk))
-                return;
+            if (chunks.TryGet(prevCloc.Value, out var prevChunk))
+            {
+                var chunkRigids = prevChunk.ChunkRigids ??= [];
+                chunkRigids.Remove(ent);
+            }
 
-            var chunkRigids = prevChunk.ChunkRigids ??= [];
-            chunkRigids.Remove(ent);
+            ent.RigidCloc = null;
         }
 
-        if (cloc != null)
+        if (cloc != null && chunks.TryGet(cloc.Value, out var chunk))
         {
-            if (!chunks.TryGet(cloc.Value, out var chunk))
-                return;
-
             var chunkRigids = chunk.ChunkRigids ??= [];
             chunkRigids.Add(ent);
+            ent.RigidCloc = cloc;
         }
-
-        ent.RigidCloc = cloc;
     }
 }

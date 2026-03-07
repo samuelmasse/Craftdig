@@ -23,7 +23,8 @@ public class ModuleSingleplayerLoadWorldAction(
 
         var dimensionEnt = worldScope.Get<WorldEntArena>().Alloc().Mutate()
             .DimensionScope(dimensionScope)
-            .IsDimensionScope(true);
+            .IsDimensionScope(true)
+            .IsLoaded(true);
 
         // For now just find the first dimension
         var dimension = ents.Set.First(x => x.IsDimension);
@@ -43,12 +44,13 @@ public class ModuleSingleplayerLoadWorldAction(
         dimensionLoaderScope.Get<DimensionBackendLoader>().Run();
         dimensionLoaderScope.Get<DimensionFrontendLoader>().Run();
 
-        var player = dimensionScope.Get<DimensionEntArena>().Alloc();
-        player.IsPlayer = true;
+        var player = dimensionScope.Get<DimensionEntArena>().Alloc().Mutate()
+            .IsPlayer(true)
+            .IsLoaded(true);
 
         var playerScope = dimensionScope.Scope<PlayerScope>();
         playerScope.Get<PlayerMetrics>().Start();
-        playerScope.Add(new PlayerEnt(player));
+        playerScope.Add(new PlayerEnt(player.Ent));
 
         state.Current = playerScope.New<PlayerSingleplayerState>();
     }

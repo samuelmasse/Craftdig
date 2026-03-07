@@ -9,16 +9,23 @@ public class EntIdxContextBuilder
     public void AddBag<N>(EntIdxBagMut<N> bag)
     {
         var inter = new EntIdxBagInterceptor<N>(bag);
-        AddInterceptor<bool, N>(inter.Intercept);
-        AddInterceptor<int, EntIdxBagIndex<N>>(inter.InterceptNoIndex);
+        AddPost<bool, N>(inter.Intercept);
+        AddPost<bool, WorldComponents.IsLoaded>(inter.Intercept);
+        AddPre<int, EntIdxBagIndex<N>>(inter.InterceptNoIndex);
     }
 
-    public void AddInterceptor<T, N>(Action<EntMutIdx, T> action)
+    public void AddPost<T, N>(Action<EntMutIdx> action) =>
+        Add<T, N, EntIdxPost<T, N>, Action<EntMutIdx>>(action);
+
+    public void AddPre<T, N>(Action<EntMutIdx, T> action) =>
+        Add<T, N, EntIdxPre<T, N>, Action<EntMutIdx, T>>(action);
+
+    public void Add<T, N, P, PT>(PT action)
     {
-        var cur = ent.Get<ReadOnlyMemory<Action<EntMutIdx, T>>, EntIdxInterceptorFor<T, N>>();
-        var array = new Action<EntMutIdx, T>[cur.Length + 1];
+        var cur = ent.Get<ReadOnlyMemory<PT>, P>();
+        var array = new PT[cur.Length + 1];
         cur.CopyTo(array);
         array[^1] = action;
-        ent.Set<ReadOnlyMemory<Action<EntMutIdx, T>>, EntIdxInterceptorFor<T, N>>(array);
+        ent.Set<ReadOnlyMemory<PT>, P>(array);
     }
 }

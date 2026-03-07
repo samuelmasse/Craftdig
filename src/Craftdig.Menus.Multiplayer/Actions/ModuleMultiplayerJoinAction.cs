@@ -16,7 +16,8 @@ public class ModuleMultiplayerJoinAction(RootState state, ModuleEnts ents, Modul
 
         var dimensionEnt = worldScope.Get<WorldEntArena>().Alloc().Mutate()
             .DimensionScope(dimensionScope)
-            .IsDimensionScope(true);
+            .IsDimensionScope(true)
+            .IsLoaded(true);
 
         // For now just find the first dimension
         var dimension = ents.Set.First(x => x.IsDimension);
@@ -28,11 +29,12 @@ public class ModuleMultiplayerJoinAction(RootState state, ModuleEnts ents, Modul
         dimensionLoaderScope.Get<DimensionLoader>().Run();
         dimensionLoaderScope.Get<DimensionFrontendLoader>().Run();
 
-        var player = dimensionScope.Get<DimensionEntArena>().Alloc();
-        player.IsPlayer = true;
+        var player = dimensionScope.Get<DimensionEntArena>().Alloc().Mutate()
+            .IsPlayer(true)
+            .IsLoaded(true);
 
         var playerScope = dimensionScope.Scope<PlayerScope>();
-        playerScope.Add(new PlayerEnt(player));
+        playerScope.Add(new PlayerEnt(player.Ent));
         playerScope.Add(socket);
         dimensionScope.Get<DimensionChunkUnloaderHandlers>().Add(playerScope.Get<PlayerChunkClientUnloader>().Unload);
         playerScope.Get<PlayerSocketLoop>().Start();

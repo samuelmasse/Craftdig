@@ -5,6 +5,7 @@ public interface IWorldComponents
 {
     [ComponentToString] Guid Id { get; set; }
     HashSet<EntPtrIdx> ContextEntLiveSet { get; set; }
+    bool IsLoaded { get; set; }
 
     bool IsDimensionScope { get; set; }
 

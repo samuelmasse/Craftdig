@@ -2,12 +2,14 @@ namespace Craftdig.World;
 
 public class EntIdxBagInterceptor<N>(EntIdxBagMut<N> bag)
 {
-    public void Intercept(EntMutIdx ent, bool value)
+    public void Intercept(EntMutIdx ent)
     {
-        if (ent.Get<bool, N>() == value)
+        var shouldBeInBag = ent.IsLoaded && ent.Get<bool, N>();
+
+        if (bag.Contains(ent) == shouldBeInBag)
             return;
 
-        if (value)
+        if (shouldBeInBag)
             bag.Add(ent);
         else bag.Remove(ent);
     }

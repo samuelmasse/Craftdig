@@ -13,7 +13,8 @@ public class DimensionLoader(
         context.AddBag(chunkBag);
         context.AddBag(playerBag);
         context.AddBag(rigidBag);
-        context.AddInterceptor<Vector3d, DimensionComponents.Position>(rigidSorter.SortPosition);
-        context.AddInterceptor<bool, DimensionComponents.IsRigid>(rigidSorter.SortIsRigid);
+        context.AddPost<Vector3d, DimensionComponents.Position>(rigidSorter.Tick);
+        context.AddPost<bool, DimensionComponents.IsRigid>(rigidSorter.Tick);
+        context.AddPost<bool, WorldComponents.IsLoaded>(rigidSorter.Tick);
     }
 }

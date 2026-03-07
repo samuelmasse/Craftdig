@@ -25,8 +25,9 @@ public class EntIdxBagMut<N>
         ents[index] = last;
         last.Set<int, EntIdxBagIndex<N>>(index);
         last = default;
+        ent.Set<int, EntIdxBagIndex<N>>(-1);
         count--;
     }
 
-    public bool Contains(EntMutIdx ent) => ent.Has<int, EntIdxBagIndex<N>>();
+    public bool Contains(EntMutIdx ent) => ent.Get<int, EntIdxBagIndex<N>>() > 0;
 }

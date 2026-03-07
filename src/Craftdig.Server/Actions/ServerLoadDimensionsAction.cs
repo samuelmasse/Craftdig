@@ -10,7 +10,10 @@ public class ServerLoadDimensionsAction(ModuleEnts ents, WorldScope worldScope, 
         worldLoaderScope.Get<WorldBackendLoader>().Run();
 
         var dimensionScope = worldScope.Scope<DimensionScope>();
-        var dimensionEnt = arena.Alloc().Mutate().DimensionScope(dimensionScope).IsDimensionScope(true);
+        var dimensionEnt = arena.Alloc().Mutate()
+            .DimensionScope(dimensionScope)
+            .IsDimensionScope(true)
+            .IsLoaded(true);
 
         // For now just find the first dimension
         var dimension = ents.Set.First(x => x.IsDimension);

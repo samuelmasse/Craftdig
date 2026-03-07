@@ -20,12 +20,15 @@ public readonly record struct EntPtrIdx : IEntMut, IDisposable
 
     public void Set<T, N>(in T value)
     {
-        var interceptors = context.Get<ReadOnlyMemory<Action<EntMutIdx, T>>, EntIdxInterceptorFor<T, N>>();
-
-        foreach (var interceptor in interceptors.Span)
-            interceptor(this, value);
+        var pres = context.Get<ReadOnlyMemory<Action<EntMutIdx, T>>, EntIdxPre<T, N>>();
+        foreach (var pre in pres.Span)
+            pre(this, value);
 
         ent.Set<T, N>(value);
+
+        var posts = context.Get<ReadOnlyMemory<Action<EntMutIdx>>, EntIdxPost<T, N>>();
+        foreach (var post in posts.Span)
+            post(this);
     }
 
     public bool Unset<T, N>()

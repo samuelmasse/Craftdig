@@ -12,7 +12,6 @@ public interface IDimensionComponents
     [ComponentToString] bool IsChunk { get; set; }
     [ComponentToString] Vector2i Cloc { get; set; }
     ChunkBlocks? ChunkBlocks { get; set; }
-    bool IsChunkLoaded { get; set; }
     HashSet<Ent>? ChunkRigids { get; set; }
 
     // Rigid

@@ -33,7 +33,8 @@ public class DimensionConstruction(
                 .IsProjectile(true)
                 .HitBox(new Box3d((-0.25, -0.25, -0.25), (0.25, 0.25, 0.25)))
                 .Position(ent.Position)
-                .Velocity(ent.Velocity + ent.Movement.LookAt / 2);
+                .Velocity(ent.Velocity + ent.Movement.LookAt / 2)
+                .IsLoaded(true);
 
             return;
         }
