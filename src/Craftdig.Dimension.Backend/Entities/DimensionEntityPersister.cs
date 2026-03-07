@@ -3,7 +3,7 @@ namespace Craftdig.Dimension.Backend;
 [Dimension]
 public class DimensionEntityPersister(AppLog log, DimensionEntityRegionWriter entityRegionWriter)
 {
-    private readonly PriorityQueue<Persistance, DateTime> pq = new();
+    private readonly PriorityQueue<Persistence, DateTime> pq = new();
     private readonly Random rng = new();
 
     public void Frame()
@@ -39,5 +39,5 @@ public class DimensionEntityPersister(AppLog log, DimensionEntityRegionWriter en
         pq.Enqueue(new(ent, rloc, prevRloc, time, ent.RigidPersistId), time);
     }
 
-    private readonly record struct Persistance(Ent Ent, Vector2i Rloc, Vector2i? PrevRloc, DateTime Time, long PersistId);
+    private readonly record struct Persistence(Ent Ent, Vector2i Rloc, Vector2i? PrevRloc, DateTime Time, long PersistId);
 }
