@@ -1,7 +1,7 @@
 namespace Craftdig.World;
 
 [World]
-public class WorldModuleIndices(ModuleEnts ents)
+public class WorldModuleIndicesMut(ModuleEnts ents)
 {
     private string[] names = [];
     private int[] rtToIndex = [];
@@ -35,4 +35,11 @@ public class WorldModuleIndices(ModuleEnts ents)
                 indexToRt[i] = ents[name].RuntimeIndex;
         }
     }
+}
+
+[World]
+public class WorldModuleIndices(WorldModuleIndicesMut indices)
+{
+    public int this[Ent block] => indices[block];
+    public Ent this[int index] => indices[index];
 }

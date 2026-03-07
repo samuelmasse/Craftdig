@@ -1,7 +1,7 @@
 namespace Craftdig.Client;
 
 [Player]
-public class PlayerWorldIndicesUpdateReceiver(WorldModuleIndices moduleIndices)
+public class PlayerWorldIndicesUpdateReceiver(WorldModuleIndicesMut moduleIndices)
 {
     public void Receive(ReadOnlySpan<byte> data)
     {

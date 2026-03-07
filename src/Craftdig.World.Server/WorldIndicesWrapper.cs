@@ -1,7 +1,7 @@
 namespace Craftdig.World.Server;
 
 [World]
-public class WorldIndicesWrapper(WorldModuleIndices moduleIndices)
+public class WorldIndicesWrapper(WorldModuleIndicesMut moduleIndices)
 {
     private int cacheCount;
     private byte[] cache = [];

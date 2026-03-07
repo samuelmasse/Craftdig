@@ -3,10 +3,12 @@ namespace Craftdig.Module;
 [Components]
 public interface IModuleComponents
 {
+    // Common
     [ComponentToString] string ModuleName { get; set; }
     [ComponentToString] string Name { get; set; }
     int RuntimeIndex { get; set; }
 
+    // Difficulty
     [ComponentToString] bool IsDifficulty { get; set; }
     float Order { get; set; }
 

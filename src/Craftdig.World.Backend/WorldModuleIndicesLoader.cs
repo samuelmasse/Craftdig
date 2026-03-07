@@ -1,7 +1,7 @@
 namespace Craftdig.World.Backend;
 
 [WorldLoader]
-public class WorldModuleIndicesLoader(ModuleEnts ents, WorldPaths paths, WorldModuleIndices moduleIndices)
+public class WorldModuleIndicesLoader(ModuleEnts ents, WorldPaths paths, WorldModuleIndicesMut moduleIndices)
 {
     public void Run()
     {

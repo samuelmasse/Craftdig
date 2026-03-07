@@ -1,7 +1,7 @@
 namespace Craftdig.Menus.Common;
 
 [Player]
-public class PlayerEscapeMenu(AppReset reset, AppStyle s, ModuleScope scope)
+public class PlayerEscapeMenu(AppReset reset, AppStyle s)
 {
     public void Create(EntObj root)
     {
