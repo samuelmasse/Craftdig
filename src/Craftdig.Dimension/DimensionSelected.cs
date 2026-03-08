@@ -16,7 +16,6 @@ public class DimensionSelected(DimensionBlocks blocks, DimensionPlayerBag player
     private void Tick(EntMutIdx player)
     {
         player.BlockSelectionPosition = player.Position;
-        player.BlockSelectionLookAt = player.Movement.LookAt;
         player.BlockSelection = null;
     }
 
@@ -26,7 +25,7 @@ public class DimensionSelected(DimensionBlocks blocks, DimensionPlayerBag player
         {
             if (player.BlockSelectionLastComputed != time)
             {
-                player.BlockSelection = Select(player.BlockSelectionPosition, player.BlockSelectionLookAt);
+                player.BlockSelection = Select(player.BlockSelectionPosition, player.LookAt);
                 player.BlockSelectionLastComputed = time;
             }
 

@@ -11,6 +11,7 @@ public interface IDimensionComponents
 
     // Player
     [Saved][ComponentToString] bool IsPlayer { get; set; }
+    [Saved] Vector3 LookAt { get; set; }
     [Saved] Ent[]? ArmorSlotEnts { get; set; }
     [Saved] int[]? ArmorSlotCounts { get; set; }
     [Saved] Ent[]? InventorySlotEnts { get; set; }
@@ -47,7 +48,6 @@ public interface IDimensionComponents
     // Player selection state
     BlockSelection? BlockSelection { get; set; }
     Vector3d BlockSelectionPosition { get; set; }
-    Vector3 BlockSelectionLookAt { get; set; }
     long BlockSelectionLastComputed { get; set; }
 
     // Player movement permissions

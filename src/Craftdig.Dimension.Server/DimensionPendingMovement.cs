@@ -62,6 +62,7 @@ public class DimensionPendingMovement(AppLog log, DimensionSockets sockets)
         }
 
         ent.Movement = mov;
+        ent.LookAt = ent.Movement.LookAt;
         ent.Construction = constr;
     }
 

@@ -1,7 +1,10 @@
 namespace Craftdig.Dimension.Backend;
 
 [Dimension]
-public class DimensionEntTracker(WorldIndexedComponents indexedComponents, DimensionScope scope, DimensionEntIdxContextBuilder context)
+public class DimensionEntTracker(
+    WorldIndexedComponents indexedComponents,
+    DimensionScope scope,
+    DimensionEntIdxContextBuilder context)
 {
     private int index;
 
