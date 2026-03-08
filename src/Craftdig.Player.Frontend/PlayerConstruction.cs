@@ -21,7 +21,7 @@ public class PlayerConstruction(RootMouse mouse, WorldModuleIndices moduleIndice
         if (reject)
             return;
 
-        var hand = ent.GetHotBarSlot(ent.HotBarIndex).Item;
+        var hand = ent.HotBarSlots[ent.HotBarIndex].Item;
 
         if (drop)
         {

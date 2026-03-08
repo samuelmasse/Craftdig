@@ -19,7 +19,7 @@ public class PlayerOverlayMenu(AppStyle s, PlayerEnt ent)
                 .SizeTextRelativeV(s.Horizontal + s.Vertical * 2)
                 .TextF(() =>
                 {
-                    var selected = ent.GetHotBarSlot(ent.HotBarIndex);
+                    var selected = ent.HotBarSlots[ent.HotBarIndex];
 
                     if (lastSelected != selected.Item)
                     {
@@ -39,13 +39,13 @@ public class PlayerOverlayMenu(AppStyle s, PlayerEnt ent)
                     .PaddingV((s.ItemSpacingS, s.ItemSpacingS, s.ItemSpacingS, s.ItemSpacingS))
                     .ColorV(s.BoardColor)
                     .SizeInnerMaxRelativeV(s.Vertical);
-                for (int i = 0; i < HotBarSlots.Count; i++)
+                for (int i = 0; i < Slots.HotBarCount; i++)
                 {
                     int k = i;
 
                     Node(bar, out var square)
                         .Mutate(s.Slot)
-                        .GetSlotValueF(() => ent.GetHotBarSlot(k))
+                        .GetSlotValueF(() => ent.HotBarSlots[k])
                         .ColorV((0, 1, 0, 1));
                 }
 

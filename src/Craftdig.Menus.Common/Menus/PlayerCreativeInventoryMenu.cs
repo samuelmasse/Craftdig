@@ -6,7 +6,7 @@ public class PlayerCreativeInventoryMenu(ModuleEnts ents, AppStyle s, PlayerEnt 
     public void Create(EntObj root)
     {
         int rows = 5;
-        var blocks = new ItemSlot[(rows + 1) * HotBarSlots.Count];
+        var blocks = new ItemSlot[(rows + 1) * Slots.HotBarCount];
         int count = 0;
 
         foreach (var ent in ents.Span)
@@ -38,7 +38,7 @@ public class PlayerCreativeInventoryMenu(ModuleEnts ents, AppStyle s, PlayerEnt 
                 .Mutate(s.HorizontalList)
                 .SizeInnerMaxRelativeV(s.Vertical);
 
-            for (int x = 0; x < HotBarSlots.Count; x++)
+            for (int x = 0; x < Slots.HotBarCount; x++)
             {
                 Vector2i loc = (x, y);
 
@@ -46,7 +46,7 @@ public class PlayerCreativeInventoryMenu(ModuleEnts ents, AppStyle s, PlayerEnt 
                     .Mutate(s.Button)
                     .Mutate(s.Slot)
                     .PlayerV(player)
-                    .GetSlotValueF(() => blocks[loc.Y * HotBarSlots.Count + loc.X]);
+                    .GetSlotValueF(() => blocks[loc.Y * Slots.HotBarCount + loc.X]);
                 {
                     Node(square)
                         .Mutate(s.SlotButtonInfinity)
@@ -59,15 +59,15 @@ public class PlayerCreativeInventoryMenu(ModuleEnts ents, AppStyle s, PlayerEnt 
         Node(vert, out var hotbar)
             .Mutate(s.HorizontalList)
             .SizeInnerMaxRelativeV(s.Vertical);
-        for (int x = 0; x < HotBarSlots.Count; x++)
+        for (int x = 0; x < Slots.HotBarCount; x++)
         {
             int i = x;
 
             Node(hotbar, out var square)
                 .Mutate(s.Button)
                 .Mutate(s.Slot)
-                .GetSlotValueF(() => player.GetHotBarSlot(i))
-                .SetSlotValueF((v) => player.SetHotBarSlot(i, v))
+                .GetSlotValueF(() => player.HotBarSlots[i])
+                .SetSlotValueF((v) => player.HotBarSlots[i] = v)
                 .PlayerV(player);
             {
                 Node(square)

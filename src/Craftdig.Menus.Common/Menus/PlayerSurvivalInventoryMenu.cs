@@ -28,7 +28,7 @@ public class PlayerSurvivalInventoryMenu(AppStyle s, PlayerEnt player)
                 .Mutate(s.VerticalList)
                 .SizeInnerMaxRelativeV(s.Horizontal)
                 .SizeWeightTypeV(SizeWeightType.Self);
-            for (int i = 0; i < ArmorSlots.Count; i++)
+            for (int i = 0; i < Slots.ArmorCount; i++)
             {
                 int x = i;
 
@@ -36,8 +36,8 @@ public class PlayerSurvivalInventoryMenu(AppStyle s, PlayerEnt player)
                     .Mutate(s.Button)
                     .Mutate(s.Slot)
                     .PlayerV(player)
-                    .GetSlotValueF(() => player.GetArmorSlot(x))
-                    .SetSlotValueF((v) => player.SetArmorSlot(x, v));
+                    .GetSlotValueF(() => player.ArmorSlots[x])
+                    .SetSlotValueF((v) => player.ArmorSlots[x] = v);
                 {
                     Node(square)
                         .Mutate(s.SlotButton)
@@ -130,13 +130,13 @@ public class PlayerSurvivalInventoryMenu(AppStyle s, PlayerEnt player)
         Node(vert, out var inventoryVert)
             .Mutate(s.VerticalList)
             .SizeInnerMaxRelativeV(s.Horizontal);
-        for (int y = 0; y < InventorySlots.Rows; y++)
+        for (int y = 0; y < Slots.InventoryRows; y++)
         {
             Node(inventoryVert, out var inventoryHor)
                 .Mutate(s.HorizontalList)
                 .SizeInnerMaxRelativeV(s.Vertical);
 
-            for (int x = 0; x < HotBarSlots.Count; x++)
+            for (int x = 0; x < Slots.HotBarCount; x++)
             {
                 Vector2i loc = (x, y);
 
@@ -144,8 +144,8 @@ public class PlayerSurvivalInventoryMenu(AppStyle s, PlayerEnt player)
                     .Mutate(s.Button)
                     .Mutate(s.Slot)
                     .PlayerV(player)
-                    .GetSlotValueF(() => player.GetInventorySlot(loc.Y * HotBarSlots.Count + loc.X))
-                    .SetSlotValueF((v) => player.SetInventorySlot(loc.Y * HotBarSlots.Count + loc.X, v));
+                    .GetSlotValueF(() => player.InventorySlots[loc.Y * Slots.HotBarCount + loc.X])
+                    .SetSlotValueF((v) => player.InventorySlots[loc.Y * Slots.HotBarCount + loc.X] = v);
                 {
                     Node(square)
                         .Mutate(s.SlotButton)
@@ -158,15 +158,15 @@ public class PlayerSurvivalInventoryMenu(AppStyle s, PlayerEnt player)
         Node(vert, out var hotbar)
             .Mutate(s.HorizontalList)
             .SizeInnerMaxRelativeV(s.Vertical);
-        for (int x = 0; x < HotBarSlots.Count; x++)
+        for (int x = 0; x < Slots.HotBarCount; x++)
         {
             int i = x;
 
             Node(hotbar, out var square)
                 .Mutate(s.Button)
                 .Mutate(s.Slot)
-                .GetSlotValueF(() => player.GetHotBarSlot(i))
-                .SetSlotValueF((v) => player.SetHotBarSlot(i, v))
+                .GetSlotValueF(() => player.HotBarSlots[i])
+                .SetSlotValueF((v) => player.HotBarSlots[i] = v)
                 .PlayerV(player);
             {
                 Node(square)

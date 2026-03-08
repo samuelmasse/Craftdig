@@ -49,8 +49,8 @@ public class PlayerFrontend(
             index--;
 
         if (index < 0)
-            index = HotBarSlots.Count - 1;
-        if (index >= HotBarSlots.Count)
+            index = Slots.HotBarCount - 1;
+        if (index >= Slots.HotBarCount)
             index = 0;
 
         ent.HotBarIndex = index;

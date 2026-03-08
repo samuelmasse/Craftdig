@@ -11,12 +11,12 @@ public interface IDimensionComponents
 
     // Player
     [Saved][ComponentToString] bool IsPlayer { get; set; }
-    [Saved] Ent[] ArmorSlotEnts { get; set; }
-    [Saved] int[] ArmorSlotCounts { get; set; }
-    [Saved] Ent[] InventorySlotEnts { get; set; }
-    [Saved] int[] InventorySlotCounts { get; set; }
-    [Saved] Ent[] HotBarSlotEnts { get; set; }
-    [Saved] int[] HotBarSlotCounts { get; set; }
+    [Saved] Ent[]? ArmorSlotEnts { get; set; }
+    [Saved] int[]? ArmorSlotCounts { get; set; }
+    [Saved] Ent[]? InventorySlotEnts { get; set; }
+    [Saved] int[]? InventorySlotCounts { get; set; }
+    [Saved] Ent[]? HotBarSlotEnts { get; set; }
+    [Saved] int[]? HotBarSlotCounts { get; set; }
     [Saved] Ent OffhandEnt { get; set; }
     [Saved] int OffhandCount { get; set; }
     [Saved] int HotBarIndex { get; set; }
