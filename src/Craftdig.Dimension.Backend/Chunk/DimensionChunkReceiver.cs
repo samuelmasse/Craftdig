@@ -22,7 +22,6 @@ public class DimensionChunkReceiver(
     private void Receive(ChunkThreadInput output)
     {
         var cloc = output.Cloc;
-        var blocks = output.Blocks;
 
         if (!output.Noop)
         {

@@ -9,35 +9,29 @@ public class DimensionEntPersister(AppLog log, DimensionEntRegionWriter entRegio
     public void Frame()
     {
         var now = DateTime.UtcNow;
-        var pass = now - TimeSpan.FromMilliseconds(500);
 
-        while (pq.Count > 0 && pq.Peek().Time < pass)
+        while (pq.Count > 0 && pq.Peek().Time < now)
         {
-            var (ent, rloc, prevRloc, _, persistId) = pq.Dequeue();
-            if (persistId != ent.RigidPersistId)
-                continue;
+            var (ent, _) = pq.Dequeue();
 
-            log.Warn("Persist ent {0} into rloc {1}", ent, prevRloc);
-            entRegionWriter.Write(ent, rloc);
+            log.Warn("Persist ent {0}", ent);
+            entRegionWriter.Write(ent);
 
-            if (prevRloc != null && prevRloc != rloc)
-            {
-                log.Warn("Remove ent {0} from rloc {1}", ent, prevRloc);
-                entRegionWriter.Erase(ent, prevRloc.Value);
-            }
+            ent.IsDirty = false;
 
-            var nextTime = now + TimeSpan.FromMilliseconds(rng.Next(250, 500));
-            pq.Enqueue(new(ent, rloc, rloc, nextTime, persistId), nextTime);
+            var dirty = ent.DirtyComponents;
+            if (dirty != null)
+                Array.Clear(dirty);
         }
     }
 
-    public void Schedule(Ent ent, Vector2i rloc, DateTime time)
+    public void Schedule(EntMutIdx ent)
     {
-        var prevRloc = ent.RigidRloc;
+        var time = DateTime.UtcNow + TimeSpan.FromMilliseconds(rng.Next(500, 750));
 
-        log.Warn("Persisting {0} {1} {2} {3} {4}", ent, rloc, prevRloc, time, ent.RigidPersistId);
-        pq.Enqueue(new(ent, rloc, prevRloc, time, ent.RigidPersistId), time);
+        log.Warn("Persisting {0} {1}", ent, time);
+        pq.Enqueue(new(ent, time), time);
     }
 
-    private readonly record struct Persistence(Ent Ent, Vector2i Rloc, Vector2i? PrevRloc, DateTime Time, long PersistId);
+    private readonly record struct Persistence(EntMutIdx Ent, DateTime Time);
 }

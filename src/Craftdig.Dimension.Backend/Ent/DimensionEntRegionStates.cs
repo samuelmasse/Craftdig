@@ -1,7 +1,10 @@
 namespace Craftdig.Dimension.Backend;
 
 [Dimension]
-public class DimensionEntRegionStates(DimensionPaths paths, DimensionEntRegionBuckets buckets)
+public class DimensionEntRegionStates(
+    DimensionPaths paths,
+    DimensionEntRegionBuckets buckets,
+    DimensionEntRegionReader regionReader)
 {
     private readonly Dictionary<Vector2i, EntRegionState> dict = [];
 
@@ -22,6 +25,7 @@ public class DimensionEntRegionStates(DimensionPaths paths, DimensionEntRegionBu
     private EntRegionState New(Vector2i rloc)
     {
         var state = new EntRegionState(paths.Ents, rloc, buckets.Count);
+        regionReader.ReadEntsFromRegion(state);
         return state;
     }
 }

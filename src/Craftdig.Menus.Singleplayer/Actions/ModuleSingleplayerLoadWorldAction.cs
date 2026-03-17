@@ -36,6 +36,7 @@ public class ModuleSingleplayerLoadWorldAction(
             (IBiomeGenerator)dimensionScope.Get(dimension.BiomeGeneraetorType)));
 
         dimensionScope.Get<DimensionChunkReceiverHandlers>().Add(dimensionScope.Get<DimensionChunkFrontendReceiver>().Receive);
+        dimensionScope.Get<DimensionChunkReceiverHandlers>().Add(dimensionScope.Get<DimensionEntChunkBackendReceiver>().Receive);
         dimensionScope.Get<DimensionChunkUnloaderHandlers>().Add(dimensionScope.Get<DimensionChunkBackendUnloader>().Unload);
         dimensionScope.Get<DimensionChunkUnloaderHandlers>().Add(dimensionScope.Get<DimensionChunkFrontendUnloader>().Unload);
 

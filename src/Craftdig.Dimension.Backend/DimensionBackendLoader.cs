@@ -4,12 +4,16 @@ namespace Craftdig.Dimension.Backend;
 public class DimensionBackendLoader(
     DimensionSavedComponentsLoader savedComponentsLoader,
     DimensionChunkThreads chunkThreads,
-    DimensionRegionThread regionThread)
+    DimensionRegionThread regionThread,
+    DimensionEntRegionThread entRegionThread,
+    DimensionEntTracker entTracker)
 {
     public void Run()
     {
         savedComponentsLoader.Run();
         chunkThreads.Start();
         regionThread.Start();
+        entRegionThread.Start();
+        entTracker.Tick();
     }
 }

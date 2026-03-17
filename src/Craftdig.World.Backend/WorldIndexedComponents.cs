@@ -4,9 +4,11 @@ namespace Craftdig.World.Backend;
 public class WorldIndexedComponentsMut(WorldComponentIndicesFile componentIndicesFile, WorldComponentIndicesMut componentIndices)
 {
     private readonly List<EntComponent> list = [];
+    private readonly List<int> indices = [];
     private readonly HashSet<EntComponent> set = [];
 
     public ReadOnlySpan<EntComponent> Components => CollectionsMarshal.AsSpan(list);
+    public ReadOnlySpan<int> Indices => CollectionsMarshal.AsSpan(indices);
 
     public void Add(EntComponent component)
     {
@@ -15,6 +17,7 @@ public class WorldIndexedComponentsMut(WorldComponentIndicesFile componentIndice
             list.Add(component);
             int index = componentIndicesFile.GetOrAdd(component.NameType.Name);
             componentIndices.Add(component, index);
+            indices.Add(index);
         }
     }
 
@@ -45,4 +48,5 @@ public class WorldIndexedComponentsMut(WorldComponentIndicesFile componentIndice
 public class WorldIndexedComponents(WorldIndexedComponentsMut indexedComponents)
 {
     public ReadOnlySpan<EntComponent> Components => indexedComponents.Components;
+    public ReadOnlySpan<int> Indices => indexedComponents.Indices;
 }

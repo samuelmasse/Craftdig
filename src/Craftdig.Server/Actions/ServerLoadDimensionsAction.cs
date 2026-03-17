@@ -24,6 +24,7 @@ public class ServerLoadDimensionsAction(ModuleEnts ents, WorldScope worldScope, 
         dimensionScope.Add(new DimensionBiomeGenerator(
             (IBiomeGenerator)dimensionScope.Get(dimension.BiomeGeneraetorType)));
 
+        dimensionScope.Get<DimensionChunkReceiverHandlers>().Add(dimensionScope.Get<DimensionEntChunkBackendReceiver>().Receive);
         dimensionScope.Get<DimensionChunkUnloaderHandlers>().Add(dimensionScope.Get<DimensionChunkBackendUnloader>().Unload);
 
         var dimensionLoaderScope = dimensionScope.Scope<DimensionLoaderScope>();

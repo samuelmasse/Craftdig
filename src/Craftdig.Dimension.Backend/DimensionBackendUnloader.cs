@@ -4,6 +4,7 @@ namespace Craftdig.Dimension.Backend;
 public class DimensionBackendUnloader(
     DimensionChunkThreads chunkThreads,
     DimensionRegionThread regionThread,
+    DimensionEntRegionThread entRegionThread,
     DimensionRegionInvalidation regionInvalidation)
 {
     public void Run()
@@ -11,5 +12,6 @@ public class DimensionBackendUnloader(
         chunkThreads.Stop();
         regionInvalidation.Drain();
         regionThread.Stop();
+        entRegionThread.Stop();
     }
 }
