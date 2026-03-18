@@ -41,14 +41,21 @@ public class PlayerCommonState(
 
     public override void Load()
     {
-        ent.IsRigid = true;
-        ent.HitBox = new Box3d((-0.3, -0.3, -1.62), (0.3, 0.3, 0.18));
-        ent.Position = (15, 0, 120);
-        ent.IsFlying = true;
+        if (!ent.IsPlayer)
+        {
+            ent.IsPlayer = true;
+            ent.IsRigid = true;
+            ent.IsFlying = true;
+            ent.HitBox = new Box3d((-0.3, -0.3, -1.62), (0.3, 0.3, 0.18));
+            ent.Position = (15, 0, 120);
+        }
+
+        ent.IsSeer = true;
         ent.CanMove = true;
         ent.CanFly = true;
         ent.CanJump = true;
         ent.CanSprint = true;
+        ent.PrevPosition = ent.Position;
 
         Node(menus).Mutate(debugMenu.Create);
         Node(menus).Mutate(dimensionSharedVertexBufferMenu.Create);

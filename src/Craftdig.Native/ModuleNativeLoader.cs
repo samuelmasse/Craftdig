@@ -7,6 +7,7 @@ public class ModuleNativeLoader(ModuleNative m) : ModLoader
     {
         m.OverworldDimension.Mutate()
             .IsDimension(true)
+            .Name("Overworld")
             .Air(m.AirBlock);
 
         LoadGameModes();

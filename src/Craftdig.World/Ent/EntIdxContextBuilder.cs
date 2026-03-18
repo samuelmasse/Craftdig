@@ -14,6 +14,13 @@ public class EntIdxContextBuilder
         AddPre<int, EntIdxBagIndex<N>>(inter.InterceptNoIndex);
     }
 
+    public void AddBagUnloaded<N>(EntIdxBagMut<N> bag)
+    {
+        var inter = new EntIdxBagInterceptorUnloaded<N>(bag);
+        AddPost<bool, N>(inter.Intercept);
+        AddPre<int, EntIdxBagIndex<N>>(inter.InterceptNoIndex);
+    }
+
     public void AddPost<T, N>(Action<EntMutIdx> action) =>
         Add<T, N, EntIdxPost<T, N>, Action<EntMutIdx>>(action);
 

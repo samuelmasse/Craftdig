@@ -1,7 +1,10 @@
 namespace Craftdig.Dimension.Backend;
 
 [Dimension]
-public class DimensionEntChunkBackendReceiver(DimensionChunks chunks, DimensionEntRegionStates regions)
+public class DimensionEntChunkBackendReceiver(
+    DimensionChunks chunks,
+    DimensionChunkRigids chunkRigids,
+    DimensionEntRegionStates regions)
 {
     public void Receive(EntMutIdx chunk)
     {
@@ -35,9 +38,9 @@ public class DimensionEntChunkBackendReceiver(DimensionChunks chunks, DimensionE
         if (!chunk.IsChunkComponentsLoaded)
         {
             var rloc = chunk.Cloc.ToRloc();
-            var region = regions[rloc];
+            regions.EnsureLoaded(rloc);
 
-            foreach (var ent in region.Ents)
+            foreach (var ent in chunkRigids[chunk.Cloc])
             {
                 var ecloc = ent.Position.ToLoc().Xy.ToCloc();
                 if (ecloc == cloc)

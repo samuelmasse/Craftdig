@@ -2,7 +2,7 @@ namespace Craftdig.Dimension.Frontend;
 
 [Dimension]
 public class DimensionSectionRequester(
-    DimensionPlayerBag playerBag,
+    DimensionSeerBag seerBag,
     DimensionDrawDistance drawDistance,
     DimensionChunks chunks,
     DimensionSections sections,
@@ -13,19 +13,19 @@ public class DimensionSectionRequester(
 
     public void Frame()
     {
-        if (playerBag.Ents.IsEmpty)
+        if (seerBag.Ents.IsEmpty)
             return;
 
         watch.Restart();
         bool next;
-        do next = LoadNearestChunk(RandomPlayerSectionLocation());
+        do next = LoadNearestChunk(RandomSeerSectionLocation());
         while (next && watch.Elapsed.TotalMilliseconds < 1);
     }
 
-    private Vector3i RandomPlayerSectionLocation()
+    private Vector3i RandomSeerSectionLocation()
     {
-        var player = playerBag.Ents[rng.Next(playerBag.Ents.Length)];
-        return (Vector3i)player.Position / SectionSize;
+        var seer = seerBag.Ents[rng.Next(seerBag.Ents.Length)];
+        return (Vector3i)seer.Position / SectionSize;
     }
 
     private bool LoadNearestChunk(Vector3i sloc)

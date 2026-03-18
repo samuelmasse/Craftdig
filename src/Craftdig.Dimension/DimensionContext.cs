@@ -3,7 +3,6 @@ namespace Craftdig.Dimension;
 [Dimension]
 public class DimensionContext(
     DimensionRigids rigids,
-    DimensionRigidSorter rigidSorter,
     DimensionMovement movement,
     DimensionBlockChanges blockChanges,
     DimensionChunkCollector chunkCollector,
@@ -16,7 +15,6 @@ public class DimensionContext(
         construction.Tick();
         movement.Tick();
         rigids.Tick();
-        rigidSorter.Tick();
     }
 
     public void Frame()

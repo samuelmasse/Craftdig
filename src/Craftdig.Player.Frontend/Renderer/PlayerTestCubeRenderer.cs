@@ -7,16 +7,15 @@ public class PlayerTestCubeRenderer(
     WorldTick tick,
     DimensionSharedVertexBuffer svb,
     DimensionGlw gl,
-    DimensionSectionSharedVertexArray sectionSharedVertexArray)
+    DimensionSectionSharedVertexArray sectionSharedVertexArray,
+    DimensionChunkRigids chunkRigids)
 {
     private readonly List<BlockVertex> vertices = [];
     private int alloc;
 
     public void Mesh(Ent chunk, Vector3d origin)
     {
-        var rigids = chunk.ChunkRigids;
-        if (rigids == null)
-            return;
+        var rigids = chunkRigids[chunk.Cloc];
 
         foreach (var rigid in rigids)
         {

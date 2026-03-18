@@ -1,8 +1,8 @@
 namespace Craftdig.Dimension.Backend;
 
 [Dimension]
-public class DimensionPaths(WorldPaths paths)
+public class DimensionPaths(WorldPaths paths, DimensionEnt dimension)
 {
-    public string Regions { get; } = Path.Join(paths.Root, "Regions");
-    public string Ents { get; } = Path.Join(paths.Root, "Ents");
+    public string Regions { get; } = Path.Join(paths.Regions, dimension.Name);
+    public string Ents { get; } = Path.Join(paths.Ents, dimension.Name);
 }

@@ -1,4 +1,4 @@
-namespace Craftdig.Dimension.Backend;
+namespace Craftdig.World.Backend;
 
 public class EntRegionFreeMap
 {

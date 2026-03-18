@@ -3,7 +3,7 @@ namespace Craftdig.Player.Frontend;
 [Player]
 public class PlayerConstruction(RootMouse mouse, WorldModuleIndices moduleIndices, PlayerEnt ent, PlayerControls controls)
 {
-    private bool reject;
+    private bool reject = true;
     private bool drop;
     private int mainCooldown;
     private int secondaryCooldown;

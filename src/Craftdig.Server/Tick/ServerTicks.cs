@@ -1,7 +1,13 @@
 namespace Craftdig.Server;
 
 [Server]
-public class ServerTicks(AppLog log, WorldTick tick, WorldDimensionBag dimensions, ServerTickCheck tickCheck, ServerKicker kicker)
+public class ServerTicks(
+    AppLog log,
+    WorldTick tick,
+    WorldBackend backend,
+    WorldDimensionBag dimensions,
+    ServerTickCheck tickCheck,
+    ServerKicker kicker)
 {
     private Thread? thread;
     private bool stop;
@@ -42,6 +48,9 @@ public class ServerTicks(AppLog log, WorldTick tick, WorldDimensionBag dimension
                 log.Trace("Tick started");
 
                 kicker.Tick();
+                backend.Frame();
+                backend.Tick();
+
                 foreach (var dimension in dimensions.Ents)
                     dimension.DimensionScope.Get<DimensionServer>().Tick();
 

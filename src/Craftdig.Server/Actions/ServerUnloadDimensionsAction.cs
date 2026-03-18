@@ -15,7 +15,9 @@ public class ServerUnloadDimensionsAction(
             dimensionLoaderScope.Get<DimensionUnloader>().Run();
         }
 
-        worldScope.Scope<WorldLoaderScope>().Get<WorldUnloader>().Run();
+        var worldLoaderScope = worldScope.Scope<WorldLoaderScope>();
+        worldLoaderScope.Get<WorldBackendUnloader>().Run();
+        worldLoaderScope.Get<WorldUnloader>().Run();
 
         log.Info("Dimensions unloaded");
     }

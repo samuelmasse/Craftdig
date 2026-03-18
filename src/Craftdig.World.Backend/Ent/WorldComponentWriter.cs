@@ -1,6 +1,6 @@
-namespace Craftdig.Dimension.Backend;
+namespace Craftdig.World.Backend;
 
-public abstract class DimensionComponentWriter
+public abstract class WorldComponentWriter
 {
     public abstract bool Has(Ent ent);
     public abstract int Measure(Ent ent);
@@ -10,8 +10,8 @@ public abstract class DimensionComponentWriter
     public abstract ComponentPloc? ReadPloc(Ent ent);
 }
 
-[Dimension]
-public class DimensionComponentWriter<T, N>() : DimensionComponentWriter where T : unmanaged
+[World]
+public class WorldComponentWriter<T, N>() : WorldComponentWriter where T : unmanaged
 {
     public override bool Has(Ent ent) => ent.Has<T, N>();
 
@@ -30,13 +30,13 @@ public class DimensionComponentWriter<T, N>() : DimensionComponentWriter where T
     }
 
     public override void WritePloc(EntMutIdx ent, ComponentPloc? index) =>
-        ent.Set<ComponentPloc?, DimensionComponentWriter<T, N>>(index);
+        ent.Set<ComponentPloc?, WorldComponentWriter<T, N>>(index);
     public override ComponentPloc? ReadPloc(Ent ent) =>
-        ent.Get<ComponentPloc?, DimensionComponentWriter<T, N>>();
+        ent.Get<ComponentPloc?, WorldComponentWriter<T, N>>();
 }
 
-[Dimension]
-public class DimensionComponentEntWriter<N>(WorldModuleIndices indices) : DimensionComponentWriter
+[World]
+public class WorldComponentEntWriter<N>(WorldModuleIndices indices) : WorldComponentWriter
 {
     public override bool Has(Ent ent) => ent.Has<Ent, N>();
 
@@ -70,13 +70,38 @@ public class DimensionComponentEntWriter<N>(WorldModuleIndices indices) : Dimens
     }
 
     public override void WritePloc(EntMutIdx ent, ComponentPloc? index) =>
-        ent.Set<ComponentPloc?, DimensionComponentEntWriter<N>>(index);
+        ent.Set<ComponentPloc?, WorldComponentEntWriter<N>>(index);
     public override ComponentPloc? ReadPloc(Ent ent) =>
-        ent.Get<ComponentPloc?, DimensionComponentEntWriter<N>>();
+        ent.Get<ComponentPloc?, WorldComponentEntWriter<N>>();
 }
 
-[Dimension]
-public class DimensionComponentArrayWriter<T, N>() : DimensionComponentWriter where T : unmanaged
+[World]
+public class WorldComponentEntMutIdxWriter<N>(WorldEntIndex entIndex) : WorldComponentWriter
+{
+    public override bool Has(Ent ent) => ent.Has<EntMutIdx, N>();
+
+    public override int Measure(Ent ent) => Unsafe.SizeOf<Guid>();
+
+    public override void Write(Ent ent, Span<byte> buffer)
+    {
+        var val = ent.Get<EntMutIdx, N>();
+        MemoryMarshal.Write(buffer, val.Id);
+    }
+
+    public override void Read(EntMutIdx ent, ReadOnlySpan<byte> buffer)
+    {
+        var id = MemoryMarshal.Read<Guid>(buffer);
+        ent.Set<EntMutIdx, N>(entIndex[id]);
+    }
+
+    public override void WritePloc(EntMutIdx ent, ComponentPloc? index) =>
+        ent.Set<ComponentPloc?, WorldComponentEntMutIdxWriter<N>>(index);
+    public override ComponentPloc? ReadPloc(Ent ent) =>
+        ent.Get<ComponentPloc?, WorldComponentEntMutIdxWriter<N>>();
+}
+
+[World]
+public class WorldComponentArrayWriter<T, N>() : WorldComponentWriter where T : unmanaged
 {
     public override bool Has(Ent ent) => ent.Has<T[]?, N>();
 
@@ -112,7 +137,7 @@ public class DimensionComponentArrayWriter<T, N>() : DimensionComponentWriter wh
     }
 
     public override void WritePloc(EntMutIdx ent, ComponentPloc? index) =>
-        ent.Set<ComponentPloc?, DimensionComponentArrayWriter<T, N>>(index);
+        ent.Set<ComponentPloc?, WorldComponentArrayWriter<T, N>>(index);
     public override ComponentPloc? ReadPloc(Ent ent) =>
-        ent.Get<ComponentPloc?, DimensionComponentArrayWriter<T, N>>();
+        ent.Get<ComponentPloc?, WorldComponentArrayWriter<T, N>>();
 }

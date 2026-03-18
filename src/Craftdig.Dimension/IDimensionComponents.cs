@@ -11,6 +11,7 @@ public interface IDimensionComponents
 
     // Player
     [Saved][ComponentToString] bool IsPlayer { get; set; }
+    [Saved] EntMutIdx WorldPlayer { get; set; }
     [Saved] Vector3 LookAt { get; set; }
     [Saved] Ent[]? ArmorSlotEnts { get; set; }
     [Saved] int[]? ArmorSlotCounts { get; set; }
@@ -34,7 +35,6 @@ public interface IDimensionComponents
     [ComponentToString] bool IsChunk { get; set; }
     [ComponentToString] Vector2i Cloc { get; set; }
     ChunkBlocks? ChunkBlocks { get; set; }
-    HashSet<Ent>? ChunkRigids { get; set; }
 
     // Rigid
     Vector3d PrevPosition { get; set; }
@@ -56,6 +56,9 @@ public interface IDimensionComponents
     bool CanJump { get; set; }
     bool CanMove { get; set; }
     bool CanMoveVertically { get; set; }
+
+    // Controls chunk loading
+    bool IsSeer { get; set; }
 
     // Dimension scope
     DimensionScope DimensionScope { get; set; }

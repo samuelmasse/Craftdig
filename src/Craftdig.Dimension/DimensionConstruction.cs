@@ -3,7 +3,7 @@ namespace Craftdig.Dimension;
 [Dimension]
 public class DimensionConstruction(
     WorldModuleIndices moduleIndices,
-    DimensionAir air,
+    DimensionEnt dimension,
     DimensionBlocks blocks,
     DimensionPlayerBag playerBag,
     DimensionSelected selected,
@@ -44,7 +44,7 @@ public class DimensionConstruction(
             return;
 
         if (constr.Action == ConstructionAction.Remove)
-            blocks.TrySet(selection.Value.Loc, air.Block);
+            blocks.TrySet(selection.Value.Loc, dimension.Air);
         else if (constr.Action == ConstructionAction.Place)
             blocks.TrySet(selection.Value.Loc + selection.Value.Normal, moduleIndices[constr.Arg]);
     }

@@ -2,7 +2,7 @@ namespace Craftdig.Dimension.Backend;
 
 [Dimension]
 public partial class DimensionEntTracker(
-    WorldIndexedComponents indexedComponents,
+    DimensionIndexedComponents indexedComponents,
     DimensionScope scope,
     DimensionEntIdxContextBuilder context)
 {
@@ -23,7 +23,7 @@ public partial class DimensionEntTracker(
             typeof(DimensionComponentArrayTracker<,>).MakeGenericType(component.ValueType.GetElementType()!, component.NameType) :
             typeof(DimensionComponentTracker<,>).MakeGenericType(component.ValueType, component.NameType);
 
-        var tracker = (DimensionComponentTracker)scope.New(type)!;
+        var tracker = (WorldComponentTracker)scope.New(type)!;
         tracker.AddTo(context);
     }
 }

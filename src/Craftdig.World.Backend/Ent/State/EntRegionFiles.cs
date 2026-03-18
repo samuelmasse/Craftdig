@@ -1,4 +1,4 @@
-namespace Craftdig.Dimension.Backend;
+namespace Craftdig.World.Backend;
 
 public class EntRegionFiles
 {
@@ -7,9 +7,9 @@ public class EntRegionFiles
 
     public ReadOnlySpan<string> Buckets => buckets;
 
-    public EntRegionFiles(string dir, Vector2i rloc)
+    public EntRegionFiles(string dir)
     {
-        root = Path.Join(dir, $"{rloc.X},{rloc.Y}");
+        root = dir;
         buckets = new string[16];
 
         for (int i = 0; i < buckets.Length; i++)

@@ -8,6 +8,7 @@ public class PlayerMultiplayerState(
     DimensionContext context,
     PlayerScope scope,
     PlayerSocket socket,
+    PlayerEnt ent,
     PlayerFrontend player,
     PlayerCommonState commonState,
     PlayerMultiplayerDisconnectAction multiplayerDisconnectAction,
@@ -20,6 +21,7 @@ public class PlayerMultiplayerState(
     public override void Load()
     {
         commonState.Load();
+        ent.IsLoaded = true;
         Node(commonState.Menus).Mutate(multiplayerDebugMenu.Create);
     }
 

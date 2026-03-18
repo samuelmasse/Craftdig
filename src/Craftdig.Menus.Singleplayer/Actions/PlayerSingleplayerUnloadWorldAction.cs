@@ -15,7 +15,9 @@ public class PlayerSingleplayerUnloadWorldAction(WorldScope worldScope, WorldDim
             dimensionLoaderScope.Get<DimensionUnloader>().Run();
         }
 
-        worldScope.Scope<WorldLoaderScope>().Get<WorldFrontendUnloader>().Run();
-        worldScope.Scope<WorldLoaderScope>().Get<WorldUnloader>().Run();
+        var worldLoaderScope = worldScope.Scope<WorldLoaderScope>();
+        worldLoaderScope.Get<WorldFrontendUnloader>().Run();
+        worldLoaderScope.Get<WorldBackendUnloader>().Run();
+        worldLoaderScope.Get<WorldUnloader>().Run();
     }
 }

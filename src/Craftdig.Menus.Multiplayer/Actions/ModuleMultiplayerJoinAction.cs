@@ -22,19 +22,16 @@ public class ModuleMultiplayerJoinAction(RootState state, ModuleEnts ents, Modul
         // For now just find the first dimension
         var dimension = ents.Set.First(x => x.IsDimension);
 
-        dimensionScope.Add(new DimensionAir(dimension.Air));
+        dimensionScope.Add(new DimensionEnt(dimension));
         dimensionScope.Get<DimensionChunkUnloaderHandlers>().Add(dimensionScope.Get<DimensionChunkFrontendUnloader>().Unload);
 
         var dimensionLoaderScope = dimensionScope.Scope<DimensionLoaderScope>();
         dimensionLoaderScope.Get<DimensionLoader>().Run();
         dimensionLoaderScope.Get<DimensionFrontendLoader>().Run();
 
-        var player = dimensionScope.Get<DimensionEntArena>().Alloc().Mutate()
-            .IsPlayer(true)
-            .IsLoaded(true);
-
+        var player = dimensionScope.Get<DimensionEntArena>().Alloc();
         var playerScope = dimensionScope.Scope<PlayerScope>();
-        playerScope.Add(new PlayerEnt(player.Ent));
+        playerScope.Add(new PlayerEnt(player));
         playerScope.Add(socket);
         dimensionScope.Get<DimensionChunkUnloaderHandlers>().Add(playerScope.Get<PlayerChunkClientUnloader>().Unload);
         playerScope.Get<PlayerSocketLoop>().Start();

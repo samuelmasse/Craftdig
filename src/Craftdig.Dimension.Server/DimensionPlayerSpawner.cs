@@ -35,6 +35,7 @@ public class DimensionPlayerSpawner(
         player.CanMove = true;
         player.CanSprint = true;
         player.CanJump = true;
+        player.IsSeer = true;
         player.IsLoaded = true;
         sockets.Add(ns);
 

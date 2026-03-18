@@ -2,7 +2,9 @@ namespace Craftdig.Dimension.Backend;
 
 [DimensionLoader]
 public class DimensionBackendLoader(
-    DimensionSavedComponentsLoader savedComponentsLoader,
+    DimensionIndexedComponentsMut indexedComponents,
+    DimensionEntIdxContextBuilder context,
+    DimensionPlayerSync playerSync,
     DimensionChunkThreads chunkThreads,
     DimensionRegionThread regionThread,
     DimensionEntRegionThread entRegionThread,
@@ -10,7 +12,10 @@ public class DimensionBackendLoader(
 {
     public void Run()
     {
-        savedComponentsLoader.Run();
+        context.AddPost<Vector3d, DimensionComponents.Position>(playerSync.Intercept);
+        context.AddPost<bool, DimensionComponents.IsPlayer>(playerSync.Intercept);
+        indexedComponents.AddSaved<DimensionComponents>();
+
         chunkThreads.Start();
         regionThread.Start();
         entRegionThread.Start();

@@ -4,7 +4,7 @@ namespace Craftdig.Dimension;
 public class DimensionChunkCollector(
     DimensionDrawDistance drawDistance,
     DimensionChunkBag chunkBag,
-    DimensionPlayerBag playerBag,
+    DimensionSeerBag seerBag,
     DimensionChunkUnloader chunkUnloader)
 {
     private readonly Stopwatch watch = new();
@@ -32,9 +32,9 @@ public class DimensionChunkCollector(
     {
         var far = drawDistance.Far;
 
-        foreach (var player in playerBag.Ents)
+        foreach (var seer in seerBag.Ents)
         {
-            var pcloc = player.Position.ToLoc().Xy.ToCloc();
+            var pcloc = seer.Position.ToLoc().Xy.ToCloc();
 
             var delta = Vector2i.Abs(chunk.Cloc - pcloc);
             var dist = delta.X + delta.Y;

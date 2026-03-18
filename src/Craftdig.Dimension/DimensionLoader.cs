@@ -6,15 +6,16 @@ public class DimensionLoader(
     DimensionChunkBagMut chunkBag,
     DimensionPlayerBagMut playerBag,
     DimensionRigidBagMut rigidBag,
-    DimensionRigidSorter rigidSorter)
+    DimensionSeerBagMut seerBag,
+    DimensionChunkRigids chunkRigids)
 {
     public void Run()
     {
+        context.AddBagUnloaded(seerBag);
         context.AddBag(chunkBag);
         context.AddBag(playerBag);
         context.AddBag(rigidBag);
-        context.AddPost<Vector3d, DimensionComponents.Position>(rigidSorter.Tick);
-        context.AddPost<bool, DimensionComponents.IsRigid>(rigidSorter.Tick);
-        context.AddPost<bool, WorldComponents.IsLoaded>(rigidSorter.Tick);
+        context.AddPost<Vector3d, DimensionComponents.Position>(chunkRigids.Intercept);
+        context.AddPost<bool, DimensionComponents.IsRigid>(chunkRigids.Intercept);
     }
 }

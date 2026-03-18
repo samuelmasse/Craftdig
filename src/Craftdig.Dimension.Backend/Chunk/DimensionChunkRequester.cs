@@ -3,7 +3,7 @@ namespace Craftdig.Dimension.Backend;
 [Dimension]
 public class DimensionChunkRequester(
     DimensionDrawDistance drawDistance,
-    DimensionPlayerBag playerBag,
+    DimensionSeerBag seerBag,
     DimensionChunks chunks,
     DimensionChunkThreadWorkQueue chunkThreadWorkQueue,
     DimensionChunkPending chunkPending,
@@ -14,7 +14,7 @@ public class DimensionChunkRequester(
 
     public void Frame()
     {
-        if (playerBag.Ents.IsEmpty)
+        if (seerBag.Ents.IsEmpty)
             return;
 
         int credits = 32 - chunkThreadWorkQueue.Count;
@@ -24,15 +24,15 @@ public class DimensionChunkRequester(
 
         while (next && credits > 0 && watch.Elapsed.TotalMilliseconds < 1)
         {
-            next = LoadNearestChunk(RandomPlayerChunkLocation());
+            next = LoadNearestChunk(RandomSeerChunkLocation());
             credits--;
         }
     }
 
-    private Vector2i RandomPlayerChunkLocation()
+    private Vector2i RandomSeerChunkLocation()
     {
-        var player = playerBag.Ents[rng.Next(playerBag.Ents.Length)];
-        return player.Position.ToLoc().Xy.ToCloc();
+        var seer = seerBag.Ents[rng.Next(seerBag.Ents.Length)];
+        return seer.Position.ToLoc().Xy.ToCloc();
     }
 
     private bool LoadNearestChunk(Vector2i cloc)

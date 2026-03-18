@@ -2,30 +2,10 @@ namespace Craftdig.Dimension.Backend;
 
 [Dimension]
 public class DimensionEntRegionStates(
+    WorldPaths worldPaths,
     DimensionPaths paths,
-    DimensionEntRegionBuckets buckets,
-    DimensionEntRegionReader regionReader)
+    WorldEntRegionBuckets buckets,
+    DimensionEntRegionReader regionReader) : WorldEntRegionStates(worldPaths, buckets, regionReader)
 {
-    private readonly Dictionary<Vector2i, EntRegionState> dict = [];
-
-    public EntRegionState this[Vector2i rloc]
-    {
-        get
-        {
-            if (!dict.TryGetValue(rloc, out var state))
-            {
-                state = New(rloc);
-                dict.Add(rloc, state);
-            }
-
-            return state;
-        }
-    }
-
-    private EntRegionState New(Vector2i rloc)
-    {
-        var state = new EntRegionState(paths.Ents, rloc, buckets.Count);
-        regionReader.ReadEntsFromRegion(state);
-        return state;
-    }
+    protected override string Dir(Vector2i rloc) => Path.Join(paths.Ents, $"{rloc.X},{rloc.Y}");
 }
