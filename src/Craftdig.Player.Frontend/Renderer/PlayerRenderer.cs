@@ -62,6 +62,11 @@ public class PlayerRenderer(
                 if (!chunks.TryGet(ncloc, out var chunk))
                     continue;
 
+                var colMin = (Vector3)(new Vector3i(ncloc.X, ncloc.Y, 0).Swizzle() * SectionSize - pos);
+                var colMax = colMin + (SectionSize, HeightSize, SectionSize);
+                if (!frustum.IsBoxVisible(colMin, colMax))
+                    continue;
+
                 for (int i = 0; i < chunk.Rendered.Count; i++)
                 {
                     var z = chunk.Rendered[chunk.Rendered.Keys[i]];
