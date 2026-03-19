@@ -4,7 +4,7 @@ namespace Craftdig.Dimension.Frontend;
 public interface IDimensionFrontendComponents
 {
     // Chunk
-    Memory<EntPtr> Sections { get; set; }
+    Memory<EntPtrIdx> Sections { get; set; }
     SortedList<int, int> Unrendered { get; set; }
     bool IsUnrenderedListBuilt { get; set; }
     bool IsReadyToRender { get; set; }
@@ -14,5 +14,5 @@ public interface IDimensionFrontendComponents
     [ComponentToString] bool IsSection { get; set; }
     [ComponentToString] Vector3i Sloc { get; set; }
     SectionMesh TerrainMesh { get; set; }
-    EntMut Chunk { get; set; }
+    EntMutIdx Chunk { get; set; }
 }

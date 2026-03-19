@@ -44,10 +44,13 @@ public class WorldEntRegionWriter(
         }
 
         var bucket = entRegionBuckets.BestFit(size);
+        int bucketSize = entRegionBuckets.Sizes[bucket];
         int offset = region.FreeMap.Alloc(bucket);
         region.Ents.Add(ent);
 
-        var span = buffer.GetSpan(size)[..size];
+        var span = buffer.GetSpan(bucketSize)[..bucketSize];
+        span.Clear();
+
         int spIndex = 0;
 
         MemoryMarshal.Write(span, ent.Id);

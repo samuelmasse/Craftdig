@@ -3,9 +3,9 @@ namespace Craftdig.Dimension.Frontend;
 [Dimension]
 public class DimensionSections(DimensionChunks chunks, DimensionChunkArena chunkArena)
 {
-    private readonly Queue<Memory<EntPtr>> pool = [];
+    private readonly Queue<Memory<EntPtrIdx>> pool = [];
 
-    public bool TryGet(Vector3i sloc, out EntMut ent)
+    public bool TryGet(Vector3i sloc, out EntMutIdx ent)
     {
         if (!chunks.TryGet(sloc.Xy, out var chunk))
         {
@@ -15,7 +15,7 @@ public class DimensionSections(DimensionChunks chunks, DimensionChunkArena chunk
 
         if (chunk.Sections.IsEmpty)
         {
-            chunk.Sections = pool.Count > 0 ? pool.Dequeue() : new EntPtr[SectionHeight];
+            chunk.Sections = pool.Count > 0 ? pool.Dequeue() : new EntPtrIdx[SectionHeight];
 
             for (int z = 0; z < chunk.Sections.Length; z++)
             {
@@ -30,7 +30,7 @@ public class DimensionSections(DimensionChunks chunks, DimensionChunkArena chunk
         return true;
     }
 
-    public void ReturnSections(Memory<EntPtr> sections)
+    public void ReturnSections(Memory<EntPtrIdx> sections)
     {
         sections.Span.Clear();
         pool.Enqueue(sections);
