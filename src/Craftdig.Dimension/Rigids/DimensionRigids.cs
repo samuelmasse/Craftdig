@@ -55,9 +55,43 @@ public class DimensionRigids(DimensionBlocks blocks, DimensionRigidBag rigidBag)
 
     private void Collide(ref Vector3d position, ref Vector3d velocity, ref Box3d hitBox, ref Vector3i collisionNormal)
     {
+        var size = hitBox.Max - hitBox.Min;
+
+        if (size.X <= 1 && size.Y <= 1 && velocity.X == 0 && velocity.Y == 0 && velocity.Z < 0)
+        {
+            // We can early exit if only pulled by gravity and any of the 4 corners touch a solid block
+            if (TryCollideBottom(ref position, ref velocity, hitBox, ref collisionNormal))
+                return;
+        }
+
         for (var i = 0; i < 3; i++)
             CollideAxis(ref position, ref velocity, ref hitBox, ref collisionNormal);
     }
+
+    private bool TryCollideBottom(ref Vector3d position, ref Vector3d velocity, Box3d hitBox, ref Vector3i collisionNormal)
+    {
+        var box = new Box3d(hitBox.Min + position, hitBox.Max + position);
+        var tbox = new Box3d(box.Min + velocity, box.Max + velocity);
+
+        int z = (int)Math.Floor(tbox.Min.Z);
+        double minX = box.Min.X;
+        double maxX = box.Max.X - 0.000001;
+        double minY = box.Min.Y;
+        double maxY = box.Max.Y - 0.000001;
+
+        if (IsSolidCorner((minX, minY, z)) || IsSolidCorner((minX, maxY, z)) ||
+            IsSolidCorner((maxX, minY, z)) || IsSolidCorner((maxX, maxY, z)))
+        {
+            position.Z = z + 1 - hitBox.Min.Z;
+            velocity.Z = 0;
+            collisionNormal = (0, 0, 1);
+            return true;
+        }
+
+        return false;
+    }
+
+    private bool IsSolidCorner(Vector3d pos) => blocks.TryGet(pos.ToLoc(), out var block) && block.IsSolid;
 
     private void CollideAxis(ref Vector3d position, ref Vector3d velocity, ref Box3d hitBox, ref Vector3i collisionNormal)
     {
