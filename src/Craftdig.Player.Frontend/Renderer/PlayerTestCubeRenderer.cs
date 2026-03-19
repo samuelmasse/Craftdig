@@ -19,7 +19,7 @@ public class PlayerTestCubeRenderer(
 
         foreach (var rigid in rigids)
         {
-            if (!rigid.IsTestCube)
+            if (!rigid.IsTestCube || !rigid.IsLoaded)
                 continue;
 
             var block = rigid.TestCubeMaterial;

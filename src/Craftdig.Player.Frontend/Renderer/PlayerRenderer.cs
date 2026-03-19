@@ -27,6 +27,9 @@ public class PlayerRenderer(
         camera.ComputeVectors();
         perspective.ComputeMatrix(canvas.Size, camera);
 
+        var mvp = perspective.View * perspective.Projection;
+        var frustum = new Frustum(mvp);
+
         gl.Viewport(canvas.Size);
         gl.Enable(EnableCap.DepthTest);
         gl.DepthFunc(DepthFunction.Less);
@@ -64,6 +67,12 @@ public class PlayerRenderer(
                     var z = chunk.Rendered[chunk.Rendered.Keys[i]];
                     var nsloc = new Vector3i(ncloc.X, ncloc.Y, z);
                     if (!sections.TryGet(nsloc, out var section) || section.TerrainMesh.Count <= 0)
+                        continue;
+
+                    var center = (Vector3)(nsloc.Swizzle() * SectionSize - pos) + new Vector3(SectionSize / 2);
+                    var min = center - new Vector3(SectionSize / 2);
+                    var max = center + new Vector3(SectionSize / 2);
+                    if (!frustum.IsBoxVisible(min, max))
                         continue;
 
                     blockProgram.Offset = (Vector3)(nsloc.Swizzle() * SectionSize - pos);
