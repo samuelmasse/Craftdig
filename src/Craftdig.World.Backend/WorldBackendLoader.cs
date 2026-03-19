@@ -9,12 +9,14 @@ public class WorldBackendLoader(
     WorldIndexedComponentsMut indexedComponents,
     WorldEntTracker entTracker,
     WorldEntRegionThread entRegionThread,
-    WorldModuleIndicesLoader moduleIndicesLoader)
+    WorldModuleIndicesLoader moduleIndicesLoader,
+    WorldEntDisposeTracker entDisposeTracker)
 {
     public void Run()
     {
         moduleIndicesLoader.Run();
 
+        context.AddPreDispose(entDisposeTracker.InterceptDispose);
         context.AddPre<Guid, WorldComponents.Id>(entIndex.Intercept);
         indexedComponents.AddSaved<WorldComponents>();
 

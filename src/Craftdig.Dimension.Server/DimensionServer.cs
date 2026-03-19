@@ -2,6 +2,7 @@ namespace Craftdig.Dimension.Server;
 
 [Dimension]
 public class DimensionServer(
+    AppLog log,
     DimensionContext context,
     DimensionBackend backend,
     DimensionPendingMovement pendingMovement,
@@ -12,7 +13,8 @@ public class DimensionServer(
     DimensionForgottenChunks forgottenChunks,
     DimensionForgottenSections forgottenSections,
     DimensionSectionUpdateStreamer sectionUpdateStreamer,
-    DimensionSectionReminder sectionReminder)
+    DimensionSectionReminder sectionReminder,
+    DimensionRigidBag rigidBag)
 {
     public void Tick()
     {
@@ -29,5 +31,6 @@ public class DimensionServer(
         backend.Tick();
         playerSpawner.Tick();
         positionStreamer.Tick();
+        log.Debug("{0} rigids", rigidBag.Ents.Length);
     }
 }

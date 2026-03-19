@@ -39,6 +39,10 @@ public readonly record struct EntPtrIdx : IEntMut, IDisposable
 
     public void Dispose()
     {
+        var pres = context.Get<ReadOnlyMemory<Action<EntMutIdx>>, EntIdxPreDispose>();
+        foreach (var pre in pres.Span)
+            pre(this);
+
         this.Clear();
         ent.Dispose();
     }

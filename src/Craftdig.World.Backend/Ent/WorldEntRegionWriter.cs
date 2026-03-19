@@ -22,6 +22,11 @@ public class WorldEntRegionWriter(
         else MoveToRegion(ent, rloc);
     }
 
+    public void Erase(EntMutIdx ent)
+    {
+        RemoveFromRegion(ent);
+    }
+
     private void AddToRegion(EntMutIdx ent, Vector2i rloc)
     {
         var region = entRegionStates[rloc];

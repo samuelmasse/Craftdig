@@ -32,8 +32,16 @@ public class WorldEntPersister(WorldEntRegionWriter entRegionWriter)
         pq.Enqueue(new(ent, time), time);
     }
 
+    public void Erase(EntMutIdx ent)
+    {
+        entRegionWriter.Erase(ent);
+    }
+
     private void Write(EntMutIdx ent)
     {
+        if (!ent.IsAlive)
+            return;
+
         entRegionWriter.Write(ent);
 
         ent.IsDirty = false;

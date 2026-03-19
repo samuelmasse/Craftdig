@@ -8,10 +8,12 @@ public class DimensionBackendLoader(
     DimensionChunkThreads chunkThreads,
     DimensionRegionThread regionThread,
     DimensionEntRegionThread entRegionThread,
-    DimensionEntTracker entTracker)
+    DimensionEntTracker entTracker,
+    DimensionEntDisposeTracker entDisposeTracker)
 {
     public void Run()
     {
+        context.AddPreDispose(entDisposeTracker.InterceptDispose);
         context.AddPost<Vector3d, DimensionComponents.Position>(playerSync.Intercept);
         context.AddPost<bool, DimensionComponents.IsPlayer>(playerSync.Intercept);
         indexedComponents.AddSaved<DimensionComponents>();

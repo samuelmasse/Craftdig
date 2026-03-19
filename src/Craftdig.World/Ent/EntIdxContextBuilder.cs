@@ -22,12 +22,15 @@ public class EntIdxContextBuilder
     }
 
     public void AddPost<T, N>(Action<EntMutIdx> action) =>
-        Add<T, N, EntIdxPost<T, N>, Action<EntMutIdx>>(action);
+        Add<EntIdxPost<T, N>, Action<EntMutIdx>>(action);
 
     public void AddPre<T, N>(Action<EntMutIdx, T> action) =>
-        Add<T, N, EntIdxPre<T, N>, Action<EntMutIdx, T>>(action);
+        Add<EntIdxPre<T, N>, Action<EntMutIdx, T>>(action);
 
-    public void Add<T, N, P, PT>(PT action)
+    public void AddPreDispose(Action<EntMutIdx> action) =>
+        Add<EntIdxPreDispose, Action<EntMutIdx>>(action);
+
+    public void Add<P, PT>(PT action)
     {
         var cur = ent.Get<ReadOnlyMemory<PT>, P>();
         var array = new PT[cur.Length + 1];
