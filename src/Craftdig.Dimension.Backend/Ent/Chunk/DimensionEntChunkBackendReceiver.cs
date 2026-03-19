@@ -6,7 +6,7 @@ public class DimensionEntChunkBackendReceiver(
     DimensionChunkRigids chunkRigids,
     DimensionEntRegionStates regions)
 {
-    public void Receive(EntMutIdx chunk)
+    public void Receive(EntMut chunk)
     {
         var cloc = chunk.Cloc;
         Process(cloc);

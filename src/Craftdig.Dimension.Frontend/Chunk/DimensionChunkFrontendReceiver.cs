@@ -5,7 +5,7 @@ public class DimensionChunkFrontendReceiver(
     DimensionChunkRenderScheduler chunkRenderScheduler,
     DimensionChunkSortedLists chunkSortedLists)
 {
-    public void Receive(EntMutIdx chunk)
+    public void Receive(EntMut chunk)
     {
         chunk.Unrendered = chunkSortedLists.Take();
         chunk.Rendered = chunkSortedLists.Take();

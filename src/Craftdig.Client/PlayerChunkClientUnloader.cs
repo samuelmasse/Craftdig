@@ -3,7 +3,7 @@ namespace Craftdig.Client;
 [Player]
 public class PlayerChunkClientUnloader(DimensionBlocksRaw blocksRaw, PlayerSocket socket)
 {
-    public void Unload(EntMutIdx ent)
+    public void Unload(EntMut ent)
     {
         socket.Send(new ForgetChunkCommand() { Cloc = ent.Cloc });
 

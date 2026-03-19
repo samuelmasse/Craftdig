@@ -5,7 +5,7 @@ public class DimensionEntChunkBackendUnloader(
     DimensionChunks chunks,
     DimensionChunkRigids chunkRigids)
 {
-    public void Unload(EntMutIdx chunk)
+    public void Unload(EntMut chunk)
     {
         var cloc = chunk.Cloc;
         Process(cloc);

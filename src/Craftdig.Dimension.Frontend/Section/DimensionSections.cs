@@ -1,11 +1,11 @@
 namespace Craftdig.Dimension.Frontend;
 
 [Dimension]
-public class DimensionSections(DimensionChunks chunks, DimensionEntArena entArena)
+public class DimensionSections(DimensionChunks chunks, DimensionChunkArena chunkArena)
 {
-    private readonly Queue<Memory<EntPtrIdx>> pool = [];
+    private readonly Queue<Memory<EntPtr>> pool = [];
 
-    public bool TryGet(Vector3i sloc, out EntMutIdx ent)
+    public bool TryGet(Vector3i sloc, out EntMut ent)
     {
         if (!chunks.TryGet(sloc.Xy, out var chunk))
         {
@@ -15,11 +15,11 @@ public class DimensionSections(DimensionChunks chunks, DimensionEntArena entAren
 
         if (chunk.Sections.IsEmpty)
         {
-            chunk.Sections = pool.Count > 0 ? pool.Dequeue() : new EntPtrIdx[SectionHeight];
+            chunk.Sections = pool.Count > 0 ? pool.Dequeue() : new EntPtr[SectionHeight];
 
             for (int z = 0; z < chunk.Sections.Length; z++)
             {
-                chunk.Sections.Span[z] = entArena.Alloc().Mutate()
+                chunk.Sections.Span[z] = chunkArena.Alloc().Mutate()
                     .IsSection(true)
                     .Chunk(chunk)
                     .Sloc((sloc.X, sloc.Y, z));
@@ -30,7 +30,7 @@ public class DimensionSections(DimensionChunks chunks, DimensionEntArena entAren
         return true;
     }
 
-    public void ReturnSections(Memory<EntPtrIdx> sections)
+    public void ReturnSections(Memory<EntPtr> sections)
     {
         sections.Span.Clear();
         pool.Enqueue(sections);

@@ -6,7 +6,7 @@ public class DimensionChunkBackendUnloader(
     DimensionRegionThreadWorkQueue regionThreadWorkQueue,
     DimensionRegionInvalidation regionInvalidation)
 {
-    public void Unload(EntMutIdx ent)
+    public void Unload(EntMut ent)
     {
         var cloc = ent.Cloc;
 
