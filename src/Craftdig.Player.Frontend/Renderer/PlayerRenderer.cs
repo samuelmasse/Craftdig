@@ -20,6 +20,9 @@ public class PlayerRenderer(
     PlayerEnt ent,
     PlayerTestCubeRenderer testCubeRenderer)
 {
+    private readonly List<EntMutIdx> schunks = [];
+    private readonly List<float> dists = [];
+
     public void Render()
     {
         var sky = new Vector3(84, 145, 255);
@@ -48,6 +51,9 @@ public class PlayerRenderer(
         metrics.RenderMetric.Start();
         gl.BindVertexArray(sectionSharedVertexArray.Vao);
 
+        schunks.Clear();
+        dists.Clear();
+
         for (int dy = -drawDistance.Far; dy <= drawDistance.Far; dy++)
         {
             for (int dx = -drawDistance.Far; dx <= drawDistance.Far; dx++)
@@ -67,35 +73,90 @@ public class PlayerRenderer(
                 if (!frustum.IsBoxVisible(colMin, colMax))
                     continue;
 
-                for (int i = 0; i < chunk.Rendered.Count; i++)
-                {
-                    var z = chunk.Rendered[chunk.Rendered.Keys[i]];
-                    var nsloc = new Vector3i(ncloc.X, ncloc.Y, z);
-                    if (!sections.TryGet(nsloc, out var section) || section.TerrainMesh.Count <= 0)
-                        continue;
+                float colCenterX = colMin.X + (SectionSize / 2f);
+                float colCenterZ = colMin.Z + (SectionSize / 2f);
+                float distSq = colCenterX * colCenterX + colCenterZ * colCenterZ;
 
-                    var center = (Vector3)(nsloc.Swizzle() * SectionSize - pos) + new Vector3(SectionSize / 2);
-                    var min = center - new Vector3(SectionSize / 2);
-                    var max = center + new Vector3(SectionSize / 2);
-                    if (!frustum.IsBoxVisible(min, max))
-                        continue;
-
-                    blockProgram.Offset = (Vector3)(nsloc.Swizzle() * SectionSize - pos);
-
-                    var mesh = section.TerrainMesh;
-                    int addr = (int)svb.Addr(mesh.Alloc);
-
-                    GL.DrawElementsBaseVertex(
-                        PrimitiveType.Triangles,
-                        quadIndexBuffer.IndexCount(mesh.Count),
-                        DrawElementsType.UnsignedInt,
-                        0,
-                        addr / BlockVertex.Size);
-                }
-
-                testCubeRenderer.Mesh(chunk, pos);
+                schunks.Add(chunk);
+                dists.Add(distSq);
             }
         }
+
+        var schunksSpan = CollectionsMarshal.AsSpan(schunks);
+        var distsSpan = CollectionsMarshal.AsSpan(dists);
+        distsSpan.Sort(schunksSpan);
+
+        foreach (var chunk in schunksSpan)
+        {
+            int count = chunk.Rendered.Count;
+            if (count == 0)
+                continue;
+
+            var keys = chunk.Rendered.Keys;
+            var values = chunk.Rendered.Values;
+
+            float targetHeightIdx = (float)pos.Y / SectionSize;
+            int closestIdx = 0;
+            float minDist = float.MaxValue;
+
+            for (int i = 0; i < count; i++)
+            {
+                float dist = Math.Abs(keys[i] - targetHeightIdx);
+                if (dist < minDist)
+                {
+                    minDist = dist;
+                    closestIdx = i;
+                }
+            }
+
+            // We do a sorted walk from the closest section
+            int up = closestIdx;
+            int down = closestIdx - 1;
+
+            while (up < count || down >= 0)
+            {
+                int index;
+
+                if (up >= count)
+                    index = down--;
+                else if (down < 0)
+                    index = up++;
+                else
+                {
+                    float distUp = Math.Abs(keys[up] - targetHeightIdx);
+                    float distDown = Math.Abs(keys[down] - targetHeightIdx);
+                    index = distUp < distDown ? up++ : down--;
+                }
+
+                var z = values[index];
+                var nsloc = new Vector3i(chunk.Cloc.X, chunk.Cloc.Y, z);
+
+                if (!sections.TryGet(nsloc, out var section) || section.TerrainMesh.Count <= 0)
+                    continue;
+
+                var center = (Vector3)(nsloc.Swizzle() * SectionSize - pos) + new Vector3(SectionSize / 2);
+                var min = center - new Vector3(SectionSize / 2);
+                var max = center + new Vector3(SectionSize / 2);
+
+                if (!frustum.IsBoxVisible(min, max))
+                    continue;
+
+                blockProgram.Offset = (Vector3)(nsloc.Swizzle() * SectionSize - pos);
+
+                var mesh = section.TerrainMesh;
+                int addr = (int)svb.Addr(mesh.Alloc);
+
+                GL.DrawElementsBaseVertex(
+                    PrimitiveType.Triangles,
+                    quadIndexBuffer.IndexCount(mesh.Count),
+                    DrawElementsType.UnsignedInt,
+                    0,
+                    addr / BlockVertex.Size);
+            }
+        }
+
+        foreach (var chunk in schunksSpan)
+            testCubeRenderer.Mesh(chunk, pos);
 
         gl.UnbindVertexArray();
         blockProgram.Offset = default;
