@@ -1,7 +1,7 @@
 namespace Craftdig.World.Backend;
 
 [World]
-public class WorldEntPersister(AppLog log, WorldEntRegionWriter entRegionWriter)
+public class WorldEntPersister(WorldEntRegionWriter entRegionWriter)
 {
     private readonly PriorityQueue<Persistence, DateTime> pq = new();
     private readonly Random rng = new();
@@ -29,14 +29,11 @@ public class WorldEntPersister(AppLog log, WorldEntRegionWriter entRegionWriter)
     public void Schedule(EntMutIdx ent)
     {
         var time = DateTime.UtcNow + TimeSpan.FromMilliseconds(rng.Next(500, 750));
-
-        log.Warn("Persisting {0} {1}", ent, time);
         pq.Enqueue(new(ent, time), time);
     }
 
     private void Write(EntMutIdx ent)
     {
-        log.Warn("Persist ent {0}", ent);
         entRegionWriter.Write(ent);
 
         ent.IsDirty = false;

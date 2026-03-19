@@ -6,10 +6,8 @@ public abstract class WorldComponentTracker
 }
 
 [World]
-public class WorldComponentTracker<T, N>(
-    AppLog log,
-    WorldEntDirty dirty,
-    WorldComponentIndex<T, N> index) : WorldComponentTracker where T : IEquatable<T>
+public class WorldComponentTracker<T, N>(WorldEntDirty dirty, WorldComponentIndex<T, N> index) :
+    WorldComponentTracker where T : IEquatable<T>
 {
     public override void AddTo(EntIdxContextBuilder context) => context.AddPre<T, N>(Intercept);
 
@@ -20,21 +18,17 @@ public class WorldComponentTracker<T, N>(
             return;
 
         dirty.Mark(ent, index.Index);
-        log.Info("New value {0} ({1} -> {2}) for {3}", typeof(N).Name, old, value, ent.Id);
     }
 }
 
 [World]
-public class WorldComponentArrayTracker<T, N>(
-    AppLog log,
-    WorldEntDirty dirty,
-    WorldComponentIndex<T[], N> index) : WorldComponentTracker where T : IEquatable<T>
+public class WorldComponentArrayTracker<T, N>(WorldEntDirty dirty, WorldComponentIndex<T[], N> index) :
+    WorldComponentTracker where T : IEquatable<T>
 {
     public override void AddTo(EntIdxContextBuilder context) => context.AddPre<T[], N>(Intercept);
 
     private void Intercept(EntMutIdx ent, T[] value)
     {
         dirty.Mark(ent, index.Index);
-        log.Info("New array {0} for {1}", typeof(N).Name, ent.Id);
     }
 }
