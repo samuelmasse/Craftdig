@@ -6,8 +6,6 @@ public class DimensionServer(
     DimensionContext context,
     DimensionBackend backend,
     DimensionPendingMovement pendingMovement,
-    DimensionSocketCleaner socketCleaner,
-    DimensionPlayerSpawner playerSpawner,
     DimensionPositionStreamer positionStreamer,
     DimensionChunkStreamerRequester chunkStreamerRequester,
     DimensionForgottenChunks forgottenChunks,
@@ -25,11 +23,9 @@ public class DimensionServer(
         forgottenChunks.Tick();
         chunkStreamerRequester.Tick();
         context.Frame();
-        socketCleaner.Tick();
         pendingMovement.Tick();
         context.Tick();
         backend.Tick();
-        playerSpawner.Tick();
         positionStreamer.Tick();
         log.Debug("{0} rigids", rigidBag.Ents.Length);
     }

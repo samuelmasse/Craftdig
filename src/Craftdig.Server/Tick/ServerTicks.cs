@@ -4,10 +4,8 @@ namespace Craftdig.Server;
 public class ServerTicks(
     AppLog log,
     WorldTick tick,
-    WorldBackend backend,
-    WorldDimensionBag dimensions,
     ServerTickCheck tickCheck,
-    ServerKicker kicker)
+    ServerTick serverTick)
 {
     private Thread? thread;
     private bool stop;
@@ -47,13 +45,7 @@ public class ServerTicks(
                 var start = sw.Elapsed.TotalMilliseconds;
                 log.Trace("Tick started");
 
-                kicker.Tick();
-                backend.Frame();
-                backend.Tick();
-
-                foreach (var dimension in dimensions.Ents)
-                    dimension.DimensionScope.Get<DimensionServer>().Tick();
-
+                serverTick.Tick();
                 ticks--;
 
                 log.Trace("Tick took {0} ms", Math.Round(sw.Elapsed.TotalMilliseconds - start, 4));

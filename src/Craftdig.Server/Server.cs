@@ -5,6 +5,7 @@ public class Server(
     ServerApplyGlobalSettingsAction applyGlobalSettingsAction,
     ServerLoadOrCreateMetaAction loadOrCreateMetaAction,
     ServerLoadDimensionsAction loadDimensionsAction,
+    ServerLoadInterceptorsAction loadInterceptorsAction,
     ServerRegisterHandlersAction registerHandlersAction,
     ServerRegisterShutdownHandlersAction registerShutdownHandlersAction,
     ServerTickTimer tickTimer,
@@ -18,6 +19,7 @@ public class Server(
     {
         applyGlobalSettingsAction.Run();
         loadOrCreateMetaAction.Run();
+        loadInterceptorsAction.Run();
         loadDimensionsAction.Run();
         registerHandlersAction.Run();
 

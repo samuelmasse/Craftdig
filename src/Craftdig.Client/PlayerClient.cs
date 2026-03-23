@@ -2,6 +2,7 @@ namespace Craftdig.Client;
 
 [Player]
 public class PlayerClient(
+    PlayerPositionUpdateReceiver positionUpdateReceiver,
     PlayerPings pings,
     PlayerPosition position,
     PlayerChunks chunks,
@@ -16,6 +17,9 @@ public class PlayerClient(
 
     public void Stream()
     {
+        if (positionUpdateReceiver.Count == 0)
+            return;
+
         position.Stream();
     }
 
