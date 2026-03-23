@@ -39,11 +39,11 @@ public class DimensionPendingMovement(AppLog log, DimensionSockets sockets)
 
         var mov = ent.Movement;
         var constr = ent.Construction;
+        var drop = ent.Drop;
 
         if (pending.TryDequeue(out var cmd))
         {
             var cmov = cmd.Movement;
-            var cconstr = cmd.Construction;
 
             if (cmov.Sprint != MovementAction.None)
                 mov.Sprint = cmov.Sprint;
@@ -57,11 +57,12 @@ public class DimensionPendingMovement(AppLog log, DimensionSockets sockets)
             mov.Vector = cmov.Vector;
             mov.LookAt = cmov.LookAt;
 
-            constr.Action = cconstr.Action;
-            constr.Arg = cconstr.Arg;
+            constr = cmd.Construction;
+            drop = cmd.Drop;
         }
 
         ent.Movement = mov;
+        ent.Drop = drop;
         ent.LookAt = ent.Movement.LookAt;
         ent.Construction = constr;
     }

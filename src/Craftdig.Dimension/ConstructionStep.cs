@@ -11,6 +11,5 @@ public enum ConstructionAction : byte
 {
     None,
     Place,
-    Remove,
-    Drop
+    Remove
 }

@@ -7,11 +7,13 @@ public class DimensionBackend(
     DimensionChunkRequester chunkRequester,
     DimensionChunkReceiver chunkReceiver,
     DimensionRegionReceiver regionReceiver,
-    DimensionRegionInvalidation regionInvalidation)
+    DimensionRegionInvalidation regionInvalidation,
+    DimensionDropBackend drop)
 {
     public void Tick()
     {
         entTracker.Tick();
+        drop.Tick();
     }
 
     public void Frame()

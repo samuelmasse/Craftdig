@@ -74,7 +74,8 @@ public class PlayerPosition(
             listen--;
         }
 
-        socket.Send(new MovePlayerCommand() { Movement = ent.Movement, Construction = ent.Construction });
+        socket.Send(new MovePlayerCommand() { Movement = ent.Movement, Construction = ent.Construction, Drop = ent.Drop });
+        ent.Drop = default;
     }
 
     private bool HasMatchingCommand()

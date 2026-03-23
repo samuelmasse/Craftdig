@@ -7,4 +7,5 @@ public struct MovePlayerCommand : ICommand
 
     public MovementStep Movement;
     public ConstructionStep Construction;
+    public DropStep Drop;
 }

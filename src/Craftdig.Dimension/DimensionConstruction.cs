@@ -6,8 +6,7 @@ public class DimensionConstruction(
     DimensionEnt dimension,
     DimensionBlocks blocks,
     DimensionPlayerBag playerBag,
-    DimensionSelected selected,
-    DimensionEntArena entArena)
+    DimensionSelected selected)
 {
     public void Tick()
     {
@@ -22,22 +21,6 @@ public class DimensionConstruction(
 
         if (constr.Action == ConstructionAction.None)
             return;
-
-        if (constr.Action == ConstructionAction.Drop)
-        {
-            entArena.Alloc().Mutate()
-                .IsTestCube(true)
-                .TestCubeMaterial(moduleIndices[constr.Arg])
-                .TestCubeSize(0.5f)
-                .IsRigid(true)
-                .IsProjectile(true)
-                .HitBox(new Box3d((-0.25, -0.25, -0.25), (0.25, 0.25, 0.25)))
-                .Position(ent.Position)
-                .Velocity(ent.Velocity + ent.LookAt / 2)
-                .IsLoaded(true);
-
-            return;
-        }
 
         var selection = selected[ent];
         if (selection == null)

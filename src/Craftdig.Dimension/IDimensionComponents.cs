@@ -44,6 +44,7 @@ public interface IDimensionComponents
     // Playera action state
     MovementStep Movement { get; set; }
     ConstructionStep Construction { get; set; }
+    DropStep Drop { get; set; }
 
     // Player selection state
     BlockSelection? BlockSelection { get; set; }

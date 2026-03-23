@@ -26,10 +26,9 @@ public class PlayerConstruction(RootMouse mouse, WorldModuleIndices moduleIndice
         if (drop)
         {
             if (hand.IsBuildable)
-                ent.Construction = new() { Action = ConstructionAction.Drop, Arg = moduleIndices[hand] };
+                ent.Drop = new() { Action = DropAction.DropTest, Arg = moduleIndices[hand] };
 
             drop = false;
-            return;
         }
 
         if (mouse.IsMainDown() && mainCooldown <= 0)
