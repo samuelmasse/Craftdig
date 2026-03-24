@@ -8,6 +8,7 @@ public class ServerLoadDimensionsAction(ModuleEnts ents, WorldScope worldScope, 
         var worldLoaderScope = worldScope.Scope<WorldLoaderScope>();
         worldLoaderScope.Get<WorldLoader>().Run();
         worldLoaderScope.Get<WorldBackendLoader>().Run();
+        worldLoaderScope.Get<WorldServerLoader>().Run();
 
         var dimensionScope = worldScope.Scope<DimensionScope>();
         var dimensionEnt = arena.Alloc().Mutate()
@@ -28,5 +29,6 @@ public class ServerLoadDimensionsAction(ModuleEnts ents, WorldScope worldScope, 
         var dimensionLoaderScope = dimensionScope.Scope<DimensionLoaderScope>();
         dimensionLoaderScope.Get<DimensionLoader>().Run();
         dimensionLoaderScope.Get<DimensionBackendLoader>().Run();
+        dimensionLoaderScope.Get<DimensionServerLoader>().Run();
     }
 }
