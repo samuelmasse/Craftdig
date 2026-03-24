@@ -1,6 +1,6 @@
 namespace Craftdig.App;
 
-[AppLoader]
+[App]
 public class AppModFinder
 {
     public ModEntry[] Find()

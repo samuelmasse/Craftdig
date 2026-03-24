@@ -26,14 +26,13 @@ public class AppInitializeState(
         ui.Nodes.Add(Node().OrderValueV(2).Mutate(tooltipMenu.Create));
         ui.Nodes.Add(Node().OrderValueV(5).Mutate(zoomMenu.Create));
 
-        var module = scope.Scope<ModuleScope>();
-        module.Handler(module.Get<ModuleEntMutInjector>());
+        scope.Scope<ModuleScope>()
+            .Run(x => x.Handler(x.Get<ModuleEntMutInjector>()))
+            .Run(x => x.Scope<ModuleLoaderScope>()
+                .Run(x => x.Get<ModuleLoader>().Run())
+                .Run(x => x.Get<ModuleFrontendLoader>().Run()))
+            .Run(x => reset.Register(() => state.Current = x.New<ModuleMenuState>()));
 
-        var moduleLoaderScope = module.Scope<ModuleLoaderScope>();
-        moduleLoaderScope.Get<ModuleLoader>().Run();
-        moduleLoaderScope.Get<ModuleFrontendLoader>().Run();
-
-        reset.Register(() => state.Current = module.New<ModuleMenuState>());
         reset.Run();
     }
 }

@@ -3,16 +3,11 @@ namespace Craftdig;
 [Root]
 public class RootBootState(RootState state, RootScope scope, RootScripts scripts) : State
 {
-    public override void Load()
-    {
-        var app = scope.Scope<AppScope>();
-        var appLoader = app.Scope<AppLoaderScope>();
-
-        app.Add(new AppMods(appLoader.Get<AppModFinder>().Find()));
-        appLoader.Get<AppLoader>().Run();
-        appLoader.Get<AppFrontendLoader>().Run();
-
-        scripts.Add(app.Get<AppScript>());
-        state.Current = app.New<AppInitializeState>();
-    }
+    public override void Load() => scope.Scope<AppScope>()
+        .With(x => new AppMods(x.Get<AppModFinder>().Find()))
+        .Run(x => x.Scope<AppLoaderScope>()
+            .Run(x => x.Get<AppLoader>().Run())
+            .Run(x => x.Get<AppFrontendLoader>().Run()))
+        .Run(x => scripts.Add(x.Get<AppScript>()))
+        .Run(x => state.Current = x.New<AppInitializeState>());
 }
