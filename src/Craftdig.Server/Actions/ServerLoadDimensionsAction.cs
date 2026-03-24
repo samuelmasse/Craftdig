@@ -5,30 +5,27 @@ public class ServerLoadDimensionsAction(ModuleEnts ents, WorldScope worldScope, 
 {
     public void Run()
     {
-        var worldLoaderScope = worldScope.Scope<WorldLoaderScope>();
-        worldLoaderScope.Get<WorldLoader>().Run();
-        worldLoaderScope.Get<WorldBackendLoader>().Run();
-        worldLoaderScope.Get<WorldServerLoader>().Run();
-
-        var dimensionScope = worldScope.Scope<DimensionScope>();
-        var dimensionEnt = arena.Alloc().Mutate()
-            .DimensionScope(dimensionScope)
-            .IsDimensionScope(true)
-            .IsLoaded(true);
+        worldScope.Scope<WorldLoaderScope>()
+            .Run(x => x.Get<WorldLoader>().Run())
+            .Run(x => x.Get<WorldBackendLoader>().Run())
+            .Run(x => x.Get<WorldServerLoader>().Run());
 
         // For now just find the first dimension
         var dimension = ents.Set.First(x => x.IsDimension);
-
-        dimensionScope.Add(new DimensionEnt(dimension));
-        dimensionScope.Add(new DimensionTerrainGenerator((ITerrainGenerator)dimensionScope.Get(dimension.TerrainGeneratorType)));
-        dimensionScope.Add(new DimensionBiomeGenerator((IBiomeGenerator)dimensionScope.Get(dimension.BiomeGeneraetorType)));
-        dimensionScope.Get<DimensionChunkReceiverHandlers>().Add(dimensionScope.Get<DimensionEntChunkBackendReceiver>().Receive);
-        dimensionScope.Get<DimensionChunkUnloaderHandlers>().Add(dimensionScope.Get<DimensionChunkBackendUnloader>().Unload);
-        dimensionScope.Get<DimensionChunkUnloaderHandlers>().Add(dimensionScope.Get<DimensionEntChunkBackendUnloader>().Unload);
-
-        var dimensionLoaderScope = dimensionScope.Scope<DimensionLoaderScope>();
-        dimensionLoaderScope.Get<DimensionLoader>().Run();
-        dimensionLoaderScope.Get<DimensionBackendLoader>().Run();
-        dimensionLoaderScope.Get<DimensionServerLoader>().Run();
+        worldScope.Scope<DimensionScope>()
+            .With(new DimensionEnt(dimension))
+            .With(x => new DimensionTerrainGenerator((ITerrainGenerator)x.Get(dimension.TerrainGeneratorType)))
+            .With(x => new DimensionBiomeGenerator((IBiomeGenerator)x.Get(dimension.BiomeGeneraetorType)))
+            .Run(x => x.Get<DimensionChunkReceiverHandlers>().Add(x.Get<DimensionEntChunkBackendReceiver>().Receive))
+            .Run(x => x.Get<DimensionChunkUnloaderHandlers>().Add(x.Get<DimensionChunkBackendUnloader>().Unload))
+            .Run(x => x.Get<DimensionChunkUnloaderHandlers>().Add(x.Get<DimensionEntChunkBackendUnloader>().Unload))
+            .Run(x => x.Scope<DimensionLoaderScope>()
+                .Run(x => x.Get<DimensionLoader>().Run())
+                .Run(x => x.Get<DimensionBackendLoader>().Run())
+                .Run(x => x.Get<DimensionServerLoader>().Run()))
+            .Run(x => arena.Alloc().Mutate()
+                .DimensionScope(x)
+                .IsDimensionScope(true)
+                .IsLoaded(true));
     }
 }
