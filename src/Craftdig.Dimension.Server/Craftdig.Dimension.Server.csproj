@@ -17,7 +17,6 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\Craftdig.Dimension\Craftdig.Dimension.csproj" />
         <ProjectReference Include="..\Craftdig.Dimension.Backend\Craftdig.Dimension.Backend.csproj" />
         <ProjectReference Include="..\Craftdig.World.Server\Craftdig.World.Server.csproj" />
     </ItemGroup>

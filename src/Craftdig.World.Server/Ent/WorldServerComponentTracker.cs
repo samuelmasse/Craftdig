@@ -1,13 +1,13 @@
-namespace Craftdig.Server;
+namespace Craftdig.World.Server;
 
-public abstract class ServerComponentTracker
+public abstract class WorldServerComponentTracker
 {
     public abstract void AddTo(EntIdxContextBuilder context);
 }
 
-[Server]
-public class ServerComponentTracker<T, N>(ServerEntScratched scratched, WorldComponentIndex<T, N> index) :
-    ServerComponentTracker where T : IEquatable<T>
+[World]
+public class WorldServerComponentTracker<T, N>(WorldEntScratched scratched, WorldComponentIndex<T, N> index) :
+    WorldServerComponentTracker where T : IEquatable<T>
 {
     public override void AddTo(EntIdxContextBuilder context) => context.AddPre<T, N>(Intercept);
 
@@ -21,9 +21,9 @@ public class ServerComponentTracker<T, N>(ServerEntScratched scratched, WorldCom
     }
 }
 
-[Server]
-public class ServerComponentArrayTracker<T, N>(ServerEntScratched scratched, WorldComponentIndex<T[], N> index) :
-    ServerComponentTracker where T : IEquatable<T>
+[World]
+public class WorldServerComponentArrayTracker<T, N>(WorldEntScratched scratched, WorldComponentIndex<T[], N> index) :
+    WorldServerComponentTracker where T : IEquatable<T>
 {
     public override void AddTo(EntIdxContextBuilder context) => context.AddPre<T[], N>(Intercept);
 

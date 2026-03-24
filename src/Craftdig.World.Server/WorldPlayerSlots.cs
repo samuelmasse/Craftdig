@@ -1,7 +1,7 @@
-namespace Craftdig.Server;
+namespace Craftdig.World.Server;
 
-[Server]
-public class ServerPlayerSlots(AppLog log)
+[World]
+public class WorldPlayerSlots(AppLog log)
 {
     private readonly SortedSet<int> set = [];
     private int max = 1;

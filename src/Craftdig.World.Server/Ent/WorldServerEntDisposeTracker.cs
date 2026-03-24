@@ -1,7 +1,7 @@
 namespace Craftdig.Server.Backend;
 
-[Server]
-public class ServerEntDisposeTracker()
+[World]
+public class WorldServerEntDisposeTracker()
 {
     public void InterceptDispose(EntMutIdx ent)
     {

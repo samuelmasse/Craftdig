@@ -1,7 +1,7 @@
 namespace Craftdig.Server;
 
 [Server]
-public class ServerLoadInterceptorsAction(WorldEntIdxContextBuilder context, ServerScratchedBagMut scratchedBag)
+public class ServerLoadInterceptorsAction(WorldEntIdxContextBuilder context, WorldScratchedBagMut scratchedBag)
 {
     public void Run()
     {

@@ -1,7 +1,7 @@
-namespace Craftdig.Server;
+namespace Craftdig.World.Server;
 
-[Server]
-public class ServerEntStreamer(AppLog log, ServerPlayerSockets playerSockets, ServerScratchedBag scratchedBag)
+[World]
+public class WorldEntStreamer(AppLog log, WorldScratchedBag scratchedBag)
 {
     private readonly List<EntMutIdx> scratched = [];
 

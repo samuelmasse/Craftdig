@@ -6,12 +6,13 @@
         <Using Include="Craftdig.Module" />
         <Using Include="Craftdig.Protocol" />
         <Using Include="Craftdig.World" />
+        <Using Include="Craftdig.World.Backend" />
         <Using Include="Craftdig.World.Server" />
     </ItemGroup>
 
     <ItemGroup>
         <ProjectReference Include="..\Craftdig.Protocol\Craftdig.Protocol.csproj" />
-        <ProjectReference Include="..\Craftdig.World\Craftdig.World.csproj" />
+        <ProjectReference Include="..\Craftdig.World.Backend\Craftdig.World.Backend.csproj" />
     </ItemGroup>
 
 </Project>

@@ -1,7 +1,7 @@
-namespace Craftdig.Server;
+namespace Craftdig.World.Server;
 
-[Server]
-public class ServerEntScratched
+[World]
+public class WorldEntScratched
 {
     public void Mark(EntMutIdx ent, int index)
     {

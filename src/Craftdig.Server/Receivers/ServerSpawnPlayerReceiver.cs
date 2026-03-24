@@ -1,7 +1,7 @@
 namespace Craftdig.Server;
 
 [Server]
-public class ServerSpawnPlayerReceiver(AppLog log, WorldEntArena entArena, ServerPlayerSpawner playerSpawner)
+public class ServerSpawnPlayerReceiver(AppLog log, WorldEntArena entArena, WorldDimensionBag dimensionBag)
 {
     public void Receive(NetSocket ns)
     {
@@ -18,6 +18,6 @@ public class ServerSpawnPlayerReceiver(AppLog log, WorldEntArena entArena, Serve
         worldPlayer.Tag = ns.Tag;
         ns.SocketWorldPlayer = worldPlayer;
 
-        playerSpawner.Add(ns);
+        dimensionBag.Ents[0].DimensionScope.Get<DimensionPlayerSpawner>().Add(ns);
     }
 }

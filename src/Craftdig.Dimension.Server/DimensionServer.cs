@@ -12,21 +12,29 @@ public class DimensionServer(
     DimensionForgottenSections forgottenSections,
     DimensionSectionUpdateStreamer sectionUpdateStreamer,
     DimensionSectionReminder sectionReminder,
-    DimensionRigidBag rigidBag)
+    DimensionRigidBag rigidBag,
+    DimensionPlayerSpawner playerSpawner,
+    DimensionPlayerSocketsCleaner playerSocketsCleaner)
 {
     public void Tick()
     {
-        backend.Frame();
-        forgottenSections.Tick();
-        sectionUpdateStreamer.Tick();
-        sectionReminder.Tick();
-        forgottenChunks.Tick();
-        chunkStreamerRequester.Tick();
         context.Frame();
+        backend.Frame();
+
+        playerSpawner.Tick();
+        playerSocketsCleaner.Tick();
+        forgottenSections.Tick();
+        forgottenChunks.Tick();
         pendingMovement.Tick();
+
         context.Tick();
         backend.Tick();
+
+        chunkStreamerRequester.Tick();
+        sectionUpdateStreamer.Tick();
+        sectionReminder.Tick();
         positionStreamer.Tick();
+
         log.Debug("{0} rigids", rigidBag.Ents.Length);
     }
 }

@@ -1,7 +1,7 @@
-namespace Craftdig.Dimension.Server;
+namespace Craftdig.World.Server;
 
-[Server]
-public class ServerPlayerSockets
+[World]
+public class WorldPlayerSockets
 {
     private readonly List<NetSocket> sockets = [];
 
