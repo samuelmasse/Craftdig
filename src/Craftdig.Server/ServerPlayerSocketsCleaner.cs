@@ -1,7 +1,7 @@
 namespace Craftdig.Server;
 
 [Server]
-public class ServerPlayerSocketsCleaner(AppLog log, ServerPlayerSockets sockets)
+public class ServerPlayerSocketsCleaner(AppLog log, ServerPlayerSockets sockets, ServerPlayerSlots playerSlots)
 {
     private readonly List<NetSocket> remove = [];
 
@@ -17,6 +17,7 @@ public class ServerPlayerSocketsCleaner(AppLog log, ServerPlayerSockets sockets)
         {
             var tag = ns.SocketWorldPlayer.Tag;
             sockets.Remove(ns);
+            playerSlots.Return(ns.PlayerSlot);
             ns.DimensionScope.Get<DimensionSocketCleaner>().Remove(ns);
             ns.SocketWorldPlayer.Dispose();
             log.Info("Player {0} left", tag);

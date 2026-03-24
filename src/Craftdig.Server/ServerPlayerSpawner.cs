@@ -1,7 +1,11 @@
 namespace Craftdig.Server;
 
 [Server]
-public class ServerPlayerSpawner(WorldIndicesWrapper indicesWrapper, WorldDimensionBag dimensionBag, ServerPlayerSockets playerSockets)
+public class ServerPlayerSpawner(
+    WorldIndicesWrapper indicesWrapper,
+    WorldDimensionBag dimensionBag,
+    ServerPlayerSockets playerSockets,
+    ServerPlayerSlots playerSlots)
 {
     private readonly ConcurrentQueue<NetSocket> queue = [];
 
@@ -25,6 +29,7 @@ public class ServerPlayerSpawner(WorldIndicesWrapper indicesWrapper, WorldDimens
     {
         dimensionBag.Ents[0].DimensionScope.Get<DimensionPlayerSpawner>().Add(ns);
         playerSockets.Add(ns);
+        ns.PlayerSlot = playerSlots.Take();
         ns.Send<WorldIndicesUpdateCommand, byte>(indicesWrapper.Wrap());
     }
 }

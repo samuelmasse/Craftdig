@@ -23,5 +23,6 @@ public enum Commands : ushort
     PositionUpdate,
     SlowDown,
     SlowTick,
-    SectionUpdate
+    SectionUpdate,
+    EntUpdate
 }
