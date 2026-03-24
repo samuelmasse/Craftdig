@@ -15,9 +15,7 @@ public class PlayerTestCubeRenderer(
 
     public void Mesh(Ent chunk, Vector3d origin)
     {
-        var rigids = chunkRigids[chunk.Cloc];
-
-        foreach (var rigid in rigids)
+        foreach (var rigid in chunkRigids[chunk.Cloc])
         {
             if (!rigid.IsTestCube || !rigid.IsLoaded)
                 continue;

@@ -6,7 +6,7 @@ public class DimensionChunkRigids
     private readonly HashSet<EntMutIdx> empty = [];
     private readonly Dictionary<Vector2i, HashSet<EntMutIdx>> dict = [];
 
-    public IReadOnlySet<EntMutIdx> this[Vector2i index]
+    public HashSet<EntMutIdx> this[Vector2i index]
     {
         get
         {
