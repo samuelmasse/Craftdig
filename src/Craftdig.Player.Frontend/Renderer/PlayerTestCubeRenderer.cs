@@ -60,7 +60,7 @@ public class PlayerTestCubeRenderer(
         gl.UnbindBuffer(BufferTarget.ArrayBuffer);
 
         gl.BindVertexArray(sectionSharedVertexArray.Vao);
-        GL.DrawElementsBaseVertex(
+        gl.DrawElementsBaseVertex(
             PrimitiveType.Triangles,
             quadIndexBuffer.IndexCount(vertices.Count),
             DrawElementsType.UnsignedInt,

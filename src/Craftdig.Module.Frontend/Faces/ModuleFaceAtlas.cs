@@ -65,7 +65,7 @@ public class ModuleFaceAtlas(ModuleGlw gl, ModuleImages imgs)
         texture.Bind();
         gl.ActiveTexture(TextureUnit.Texture0);
 
-        GL.TexSubImage3D(
+        gl.TexSubImage3D(
             TextureTarget.Texture2DArray,
             0,
             0,
@@ -96,9 +96,7 @@ public class ModuleFaceAtlas(ModuleGlw gl, ModuleImages imgs)
             0,
             PixelFormat.Rgba,
             PixelType.UnsignedByte,
-            0,
-            sizeof(byte),
-            4);
+            0);
 
         gl.ResetActiveTexture();
         texture.Unbind();

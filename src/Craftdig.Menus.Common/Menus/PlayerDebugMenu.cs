@@ -17,7 +17,7 @@ public class PlayerDebugMenu(
 {
     public void Create(EntObj root)
     {
-        var gpu = GL.GetString(StringName.Renderer);
+        var gpu = gl.GetString(StringName.Renderer);
 
         List<Func<ReadOnlySpan<char>>> lines =
         [

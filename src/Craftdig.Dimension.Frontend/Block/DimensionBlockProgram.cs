@@ -10,14 +10,14 @@ public class DimensionBlockProgram : RenderProgram3D<BlockVertex>
 
     public Vector3 Offset
     {
-        set => GL.Uniform3(vecOffset, value);
+        set => gl.Uniform3(vecOffset, value);
     }
 
     public DimensionBlockProgram(RootGlw gl, AppFiles files) : base(
         gl, File.ReadAllText(files["Shaders/Block.vert"]), File.ReadAllText(files["Shaders/Block.frag"]))
     {
-        vecOffset = GL.GetUniformLocation(Id, nameof(vecOffset));
+        vecOffset = gl.GetUniformLocation(Id, nameof(vecOffset));
         samplerTexture = TextureUnit.Texture0;
-        GL.Uniform1(GL.GetUniformLocation(Id, nameof(samplerTexture)), (int)samplerTexture);
+        gl.Uniform1(gl.GetUniformLocation(Id, nameof(samplerTexture)), (int)samplerTexture);
     }
 }

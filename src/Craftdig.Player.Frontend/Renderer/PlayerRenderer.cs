@@ -146,7 +146,7 @@ public class PlayerRenderer(
                 var mesh = section.TerrainMesh;
                 int addr = (int)svb.Addr(mesh.Alloc);
 
-                GL.DrawElementsBaseVertex(
+                gl.DrawElementsBaseVertex(
                     PrimitiveType.Triangles,
                     quadIndexBuffer.IndexCount(mesh.Count),
                     DrawElementsType.UnsignedInt,
