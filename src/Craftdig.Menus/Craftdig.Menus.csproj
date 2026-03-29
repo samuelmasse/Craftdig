@@ -24,7 +24,6 @@
         <Using Include="Craftdig.World" />
         <Using Include="Craftdig.World.Backend" />
         <Using Include="Craftdig.World.Frontend" />
-        <Using Include="OpenTK.Graphics.OpenGL4" />
         <Using Include="OpenTK.Windowing.Common" />
         <Using Include="OpenTK.Windowing.Common.Input" />
         <Using Include="OpenTK.Windowing.Desktop" />

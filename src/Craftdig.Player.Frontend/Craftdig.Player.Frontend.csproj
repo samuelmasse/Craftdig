@@ -15,10 +15,10 @@
         <Using Include="Craftdig.Player.Frontend" />
         <Using Include="Craftdig.World" />
         <Using Include="Craftdig.World.Frontend" />
+        <Using Include="GlwLayer" />
         <Using Include="Glw2D" />
         <Using Include="Glw2D.Fonts" />
         <Using Include="GlwLayer" />
-        <Using Include="OpenTK.Graphics.OpenGL4" />
         <Using Include="OpenTK.Windowing.Common" />
         <Using Include="OpenTK.Windowing.Common.Input" />
         <Using Include="OpenTK.Windowing.Desktop" />

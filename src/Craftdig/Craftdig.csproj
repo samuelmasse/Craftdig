@@ -25,13 +25,13 @@
         <Using Include="Craftdig.World" />
         <Using Include="Craftdig.World.Backend" />
         <Using Include="Craftdig.World.Frontend" />
-        <Using Include="GlwLayer.Driver.OpenTK" />
+        <Using Include="GlwLayer" />
         <Using Include="TrogloUI" />
         <Using Include="Wigdow" />
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="GlwLayer.Driver.OpenTK" Version="0.*" />
+        <PackageReference Include="GlwLayer.Driver.OpenTK" Version="0.4.0" />
     </ItemGroup>
 
     <ItemGroup>

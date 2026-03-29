@@ -5,10 +5,10 @@
         <Using Include="Craftdig" />
         <Using Include="Craftdig.App" />
         <Using Include="Craftdig.App.Frontend" />
+        <Using Include="GlwLayer" />
         <Using Include="Glw2D" />
         <Using Include="Glw2D.Fonts" />
         <Using Include="GlwLayer" />
-        <Using Include="OpenTK.Graphics.OpenGL4" />
         <Using Include="OpenTK.Windowing.Common" />
         <Using Include="OpenTK.Windowing.Common.Input" />
         <Using Include="OpenTK.Windowing.Desktop" />
@@ -16,7 +16,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="AlvorEngine" Version="0.6.1" />
+        <PackageReference Include="AlvorEngine" Version="0.8.0" />
     </ItemGroup>
 
     <ItemGroup>

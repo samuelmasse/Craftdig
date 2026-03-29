@@ -95,8 +95,7 @@ public class ModuleFaceAtlas(ModuleGlw gl, ModuleImages imgs)
             depth,
             0,
             PixelFormat.Rgba,
-            PixelType.UnsignedByte,
-            0);
+            PixelType.UnsignedByte);
 
         gl.ResetActiveTexture();
         texture.Unbind();
