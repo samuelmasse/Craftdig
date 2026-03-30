@@ -70,7 +70,7 @@ public class PlayerRenderer(
 
                 var colMin = (Vector3)(new Vector3i(ncloc.X, ncloc.Y, 0).Swizzle() * SectionSize - pos);
                 var colMax = colMin + (SectionSize, HeightSize, SectionSize);
-                if (!frustum.IsBoxVisible(colMin, colMax))
+                if (!frustum.Intersects(new(colMin, colMax)))
                     continue;
 
                 float colCenterX = colMin.X + (SectionSize / 2f);
@@ -138,7 +138,7 @@ public class PlayerRenderer(
                 var min = center - new Vector3(SectionSize / 2);
                 var max = center + new Vector3(SectionSize / 2);
 
-                if (!frustum.IsBoxVisible(min, max))
+                if (!frustum.Intersects(new(min, max)))
                     continue;
 
                 blockProgram.Offset = (Vector3)(nsloc.Swizzle() * SectionSize - pos);
