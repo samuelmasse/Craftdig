@@ -5,9 +5,14 @@ public class RootUiDraw(RootSprites sprites, RootUiScale scale, RootUiPosition p
 {
     internal void Draw(Vector2 o, EntObj n)
     {
+        var clip = sprites.Batch.Clip;
+        sprites.Batch.Clip = IntersectClips(clip, new(o + n.OffsetR, o + n.OffsetR + n.SizeR));
+
         DrawNode(o + n.OffsetR, n);
         foreach (var sc in n.NodesR.Span)
             Draw(o + n.OffsetR, sc);
+
+        sprites.Batch.Clip = clip;
     }
 
     private void DrawNode(Vector2 o, EntObj n)
@@ -85,5 +90,16 @@ public class RootUiDraw(RootSprites sprites, RootUiScale scale, RootUiPosition p
         offset.Y += size.Y / 2;
 
         sprites.Batch.Write(font.Size(fontSize), text, (o + offset) * scale.Scale, textColor, scale.Scale);
+    }
+
+    private static Box2 IntersectClips(Box2? current, Box2 next)
+    {
+        if (current is not Box2 existing)
+            return next;
+
+        var min = Vector2.ComponentMax(existing.Min, next.Min);
+        var max = Vector2.ComponentMin(existing.Max, next.Max);
+
+        return new(min, max);
     }
 }
