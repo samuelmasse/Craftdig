@@ -18,8 +18,7 @@ public class DimensionSectionSharedVertexArray
         gl.BindBuffer(BufferTarget.ArrayBuffer, svb.Vbo);
         gl.BindBuffer(BufferTarget.ElementArrayBuffer, quadIndexBuffer.Id);
         blockProgram.SetAttributes();
-        gl.UnbindVertexArray();
         gl.UnbindBuffer(BufferTarget.ArrayBuffer);
-        gl.UnbindBuffer(BufferTarget.ElementArrayBuffer);
+        gl.UnbindVertexArray();
     }
 }

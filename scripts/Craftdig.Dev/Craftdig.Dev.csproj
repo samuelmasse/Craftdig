@@ -32,7 +32,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="GlwLayer.Driver.OpenTK" Version="0.4.0" />
+        <PackageReference Include="GlwLayer.Driver.OpenTK" Version="0.5.0" />
     </ItemGroup>
 
     <ItemGroup>
