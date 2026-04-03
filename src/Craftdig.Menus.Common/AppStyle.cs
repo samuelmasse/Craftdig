@@ -28,6 +28,7 @@ public class AppStyle(RootText text, RootKeyboard keyboard, AppMenuTextures menu
     public Vector4 BoardColor2 => (1, 1, 0, 1);
 
     public Vector4 TextColor => (1, 1, 1, 1);
+    public Vector4 TextColorFaint => (0.5f, 0.5f, 0.5f, 1);
     public Vector4 ButtonColor => (1, 0, 1, 1);
     public Vector4 ButtonColorDisabled => (0.4f, 0, 0.4f, 1);
     public Vector4 ButtonColorHovered => (1, 0.7f, 1, 1);
@@ -139,13 +140,13 @@ public class AppStyle(RootText text, RootKeyboard keyboard, AppMenuTextures menu
     public void Button(EntObj ent) => ent.Mutate()
         .Mutate(InputItem)
         .Mutate(Text)
+        .Mutate(PointingCursor)
         .Tag(nameof(Button))
         .OnUpdateF(() =>
         {
             if (ent.IsFocusedR && keyboard.IsKeyPressedRepeated(Keys.Enter))
                 ent.OnPressFDelegate?.Invoke();
         })
-        .CursorF(() => Get(ent.IsInputDisabledV, ent.IsInputDisabledFDelegate) ? MouseCursor.Default : MouseCursor.PointingHand)
         .ColorF(() =>
         {
             if (Get(ent.IsInputDisabledV, ent.IsInputDisabledFDelegate))
@@ -153,6 +154,42 @@ public class AppStyle(RootText text, RootKeyboard keyboard, AppMenuTextures menu
 
             return ButtonColor;
         });
+
+    public void SelectorItem(EntObj ent) => ent.Mutate()
+        .SizeV((0, ItemHeight))
+        .SizeRelativeV((1, 0))
+        .ColorF(() => ent.IsFocusedR ? (0, 0, 0, 1) : (0, 0, 0, 0))
+        .IsSelectableV(true)
+        .IsFocusableV(true)
+        .Nodes([
+            Node()
+                .AlignmentV(Alignment.Top | Alignment.Left)
+                .ColorV((1, 1, 1, 1))
+                .IsDisabledF(() => !ent.IsFocusedR)
+                .SizeV((ItemSpacingXS, 0))
+                .SizeRelativeV((0, 1)),
+            Node()
+                .AlignmentV(Alignment.Top | Alignment.Right)
+                .ColorV((1, 1, 1, 1))
+                .IsDisabledF(() => !ent.IsFocusedR)
+                .SizeV((ItemSpacingXS, 0))
+                .SizeRelativeV((0, 1)),
+            Node()
+                .AlignmentV(Alignment.Top | Alignment.Left)
+                .ColorV((1, 1, 1, 1))
+                .IsDisabledF(() => !ent.IsFocusedR)
+                .SizeV((0, ItemSpacingXS))
+                .SizeRelativeV((1, 0)),
+            Node()
+                .AlignmentV(Alignment.Bottom | Alignment.Left)
+                .ColorV((1, 1, 1, 1))
+                .IsDisabledF(() => !ent.IsFocusedR)
+                .SizeV((0, ItemSpacingXS))
+                .SizeRelativeV((1, 0))]);
+
+
+    public void PointingCursor(EntObj ent) => ent.Mutate()
+        .CursorF(() => Get(ent.IsInputDisabledV, ent.IsInputDisabledFDelegate) ? MouseCursor.Default : MouseCursor.PointingHand);
 
     public void VerticalList(EntObj ent) => ent.Mutate()
         .Tag(nameof(VerticalList))

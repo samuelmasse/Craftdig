@@ -3,6 +3,8 @@ namespace Craftdig.World.Backend;
 [WorldLoader]
 public class WorldBackendLoader(
     AppLog log,
+    ModuleWriteWorldStateAction writeWorldStateAction,
+    WorldPaths paths,
     WorldEntRegionStates entRegionStates,
     WorldEntIdxContextBuilder context,
     WorldEntIndex entIndex,
@@ -14,6 +16,7 @@ public class WorldBackendLoader(
 {
     public void Run()
     {
+        writeWorldStateAction.Write(new(DateTimeOffset.UtcNow), paths);
         moduleIndicesLoader.Run();
 
         context.AddPreDispose(entDisposeTracker.InterceptDispose);
