@@ -2,9 +2,7 @@ namespace Craftdig.Player.Frontend;
 
 [Player]
 public class PlayerRenderer(
-    RootCanvas canvas,
     RootQuadIndexBuffer quadIndexBuffer,
-    RootBackbuffer backbuffer,
     ModuleFaceAtlas blockAtlas,
     WorldTick tick,
     DimensionSharedVertexBuffer svb,
@@ -23,17 +21,23 @@ public class PlayerRenderer(
     private readonly List<EntMutIdx> schunks = [];
     private readonly List<float> dists = [];
 
-    public void Render()
+    public void Render(Vector2 canvas)
     {
         var sky = new Vector3(84, 145, 255);
-        backbuffer.Clear(new Vector4(sky / 0xFF, 1));
+
+        gl.Viewport(canvas);
+        gl.ClearColor(new Vector4(sky / 0xFF, 1));
+        gl.ClearDepth(1f);
+        gl.Clear(ClearBufferMask.DepthBufferBit | ClearBufferMask.ColorBufferBit);
+        gl.ResetClearDepth();
+        gl.ResetClearColor();
+
         camera.ComputeVectors();
-        perspective.ComputeMatrix(canvas.Size, camera);
+        perspective.ComputeMatrix(canvas, camera);
 
         var mvp = perspective.View * perspective.Projection;
         var frustum = new Frustum(mvp);
 
-        gl.Viewport(canvas.Size);
         gl.Enable(EnableCap.DepthTest);
         gl.DepthFunc(DepthFunction.Less);
         gl.Enable(EnableCap.CullFace);

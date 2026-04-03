@@ -3,6 +3,7 @@
     <ItemGroup>
         <Using Include="AlvorEngine" />
         <Using Include="AlvorEngine.Loop" />
+        <Using Include="BigGustave" />
         <Using Include="GlwLayer" />
         <Using Include="Glw2D" />
         <Using Include="Glw2D.Fonts" />

@@ -2,8 +2,10 @@ namespace Craftdig.Menus.Singleplayer;
 
 [Module]
 public class ModuleSingleplayerWorldSelectMenu(
+    RootPngs pngs,
     AppStyle s,
     AppPaths paths,
+    ModuleGlw gl,
     ModuleSingleplayerLoadWorldAction singleplayerLoadWorldAction,
     ModuleReadWorldMetaAction readWorldMetaAction,
     ModuleReadWorldStateAction readWorldStateAction,
@@ -48,6 +50,19 @@ public class ModuleSingleplayerWorldSelectMenu(
             foreach (var (dir, paths, meta, state) in worlds)
             {
                 var itemHeight = s.ItemHeight * 1.5f;
+                var screenshotFile = Path.Join(dir, "Screenshot.png");
+                Texture? screenshot = null;
+
+                if (File.Exists(screenshotFile))
+                {
+                    var image = pngs[screenshotFile];
+                    screenshot = new Texture2D(gl, image.Size)
+                    {
+                        PixelsMipmap = image.Pixels.Span,
+                        MagFilter = TextureMagFilter.Linear,
+                        MinFilter = TextureMinFilter.LinearMipmapLinear
+                    };
+                }
 
                 Node(select, out var item)
                     .Mutate(s.SelectorItem)
@@ -66,6 +81,7 @@ public class ModuleSingleplayerWorldSelectMenu(
                             .SizeRelativeV((0, 0))
                             .SizeV((itemHeight, itemHeight))
                             .ColorV((0.2f, 0, 0.6f, 1))
+                            .TextureV(screenshot)
                             .OnPressF(() => singleplayerLoadWorldAction.Run(paths));
                         {
                             Node(itemIcon)

@@ -125,7 +125,7 @@ public class PlayerCommonState(
     {
         dimensionFrontend.Frame();
         dimension.Frame();
-        playerRenderer.Render();
+        playerRenderer.Render(canvas.Size);
     }
 
     public override void Draw()

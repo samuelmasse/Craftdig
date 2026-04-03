@@ -11,7 +11,8 @@ public class PlayerSingleplayerState(
     PlayerEnt ent,
     PlayerCamera camera,
     PlayerCommonState commonState,
-    PlayerSingleplayerUnloadWorldAction singleplayerUnloadWorldAction) : State
+    PlayerSingleplayerUnloadWorldAction singleplayerUnloadWorldAction,
+    PlayerScreenshot screenshot) : State
 {
     public override void Load()
     {
@@ -29,6 +30,7 @@ public class PlayerSingleplayerState(
 
     public override void Unload()
     {
+        screenshot.Run();
         commonState.Unload();
         singleplayerUnloadWorldAction.Run();
     }
