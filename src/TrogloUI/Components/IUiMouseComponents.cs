@@ -10,6 +10,7 @@ public interface IUiMouseComponents
     Func<MouseCursor?>? CursorF { get; set; }
 
     Action? OnClickF { get; set; }
+    Action? OnDoubleClickF { get; set; }
     Action? OnPressF { get; set; }
     Action? OnSecondaryClickF { get; set; }
     Action? OnSecondaryPressF { get; set; }

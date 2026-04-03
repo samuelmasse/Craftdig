@@ -53,7 +53,8 @@ public class ModuleSingleplayerWorldSelectMenu(
                     .Mutate(s.SelectorItem)
                     .SizeRelativeV((0, 0))
                     .SizeV((s.ItemWidthL * 1.7f, itemHeight + s.ItemSpacingS * 2))
-                    .OnPressF(() => selected = meta);
+                    .OnPressF(() => selected = meta)
+                    .OnDoubleClickF(() => singleplayerLoadWorldAction.Run(paths));
                 {
                     Node(item, out var itemContainer)
                         .SizeRelativeV((1, 1))

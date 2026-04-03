@@ -3,12 +3,16 @@ namespace TrogloUI;
 [Root]
 public class RootUiMouse(RootMouse mouse, RootUiScale scale, RootUiFocus focus, RootUiClipping clipping)
 {
+    private const long DoubleClickMs = 500;
+
     private Vector2 position;
     private EntObj? prevHovered;
     private EntObj? pressedMain;
     private EntObj? pressedSecondary;
     private bool prevMainDown;
     private bool prevSecondaryDown;
+    private EntObj? lastClickTarget;
+    private long lastClickTicks;
 
     public Vector2 Position => position;
     public EntObj? Hovered => prevHovered;
@@ -16,6 +20,9 @@ public class RootUiMouse(RootMouse mouse, RootUiScale scale, RootUiFocus focus, 
     internal void Update(Vector2 o, EntObj n)
     {
         position = mouse.Position / scale.Scale;
+
+        if (Environment.TickCount64 - lastClickTicks > DoubleClickMs)
+            lastClickTarget = null;
 
         var hovered = FindHovered(null, o, n);
 
@@ -88,7 +95,20 @@ public class RootUiMouse(RootMouse mouse, RootUiScale scale, RootUiFocus focus, 
         if (!InputEnabled(e))
             return;
 
-        e.OnClickFDelegate?.Invoke();
+        var now = Environment.TickCount64;
+
+        if (lastClickTarget == e && now - lastClickTicks <= DoubleClickMs)
+        {
+            e.OnDoubleClickFDelegate?.Invoke();
+            lastClickTarget = null;
+            lastClickTicks = 0;
+        }
+        else
+        {
+            e.OnClickFDelegate?.Invoke();
+            lastClickTarget = e;
+            lastClickTicks = now;
+        }
     }
 
     private void OnRightPress(EntObj e)

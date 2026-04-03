@@ -159,6 +159,11 @@ public class AppStyle(RootText text, RootKeyboard keyboard, AppMenuTextures menu
         .SizeV((0, ItemHeight))
         .SizeRelativeV((1, 0))
         .ColorF(() => ent.IsFocusedR ? (0, 0, 0, 1) : (0, 0, 0, 0))
+        .OnUpdateF(() =>
+        {
+            if (ent.IsFocusedR && keyboard.IsKeyPressedRepeated(Keys.Enter))
+                ent.OnDoubleClickFDelegate?.Invoke();
+        })
         .IsSelectableV(true)
         .IsFocusableV(true)
         .Nodes([
