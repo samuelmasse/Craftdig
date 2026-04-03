@@ -5,7 +5,7 @@ public interface IAppUiComponents
 {
     string? TooltipV { get; set; }
     Func<ReadOnlySpan<char>>? TooltipF { get; set; }
-    EntObj? StackRootV { get; set; }
+    EntObj StackRootV { get; set; }
     EntMutIdx PlayerV { get; set; }
     Func<ItemSlot>? GetSlotValueF { get; set; }
     Action<ItemSlot>? SetSlotValueF { get; set; }

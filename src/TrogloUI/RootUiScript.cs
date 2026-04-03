@@ -22,6 +22,7 @@ public class RootUiScript(
         mouse.Update((0, 0), ui);
         focus.Update(ui);
         update.Update(ui);
+        ui.Cleanup();
     }
 
     public override void Draw()

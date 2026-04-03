@@ -54,27 +54,32 @@ public class AppStyle(RootText text, RootKeyboard keyboard, AppMenuTextures menu
         .SizeRelativeV((1, 0))
         .IsSelectableV(true)
         .IsFocusableV(true)
-        .Nodes([
-            Node()
+        .Mutate((ent) =>
+        {
+            Node(ent)
                 .AlignmentV(Alignment.Top | Alignment.Left)
                 .ColorF(() => InputItemBorderColor(ent))
                 .SizeV((ItemSpacingXS, 0))
-                .SizeRelativeV((0, 1)),
-            Node()
+                .SizeRelativeV((0, 1));
+
+            Node(ent)
                 .AlignmentV(Alignment.Top | Alignment.Right)
                 .ColorF(() => InputItemBorderColor(ent))
                 .SizeV((ItemSpacingXS, 0))
-                .SizeRelativeV((0, 1)),
-            Node()
+                .SizeRelativeV((0, 1));
+
+            Node(ent)
                 .AlignmentV(Alignment.Top | Alignment.Left)
                 .ColorF(() => InputItemBorderColor(ent))
                 .SizeV((0, ItemSpacingXS))
-                .SizeRelativeV((1, 0)),
-            Node()
+                .SizeRelativeV((1, 0));
+
+            Node(ent)
                 .AlignmentV(Alignment.Bottom | Alignment.Left)
                 .ColorF(() => InputItemBorderColor(ent))
                 .SizeV((0, ItemSpacingXS))
-                .SizeRelativeV((1, 0))]);
+                .SizeRelativeV((1, 0));
+        });
 
     public Vector4 InputItemBorderColor(EntObj ent)
     {
@@ -166,31 +171,36 @@ public class AppStyle(RootText text, RootKeyboard keyboard, AppMenuTextures menu
         })
         .IsSelectableV(true)
         .IsFocusableV(true)
-        .Nodes([
-            Node()
+        .Mutate((ent) =>
+        {
+            Node(ent)
                 .AlignmentV(Alignment.Top | Alignment.Left)
                 .ColorV((1, 1, 1, 1))
                 .IsDisabledF(() => !ent.IsFocusedR)
                 .SizeV((ItemSpacingXS, 0))
-                .SizeRelativeV((0, 1)),
-            Node()
+                .SizeRelativeV((0, 1));
+
+            Node(ent)
                 .AlignmentV(Alignment.Top | Alignment.Right)
                 .ColorV((1, 1, 1, 1))
                 .IsDisabledF(() => !ent.IsFocusedR)
                 .SizeV((ItemSpacingXS, 0))
-                .SizeRelativeV((0, 1)),
-            Node()
+                .SizeRelativeV((0, 1));
+
+            Node(ent)
                 .AlignmentV(Alignment.Top | Alignment.Left)
                 .ColorV((1, 1, 1, 1))
                 .IsDisabledF(() => !ent.IsFocusedR)
                 .SizeV((0, ItemSpacingXS))
-                .SizeRelativeV((1, 0)),
-            Node()
+                .SizeRelativeV((1, 0));
+
+            Node(ent)
                 .AlignmentV(Alignment.Bottom | Alignment.Left)
                 .ColorV((1, 1, 1, 1))
                 .IsDisabledF(() => !ent.IsFocusedR)
                 .SizeV((0, ItemSpacingXS))
-                .SizeRelativeV((1, 0))]);
+                .SizeRelativeV((1, 0));
+        });
 
 
     public void PointingCursor(EntObj ent) => ent.Mutate()
@@ -213,29 +223,34 @@ public class AppStyle(RootText text, RootKeyboard keyboard, AppMenuTextures menu
         .SizeV((SlotSize, SlotSize))
         .SizeRelativeV((0, 0))
         .TextureV(SlotTexture)
-        .Nodes([Node()
-            .Mutate(Text)
-            .OffsetV((ItemSpacingXS, ItemSpacingXS))
-            .SizeV((-ItemSpacingXS * 2, -ItemSpacingXS * 2))
-            .TextF(() =>
-            {
-                var c = ent.GetSlotValueFDelegate?.Invoke() ?? default;
+        .Mutate((ent) =>
+        {
+            ent.Nodes.Clear();
 
-                if (c == default || c.Count == 1)
-                    return string.Empty;
+            Node(ent)
+                .Mutate(Text)
+                .OffsetV((ItemSpacingXS, ItemSpacingXS))
+                .SizeV((-ItemSpacingXS * 2, -ItemSpacingXS * 2))
+                .TextF(() =>
+                {
+                    var c = ent.GetSlotValueFDelegate?.Invoke() ?? default;
 
-                return text.Format("{0}", c.Count);
-            })
-            .TextAlignmentV(Alignment.Bottom | Alignment.Right)
-            .TextureF(() =>
-            {
-                var c = ent.GetSlotValueFDelegate?.Invoke() ?? default;
+                    if (c == default || c.Count == 1)
+                        return string.Empty;
 
-                if (c.Item.IsBlock)
-                    return c.Item.Faces.Front.FaceTexture;
+                    return text.Format("{0}", c.Count);
+                })
+                .TextAlignmentV(Alignment.Bottom | Alignment.Right)
+                .TextureF(() =>
+                {
+                    var c = ent.GetSlotValueFDelegate?.Invoke() ?? default;
 
-                return null;
-            })]);
+                    if (c.Item.IsBlock)
+                        return c.Item.Faces.Front.FaceTexture;
+
+                    return null;
+                });
+        });
 
     public void SlotTooltip(EntObj ent) => ent.Mutate()
         .TooltipF(() => ent.SlotV.PlayerV.Offhand == default ?

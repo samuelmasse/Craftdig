@@ -2,10 +2,11 @@ namespace Craftdig.Menus.Singleplayer;
 
 [Module]
 public class ModuleSingleplayerWorldSelectMenu(
+    RootBin bin,
+    RootGlw gl,
     RootPngs pngs,
     AppStyle s,
     AppPaths paths,
-    ModuleGlw gl,
     ModuleSingleplayerLoadWorldAction singleplayerLoadWorldAction,
     ModuleReadWorldMetaAction readWorldMetaAction,
     ModuleReadWorldStateAction readWorldStateAction,
@@ -50,19 +51,6 @@ public class ModuleSingleplayerWorldSelectMenu(
             foreach (var (dir, paths, meta, state) in worlds)
             {
                 var itemHeight = s.ItemHeight * 1.5f;
-                var screenshotFile = Path.Join(dir, "Screenshot.png");
-                Texture? screenshot = null;
-
-                if (File.Exists(screenshotFile))
-                {
-                    var image = pngs[screenshotFile];
-                    screenshot = new Texture2D(gl, image.Size)
-                    {
-                        PixelsMipmap = image.Pixels.Span,
-                        MagFilter = TextureMagFilter.Linear,
-                        MinFilter = TextureMinFilter.LinearMipmapLinear
-                    };
-                }
 
                 Node(select, out var item)
                     .Mutate(s.SelectorItem)
@@ -75,13 +63,27 @@ public class ModuleSingleplayerWorldSelectMenu(
                         .SizeRelativeV((1, 1))
                         .PaddingV((s.ItemSpacingS, s.ItemSpacingS, s.ItemSpacingS, s.ItemSpacingS));
                     {
+                        var screenshotFile = Path.Join(dir, "Screenshot.png");
+                        ScreenshotTexture? screenshot = null;
+
+                        if (File.Exists(screenshotFile))
+                        {
+                            var image = pngs[screenshotFile];
+                            screenshot = new(bin, new Texture2D(gl, image.Size)
+                            {
+                                PixelsMipmap = image.Pixels.Span,
+                                MagFilter = TextureMagFilter.Linear,
+                                MinFilter = TextureMinFilter.LinearMipmapLinear
+                            });
+                        }
+
                         Node(itemContainer, out var itemIcon)
                             .Mutate(s.PointingCursor)
                             .IsSelectableV(true)
                             .SizeRelativeV((0, 0))
                             .SizeV((itemHeight, itemHeight))
                             .ColorV((0.2f, 0, 0.6f, 1))
-                            .TextureV(screenshot)
+                            .TextureF(() => screenshot?.Texture)
                             .OnPressF(() => singleplayerLoadWorldAction.Run(paths));
                         {
                             Node(itemIcon)
@@ -165,7 +167,7 @@ public class ModuleSingleplayerWorldSelectMenu(
                     .InnerSpacingV(s.ItemSpacing);
                 {
                     Node(rightButtonsVertical)
-                        .OnPressF(() => root.StackRootV?.NodeStack.Push(
+                        .OnPressF(() => root.StackRootV.NodeStack.Push(
                             new EntObj() { StackRootV = root.StackRootV }.Mutate(newWorldMenu.Create)))
                         .TextV("Create New World")
                         .Mutate(s.Button);
@@ -183,7 +185,7 @@ public class ModuleSingleplayerWorldSelectMenu(
                             .IsInputDisabledF(() => selected == null);
 
                         Node(rightButtonsHorizontal)
-                            .OnPressF(() => root.StackRootV?.NodeStack.Pop())
+                            .OnPressF(() => root.StackRootV.NodeStack.Pop())
                             .TextV("Back")
                             .Mutate(s.Button);
                     }

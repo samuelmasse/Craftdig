@@ -16,7 +16,7 @@ public class ModuleMenuState(
     {
         GC.Collect(GC.MaxGeneration);
         Node(menus).Mutate(mainBackgroundMenu.Create);
-        menus.NodeStack.Push(Node().StackRootV(menus).Mutate(mainMenu.Create));
+        NodeStack(menus).StackRootV(menus).Mutate(mainMenu.Create);
         watch.Start();
     }
 

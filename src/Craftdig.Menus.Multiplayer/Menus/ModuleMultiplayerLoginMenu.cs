@@ -23,9 +23,8 @@ public class ModuleMultiplayerLoginMenu(
                     if (multiplayerCredentials.Email == null)
                         return;
 
-                    root.StackRootV?.NodeStack.Pop();
-                    root.StackRootV?.NodeStack.Push(
-                        Node().StackRootV(root.StackRootV).Mutate(connectMenu.Create));
+                    root.StackRootV.NodeStack.Pop();
+                    NodeStack(root.StackRootV).StackRootV(root.StackRootV).Mutate(connectMenu.Create);
                 });
 
             bool loginStarted = false;
@@ -44,7 +43,7 @@ public class ModuleMultiplayerLoginMenu(
                 .OnPressF(() =>
                 {
                     multiplayerCredentials.StopLogin();
-                    root.StackRootV?.NodeStack.Pop();
+                    root.StackRootV.NodeStack.Pop();
                 })
                 .TextV("Cancel")
                 .Mutate(s.Button);

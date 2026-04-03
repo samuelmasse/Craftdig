@@ -29,7 +29,7 @@ public class PlayerCommonState(
     private readonly EntObj menus = Node(ui).OrderValueV(1);
     private readonly EntObj overlay = Node(ui).Mutate(playerOverlayMenu.Create);
     private readonly EntObj hand = Node(ui).OrderValueV(1.5f).Mutate(playerHandMenu.Create);
-    private readonly EntObj dark = Node().ColorV((0.3f, 0.3f, 0.3f, 0.3f));
+    private readonly EntObj dark = Node(ui).ColorV((0.3f, 0.3f, 0.3f, 0.3f)).IsDisabledV(true);
 
     private Action<EntObj>? currentKeyMenu;
     private bool paused;
@@ -66,6 +66,7 @@ public class PlayerCommonState(
         ui.Nodes.Remove(hand);
         ui.Nodes.Remove(menus);
         ui.Nodes.Remove(overlay);
+        ui.Nodes.Remove(dark);
     }
 
     public override void Update(double time)
@@ -77,7 +78,7 @@ public class PlayerCommonState(
             else
             {
                 paused = true;
-                menus.NodeStack.Push(Node().StackRootV(menus).Mutate(escapeMenu.Create));
+                NodeStack(menus).StackRootV(menus).Mutate(escapeMenu.Create);
             }
         }
 
@@ -99,21 +100,21 @@ public class PlayerCommonState(
                 {
                     inv = true;
                     currentKeyMenu = keyMenus[key];
-                    menus.NodeStack.Push(Node().Mutate(keyMenus[key]));
+                    NodeStack(menus).Mutate(keyMenus[key]);
                 }
             }
         }
 
-        if (menus.NodeStack.Count > 0 && !menus.Nodes.Contains(dark))
-            menus.Nodes.Add(dark);
+        if (menus.NodeStack.Count > 0 && dark.IsDisabledV)
+            dark.IsDisabledV = false;
 
-        if (menus.NodeStack.Count == 0 && menus.Nodes.Contains(dark))
+        if (menus.NodeStack.Count == 0 && !dark.IsDisabledV)
         {
             paused = false;
             inv = false;
             currentKeyMenu = null;
             ent.Offhand = default;
-            menus.Nodes.Remove(dark);
+            dark.IsDisabledV = true;
         }
 
         mouse.Track = !paused && !inv;

@@ -3,6 +3,10 @@ namespace TrogloUI;
 [Components]
 public interface IUiTraverseComponents
 {
+    [ComponentToString] long UiId { get; set; }
+    RootUi UiRoot { get; set; }
+    long UiAliveToken { get; set; }
+
     [ComponentLazyInitialize] List<EntObj> Nodes { get; set; }
     [ComponentLazyInitialize] Stack<EntObj> NodeStack { get; set; }
 
