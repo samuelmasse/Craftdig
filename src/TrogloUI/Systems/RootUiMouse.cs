@@ -1,7 +1,7 @@
 namespace TrogloUI;
 
 [Root]
-public class RootUiMouse(RootMouse mouse, RootUiScale scale, RootUiFocus focus)
+public class RootUiMouse(RootMouse mouse, RootUiScale scale, RootUiFocus focus, RootUiClipping clipping)
 {
     private Vector2 position;
     private EntObj? prevHovered;
@@ -17,7 +17,7 @@ public class RootUiMouse(RootMouse mouse, RootUiScale scale, RootUiFocus focus)
     {
         position = mouse.Position / scale.Scale;
 
-        var hovered = FindHovered(o, n);
+        var hovered = FindHovered(null, o, n);
 
         if (hovered != prevHovered)
         {
@@ -107,11 +107,11 @@ public class RootUiMouse(RootMouse mouse, RootUiScale scale, RootUiFocus focus)
         e.OnSecondaryClickFDelegate?.Invoke();
     }
 
-    private EntObj? FindHovered(Vector2 o, EntObj n)
+    private EntObj? FindHovered(Box2? clip, Vector2 o, EntObj n)
     {
         var nOffset = o + n.OffsetR;
         var nSize = n.SizeR;
-        var box = new Box2(nOffset, nOffset + nSize);
+        var box = clipping.IntersectClips(clip, new Box2(nOffset, nOffset + nSize));
 
         EntObj? hovered = null;
 
@@ -120,7 +120,7 @@ public class RootUiMouse(RootMouse mouse, RootUiScale scale, RootUiFocus focus)
 
         foreach (var c in n.NodesR.Span)
         {
-            var child = FindHovered(nOffset, c);
+            var child = FindHovered(box, nOffset, c);
             if (child != null)
                 hovered = child;
         }
