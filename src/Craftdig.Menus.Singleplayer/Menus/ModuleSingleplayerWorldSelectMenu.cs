@@ -60,7 +60,7 @@ public class ModuleSingleplayerWorldSelectMenu(
                     .Mutate(s.SelectorItem)
                     .SizeRelativeV((0, 0))
                     .SizeV((s.ItemWidthL * 1.7f, itemHeight + s.ItemSpacingS * 2))
-                    .OnPressF(() => selected = meta)
+                    .OnFocusF(() => selected = meta)
                     .OnDoubleClickF(() => singleplayerLoadWorldAction.Run(paths));
                 {
                     Node(item, out var itemContainer)
@@ -134,6 +134,8 @@ public class ModuleSingleplayerWorldSelectMenu(
 
                 Node(scrollBar, out var scrollPuck)
                     .IsSelectableV(true)
+                    .IsSilentFocusableV(true)
+                    .DeferFocusV(select)
                     .CursorF(() => scrollPuck.IsPressedR ? MouseCursor.ResizeNS : MouseCursor.PointingHand)
                     .ColorF(() => scrollPuck.IsPressedR ? (1, 1, 0, 1) : (0.5f, 0.5f, 1, 1))
                     .OffsetF(() => (0, scroll / select.SizeInnerSumR.Y) * scrollBar.SizeR)

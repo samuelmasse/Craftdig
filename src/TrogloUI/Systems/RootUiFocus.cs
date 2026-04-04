@@ -10,9 +10,29 @@ public class RootUiFocus(RootKeyboard keyboard)
 
     public void Focus(EntMut ent)
     {
+        var defer = Get(ent.DeferFocusV, ent.DeferFocusFDelegate);
+        if (defer != default && DeferFocus(defer))
+            return;
+
         focused.IsFocusedR = false;
         ent.IsFocusedR = true;
         focused = ent;
+
+        ent.OnFocusFDelegate?.Invoke();
+    }
+
+    private bool DeferFocus(EntMut ent)
+    {
+        if (ent == focused)
+            return true;
+
+        foreach (var c in ent.NodesR.Span)
+        {
+            if (DeferFocus(c))
+                return true;
+        }
+
+        return false;
     }
 
     internal void Update(EntMut n)
