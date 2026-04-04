@@ -7,9 +7,12 @@ public class RootUiFocus(RootKeyboard keyboard)
     private HashSet<EntMut> inits = [];
     private HashSet<EntMut> newInits = [];
     private EntMut focused;
+    private bool tabMode;
 
-    public void Focus(EntMut ent)
+    public void Focus(EntMut ent, bool tab)
     {
+        tabMode = tab;
+
         var defer = Get(ent.DeferFocusV, ent.DeferFocusFDelegate);
         if (defer != default && DeferFocus(defer))
             return;
@@ -78,7 +81,10 @@ public class RootUiFocus(RootKeyboard keyboard)
                 }
             }
 
-            Focus(target);
+            if (target == default && tabMode && focusables.Count > 0)
+                target = focusables[0];
+
+            Focus(target, tabMode);
         }
 
         var focusGroup = Get(focused.FocusGroupV, focused.FocusGroupFDelegate);
@@ -110,7 +116,7 @@ public class RootUiFocus(RootKeyboard keyboard)
                         focusable = selected;
                 }
 
-                Focus(focusable);
+                Focus(focusable, true);
             }
         }
     }

@@ -88,7 +88,7 @@ public class RootUiMouse(RootMouse mouse, RootUiScale scale, RootUiFocus focus, 
             return;
 
         if (Get(e.IsFocusableV, e.IsFocusableFDelegate) || Get(e.IsSilentFocusableV, e.IsSilentFocusableFDelegate))
-            focus.Focus(e);
+            focus.Focus(e, false);
 
         e.IsPressedR = true;
         e.OnPressFDelegate?.Invoke();
