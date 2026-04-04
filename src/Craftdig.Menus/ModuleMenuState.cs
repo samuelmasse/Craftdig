@@ -15,10 +15,10 @@ public class ModuleMenuState(
     public override void Load()
     {
         GCSettings.LargeObjectHeapCompactionMode = GCLargeObjectHeapCompactionMode.CompactOnce;
-        GC.Collect(2, GCCollectionMode.Forced, blocking: true, compacting: true);
+        GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced, blocking: true, compacting: true);
         GC.WaitForPendingFinalizers();
         GCSettings.LargeObjectHeapCompactionMode = GCLargeObjectHeapCompactionMode.CompactOnce;
-        GC.Collect(2, GCCollectionMode.Forced, blocking: true, compacting: true);
+        GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced, blocking: true, compacting: true);
 
         Node(menus).Mutate(mainBackgroundMenu.Create);
         NodeStack(menus).StackRootV(menus).Mutate(mainMenu.Create);
