@@ -5,8 +5,7 @@ public class RootUiUpdate
 {
     internal void Update(EntMut n)
     {
-        if (n.HasOnUpdateF)
-            n.OnUpdateFDelegate?.Invoke();
+        n.OnUpdateFV.Resolve()?.Invoke();
 
         foreach (var c in n.NodesR.Span)
             Update(c);

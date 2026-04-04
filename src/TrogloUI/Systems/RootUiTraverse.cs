@@ -28,7 +28,7 @@ public class RootUiTraverse
 
     private void OrderNodes(EntMut n)
     {
-        var ordered = Get(n.IsOrderedV, n.IsOrderedFDelegate);
+        var ordered = n.IsOrderedFV.Resolve();
         if (!ordered)
             return;
 
@@ -45,7 +45,7 @@ public class RootUiTraverse
         for (int i = 0; i < nodes.Count; i++)
         {
             keys[i] = nodes[i];
-            vals[i] = Get(nodes[i].OrderValueV, nodes[i].OrderValueFDelegate);
+            vals[i] = nodes[i].OrderValueFV.Resolve();
         }
 
         vals.Sort(keys);
@@ -60,7 +60,7 @@ public class RootUiTraverse
         {
             var c = n.Nodes[i];
 
-            var isDeleted = Get(c.IsDeletedV, c.IsDeletedFDelegate);
+            var isDeleted = c.IsDeletedFV.Resolve();
             if (isDeleted)
                 n.Nodes.RemoveAt(i);
         }
@@ -84,19 +84,16 @@ public class RootUiTraverse
         int start = traverseBufferIndex;
         int count = 0;
 
-        if (n.Nodes.Count > 0)
+        foreach (var c in n.Nodes)
         {
-            foreach (var c in n.Nodes)
-            {
-                var disabled = Get(c.IsDisabledV, c.IsDisabledFDelegate);
-                if (disabled)
-                    continue;
+            var disabled = c.IsDisabledFV.Resolve();
+            if (disabled)
+                continue;
 
-                if (traverseBufferIndex == traverseBuffer.Length)
-                    Array.Resize(ref traverseBuffer, traverseBuffer.Length * 2);
-                traverseBuffer[traverseBufferIndex++] = c;
-                count++;
-            }
+            if (traverseBufferIndex == traverseBuffer.Length)
+                Array.Resize(ref traverseBuffer, traverseBuffer.Length * 2);
+            traverseBuffer[traverseBufferIndex++] = c;
+            count++;
         }
 
         n.NodesR = traverseBuffer.AsMemory().Slice(start, count);

@@ -34,9 +34,9 @@ public class RootUiScript(
 
     private void ResetRoot()
     {
-        ui.IsOrderedV = true;
-        ui.SizeV = DrawArea.GetValueOrDefault();
-        ui.SizeRelativeV = (0, 0);
+        ui.IsOrderedFV = true;
+        ui.SizeFV = DrawArea.GetValueOrDefault();
+        ui.SizeRelativeFV = (Vector2?)(0, 0);
     }
 
     private void Traverse()

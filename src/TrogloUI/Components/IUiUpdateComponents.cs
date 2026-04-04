@@ -1,7 +1,8 @@
 namespace TrogloUI;
 
-[Components]
+[Components(SkipBuilder = true)]
 public interface IUiUpdateComponents
 {
-    Action? OnUpdateF { get; set; }
+    /// <summary>Callback invoked during the update phase.</summary>
+    UiCallback<Action?> OnUpdateFV { get; set; }
 }

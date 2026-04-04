@@ -42,9 +42,11 @@ internal class PropGenerator : IIncrementalGenerator
                         else if (named.Name == "UiCallback") kind = PropKind.Callback;
                         else continue;
 
-                        innerType = named.TypeArguments[0].ToDisplayString(
+                        var typeArg = named.TypeArguments[0];
+                        innerType = typeArg.ToDisplayString(
                             SymbolDisplayFormat.FullyQualifiedFormat
-                                .WithGlobalNamespaceStyle(SymbolDisplayGlobalNamespaceStyle.Omitted));
+                                .WithGlobalNamespaceStyle(SymbolDisplayGlobalNamespaceStyle.Omitted)
+                                .AddMiscellaneousOptions(SymbolDisplayMiscellaneousOptions.IncludeNullableReferenceTypeModifier));
                     }
                     else continue;
 
@@ -108,7 +110,7 @@ internal class PropGenerator : IIncrementalGenerator
                         sb.AppendLine($"        /// <summary>{prop.Doc}</summary>");
                     sb.AppendLine($"        public EntMutator<T> {prop.BaseName}F(in {prop.InnerType} value)");
                     sb.AppendLine("        {");
-                    sb.AppendLine($"            mut.Ent.{prop.FullName} = new() {{ Value = value }};");
+                    sb.AppendLine($"            mut.Ent.{prop.FullName} = new(value);");
                     sb.AppendLine("            return mut;");
                     sb.AppendLine("        }");
                 }
@@ -118,16 +120,16 @@ internal class PropGenerator : IIncrementalGenerator
                         sb.AppendLine($"        /// <summary>{prop.Doc}</summary>");
                     sb.AppendLine($"        public EntMutator<T> {prop.BaseName}V(string value)");
                     sb.AppendLine("        {");
-                    sb.AppendLine($"            mut.Ent.{prop.FullName} = new() {{ Value = value }};");
+                    sb.AppendLine($"            mut.Ent.{prop.FullName} = new(value, null);");
                     sb.AppendLine("            return mut;");
                     sb.AppendLine("        }");
 
                     sb.AppendLine();
                     if (prop.Doc != null)
                         sb.AppendLine($"        /// <summary>{prop.Doc}</summary>");
-                    sb.AppendLine($"        public EntMutator<T> {prop.BaseName}F(global::System.Func<global::System.ReadOnlySpan<char>> func)");
+                    sb.AppendLine($"        public EntMutator<T> {prop.BaseName}F(global::System.Func<global::System.ReadOnlySpan<char>>? func)");
                     sb.AppendLine("        {");
-                    sb.AppendLine($"            mut.Ent.{prop.FullName} = new() {{ Func = func }};");
+                    sb.AppendLine($"            mut.Ent.{prop.FullName} = new(null!, func);");
                     sb.AppendLine("            return mut;");
                     sb.AppendLine("        }");
                 }
@@ -137,16 +139,16 @@ internal class PropGenerator : IIncrementalGenerator
                         sb.AppendLine($"        /// <summary>{prop.Doc}</summary>");
                     sb.AppendLine($"        public EntMutator<T> {prop.BaseName}V(in {prop.InnerType} value)");
                     sb.AppendLine("        {");
-                    sb.AppendLine($"            mut.Ent.{prop.FullName} = new() {{ Value = value }};");
+                    sb.AppendLine($"            mut.Ent.{prop.FullName} = new(value, null);");
                     sb.AppendLine("            return mut;");
                     sb.AppendLine("        }");
 
                     sb.AppendLine();
                     if (prop.Doc != null)
                         sb.AppendLine($"        /// <summary>{prop.Doc}</summary>");
-                    sb.AppendLine($"        public EntMutator<T> {prop.BaseName}F(global::System.Func<{prop.InnerType}> func)");
+                    sb.AppendLine($"        public EntMutator<T> {prop.BaseName}F(global::System.Func<{prop.InnerType}>? func)");
                     sb.AppendLine("        {");
-                    sb.AppendLine($"            mut.Ent.{prop.FullName} = new() {{ Func = func }};");
+                    sb.AppendLine($"            mut.Ent.{prop.FullName} = new(default!, func);");
                     sb.AppendLine("            return mut;");
                     sb.AppendLine("        }");
                 }

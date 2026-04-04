@@ -19,7 +19,7 @@ public class RootUiPosition(RootSprites sprites, RootUiScale scale)
         }
 
         var innerLayout = n.InnerLayoutFV.Resolve();
-        var innerSpacing = Get(n.InnerSpacingV, n.InnerSpacingFDelegate);
+        var innerSpacing = n.InnerSpacingFV.Resolve();
         var innerScrollOffset = n.InnerScrollOffsetFV.Resolve();
 
         if (innerLayout == InnerLayout.VerticalList)
@@ -29,7 +29,7 @@ public class RootUiPosition(RootSprites sprites, RootUiScale scale)
             foreach (var c in n.NodesR.Span)
             {
                 var ce = c;
-                if (IsFloating(c))
+                if (c.IsFloatingFV.Resolve())
                     continue;
 
                 ce.OffsetR += (0, y);
@@ -44,7 +44,7 @@ public class RootUiPosition(RootSprites sprites, RootUiScale scale)
             foreach (var c in n.NodesR.Span)
             {
                 var ce = c;
-                if (IsFloating(c))
+                if (c.IsFloatingFV.Resolve())
                     continue;
 
                 ce.OffsetR += (x, 0);
@@ -71,14 +71,11 @@ public class RootUiPosition(RootSprites sprites, RootUiScale scale)
 
     private void PositionTextRelative(EntMut n)
     {
-        if (!n.HasFontV && !n.HasFontF)
-            return;
-
-        var font = Get(n.FontV, n.FontFDelegate);
+        var font = n.FontFV.Resolve();
         if (font == null)
             return;
 
-        var fontSize = (int)(Get(n.FontSizeV, n.FontSizeFDelegate) * scale.Scale);
+        var fontSize = (int)(n.FontSizeFV.Resolve() * scale.Scale);
         if (fontSize <= 0)
             return;
 
@@ -99,14 +96,6 @@ public class RootUiPosition(RootSprites sprites, RootUiScale scale)
         n.OffsetR = (
             (float)Math.Round(n.OffsetR.X / multiplier) * multiplier,
             (float)Math.Round(n.OffsetR.Y / multiplier) * multiplier);
-    }
-
-    private bool IsFloating(EntMut n)
-    {
-        if (!n.HasIsFloatingV && !n.HasIsFloatingF)
-            return false;
-
-        return Get(n.IsFloatingV, n.IsFloatingFDelegate);
     }
 
     internal Vector2 Align(Vector2 val, Vector2 size, Vector2 parent, Alignment alignment)

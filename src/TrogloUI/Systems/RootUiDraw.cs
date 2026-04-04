@@ -48,14 +48,11 @@ public class RootUiDraw(RootSprites sprites, RootUiScale scale, RootUiPosition p
 
     private void DrawText(Vector2 o, EntMut n)
     {
-        if (!n.HasFontV && !n.HasFontF)
-            return;
-
-        var font = Get(n.FontV, n.FontFDelegate);
+        var font = n.FontFV.Resolve();
         if (font == null)
             return;
 
-        var fontSize = (int)(Get(n.FontSizeV, n.FontSizeFDelegate) * scale.Scale);
+        var fontSize = (int)(n.FontSizeFV.Resolve() * scale.Scale);
         if (fontSize <= 0)
             return;
 
@@ -71,8 +68,8 @@ public class RootUiDraw(RootSprites sprites, RootUiScale scale, RootUiPosition p
         var size = new Vector2(sprites.Batch.Measure(font.Size(fontSize), text), font.Size(fontSize).Metrics.Height) / scale.Scale;
         var offset = Vector2.Zero;
 
-        var fontPadding = Get(n.FontPaddingV, n.FontPaddingFDelegate);
-        var textPadding = Get(n.TextPaddingV, n.TextPaddingFDelegate);
+        var fontPadding = n.FontPaddingFV.Resolve();
+        var textPadding = n.TextPaddingFV.Resolve();
 
         if ((alignment & (Alignment.Right | Alignment.Horizontal)) == 0)
             offset.X += fontPadding.X + textPadding.X;

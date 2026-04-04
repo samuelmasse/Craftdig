@@ -378,7 +378,7 @@ public class AppStyle(RootText text, RootKeyboard keyboard, AppMenuTextures menu
                 ent.SlotAddedV = true;
             }
         })
-        .OnSecondaryPressF(ent.OnPressFV.Value)
+        .OnSecondaryPressF(ent.OnPressFV.Resolve())
         .OnClickF(() =>
         {
             if (!ent.SlotAddedV)

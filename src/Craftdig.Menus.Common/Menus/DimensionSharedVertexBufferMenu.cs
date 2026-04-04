@@ -70,7 +70,7 @@ public class DimensionSharedVertexBufferMenu(
         Node(root).OnUpdateF(() =>
         {
             if (keyboard.IsKeyPressed(Keys.F7))
-                menu.IsDisabledV = !menu.IsDisabledV;
+                menu.IsDisabledFV = !menu.IsDisabledFV.Resolve();
         });
     }
 }

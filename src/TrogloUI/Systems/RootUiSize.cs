@@ -7,7 +7,7 @@ public class RootUiSize(RootSprites sprites, RootUiScale scale)
     {
         SizeNode(s, n);
         SizeInnerSizing(s, n);
-        n.PaddingR = Get(n.PaddingV, n.PaddingFDelegate);
+        n.PaddingR = n.PaddingFV.Resolve();
 
         foreach (var c in n.NodesR.Span)
             Size(n.SizeR - n.PaddingR.Xy - n.PaddingR.Zw, c);
@@ -17,11 +17,7 @@ public class RootUiSize(RootSprites sprites, RootUiScale scale)
 
         foreach (var c in n.NodesR.Span)
         {
-            if (!c.HasIsPostSizedV && !c.HasIsPostSizedF)
-                continue;
-
-            var isPostSized = Get(c.IsPostSizedV, c.IsPostSizedFDelegate);
-            if (!isPostSized)
+            if (!c.IsPostSizedFV.Resolve())
                 continue;
 
             Size(n.SizeR - n.PaddingR.Xy - n.PaddingR.Zw, c);
@@ -31,8 +27,8 @@ public class RootUiSize(RootSprites sprites, RootUiScale scale)
     private void SizeNode(Vector2 s, EntMut n)
     {
         n.SizeR = default;
-        n.SizeR += (Get(n.SizeRelativeV, n.SizeRelativeFDelegate) ?? (1, 1)) * s;
-        n.SizeR += Get(n.SizeV, n.SizeFDelegate);
+        n.SizeR += (n.SizeRelativeFV.Resolve() ?? (1, 1)) * s;
+        n.SizeR += n.SizeFV.Resolve();
         SizeTextRelative(s, n);
 
         var hor = n.HorizontalWeightSizeR;
@@ -46,23 +42,20 @@ public class RootUiSize(RootSprites sprites, RootUiScale scale)
 
     private void SizeTextRelative(Vector2 s, EntMut n)
     {
-        if (!n.HasFontV && !n.HasFontF)
-            return;
-
-        var font = Get(n.FontV, n.FontFDelegate);
+        var font = n.FontFV.Resolve();
         if (font == null)
             return;
 
-        var fontSize = (int)(Get(n.FontSizeV, n.FontSizeFDelegate) * scale.Scale);
+        var fontSize = (int)(n.FontSizeFV.Resolve() * scale.Scale);
         if (fontSize <= 0)
             return;
 
         var text = n.TextFV.Resolve();
-        var sizeTextRelative = Get(n.SizeTextRelativeV, n.SizeTextRelativeFDelegate);
+        var sizeTextRelative = n.SizeTextRelativeFV.Resolve();
         var size = new Vector2(sprites.Batch.Measure(font.Size(fontSize), text) / scale.Scale, font.Size(fontSize).Metrics.Height / scale.Scale);
 
-        var fontPadding = Get(n.FontPaddingV, n.FontPaddingFDelegate);
-        var textPadding = Get(n.TextPaddingV, n.TextPaddingFDelegate);
+        var fontPadding = n.FontPaddingFV.Resolve();
+        var textPadding = n.TextPaddingFV.Resolve();
 
         size += fontPadding.Xy + fontPadding.Zw;
         size += textPadding.Xy + textPadding.Zw;
@@ -72,15 +65,15 @@ public class RootUiSize(RootSprites sprites, RootUiScale scale)
 
     private void SizeInnerMaxRelative(Vector2 s, EntMut n)
     {
-        if (!n.HasSizeInnerMaxRelativeV && !n.HasSizeInnerMaxRelativeF)
+        var sizeInnerMaxRelative = n.SizeInnerMaxRelativeFV.Resolve();
+        if (sizeInnerMaxRelative == default)
             return;
 
-        var sizeInnerMaxRelative = Get(n.SizeInnerMaxRelativeV, n.SizeInnerMaxRelativeFDelegate);
         var sizeInnerMax = Vector2.Zero;
 
         foreach (var c in n.NodesR.Span)
         {
-            if (IsFloating(c))
+            if (c.IsFloatingFV.Resolve())
                 continue;
 
             sizeInnerMax.X = Math.Max(c.SizeR.X, sizeInnerMax.X);
@@ -95,15 +88,15 @@ public class RootUiSize(RootSprites sprites, RootUiScale scale)
 
     private void SizeInnerSumRelative(Vector2 s, EntMut n)
     {
-        if (!n.HasSizeInnerSumRelativeV && !n.HasSizeInnerSumRelativeF)
+        var sizeInnerSumRelative = n.SizeInnerSumRelativeFV.Resolve();
+        if (sizeInnerSumRelative == default)
             return;
 
-        var sizeInnerSumRelative = Get(n.SizeInnerSumRelativeV, n.SizeInnerSumRelativeFDelegate);
         var sizeInnerSum = Vector2.Zero;
 
         foreach (var c in n.NodesR.Span)
         {
-            if (IsFloating(c))
+            if (c.IsFloatingFV.Resolve())
                 continue;
 
             sizeInnerSum += c.SizeR;
@@ -112,7 +105,7 @@ public class RootUiSize(RootSprites sprites, RootUiScale scale)
         sizeInnerSum.X += n.PaddingR.X + n.PaddingR.Z;
         sizeInnerSum.Y += n.PaddingR.Y + n.PaddingR.W;
 
-        var innerSpacing = Get(n.InnerSpacingV, n.InnerSpacingFDelegate);
+        var innerSpacing = n.InnerSpacingFV.Resolve();
         var innerSum = sizeInnerSum + new Vector2(innerSpacing) * Math.Max(0, (n.NodesR.Length - 1));
         n.SizeR += sizeInnerSumRelative * innerSum;
         n.SizeInnerSumR = innerSum;
@@ -120,24 +113,25 @@ public class RootUiSize(RootSprites sprites, RootUiScale scale)
 
     private void SizeInnerSizing(Vector2 s, EntMut n)
     {
-        if (!n.HasInnerSizingV && !n.HasInnerSizingF)
+        var innerSizing = n.InnerSizingFV.Resolve();
+        if (innerSizing == default)
             return;
 
-        var innerSizing = Get(n.InnerSizingV, n.InnerSizingFDelegate);
         float totalWeight = 0;
 
         foreach (var c in n.NodesR.Span)
         {
-            c.UnsetHorizontalWeightSizeR();
-            c.UnsetVerticalWeightSizeR();
+            var ce = c;
+            ce.HorizontalWeightSizeR = null;
+            ce.VerticalWeightSizeR = null;
 
             if (IsSelfWeight(c))
                 continue;
 
-            totalWeight += Get(n.SizeWeightV, n.SizeWeightFDelegate) ?? 1;
+            totalWeight += n.SizeWeightFV.Resolve() ?? 1;
         }
 
-        var innerSpacing = Get(n.InnerSpacingV, n.InnerSpacingFDelegate);
+        var innerSpacing = n.InnerSpacingFV.Resolve();
         var totalSpacing = innerSpacing * Math.Max(0, n.NodesR.Length - 1);
         Vector2 useableSize = n.SizeR - (totalSpacing, totalSpacing);
 
@@ -154,7 +148,8 @@ public class RootUiSize(RootSprites sprites, RootUiScale scale)
                 if (IsSelfWeight(c))
                     continue;
 
-                c.Mutate().HorizontalWeightSizeR((Get(n.SizeWeightV, n.SizeWeightFDelegate) ?? 1 / totalWeight) * useableSize.X);
+                var ce = c;
+                ce.HorizontalWeightSizeR = (n.SizeWeightFV.Resolve() ?? 1 / totalWeight) * useableSize.X;
             }
         }
         else if (innerSizing == InnerSizing.VerticalWeight)
@@ -170,24 +165,11 @@ public class RootUiSize(RootSprites sprites, RootUiScale scale)
                 if (IsSelfWeight(c))
                     continue;
 
-                c.Mutate().VerticalWeightSizeR((Get(n.SizeWeightV, n.SizeWeightFDelegate) ?? 1 / totalWeight) * useableSize.Y);
+                var ce = c;
+                ce.VerticalWeightSizeR = (n.SizeWeightFV.Resolve() ?? 1 / totalWeight) * useableSize.Y;
             }
         }
     }
 
-    private bool IsFloating(EntMut n)
-    {
-        if (!n.HasIsFloatingV && !n.HasIsFloatingF)
-            return false;
-
-        return Get(n.IsFloatingV, n.IsFloatingFDelegate);
-    }
-
-    private bool IsSelfWeight(EntMut n)
-    {
-        if (!n.HasSizeWeightTypeV && !n.HasSizeWeightTypeF)
-            return false;
-
-        return Get(n.SizeWeightTypeV, n.SizeWeightTypeFDelegate) == SizeWeightType.Self;
-    }
+    private bool IsSelfWeight(EntMut n) => n.SizeWeightTypeFV.Resolve() == SizeWeightType.Self;
 }

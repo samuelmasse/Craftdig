@@ -82,7 +82,7 @@ public class PlayerMultiplayerDebugMenu(
         Node(root).OnUpdateF(() =>
         {
             if (keyboard.IsKeyPressed(Keys.F4))
-                list.IsDisabledV = !list.IsDisabledV;
+                list.IsDisabledFV = !list.IsDisabledFV.Resolve();
         });
     }
 }

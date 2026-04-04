@@ -54,7 +54,7 @@ public class PlayerDebugMenu(
         Node(root).OnUpdateF(() =>
         {
             if (keyboard.IsKeyPressed(Keys.F3))
-                list.IsDisabledV = !list.IsDisabledV;
+                list.IsDisabledFV = !list.IsDisabledFV.Resolve();
         });
     }
 }

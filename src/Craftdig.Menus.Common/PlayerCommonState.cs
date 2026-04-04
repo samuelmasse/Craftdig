@@ -105,10 +105,10 @@ public class PlayerCommonState(
             }
         }
 
-        if (menus.NodeStack.Count > 0 && dark.IsDisabledV)
+        if (menus.NodeStack.Count > 0 && dark.IsDisabledFV.Resolve())
             dark.Mutate().IsDisabledV(false);
 
-        if (menus.NodeStack.Count == 0 && !dark.IsDisabledV)
+        if (menus.NodeStack.Count == 0 && !dark.IsDisabledFV.Resolve())
         {
             paused = false;
             inv = false;

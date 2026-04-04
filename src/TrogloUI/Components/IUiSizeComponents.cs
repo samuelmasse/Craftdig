@@ -1,62 +1,51 @@
 namespace TrogloUI;
 
-[Components]
+[Components(SkipBuilder = true)]
 public interface IUiSizeComponents
 {
-    bool IsFloatingV { get; set; }
-    Func<bool>? IsFloatingF { get; set; }
-
-    bool IsPostSizedV { get; set; }
-    Func<bool>? IsPostSizedF { get; set; }
-
-    InnerSizing InnerSizingV { get; set; }
-    Func<InnerSizing>? InnerSizingF { get; set; }
-
-    SizeWeightType SizeWeightTypeV { get; set; }
-    Func<SizeWeightType>? SizeWeightTypeF { get; set; }
-
-    float InnerSpacingV { get; set; }
-    Func<float>? InnerSpacingF { get; set; }
-
-    float? SizeWeightV { get; set; }
-    Func<float?>? SizeWeightF { get; set; }
-
-    Vector4 PaddingV { get; set; }
-    Func<Vector4>? PaddingF { get; set; }
-
-    Vector2 SizeV { get; set; }
-    Func<Vector2>? SizeF { get; set; }
-
-    Vector2? SizeRelativeV { get; set; }
-    Func<Vector2?>? SizeRelativeF { get; set; }
-
-    Vector2 SizeInnerMaxRelativeV { get; set; }
-    Func<Vector2>? SizeInnerMaxRelativeF { get; set; }
-
-    Vector2 SizeInnerSumRelativeV { get; set; }
-    Func<Vector2>? SizeInnerSumRelativeF { get; set; }
-
-    Vector2 SizeTextRelativeV { get; set; }
-    Func<Vector2>? SizeTextRelativeF { get; set; }
-
-    Font? FontV { get; set; }
-    Func<Font?>? FontF { get; set; }
-
-    int FontSizeV { get; set; }
-    Func<int>? FontSizeF { get; set; }
-
-    Vector4 FontPaddingV { get; set; }
-    Func<Vector4>? FontPaddingF { get; set; }
-
+    /// <summary>Whether this node is excluded from layout flow.</summary>
+    UiProp<bool> IsFloatingFV { get; set; }
+    /// <summary>Whether this node is resized after siblings are laid out.</summary>
+    UiProp<bool> IsPostSizedFV { get; set; }
+    /// <summary>How child nodes are weighted for size distribution.</summary>
+    UiProp<InnerSizing> InnerSizingFV { get; set; }
+    /// <summary>Whether this node uses its own size or a weighted share.</summary>
+    UiProp<SizeWeightType> SizeWeightTypeFV { get; set; }
+    /// <summary>Spacing between child nodes in a list layout.</summary>
+    UiProp<float> InnerSpacingFV { get; set; }
+    /// <summary>Weight factor for weighted size distribution.</summary>
+    UiProp<float?> SizeWeightFV { get; set; }
+    /// <summary>Padding around the node's content area (left, top, right, bottom).</summary>
+    UiProp<Vector4> PaddingFV { get; set; }
+    /// <summary>Fixed size of this node.</summary>
+    UiProp<Vector2> SizeFV { get; set; }
+    /// <summary>Size as a fraction of the parent's available space.</summary>
+    UiProp<Vector2?> SizeRelativeFV { get; set; }
+    /// <summary>Size as a fraction of the largest child's size.</summary>
+    UiProp<Vector2> SizeInnerMaxRelativeFV { get; set; }
+    /// <summary>Size as a fraction of the sum of children's sizes.</summary>
+    UiProp<Vector2> SizeInnerSumRelativeFV { get; set; }
+    /// <summary>Size as a fraction of the text's measured size.</summary>
+    UiProp<Vector2> SizeTextRelativeFV { get; set; }
+    /// <summary>Font used for text measurement and rendering.</summary>
+    UiProp<Font?> FontFV { get; set; }
+    /// <summary>Font size in points.</summary>
+    UiProp<int> FontSizeFV { get; set; }
+    /// <summary>Padding around the font area.</summary>
+    UiProp<Vector4> FontPaddingFV { get; set; }
     /// <summary>Text content of the node.</summary>
     [ComponentToString] UiText TextFV { get; set; }
+    /// <summary>Padding around the text area.</summary>
+    UiProp<Vector4> TextPaddingFV { get; set; }
 
-    Vector4 TextPaddingV { get; set; }
-    Func<Vector4>? TextPaddingF { get; set; }
-
+    /// <summary>Resolved size of this node.</summary>
     Vector2 SizeR { get; set; }
+    /// <summary>Resolved sum of children's sizes plus spacing.</summary>
     Vector2 SizeInnerSumR { get; set; }
+    /// <summary>Resolved padding of this node.</summary>
     Vector4 PaddingR { get; set; }
+    /// <summary>Resolved horizontal size from weighted distribution.</summary>
     float? HorizontalWeightSizeR { get; set; }
+    /// <summary>Resolved vertical size from weighted distribution.</summary>
     float? VerticalWeightSizeR { get; set; }
 }
