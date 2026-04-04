@@ -23,19 +23,13 @@ public class RootUiDraw(RootSprites sprites, RootUiScale scale, RootUiPosition p
         DrawTexture(o, n);
         DrawText(o, n);
 
-        if (n.HasOnDrawF)
-            n.OnDrawFDelegate?.Invoke(o);
-
-        if (n.HasOnFrameF)
-            n.OnFrameFDelegate?.Invoke();
+        n.OnDrawFV.Resolve()?.Invoke(o);
+        n.OnFrameFV.Resolve()?.Invoke();
     }
 
     private void DrawFlatSurface(Vector2 o, EntMut n)
     {
-        if (!n.HasColorV && !n.HasColorF)
-            return;
-
-        var color = Get(n.ColorV, n.ColorFDelegate);
+        var color = n.ColorFV.Resolve();
         if (n.SizeR == (0, 0) || color.W == 0)
             return;
 
@@ -44,14 +38,11 @@ public class RootUiDraw(RootSprites sprites, RootUiScale scale, RootUiPosition p
 
     private void DrawTexture(Vector2 o, EntMut n)
     {
-        if (!n.HasTextureV && !n.HasTextureF)
-            return;
-
-        var texture = Get(n.TextureV, n.TextureFDelegate);
+        var texture = n.TextureFV.Resolve();
         if (texture == null)
             return;
 
-        var tint = Get(n.TintV, n.TintFDelegate) ?? Vector4.One;
+        var tint = n.TintFV.Resolve() ?? Vector4.One;
         sprites.Batch.Draw(texture, o, n.SizeR, tint);
     }
 
@@ -68,15 +59,15 @@ public class RootUiDraw(RootSprites sprites, RootUiScale scale, RootUiPosition p
         if (fontSize <= 0)
             return;
 
-        var text = Get(n.TextV.AsSpan(), n.TextFDelegate);
+        var text = n.TextFV.Resolve();
         if (text.IsEmpty)
             return;
 
-        var textColor = Get(n.TextColorV, n.TextColorFDelegate);
+        var textColor = n.TextColorFV.Resolve();
         if (textColor.W == 0)
             return;
 
-        var alignment = Get(n.TextAlignmentV, n.TextAlignmentFDelegate) ?? Alignment.Center;
+        var alignment = n.TextAlignmentFV.Resolve() ?? Alignment.Center;
         var size = new Vector2(sprites.Batch.Measure(font.Size(fontSize), text), font.Size(fontSize).Metrics.Height) / scale.Scale;
         var offset = Vector2.Zero;
 

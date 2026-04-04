@@ -1,25 +1,22 @@
 namespace TrogloUI;
 
-[Components]
+[Components(SkipBuilder = true)]
 public interface IUiDrawComponents
 {
-    Vector4 ColorV { get; set; }
-    Func<Vector4>? ColorF { get; set; }
-
-    Texture? TextureV { get; set; }
-    Func<Texture?>? TextureF { get; set; }
-
-    Vector4? TintV { get; set; }
-    Func<Vector4?>? TintF { get; set; }
-
-    Alignment? TextAlignmentV { get; set; }
-    Func<Alignment?>? TextAlignmentF { get; set; }
-
-    Vector4 TextColorV { get; set; }
-    Func<Vector4>? TextColorF { get; set; }
-
-    Action<Vector2>? OnDrawF { get; set; }
-    Action? OnFrameF { get; set; }
+    /// <summary>Background color of the node.</summary>
+    UiProp<Vector4> ColorFV { get; set; }
+    /// <summary>Texture to draw on the node.</summary>
+    UiProp<Texture?> TextureFV { get; set; }
+    /// <summary>Tint applied to the texture.</summary>
+    UiProp<Vector4?> TintFV { get; set; }
+    /// <summary>Text alignment within the node.</summary>
+    UiProp<Alignment?> TextAlignmentFV { get; set; }
+    /// <summary>Color of the text.</summary>
+    UiProp<Vector4> TextColorFV { get; set; }
+    /// <summary>Callback invoked during draw with the node's screen offset.</summary>
+    UiCallback<Action<Vector2>?> OnDrawFV { get; set; }
+    /// <summary>Callback invoked every frame.</summary>
+    UiCallback<Action?> OnFrameFV { get; set; }
 
     Vector2 DrawOffsetR { get; set; }
 }

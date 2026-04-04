@@ -48,8 +48,8 @@ public interface IUiSizeComponents
     Vector4 FontPaddingV { get; set; }
     Func<Vector4>? FontPaddingF { get; set; }
 
-    [ComponentToString] string TextV { get; set; }
-    Func<ReadOnlySpan<char>>? TextF { get; set; }
+    /// <summary>Text content of the node.</summary>
+    [ComponentToString] UiText TextFV { get; set; }
 
     Vector4 TextPaddingV { get; set; }
     Func<Vector4>? TextPaddingF { get; set; }

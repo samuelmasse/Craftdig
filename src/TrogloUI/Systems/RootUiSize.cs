@@ -57,7 +57,7 @@ public class RootUiSize(RootSprites sprites, RootUiScale scale)
         if (fontSize <= 0)
             return;
 
-        var text = Get(n.TextV.AsSpan(), n.TextFDelegate);
+        var text = n.TextFV.Resolve();
         var sizeTextRelative = Get(n.SizeTextRelativeV, n.SizeTextRelativeFDelegate);
         var size = new Vector2(sprites.Batch.Measure(font.Size(fontSize), text) / scale.Scale, font.Size(fontSize).Metrics.Height / scale.Scale);
 

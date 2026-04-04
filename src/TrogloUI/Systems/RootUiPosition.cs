@@ -82,7 +82,7 @@ public class RootUiPosition(RootSprites sprites, RootUiScale scale)
         if (fontSize <= 0)
             return;
 
-        var text = Get(n.TextV.AsSpan(), n.TextFDelegate);
+        var text = n.TextFV.Resolve();
         if (text.IsEmpty)
             return;
 
