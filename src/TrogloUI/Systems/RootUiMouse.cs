@@ -21,6 +21,10 @@ public class RootUiMouse(RootMouse mouse, RootUiScale scale, RootUiFocus focus, 
     {
         position = mouse.Position / scale.Scale;
 
+        var scrolled = FindScrolled(null, o, n);
+        if (mouse.Wheel != default)
+            scrolled.OnScrollFDelegate?.Invoke(mouse.Wheel);
+
         var hovered = FindHovered(null, o, n);
 
         if (hovered != prevHovered)
@@ -45,6 +49,7 @@ public class RootUiMouse(RootMouse mouse, RootUiScale scale, RootUiFocus focus, 
             if (prevMainDown && pressedMain != default && pressedMain == hovered)
                 OnLeftClick(pressedMain);
 
+            pressedMain.IsPressedR = false;
             pressedMain = default;
             prevMainDown = false;
         }
@@ -65,6 +70,7 @@ public class RootUiMouse(RootMouse mouse, RootUiScale scale, RootUiFocus focus, 
             if (prevSecondaryDown && pressedSecondary != default && pressedSecondary == hovered)
                 OnRightClick(pressedSecondary);
 
+            pressedSecondary.IsSecondaryPressedR = false;
             pressedSecondary = default;
             prevSecondaryDown = false;
         }
@@ -84,6 +90,7 @@ public class RootUiMouse(RootMouse mouse, RootUiScale scale, RootUiFocus focus, 
         if (Get(e.IsFocusableV, e.IsFocusableFDelegate))
             focus.Focus(e);
 
+        e.IsPressedR = true;
         e.OnPressFDelegate?.Invoke();
     }
 
@@ -113,6 +120,7 @@ public class RootUiMouse(RootMouse mouse, RootUiScale scale, RootUiFocus focus, 
         if (!InputEnabled(e))
             return;
 
+        e.IsSecondaryPressedR = true;
         e.OnSecondaryPressFDelegate?.Invoke();
     }
 
@@ -143,6 +151,27 @@ public class RootUiMouse(RootMouse mouse, RootUiScale scale, RootUiFocus focus, 
         }
 
         return hovered;
+    }
+
+    private EntMut FindScrolled(Box2? clip, Vector2 o, EntMut n)
+    {
+        var nOffset = o + n.OffsetR;
+        var nSize = n.SizeR;
+        var box = clipping.IntersectClips(clip, new Box2(nOffset, nOffset + nSize));
+
+        EntMut scrolled = default;
+
+        if (box.ContainsInclusive(position) && Get(n.IsScrollableV, n.IsScrollableFDelegate))
+            scrolled = n;
+
+        foreach (var c in n.NodesR.Span)
+        {
+            var child = FindScrolled(box, nOffset, c);
+            if (child != default)
+                scrolled = child;
+        }
+
+        return scrolled;
     }
 
     private bool InputEnabled(EntMut n) => !Get(n.IsInputDisabledV, n.IsInputDisabledFDelegate);

@@ -12,6 +12,9 @@ public interface IUiPositionComponents
     Vector2 OffsetV { get; set; }
     Func<Vector2>? OffsetF { get; set; }
 
+    Vector2 InnerScrollOffsetV { get; set; }
+    Func<Vector2>? InnerScrollOffsetF { get; set; }
+
     Vector2 OffsetTextRelativeV { get; set; }
     Func<Vector2>? OffsetTextRelativeF { get; set; }
 

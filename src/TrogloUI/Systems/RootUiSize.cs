@@ -112,10 +112,10 @@ public class RootUiSize(RootSprites sprites, RootUiScale scale)
         sizeInnerSum.X += n.PaddingR.X + n.PaddingR.Z;
         sizeInnerSum.Y += n.PaddingR.Y + n.PaddingR.W;
 
-        n.SizeR += sizeInnerSumRelative * sizeInnerSum;
-
         var innerSpacing = Get(n.InnerSpacingV, n.InnerSpacingFDelegate);
-        n.SizeR += sizeInnerSumRelative * innerSpacing * Math.Max(0, (n.NodesR.Length - 1));
+        var innerSum = sizeInnerSum + new Vector2(innerSpacing) * Math.Max(0, (n.NodesR.Length - 1));
+        n.SizeR += sizeInnerSumRelative * innerSum;
+        n.SizeInnerSumR = innerSum;
     }
 
     private void SizeInnerSizing(Vector2 s, EntMut n)

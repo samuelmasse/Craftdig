@@ -20,6 +20,7 @@ public class AppStyle(RootText text, RootKeyboard keyboard, AppMenuTextures menu
     public float ItemWidthL => 512;
     public float BarHeight => 192;
     public float SlotSize => 72;
+    public float ScrollStep => 65;
 
     public Vector2 Horizontal => (1, 0);
     public Vector2 Vertical => (0, 1);

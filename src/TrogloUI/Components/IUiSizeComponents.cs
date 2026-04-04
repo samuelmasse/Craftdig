@@ -55,6 +55,7 @@ public interface IUiSizeComponents
     Func<Vector4>? TextPaddingF { get; set; }
 
     Vector2 SizeR { get; set; }
+    Vector2 SizeInnerSumR { get; set; }
     Vector4 PaddingR { get; set; }
     float? HorizontalWeightSizeR { get; set; }
     float? VerticalWeightSizeR { get; set; }

@@ -20,4 +20,6 @@ public interface IUiDrawComponents
 
     Action<Vector2>? OnDrawF { get; set; }
     Action? OnFrameF { get; set; }
+
+    Vector2 DrawOffsetR { get; set; }
 }

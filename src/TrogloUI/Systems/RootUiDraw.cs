@@ -17,6 +17,8 @@ public class RootUiDraw(RootSprites sprites, RootUiScale scale, RootUiPosition p
 
     private void DrawNode(Vector2 o, EntMut n)
     {
+        n.DrawOffsetR = o;
+
         DrawFlatSurface(o, n);
         DrawTexture(o, n);
         DrawText(o, n);

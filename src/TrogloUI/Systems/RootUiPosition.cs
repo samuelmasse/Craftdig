@@ -20,10 +20,11 @@ public class RootUiPosition(RootSprites sprites, RootUiScale scale)
 
         var innerLayout = Get(n.InnerLayoutV, n.InnerLayoutFDelegate);
         var innerSpacing = Get(n.InnerSpacingV, n.InnerSpacingFDelegate);
+        var innerScrollOffset = Get(n.InnerScrollOffsetV, n.InnerScrollOffsetFDelegate);
 
         if (innerLayout == InnerLayout.VerticalList)
         {
-            float y = 0;
+            float y = innerScrollOffset.Y;
 
             foreach (var c in n.NodesR.Span)
             {
@@ -38,7 +39,7 @@ public class RootUiPosition(RootSprites sprites, RootUiScale scale)
         }
         else if (innerLayout == InnerLayout.HorizontalList)
         {
-            float x = 0;
+            float x = innerScrollOffset.X;
 
             foreach (var c in n.NodesR.Span)
             {
