@@ -12,7 +12,8 @@ public class ModuleSingleplayerWorldSelectMenu(
     ModuleReadWorldMetaAction readWorldMetaAction,
     ModuleReadWorldStateAction readWorldStateAction,
     ModuleSingleplayerNewWorldMenu newWorldMenu,
-    ModuleSingleplayerDeleteWorldMenu deleteWorldMenu)
+    ModuleSingleplayerDeleteWorldMenu deleteWorldMenu,
+    ModuleSingleplayerEditWorldMenu editWorldMenu)
 
 {
     public void Create(EntMut root)
@@ -251,6 +252,12 @@ public class ModuleSingleplayerWorldSelectMenu(
                         .InnerSizingV(InnerSizing.HorizontalWeight);
                     {
                         Node(leftButtonsHorizontal)
+                            .OnPressF(() =>
+                            {
+                                var (dir, worldPaths, _, _) = worlds.First(x => x.Item3 == selected);
+                                NodeStack(root.StackRootV).StackRootV(root.StackRootV)
+                                    .Mutate(r => editWorldMenu.Create(r, selected!, worldPaths));
+                            })
                             .TextV("Edit")
                             .Mutate(s.Button)
                             .IsInputDisabledF(() => selected == null);
