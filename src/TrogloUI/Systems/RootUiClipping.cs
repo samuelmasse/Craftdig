@@ -11,6 +11,9 @@ public class RootUiClipping
         var min = Vector2.ComponentMax(existing.Min, next.Min);
         var max = Vector2.ComponentMin(existing.Max, next.Max);
 
+        if (max.X < min.X || max.Y < min.Y)
+            return default;
+
         return new(min, max);
     }
 }

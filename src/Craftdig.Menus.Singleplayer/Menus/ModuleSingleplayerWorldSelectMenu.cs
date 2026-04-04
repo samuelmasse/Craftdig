@@ -15,36 +15,74 @@ public class ModuleSingleplayerWorldSelectMenu(
 {
     public void Create(EntMut root)
     {
+        var worlds = new List<(string, WorldPaths, WorldMeta, WorldState)>();
+        Directory.CreateDirectory(paths.SavePath);
+        var dirs = Directory.GetDirectories(paths.SavePath);
+
+        foreach (var dir in dirs)
+        {
+            try
+            {
+                var paths = new WorldPaths(dir);
+                var meta = readWorldMetaAction.Read(paths);
+                var state = readWorldStateAction.Read(paths);
+                worlds.Add((dir, paths, meta, state));
+            }
+            catch { }
+        }
+
+        worlds.Sort((a, b) => b.Item4.LastPlayed.CompareTo(a.Item4.LastPlayed));
+        bool[] filtered = new bool[worlds.Count];
+
         WorldMeta? selected = null;
 
         Node(root, out var topBar)
             .SizeRelativeV(s.Horizontal)
             .SizeV((0, s.BarHeight))
             .ColorV(s.BoardColor);
+        {
+            Node(topBar, out var topBarHor)
+                .Mutate(s.VerticalList)
+                .InnerSpacingV(s.ItemSpacing)
+                .SizeInnerMaxRelativeV((1, 0))
+                .AlignmentV(Alignment.Center);
+            {
+                Node(topBarHor)
+                    .Mutate(s.Label)
+                    .AlignmentV(Alignment.Horizontal)
+                    .TextV("Select World");
+
+                var search = new StringBuilder(string.Empty);
+
+                Node(topBarHor)
+                    .Mutate(s.Textbox)
+                    .MaxLengthV(29)
+                    .SizeV((s.ItemWidthL * 1.4f, s.ItemHeight))
+                    .StringBuilderV(search)
+                    .IsInitialFocusV(true)
+                    .OnTextUpdated(() =>
+                    {
+                        if (search.Length == 0)
+                        {
+                            Array.Clear(filtered);
+                            return;
+                        }
+
+                        var term = search.ToString();
+                        for (int i = 0; i < worlds.Count; i++)
+                        {
+                            var (dir, paths, meta, state) = worlds[i];
+                            filtered[i] = !meta.Name.Contains(term, StringComparison.InvariantCultureIgnoreCase);
+                        }
+                    });
+            }
+        }
 
         Node(root, out var middle)
             .SizeRelativeV((1, 1))
             .SizeV((0, -s.BarHeight * 2))
             .OffsetV((0, s.BarHeight));
         {
-            var worlds = new List<(string, WorldPaths, WorldMeta, WorldState)>();
-            Directory.CreateDirectory(paths.SavePath);
-            var dirs = Directory.GetDirectories(paths.SavePath);
-
-            foreach (var dir in dirs)
-            {
-                try
-                {
-                    var paths = new WorldPaths(dir);
-                    var meta = readWorldMetaAction.Read(paths);
-                    var state = readWorldStateAction.Read(paths);
-                    worlds.Add((dir, paths, meta, state));
-                }
-                catch { }
-            }
-
-            worlds.Sort((a, b) => b.Item4.LastPlayed.CompareTo(a.Item4.LastPlayed));
-
             float scroll = 0;
 
             Node(middle, out var select)
@@ -52,16 +90,21 @@ public class ModuleSingleplayerWorldSelectMenu(
                 .InnerScrollOffsetF(() => (0, -scroll))
                 .SizeInnerMaxRelativeV((1, 0))
                 .AlignmentV(Alignment.Horizontal);
-            foreach (var (dir, paths, meta, state) in worlds)
+            for (int i = 0; i < worlds.Count; i++)
             {
+                var (dir, paths, meta, state) = worlds[i];
                 var itemHeight = s.ItemHeight * 1.5f;
+                int index = i;
 
                 Node(select, out var item)
                     .Mutate(s.SelectorItem)
                     .SizeRelativeV((0, 0))
                     .SizeV((s.ItemWidthL * 1.7f, itemHeight + s.ItemSpacingS * 2))
                     .OnFocusF(() => selected = meta)
-                    .OnDoubleClickF(() => singleplayerLoadWorldAction.Run(paths));
+                    .OnUnselectF(() => selected = null)
+                    .OnDoubleClickF(() => singleplayerLoadWorldAction.Run(paths))
+                    .FocusGroupV(select)
+                    .IsDisabledF(() => filtered[index]);
                 {
                     Node(item, out var itemContainer)
                         .SizeRelativeV((1, 1))

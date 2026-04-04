@@ -122,17 +122,31 @@ public class AppStyle(RootText text, RootKeyboard keyboard, AppMenuTextures menu
                 if ((dt / 500) % 2 == 0)
                     ent.CarretR = "_";
 
+                bool modified = false;
+
                 if (keyboard.IsKeyPressedRepeated(Keys.Backspace) && sb.Length > 0)
+                {
                     sb.Remove(sb.Length - 1, 1);
+                    modified = true;
+                }
 
                 if (keyboard.Text.Count > 0)
                 {
                     foreach (var rune in keyboard.Text)
+                    {
                         sb.Append(rune);
+                        modified = true;
+                    }
                 }
 
                 if (keyboard.IsKeyDown(Keys.LeftControl) && keyboard.IsKeyPressed(Keys.V))
+                {
                     sb.Append(keyboard.Clipboard);
+                    modified = true;
+                }
+
+                if (modified)
+                    ent.OnTextUpdatedDelegate?.Invoke();
             }
             else ent.WasFocusedR = false;
 
@@ -164,7 +178,7 @@ public class AppStyle(RootText text, RootKeyboard keyboard, AppMenuTextures menu
     public void SelectorItem(EntMut ent) => ent.Mutate()
         .SizeV((0, ItemHeight))
         .SizeRelativeV((1, 0))
-        .ColorF(() => ent.IsFocusedR ? (0, 0, 0, 1) : (0, 0, 0, 0))
+        .ColorF(() => ent.IsSelectedR ? (0, 0, 0, 1) : (0, 0, 0, 0))
         .OnUpdateF(() =>
         {
             if (ent.IsFocusedR && keyboard.IsKeyPressedRepeated(Keys.Enter))
@@ -175,32 +189,32 @@ public class AppStyle(RootText text, RootKeyboard keyboard, AppMenuTextures menu
         .Mutate((ent) =>
         {
             Node(ent)
+                .Mutate(Border)
                 .AlignmentV(Alignment.Top | Alignment.Left)
-                .ColorV((1, 1, 1, 1))
-                .IsDisabledF(() => !ent.IsFocusedR)
                 .SizeV((ItemSpacingXS, 0))
                 .SizeRelativeV((0, 1));
 
             Node(ent)
+                .Mutate(Border)
                 .AlignmentV(Alignment.Top | Alignment.Right)
-                .ColorV((1, 1, 1, 1))
-                .IsDisabledF(() => !ent.IsFocusedR)
                 .SizeV((ItemSpacingXS, 0))
                 .SizeRelativeV((0, 1));
 
             Node(ent)
+                .Mutate(Border)
                 .AlignmentV(Alignment.Top | Alignment.Left)
-                .ColorV((1, 1, 1, 1))
-                .IsDisabledF(() => !ent.IsFocusedR)
                 .SizeV((0, ItemSpacingXS))
                 .SizeRelativeV((1, 0));
 
             Node(ent)
+                .Mutate(Border)
                 .AlignmentV(Alignment.Bottom | Alignment.Left)
-                .ColorV((1, 1, 1, 1))
-                .IsDisabledF(() => !ent.IsFocusedR)
                 .SizeV((0, ItemSpacingXS))
                 .SizeRelativeV((1, 0));
+
+            void Border(EntMut x) => x.Mutate()
+                .ColorF(() => ent.IsFocusedR ? (1, 1, 1, 1) : (0.5f, 0.5f, 0.5f, 1f))
+                .IsDisabledF(() => !ent.IsSelectedR);
         });
 
 

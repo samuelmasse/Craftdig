@@ -18,7 +18,13 @@ public interface IUiFocusComponents
     EntMut DeferFocusV { get; set; }
     Func<EntMut>? DeferFocusF { get; set; }
 
+    EntMut FocusGroupV { get; set; }
+    Func<EntMut>? FocusGroupF { get; set; }
+
     Action? OnFocusF { get; set; }
+    Action? OnUnselectF { get; set; }
 
     bool IsFocusedR { get; set; }
+    bool IsSelectedR { get; set; }
+    EntMut SelectedR { get; set; }
 }

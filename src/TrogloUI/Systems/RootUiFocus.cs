@@ -18,6 +18,15 @@ public class RootUiFocus(RootKeyboard keyboard)
         ent.IsFocusedR = true;
         focused = ent;
 
+        var focusGroup = Get(ent.FocusGroupV, ent.FocusGroupFDelegate);
+        if (focusGroup != default)
+        {
+            RemoveSelect(focusGroup);
+            focusGroup.SelectedR = ent;
+        }
+        else RemoveSelect(ent);
+
+        ent.IsSelectedR = true;
         ent.OnFocusFDelegate?.Invoke();
     }
 
@@ -35,12 +44,25 @@ public class RootUiFocus(RootKeyboard keyboard)
         return false;
     }
 
+    private void RemoveSelect(EntMut ent)
+    {
+        if (ent.IsSelectedR)
+        {
+            ent.IsSelectedR = false;
+            ent.OnUnselectFDelegate?.Invoke();
+        }
+
+        foreach (var c in ent.NodesR.Span)
+            RemoveSelect(c);
+    }
+
     internal void Update(EntMut n)
     {
         (inits, newInits) = (newInits, inits);
         focusables.Clear();
         newInits.Clear();
         CollectFocusables(n);
+        UnselectUnselectables(n);
 
         int index = focusables.IndexOf(focused);
         if (index < 0)
@@ -59,10 +81,37 @@ public class RootUiFocus(RootKeyboard keyboard)
             Focus(target);
         }
 
+        var focusGroup = Get(focused.FocusGroupV, focused.FocusGroupFDelegate);
+
         if (focusables.Count > 0 && keyboard.IsKeyPressedRepeated(Keys.Tab))
         {
-            index = (index + 1) % focusables.Count;
-            Focus(focusables[index]);
+            int offset = 1;
+
+            while (offset < focusables.Count)
+            {
+                var focusable = focusables[(index + offset) % focusables.Count];
+                var nextFocuseGroup = Get(focusable.FocusGroupV, focusable.FocusGroupFDelegate);
+
+                if (nextFocuseGroup == default || nextFocuseGroup != focusGroup)
+                    break;
+
+                offset++;
+            }
+
+            if (offset < focusables.Count)
+            {
+                var focusable = focusables[(index + offset) % focusables.Count];
+                var nextFocuseGroup = Get(focusable.FocusGroupV, focusable.FocusGroupFDelegate);
+
+                if (nextFocuseGroup != default)
+                {
+                    var selected = FindSelected(nextFocuseGroup);
+                    if (selected != default)
+                        focusable = selected;
+                }
+
+                Focus(focusable);
+            }
         }
     }
 
@@ -81,5 +130,50 @@ public class RootUiFocus(RootKeyboard keyboard)
 
         foreach (var c in n.NodesR.Span)
             CollectFocusables(c);
+    }
+
+    private void UnselectUnselectables(EntMut n)
+    {
+        if (n.SelectedR != default)
+        {
+            if (!HasChild(n, n.SelectedR))
+            {
+                n.SelectedR.Mutate().IsSelectedR(false);
+                n.SelectedR.OnUnselectFDelegate?.Invoke();
+                n.SelectedR = default;
+            }
+        }
+
+        foreach (var c in n.NodesR.Span)
+            UnselectUnselectables(c);
+    }
+
+    private bool HasChild(EntMut n, EntMut child)
+    {
+        if (n == child)
+            return true;
+
+        foreach (var c in n.NodesR.Span)
+        {
+            if (HasChild(c, child))
+                return true;
+        }
+
+        return false;
+    }
+
+    private EntMut FindSelected(EntMut ent)
+    {
+        if (ent.IsSelectedR)
+            return ent;
+
+        foreach (var c in ent.NodesR.Span)
+        {
+            var selected = FindSelected(c);
+            if (selected != default)
+                return selected;
+        }
+
+        return default;
     }
 }

@@ -11,6 +11,7 @@ public interface IAppUiComponents
     Action<ItemSlot>? SetSlotValueF { get; set; }
     StringBuilder? StringBuilderV { get; set; }
     int MaxLengthV { get; set; }
+    Action OnTextUpdated { get; set; }
     EntMut SlotV { get; set; }
     bool SlotAddedV { get; set; }
     bool WasFocusedR { get; set; }
