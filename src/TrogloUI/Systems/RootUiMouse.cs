@@ -23,7 +23,7 @@ public class RootUiMouse(RootMouse mouse, RootUiScale scale, RootUiFocus focus, 
 
         var scrolled = FindScrolled(null, o, n);
         if (mouse.Wheel != default)
-            scrolled.OnScrollFDelegate?.Invoke(mouse.Wheel);
+            scrolled.OnScrollFV.Resolve()?.Invoke(mouse.Wheel);
 
         var hovered = FindHovered(null, o, n);
 
@@ -78,7 +78,7 @@ public class RootUiMouse(RootMouse mouse, RootUiScale scale, RootUiFocus focus, 
         prevHovered = hovered;
 
         mouse.Cursor = hovered != default
-            ? (Get(hovered.CursorV, hovered.CursorFDelegate) ?? MouseCursor.Default)
+            ? (hovered.CursorFV.Resolve() ?? MouseCursor.Default)
             : MouseCursor.Default;
     }
 
@@ -91,7 +91,7 @@ public class RootUiMouse(RootMouse mouse, RootUiScale scale, RootUiFocus focus, 
             focus.Focus(e, false);
 
         e.IsPressedR = true;
-        e.OnPressFDelegate?.Invoke();
+        e.OnPressFV.Resolve()?.Invoke();
     }
 
     private void OnLeftClick(EntMut e)
@@ -103,13 +103,13 @@ public class RootUiMouse(RootMouse mouse, RootUiScale scale, RootUiFocus focus, 
 
         if (lastClickTarget == e && now - lastClickTicks <= DoubleClickMs)
         {
-            e.OnDoubleClickFDelegate?.Invoke();
+            e.OnDoubleClickFV.Resolve()?.Invoke();
             lastClickTarget = default;
             lastClickTicks = 0;
         }
         else
         {
-            e.OnClickFDelegate?.Invoke();
+            e.OnClickFV.Resolve()?.Invoke();
             lastClickTarget = e;
             lastClickTicks = now;
         }
@@ -121,7 +121,7 @@ public class RootUiMouse(RootMouse mouse, RootUiScale scale, RootUiFocus focus, 
             return;
 
         e.IsSecondaryPressedR = true;
-        e.OnSecondaryPressFDelegate?.Invoke();
+        e.OnSecondaryPressFV.Resolve()?.Invoke();
     }
 
     private void OnRightClick(EntMut e)
@@ -129,7 +129,7 @@ public class RootUiMouse(RootMouse mouse, RootUiScale scale, RootUiFocus focus, 
         if (!InputEnabled(e))
             return;
 
-        e.OnSecondaryClickFDelegate?.Invoke();
+        e.OnSecondaryClickFV.Resolve()?.Invoke();
     }
 
     private EntMut FindHovered(Box2? clip, Vector2 o, EntMut n)
@@ -140,7 +140,7 @@ public class RootUiMouse(RootMouse mouse, RootUiScale scale, RootUiFocus focus, 
 
         EntMut hovered = default;
 
-        if (box.ContainsInclusive(position) && Get(n.IsSelectableV, n.IsSelectableFDelegate))
+        if (box.ContainsInclusive(position) && n.IsSelectableFV.Resolve())
             hovered = n;
 
         foreach (var c in n.NodesR.Span)
@@ -161,7 +161,7 @@ public class RootUiMouse(RootMouse mouse, RootUiScale scale, RootUiFocus focus, 
 
         EntMut scrolled = default;
 
-        if (box.ContainsInclusive(position) && Get(n.IsScrollableV, n.IsScrollableFDelegate))
+        if (box.ContainsInclusive(position) && n.IsScrollableFV.Resolve())
             scrolled = n;
 
         foreach (var c in n.NodesR.Span)

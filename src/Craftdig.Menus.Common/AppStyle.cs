@@ -165,7 +165,7 @@ public class AppStyle(RootText text, RootKeyboard keyboard, AppMenuTextures menu
         .OnUpdateF(() =>
         {
             if (ent.IsFocusedR && keyboard.IsKeyPressedRepeated(Keys.Enter))
-                ent.OnPressFDelegate?.Invoke();
+                ent.OnPressFV.Resolve()?.Invoke();
         })
         .ColorF(() =>
         {
@@ -182,7 +182,7 @@ public class AppStyle(RootText text, RootKeyboard keyboard, AppMenuTextures menu
         .OnUpdateF(() =>
         {
             if (ent.IsFocusedR && keyboard.IsKeyPressedRepeated(Keys.Enter))
-                ent.OnDoubleClickFDelegate?.Invoke();
+                ent.OnDoubleClickFV.Resolve()?.Invoke();
         })
         .IsSelectableV(true)
         .IsFocusableV(true)
@@ -378,7 +378,7 @@ public class AppStyle(RootText text, RootKeyboard keyboard, AppMenuTextures menu
                 ent.SlotAddedV = true;
             }
         })
-        .OnSecondaryPressF(ent.OnPressFDelegate)
+        .OnSecondaryPressF(ent.OnPressFV.Value)
         .OnClickF(() =>
         {
             if (!ent.SlotAddedV)

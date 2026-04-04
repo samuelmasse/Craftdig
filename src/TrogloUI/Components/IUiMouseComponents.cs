@@ -1,25 +1,31 @@
 namespace TrogloUI;
 
-[Components]
+[Components(SkipBuilder = true)]
 public interface IUiMouseComponents
 {
-    bool IsSelectableV { get; set; }
-    Func<bool>? IsSelectableF { get; set; }
+    /// <summary>Whether this node can be hovered by the mouse.</summary>
+    UiProp<bool> IsSelectableFV { get; set; }
+    /// <summary>Whether this node can receive scroll events.</summary>
+    UiProp<bool> IsScrollableFV { get; set; }
+    /// <summary>Mouse cursor to display when hovering this node.</summary>
+    UiProp<MouseCursor?> CursorFV { get; set; }
+    /// <summary>Callback invoked on left click.</summary>
+    UiCallback<Action?> OnClickFV { get; set; }
+    /// <summary>Callback invoked on double left click.</summary>
+    UiCallback<Action?> OnDoubleClickFV { get; set; }
+    /// <summary>Callback invoked on left mouse press.</summary>
+    UiCallback<Action?> OnPressFV { get; set; }
+    /// <summary>Callback invoked on right click.</summary>
+    UiCallback<Action?> OnSecondaryClickFV { get; set; }
+    /// <summary>Callback invoked on right mouse press.</summary>
+    UiCallback<Action?> OnSecondaryPressFV { get; set; }
+    /// <summary>Callback invoked on scroll with the scroll delta.</summary>
+    UiCallback<Action<Vector2>?> OnScrollFV { get; set; }
 
-    bool IsScrollableV { get; set; }
-    Func<bool>? IsScrollableF { get; set; }
-
-    MouseCursor? CursorV { get; set; }
-    Func<MouseCursor?>? CursorF { get; set; }
-
-    Action? OnClickF { get; set; }
-    Action? OnDoubleClickF { get; set; }
-    Action? OnPressF { get; set; }
-    Action? OnSecondaryClickF { get; set; }
-    Action? OnSecondaryPressF { get; set; }
-    Action<Vector2>? OnScrollF { get; set; }
-
+    /// <summary>Whether this node is currently hovered.</summary>
     bool IsHoveredR { get; set; }
+    /// <summary>Whether this node is currently pressed with the left mouse button.</summary>
     bool IsPressedR { get; set; }
+    /// <summary>Whether this node is currently pressed with the right mouse button.</summary>
     bool IsSecondaryPressedR { get; set; }
 }
