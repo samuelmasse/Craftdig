@@ -286,6 +286,11 @@ public class ModuleSingleplayerWorldSelectMenu(
                         .InnerSizingV(InnerSizing.HorizontalWeight);
                     {
                         Node(rightButtonsHorizontal)
+                            .OnPressF(() =>
+                            {
+                                NodeStack(root.StackRootV).StackRootV(root.StackRootV)
+                                    .Mutate(r => newWorldMenu.Create(r, selected));
+                            })
                             .TextV("Re-Create")
                             .Mutate(s.Button)
                             .IsInputDisabledF(() => selected == null);

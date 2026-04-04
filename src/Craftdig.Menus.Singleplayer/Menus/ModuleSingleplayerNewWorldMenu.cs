@@ -8,16 +8,18 @@ public class ModuleSingleplayerNewWorldMenu(
     ModuleSingleplayerCreateWorldAction singleplayerCreateWorldAction,
     ModuleSingleplayerLoadWorldAction singleplayerLoadWorldAction)
 {
-    public void Create(EntMut root)
+    public void Create(EntMut root) => Create(root, null);
+
+    public void Create(EntMut root, WorldMeta? template)
     {
         var gameModes = ents.Set.Where(x => x.IsGameMode).OrderBy(x => x.Order).ToList();
         var difficulties = ents.Set.Where(x => x.IsDifficulty).OrderBy(x => x.Order).ToList();
 
         string defaultName = "New World";
-        var name = new StringBuilder(defaultName);
-        var seed = new StringBuilder(string.Empty);
-        int gameModeIndex = 0;
-        int difficultyIndex = 0;
+        var name = new StringBuilder(template?.Name ?? defaultName);
+        var seed = new StringBuilder(template != null ? template.Seed.ToString() : string.Empty);
+        int gameModeIndex = template != null ? gameModes.IndexOf(template.GameMode) : 0;
+        int difficultyIndex = template != null ? difficulties.IndexOf(template.Difficulty) : 0;
 
         Node(root, out var form)
             .Mutate(s.VerticalList)
