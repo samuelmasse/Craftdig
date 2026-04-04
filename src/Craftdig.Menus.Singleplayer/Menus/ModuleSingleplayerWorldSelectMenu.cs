@@ -240,7 +240,8 @@ public class ModuleSingleplayerWorldSelectMenu(
                     Node(leftButtonsVertical)
                         .TextV("Play Selected World")
                         .Mutate(s.Button)
-                        .IsInputDisabledF(() => selected == null);
+                        .IsInputDisabledF(() => selected == null)
+                        .OnPressF(() => singleplayerLoadWorldAction.Run(worlds.First(x => x.Item3 == selected).Item2));
 
                     Node(leftButtonsVertical, out var leftButtonsHorizontal)
                         .SizeRelativeV(s.Horizontal)
