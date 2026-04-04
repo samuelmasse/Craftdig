@@ -11,16 +11,16 @@ public class RootUiPosition(RootSprites sprites, RootUiScale scale)
             var ce = c;
             Position(n.SizeR, c);
 
-            var alignment = GetAlignment(c);
+            var alignment = c.AlignmentFV.Resolve();
             if ((alignment & (Alignment.Right | Alignment.Horizontal)) == 0)
                 ce.OffsetR += (n.PaddingR.X, 0);
             if ((alignment & (Alignment.Bottom | Alignment.Vertical)) == 0)
                 ce.OffsetR += (0, n.PaddingR.Y);
         }
 
-        var innerLayout = Get(n.InnerLayoutV, n.InnerLayoutFDelegate);
+        var innerLayout = n.InnerLayoutFV.Resolve();
         var innerSpacing = Get(n.InnerSpacingV, n.InnerSpacingFDelegate);
-        var innerScrollOffset = Get(n.InnerScrollOffsetV, n.InnerScrollOffsetFDelegate);
+        var innerScrollOffset = n.InnerScrollOffsetFV.Resolve();
 
         if (innerLayout == InnerLayout.VerticalList)
         {
@@ -57,7 +57,7 @@ public class RootUiPosition(RootSprites sprites, RootUiScale scale)
     private void PositionNode(Vector2 s, EntMut n)
     {
         n.OffsetR = default;
-        n.OffsetR += Get(n.OffsetV, n.OffsetFDelegate);
+        n.OffsetR += n.OffsetFV.Resolve();
         PositionTextRelative(n);
         PositionAlignement(s, n);
         PositionMultiplier(n);
@@ -65,7 +65,7 @@ public class RootUiPosition(RootSprites sprites, RootUiScale scale)
 
     private void PositionAlignement(Vector2 s, EntMut n)
     {
-        var alignment = GetAlignment(n);
+        var alignment = n.AlignmentFV.Resolve();
         n.OffsetR = Align(n.OffsetR, n.SizeR, s, alignment);
     }
 
@@ -87,27 +87,18 @@ public class RootUiPosition(RootSprites sprites, RootUiScale scale)
             return;
 
         var size = new Vector2(sprites.Batch.Measure(font.Size(fontSize), text), font.Size(fontSize).Metrics.Height) / scale.Scale;
-        n.OffsetR += Get(n.OffsetTextRelativeV, n.OffsetTextRelativeFDelegate) * size;
+        n.OffsetR += n.OffsetTextRelativeFV.Resolve() * size;
     }
 
     private void PositionMultiplier(EntMut n)
     {
-        if (!n.HasOffsetMultiplierV && !n.HasOffsetMultiplierF)
+        var multiplier = n.OffsetMultiplierFV.Resolve();
+        if (multiplier == 0)
             return;
-
-        var multiplier = Get(n.OffsetMultiplierV, n.OffsetMultiplierFDelegate);
 
         n.OffsetR = (
             (float)Math.Round(n.OffsetR.X / multiplier) * multiplier,
             (float)Math.Round(n.OffsetR.Y / multiplier) * multiplier);
-    }
-
-    private Alignment GetAlignment(EntMut n)
-    {
-        if (!n.HasAlignmentV && !n.HasAlignmentF)
-            return Alignment.None;
-
-        return Get(n.AlignmentV, n.AlignmentFDelegate);
     }
 
     private bool IsFloating(EntMut n)

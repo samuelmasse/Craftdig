@@ -1,25 +1,21 @@
 namespace TrogloUI;
 
-[Components]
+[Components(SkipBuilder = true)]
 public interface IUiPositionComponents
 {
-    InnerLayout InnerLayoutV { get; set; }
-    Func<InnerLayout>? InnerLayoutF { get; set; }
+    /// <summary>Layout direction for child nodes.</summary>
+    UiProp<InnerLayout> InnerLayoutFV { get; set; }
+    /// <summary>Alignment of this node within its parent.</summary>
+    UiProp<Alignment> AlignmentFV { get; set; }
+    /// <summary>Position offset of this node.</summary>
+    UiProp<Vector2> OffsetFV { get; set; }
+    /// <summary>Scroll offset applied to child nodes.</summary>
+    UiProp<Vector2> InnerScrollOffsetFV { get; set; }
+    /// <summary>Position offset relative to text size.</summary>
+    UiProp<Vector2> OffsetTextRelativeFV { get; set; }
+    /// <summary>Snaps the resolved offset to the nearest multiple of this value.</summary>
+    UiProp<float> OffsetMultiplierFV { get; set; }
 
-    Alignment AlignmentV { get; set; }
-    Func<Alignment>? AlignmentF { get; set; }
-
-    Vector2 OffsetV { get; set; }
-    Func<Vector2>? OffsetF { get; set; }
-
-    Vector2 InnerScrollOffsetV { get; set; }
-    Func<Vector2>? InnerScrollOffsetF { get; set; }
-
-    Vector2 OffsetTextRelativeV { get; set; }
-    Func<Vector2>? OffsetTextRelativeF { get; set; }
-
-    float OffsetMultiplierV { get; set; }
-    Func<float>? OffsetMultiplierF { get; set; }
-
+    /// <summary>Resolved position offset of this node.</summary>
     Vector2 OffsetR { get; set; }
 }
