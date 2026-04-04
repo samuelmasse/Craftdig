@@ -21,21 +21,21 @@ public class PlayerCommonState(
     PlayerCreativeInventoryMenu creativeInventoryMenu,
     PlayerSurvivalInventoryMenu survivalInventoryMenu) : State
 {
-    private readonly Dictionary<Keys, Action<EntObj>> keyMenus = new()
+    private readonly Dictionary<Keys, Action<EntMut>> keyMenus = new()
     {
         [Keys.Tab] = creativeInventoryMenu.Create,
         [Keys.E] = survivalInventoryMenu.Create,
     };
-    private readonly EntObj menus = Node(ui).OrderValueV(1);
-    private readonly EntObj overlay = Node(ui).Mutate(playerOverlayMenu.Create);
-    private readonly EntObj hand = Node(ui).OrderValueV(1.5f).Mutate(playerHandMenu.Create);
-    private readonly EntObj dark = Node(ui).ColorV((0.3f, 0.3f, 0.3f, 0.3f)).IsDisabledV(true);
+    private readonly EntMut menus = Node(ui).OrderValueV(1);
+    private readonly EntMut overlay = Node(ui).Mutate(playerOverlayMenu.Create);
+    private readonly EntMut hand = Node(ui).OrderValueV(1.5f).Mutate(playerHandMenu.Create);
+    private readonly EntMut dark = Node(ui).ColorV((0.3f, 0.3f, 0.3f, 0.3f)).IsDisabledV(true);
 
-    private Action<EntObj>? currentKeyMenu;
+    private Action<EntMut>? currentKeyMenu;
     private bool paused;
     private bool inv;
 
-    public EntObj Menus => menus;
+    public EntMut Menus => menus;
     public bool Paused => paused;
     public bool Inv => inv;
 
@@ -106,7 +106,7 @@ public class PlayerCommonState(
         }
 
         if (menus.NodeStack.Count > 0 && dark.IsDisabledV)
-            dark.IsDisabledV = false;
+            dark.Mutate().IsDisabledV(false);
 
         if (menus.NodeStack.Count == 0 && !dark.IsDisabledV)
         {
@@ -114,7 +114,7 @@ public class PlayerCommonState(
             inv = false;
             currentKeyMenu = null;
             ent.Offhand = default;
-            dark.IsDisabledV = true;
+            dark.Mutate().IsDisabledV(true);
         }
 
         mouse.Track = !paused && !inv;

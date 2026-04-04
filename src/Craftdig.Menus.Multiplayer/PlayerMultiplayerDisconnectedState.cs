@@ -7,7 +7,7 @@ public class PlayerMultiplayerDisconnectedState(
     ModuleMainBackgroundMenu mainBackgroundMenu,
     PlayerMultiplayerDisconnectedMenu multiplayerDisconnectedMenu) : State
 {
-    private readonly EntObj menus = Node(ui);
+    private readonly EntMut menus = Node(ui);
 
     public override void Load()
     {

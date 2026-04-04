@@ -3,13 +3,13 @@ namespace TrogloUI;
 [Root]
 public class RootUiTraverse
 {
-    private EntObj[] traverseBuffer = new EntObj[16];
+    private EntMut[] traverseBuffer = new EntMut[16];
     private int traverseBufferIndex;
 
-    private EntObj[] orderBufferKeys = new EntObj[16];
+    private EntMut[] orderBufferKeys = new EntMut[16];
     private float[] orderBufferVals = new float[16];
 
-    internal void Traverse(EntObj n, int depth)
+    internal void Traverse(EntMut n, int depth)
     {
         if (depth == 0)
             traverseBufferIndex = 0;
@@ -26,7 +26,7 @@ public class RootUiTraverse
             Traverse(c, depth + 1);
     }
 
-    private void OrderNodes(EntObj n)
+    private void OrderNodes(EntMut n)
     {
         var ordered = Get(n.IsOrderedV, n.IsOrderedFDelegate);
         if (!ordered)
@@ -54,7 +54,7 @@ public class RootUiTraverse
             nodes[i] = keys[i];
     }
 
-    private void RemoveNodes(EntObj n)
+    private void RemoveNodes(EntMut n)
     {
         for (int i = n.Nodes.Count - 1; i >= 0; i--)
         {
@@ -66,10 +66,10 @@ public class RootUiTraverse
         }
     }
 
-    private void StackNodes(EntObj n)
+    private void StackNodes(EntMut n)
     {
         var stackedNode = n.StackedNodeR;
-        if (stackedNode != null)
+        if (stackedNode != default)
             n.Nodes.Remove(stackedNode);
 
         if (n.HasNodeStack && n.NodeStack.TryPeek(out var topStack))
@@ -79,7 +79,7 @@ public class RootUiTraverse
         }
     }
 
-    private void CompileNodes(EntObj n)
+    private void CompileNodes(EntMut n)
     {
         int start = traverseBufferIndex;
         int count = 0;

@@ -12,7 +12,7 @@ public class ModuleMainMenu(
     ModuleMultiplayerLoginMenu loginMenu,
     ModuleMultiplayerCredentials multiplayerCredentials)
 {
-    public void Create(EntObj root)
+    public void Create(EntMut root)
     {
         Node(root, out var list)
             .Mutate(s.VerticalList)

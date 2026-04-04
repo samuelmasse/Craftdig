@@ -15,7 +15,7 @@ public class PlayerDebugMenu(
     PlayerEnt ent,
     PlayerCamera camera)
 {
-    public void Create(EntObj root)
+    public void Create(EntMut root)
     {
         var gpu = gl.GetString(StringName.Renderer);
 

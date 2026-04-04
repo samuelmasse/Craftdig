@@ -3,18 +3,19 @@ namespace TrogloUI;
 [Root]
 public class RootUiPosition(RootSprites sprites, RootUiScale scale)
 {
-    internal void Position(Vector2 s, EntObj n)
+    internal void Position(Vector2 s, EntMut n)
     {
         PositionNode(s, n);
         foreach (var c in n.NodesR.Span)
         {
+            var ce = c;
             Position(n.SizeR, c);
 
             var alignment = GetAlignment(c);
             if ((alignment & (Alignment.Right | Alignment.Horizontal)) == 0)
-                c.OffsetR += (n.PaddingR.X, 0);
+                ce.OffsetR += (n.PaddingR.X, 0);
             if ((alignment & (Alignment.Bottom | Alignment.Vertical)) == 0)
-                c.OffsetR += (0, n.PaddingR.Y);
+                ce.OffsetR += (0, n.PaddingR.Y);
         }
 
         var innerLayout = Get(n.InnerLayoutV, n.InnerLayoutFDelegate);
@@ -26,10 +27,11 @@ public class RootUiPosition(RootSprites sprites, RootUiScale scale)
 
             foreach (var c in n.NodesR.Span)
             {
+                var ce = c;
                 if (IsFloating(c))
                     continue;
 
-                c.OffsetR += (0, y);
+                ce.OffsetR += (0, y);
                 y += c.SizeR.Y;
                 y += innerSpacing;
             }
@@ -40,17 +42,18 @@ public class RootUiPosition(RootSprites sprites, RootUiScale scale)
 
             foreach (var c in n.NodesR.Span)
             {
+                var ce = c;
                 if (IsFloating(c))
                     continue;
 
-                c.OffsetR += (x, 0);
+                ce.OffsetR += (x, 0);
                 x += c.SizeR.X;
                 x += innerSpacing;
             }
         }
     }
 
-    private void PositionNode(Vector2 s, EntObj n)
+    private void PositionNode(Vector2 s, EntMut n)
     {
         n.OffsetR = default;
         n.OffsetR += Get(n.OffsetV, n.OffsetFDelegate);
@@ -59,13 +62,13 @@ public class RootUiPosition(RootSprites sprites, RootUiScale scale)
         PositionMultiplier(n);
     }
 
-    private void PositionAlignement(Vector2 s, EntObj n)
+    private void PositionAlignement(Vector2 s, EntMut n)
     {
         var alignment = GetAlignment(n);
         n.OffsetR = Align(n.OffsetR, n.SizeR, s, alignment);
     }
 
-    private void PositionTextRelative(EntObj n)
+    private void PositionTextRelative(EntMut n)
     {
         if (!n.HasFontV && !n.HasFontF)
             return;
@@ -86,7 +89,7 @@ public class RootUiPosition(RootSprites sprites, RootUiScale scale)
         n.OffsetR += Get(n.OffsetTextRelativeV, n.OffsetTextRelativeFDelegate) * size;
     }
 
-    private void PositionMultiplier(EntObj n)
+    private void PositionMultiplier(EntMut n)
     {
         if (!n.HasOffsetMultiplierV && !n.HasOffsetMultiplierF)
             return;
@@ -98,7 +101,7 @@ public class RootUiPosition(RootSprites sprites, RootUiScale scale)
             (float)Math.Round(n.OffsetR.Y / multiplier) * multiplier);
     }
 
-    private Alignment GetAlignment(EntObj n)
+    private Alignment GetAlignment(EntMut n)
     {
         if (!n.HasAlignmentV && !n.HasAlignmentF)
             return Alignment.None;
@@ -106,7 +109,7 @@ public class RootUiPosition(RootSprites sprites, RootUiScale scale)
         return Get(n.AlignmentV, n.AlignmentFDelegate);
     }
 
-    private bool IsFloating(EntObj n)
+    private bool IsFloating(EntMut n)
     {
         if (!n.HasIsFloatingV && !n.HasIsFloatingF)
             return false;

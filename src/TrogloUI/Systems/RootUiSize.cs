@@ -3,7 +3,7 @@ namespace TrogloUI;
 [Root]
 public class RootUiSize(RootSprites sprites, RootUiScale scale)
 {
-    internal void Size(Vector2 s, EntObj n)
+    internal void Size(Vector2 s, EntMut n)
     {
         SizeNode(s, n);
         SizeInnerSizing(s, n);
@@ -28,7 +28,7 @@ public class RootUiSize(RootSprites sprites, RootUiScale scale)
         }
     }
 
-    private void SizeNode(Vector2 s, EntObj n)
+    private void SizeNode(Vector2 s, EntMut n)
     {
         n.SizeR = default;
         n.SizeR += (Get(n.SizeRelativeV, n.SizeRelativeFDelegate) ?? (1, 1)) * s;
@@ -44,7 +44,7 @@ public class RootUiSize(RootSprites sprites, RootUiScale scale)
             n.SizeR = n.SizeR with { Y = ver.GetValueOrDefault() };
     }
 
-    private void SizeTextRelative(Vector2 s, EntObj n)
+    private void SizeTextRelative(Vector2 s, EntMut n)
     {
         if (!n.HasFontV && !n.HasFontF)
             return;
@@ -70,7 +70,7 @@ public class RootUiSize(RootSprites sprites, RootUiScale scale)
         n.SizeR += sizeTextRelative * size;
     }
 
-    private void SizeInnerMaxRelative(Vector2 s, EntObj n)
+    private void SizeInnerMaxRelative(Vector2 s, EntMut n)
     {
         if (!n.HasSizeInnerMaxRelativeV && !n.HasSizeInnerMaxRelativeF)
             return;
@@ -93,7 +93,7 @@ public class RootUiSize(RootSprites sprites, RootUiScale scale)
         n.SizeR += sizeInnerMaxRelative * sizeInnerMax;
     }
 
-    private void SizeInnerSumRelative(Vector2 s, EntObj n)
+    private void SizeInnerSumRelative(Vector2 s, EntMut n)
     {
         if (!n.HasSizeInnerSumRelativeV && !n.HasSizeInnerSumRelativeF)
             return;
@@ -118,7 +118,7 @@ public class RootUiSize(RootSprites sprites, RootUiScale scale)
         n.SizeR += sizeInnerSumRelative * innerSpacing * Math.Max(0, (n.NodesR.Length - 1));
     }
 
-    private void SizeInnerSizing(Vector2 s, EntObj n)
+    private void SizeInnerSizing(Vector2 s, EntMut n)
     {
         if (!n.HasInnerSizingV && !n.HasInnerSizingF)
             return;
@@ -154,7 +154,7 @@ public class RootUiSize(RootSprites sprites, RootUiScale scale)
                 if (IsSelfWeight(c))
                     continue;
 
-                c.HorizontalWeightSizeR = (Get(n.SizeWeightV, n.SizeWeightFDelegate) ?? 1 / totalWeight) * useableSize.X;
+                c.Mutate().HorizontalWeightSizeR((Get(n.SizeWeightV, n.SizeWeightFDelegate) ?? 1 / totalWeight) * useableSize.X);
             }
         }
         else if (innerSizing == InnerSizing.VerticalWeight)
@@ -170,12 +170,12 @@ public class RootUiSize(RootSprites sprites, RootUiScale scale)
                 if (IsSelfWeight(c))
                     continue;
 
-                c.VerticalWeightSizeR = (Get(n.SizeWeightV, n.SizeWeightFDelegate) ?? 1 / totalWeight) * useableSize.Y;
+                c.Mutate().VerticalWeightSizeR((Get(n.SizeWeightV, n.SizeWeightFDelegate) ?? 1 / totalWeight) * useableSize.Y);
             }
         }
     }
 
-    private bool IsFloating(EntObj n)
+    private bool IsFloating(EntMut n)
     {
         if (!n.HasIsFloatingV && !n.HasIsFloatingF)
             return false;
@@ -183,7 +183,7 @@ public class RootUiSize(RootSprites sprites, RootUiScale scale)
         return Get(n.IsFloatingV, n.IsFloatingFDelegate);
     }
 
-    private bool IsSelfWeight(EntObj n)
+    private bool IsSelfWeight(EntMut n)
     {
         if (!n.HasSizeWeightTypeV && !n.HasSizeWeightTypeF)
             return false;

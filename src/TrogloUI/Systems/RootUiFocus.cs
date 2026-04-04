@@ -3,19 +3,19 @@ namespace TrogloUI;
 [Root]
 public class RootUiFocus(RootKeyboard keyboard)
 {
-    private readonly List<EntObj?> focusables = [];
-    private HashSet<EntObj> inits = [];
-    private HashSet<EntObj> newInits = [];
-    private EntObj? focused;
+    private readonly List<EntMut> focusables = [];
+    private HashSet<EntMut> inits = [];
+    private HashSet<EntMut> newInits = [];
+    private EntMut focused;
 
-    public void Focus(EntObj? ent)
+    public void Focus(EntMut ent)
     {
-        focused?.IsFocusedR = false;
-        ent?.IsFocusedR = true;
+        focused.IsFocusedR = false;
+        ent.IsFocusedR = true;
         focused = ent;
     }
 
-    internal void Update(EntObj n)
+    internal void Update(EntMut n)
     {
         (inits, newInits) = (newInits, inits);
         focusables.Clear();
@@ -25,7 +25,7 @@ public class RootUiFocus(RootKeyboard keyboard)
         int index = focusables.IndexOf(focused);
         if (index < 0)
         {
-            EntObj? target = null;
+            EntMut target = default;
 
             foreach (var ent in newInits)
             {
@@ -46,7 +46,7 @@ public class RootUiFocus(RootKeyboard keyboard)
         }
     }
 
-    private void CollectFocusables(EntObj n)
+    private void CollectFocusables(EntMut n)
     {
         var isFocusable = Get(n.IsFocusableV, n.IsFocusableFDelegate);
         var isInputDisabled = Get(n.IsInputDisabledV, n.IsInputDisabledFDelegate);

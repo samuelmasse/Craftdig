@@ -9,7 +9,7 @@ public class ModuleMenuState(
     ModuleMainBackgroundMenu mainBackgroundMenu,
     ModuleMainMenu mainMenu) : State
 {
-    private readonly EntObj menus = Node(ui);
+    private readonly EntMut menus = Node(ui);
     private readonly Stopwatch watch = new();
 
     public override void Load()

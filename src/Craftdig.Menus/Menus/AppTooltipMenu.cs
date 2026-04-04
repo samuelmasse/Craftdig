@@ -3,7 +3,7 @@ namespace Craftdig.Menus;
 [App]
 public class AppTooltipMenu(RootUiMouse uiMouse, AppStyle s)
 {
-    public void Create(EntObj root)
+    public void Create(EntMut root)
     {
         Node(root, out var text)
             .Mutate(s.Label)

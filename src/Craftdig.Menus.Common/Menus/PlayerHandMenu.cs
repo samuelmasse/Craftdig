@@ -3,7 +3,7 @@ namespace Craftdig.Menus.Common;
 [Player]
 public class PlayerHandMenu(RootUiMouse mouse, AppStyle s, PlayerEnt player)
 {
-    public void Create(EntObj root)
+    public void Create(EntMut root)
     {
         Node(root)
             .Mutate(s.Slot)

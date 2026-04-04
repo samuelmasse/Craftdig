@@ -8,7 +8,7 @@ public class ModuleSingleplayerNewWorldMenu(
     ModuleSingleplayerCreateWorldAction singleplayerCreateWorldAction,
     ModuleSingleplayerLoadWorldAction singleplayerLoadWorldAction)
 {
-    public void Create(EntObj root)
+    public void Create(EntMut root)
     {
         var gameModes = ents.Set.Where(x => x.IsGameMode).OrderBy(x => x.Order).ToList();
         var difficulties = ents.Set.Where(x => x.IsDifficulty).OrderBy(x => x.Order).ToList();

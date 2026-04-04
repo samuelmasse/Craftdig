@@ -36,20 +36,20 @@ public class AppStyle(RootText text, RootKeyboard keyboard, AppMenuTextures menu
 
     public Font Font => monocraft.Font;
 
-    public void Text(EntObj ent) => ent.Mutate()
+    public void Text(EntMut ent) => ent.Mutate()
         .Tag(nameof(Text))
         .FontV(Font)
         .FontSizeV(FontSize)
         .FontPaddingV((ItemSpacingXS, 0, ItemSpacingXS, 0))
         .TextColorV(TextColor);
 
-    public void Label(EntObj ent) => ent.Mutate()
+    public void Label(EntMut ent) => ent.Mutate()
         .Mutate(Text)
         .Tag(nameof(Label))
         .SizeTextRelativeV((1, 1))
         .SizeRelativeV((0, 0));
 
-    public void InputItem(EntObj ent) => ent.Mutate()
+    public void InputItem(EntMut ent) => ent.Mutate()
         .SizeV((0, ItemHeight))
         .SizeRelativeV((1, 0))
         .IsSelectableV(true)
@@ -81,7 +81,7 @@ public class AppStyle(RootText text, RootKeyboard keyboard, AppMenuTextures menu
                 .SizeRelativeV((1, 0));
         });
 
-    public Vector4 InputItemBorderColor(EntObj ent)
+    public Vector4 InputItemBorderColor(EntMut ent)
     {
         if (Get(ent.IsInputDisabledV, ent.IsInputDisabledFDelegate))
             return (0.2f, 0.2f, 0.2f, 1f);
@@ -92,7 +92,7 @@ public class AppStyle(RootText text, RootKeyboard keyboard, AppMenuTextures menu
         return (0, 0, 0, 1);
     }
 
-    public void Textbox(EntObj ent) => ent.Mutate()
+    public void Textbox(EntMut ent) => ent.Mutate()
         .Mutate(InputItem)
         .Mutate(Text)
         .Tag(nameof(Textbox))
@@ -142,7 +142,7 @@ public class AppStyle(RootText text, RootKeyboard keyboard, AppMenuTextures menu
             }
         });
 
-    public void Button(EntObj ent) => ent.Mutate()
+    public void Button(EntMut ent) => ent.Mutate()
         .Mutate(InputItem)
         .Mutate(Text)
         .Mutate(PointingCursor)
@@ -160,7 +160,7 @@ public class AppStyle(RootText text, RootKeyboard keyboard, AppMenuTextures menu
             return ButtonColor;
         });
 
-    public void SelectorItem(EntObj ent) => ent.Mutate()
+    public void SelectorItem(EntMut ent) => ent.Mutate()
         .SizeV((0, ItemHeight))
         .SizeRelativeV((1, 0))
         .ColorF(() => ent.IsFocusedR ? (0, 0, 0, 1) : (0, 0, 0, 0))
@@ -203,22 +203,22 @@ public class AppStyle(RootText text, RootKeyboard keyboard, AppMenuTextures menu
         });
 
 
-    public void PointingCursor(EntObj ent) => ent.Mutate()
+    public void PointingCursor(EntMut ent) => ent.Mutate()
         .CursorF(() => Get(ent.IsInputDisabledV, ent.IsInputDisabledFDelegate) ? MouseCursor.Default : MouseCursor.PointingHand);
 
-    public void VerticalList(EntObj ent) => ent.Mutate()
+    public void VerticalList(EntMut ent) => ent.Mutate()
         .Tag(nameof(VerticalList))
         .InnerLayoutV(InnerLayout.VerticalList)
         .SizeInnerSumRelativeV(Vertical)
         .SizeRelativeV((0, 0));
 
-    public void HorizontalList(EntObj ent) => ent.Mutate()
+    public void HorizontalList(EntMut ent) => ent.Mutate()
         .Tag(nameof(HorizontalList))
         .InnerLayoutV(InnerLayout.HorizontalList)
         .SizeInnerSumRelativeV(Horizontal)
         .SizeRelativeV((0, 0));
 
-    public void Slot(EntObj ent) => ent.Mutate()
+    public void Slot(EntMut ent) => ent.Mutate()
         .Tag(nameof(Slot))
         .SizeV((SlotSize, SlotSize))
         .SizeRelativeV((0, 0))
@@ -252,11 +252,11 @@ public class AppStyle(RootText text, RootKeyboard keyboard, AppMenuTextures menu
                 });
         });
 
-    public void SlotTooltip(EntObj ent) => ent.Mutate()
+    public void SlotTooltip(EntMut ent) => ent.Mutate()
         .TooltipF(() => ent.SlotV.PlayerV.Offhand == default ?
             ent.SlotV.GetSlotValueFDelegate?.Invoke().Item.Name : null);
 
-    public void SlotButton(EntObj ent) => ent.Mutate()
+    public void SlotButton(EntMut ent) => ent.Mutate()
         .Tag(nameof(SlotButton))
         .IsSelectableV(true)
         .ColorF(() => ent.IsHoveredR ? (1, 1, 1, 0.5f) : default)
@@ -351,7 +351,7 @@ public class AppStyle(RootText text, RootKeyboard keyboard, AppMenuTextures menu
             ent.SlotAddedV = false;
         });
 
-    public void SlotButtonInfinity(EntObj ent) => ent.Mutate()
+    public void SlotButtonInfinity(EntMut ent) => ent.Mutate()
         .Mutate(SlotButton)
         .OnPressF(() =>
         {

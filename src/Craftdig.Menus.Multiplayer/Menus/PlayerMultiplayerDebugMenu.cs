@@ -11,7 +11,7 @@ public class PlayerMultiplayerDebugMenu(
     PlayerPositionUpdateReceiver playerPositionUpdateReceiver,
     PlayerSlowTickReceiver slowTickReceiver)
 {
-    public void Create(EntObj root)
+    public void Create(EntMut root)
     {
         List<Func<ReadOnlySpan<char>>> lines =
         [

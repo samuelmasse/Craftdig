@@ -3,10 +3,13 @@ namespace TrogloUI;
 [Root]
 public class RootUi : EntObj
 {
+    public static implicit operator EntMut(RootUi value) => (EntMut)(value as EntObj);
+
+    private readonly EntArena arena = new();
     private long nextId = 1;
     private long alive = 1;
-    private List<EntObj> ents = [];
-    private List<EntObj> buffer = [];
+    private List<EntPtr> ents = [];
+    private List<EntPtr> buffer = [];
 
     public RootUi()
     {
@@ -14,15 +17,13 @@ public class RootUi : EntObj
         this.UiRoot = this;
     }
 
-    public EntObj Alloc()
-    {
-        Console.WriteLine($"ui {nextId}");
+    ~RootUi() => arena.Dispose();
 
-        var ent = new EntObj()
-        {
-            UiId = nextId++,
-            UiRoot = this
-        };
+    public EntMut Alloc()
+    {
+        var ent = arena.Alloc();
+        ent.UiId = nextId++;
+        ent.UiRoot = this;
 
         ents.Add(ent);
 
@@ -33,24 +34,20 @@ public class RootUi : EntObj
     {
         alive++;
 
-        Mark(this);
+        Mark((EntMut)this);
 
-        foreach(var ent in ents)
+        foreach (var ent in ents)
         {
             if (ent.UiAliveToken == alive)
                 buffer.Add(ent);
-            else
-            {
-                Console.WriteLine($"clear {ent.UiId}");
-                ent.Clear();
-            }
+            else ent.Dispose();
         }
 
         (ents, buffer) = (buffer, ents);
         buffer.Clear();
     }
 
-    private void Mark(EntObj ent)
+    private void Mark(EntMut ent)
     {
         ent.UiAliveToken = alive;
 

@@ -3,7 +3,7 @@ namespace TrogloUI;
 [Root]
 public class RootUiUpdate
 {
-    internal void Update(EntObj n)
+    internal void Update(EntMut n)
     {
         if (n.HasOnUpdateF)
             n.OnUpdateFDelegate?.Invoke();

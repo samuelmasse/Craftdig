@@ -2,28 +2,28 @@ namespace TrogloUI;
 
 public static class UiSyntax
 {
-    public static EntMutator<EntObj> Node(EntObj parent)
+    public static EntMutator<EntMut> Node(EntMut parent)
     {
         var val = parent.UiRoot.Alloc();
         parent.Nodes.Add(val);
         return val.Mutate();
     }
 
-    public static EntMutator<EntObj> Node(EntObj parent, out EntObj val)
+    public static EntMutator<EntMut> Node(EntMut parent, out EntMut val)
     {
         val = parent.UiRoot.Alloc();
         parent.Nodes.Add(val);
         return val.Mutate();
     }
 
-    public static EntMutator<EntObj> NodeStack(EntObj parent)
+    public static EntMutator<EntMut> NodeStack(EntMut parent)
     {
         var val = parent.UiRoot.Alloc();
         parent.NodeStack.Push(val);
         return val.Mutate();
     }
 
-    public static EntMutator<EntObj> NodeStack(EntObj parent, out EntObj val)
+    public static EntMutator<EntMut> NodeStack(EntMut parent, out EntMut val)
     {
         val = parent.UiRoot.Alloc();
         parent.NodeStack.Push(val);

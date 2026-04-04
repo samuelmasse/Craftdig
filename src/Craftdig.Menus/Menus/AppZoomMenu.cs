@@ -3,7 +3,7 @@ namespace Craftdig.Menus;
 [App]
 public class AppZoomMenu(RootKeyboard keyboard, RootText text, RootUiScale scale, AppStyle s)
 {
-    public void Create(EntObj root)
+    public void Create(EntMut root)
     {
         int zoom = (int)(scale.Scale * 8);
         var sw = Stopwatch.StartNew();

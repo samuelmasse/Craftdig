@@ -3,7 +3,7 @@ namespace Craftdig.Menus;
 [App]
 public class AppMouseTrackMenu(RootMouse mouse)
 {
-    public void Create(EntObj root)
+    public void Create(EntMut root)
     {
         Node(root, out var text)
             .OnUpdateF(() =>

@@ -9,7 +9,7 @@ public class DimensionSharedVertexBufferMenu(
     DimensionSharedVertexBuffer svb,
     AppStyle s)
 {
-    public void Create(EntObj root)
+    public void Create(EntMut root)
     {
         Node(root, out var menu)
             .Mutate(s.VerticalList)

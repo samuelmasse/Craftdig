@@ -3,7 +3,7 @@ namespace TrogloUI;
 [Root]
 public class RootUiDraw(RootSprites sprites, RootUiScale scale, RootUiPosition position, RootUiClipping clipping)
 {
-    internal void Draw(Vector2 o, EntObj n)
+    internal void Draw(Vector2 o, EntMut n)
     {
         var clip = sprites.Batch.Clip;
         sprites.Batch.Clip = clipping.IntersectClips(clip, new(o + n.OffsetR, o + n.OffsetR + n.SizeR));
@@ -15,7 +15,7 @@ public class RootUiDraw(RootSprites sprites, RootUiScale scale, RootUiPosition p
         sprites.Batch.Clip = clip;
     }
 
-    private void DrawNode(Vector2 o, EntObj n)
+    private void DrawNode(Vector2 o, EntMut n)
     {
         DrawFlatSurface(o, n);
         DrawTexture(o, n);
@@ -28,7 +28,7 @@ public class RootUiDraw(RootSprites sprites, RootUiScale scale, RootUiPosition p
             n.OnFrameFDelegate?.Invoke();
     }
 
-    private void DrawFlatSurface(Vector2 o, EntObj n)
+    private void DrawFlatSurface(Vector2 o, EntMut n)
     {
         if (!n.HasColorV && !n.HasColorF)
             return;
@@ -40,7 +40,7 @@ public class RootUiDraw(RootSprites sprites, RootUiScale scale, RootUiPosition p
         sprites.Batch.Draw(o, n.SizeR, color);
     }
 
-    private void DrawTexture(Vector2 o, EntObj n)
+    private void DrawTexture(Vector2 o, EntMut n)
     {
         if (!n.HasTextureV && !n.HasTextureF)
             return;
@@ -53,7 +53,7 @@ public class RootUiDraw(RootSprites sprites, RootUiScale scale, RootUiPosition p
         sprites.Batch.Draw(texture, o, n.SizeR, tint);
     }
 
-    private void DrawText(Vector2 o, EntObj n)
+    private void DrawText(Vector2 o, EntMut n)
     {
         if (!n.HasFontV && !n.HasFontF)
             return;

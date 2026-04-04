@@ -3,7 +3,7 @@ namespace Craftdig.Menus.Common;
 [Player]
 public class PlayerOverlayMenu(AppStyle s, PlayerEnt ent)
 {
-    public void Create(EntObj root)
+    public void Create(EntMut root)
     {
         Node(root, out var verticalList)
             .Mutate(s.VerticalList)

@@ -9,7 +9,7 @@ public class ModuleMultiplayerConnectMenu(
     ModuleMultiplayerConnectAction multiplayerConnectAction,
     ModuleMultiplayerConnectingMenu multiplayerConnectingMenu)
 {
-    public void Create(EntObj root)
+    public void Create(EntMut root)
     {
         string defaultName = "127.0.0.1";
         string defaultPort = clientOptions.UseRawTcp ? "36677" : "36676";

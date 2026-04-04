@@ -3,7 +3,7 @@ namespace Craftdig.Menus.Common;
 [Player]
 public class PlayerEscapeMenu(AppReset reset, AppStyle s)
 {
-    public void Create(EntObj root)
+    public void Create(EntMut root)
     {
         Node(root, out var list)
             .Mutate(s.VerticalList)

@@ -12,7 +12,7 @@ public class ModuleSingleplayerWorldSelectMenu(
     ModuleReadWorldStateAction readWorldStateAction,
     ModuleSingleplayerNewWorldMenu newWorldMenu)
 {
-    public void Create(EntObj root)
+    public void Create(EntMut root)
     {
         WorldMeta? selected = null;
 
@@ -168,7 +168,7 @@ public class ModuleSingleplayerWorldSelectMenu(
                 {
                     Node(rightButtonsVertical)
                         .OnPressF(() => root.StackRootV.NodeStack.Push(
-                            new EntObj() { StackRootV = root.StackRootV }.Mutate(newWorldMenu.Create)))
+                            new EntMut() { StackRootV = root.StackRootV }.Mutate(newWorldMenu.Create)))
                         .TextV("Create New World")
                         .Mutate(s.Button);
 

@@ -3,7 +3,7 @@ namespace Craftdig.Menus.Common;
 [Player]
 public class PlayerSurvivalInventoryMenu(AppStyle s, PlayerEnt player)
 {
-    public void Create(EntObj root)
+    public void Create(EntMut root)
     {
         Node(root, out var vert)
             .Mutate(s.VerticalList)

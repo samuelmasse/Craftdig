@@ -7,8 +7,8 @@ public interface IUiTraverseComponents
     RootUi UiRoot { get; set; }
     long UiAliveToken { get; set; }
 
-    [ComponentLazyInitialize] List<EntObj> Nodes { get; set; }
-    [ComponentLazyInitialize] Stack<EntObj> NodeStack { get; set; }
+    [ComponentLazyInitialize] List<EntMut> Nodes { get; set; }
+    [ComponentLazyInitialize] Stack<EntMut> NodeStack { get; set; }
 
     bool IsDeletedV { get; set; }
     Func<bool>? IsDeletedF { get; set; }
@@ -22,6 +22,6 @@ public interface IUiTraverseComponents
     float OrderValueV { get; set; }
     Func<float>? OrderValueF { get; set; }
 
-    EntObj? StackedNodeR { get; set; }
-    Memory<EntObj> NodesR { get; set; }
+    EntMut StackedNodeR { get; set; }
+    Memory<EntMut> NodesR { get; set; }
 }

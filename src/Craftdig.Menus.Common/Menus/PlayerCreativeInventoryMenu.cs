@@ -3,7 +3,7 @@ namespace Craftdig.Menus.Common;
 [Player]
 public class PlayerCreativeInventoryMenu(ModuleEnts ents, AppStyle s, PlayerEnt player)
 {
-    public void Create(EntObj root)
+    public void Create(EntMut root)
     {
         int rows = 5;
         var blocks = new ItemSlot[(rows + 1) * Slots.HotBarCount];
