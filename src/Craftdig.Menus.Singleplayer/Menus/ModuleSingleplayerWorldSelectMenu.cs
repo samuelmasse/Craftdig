@@ -3,10 +3,8 @@ namespace Craftdig.Menus.Singleplayer;
 [Module]
 public class ModuleSingleplayerWorldSelectMenu(
     RootUiMouse mouse,
-    RootBin bin,
-    RootGlw gl,
-    RootPngs pngs,
     AppStyle s,
+    ModuleScope scope,
     ModuleSingleplayerLoadWorldAction singleplayerLoadWorldAction,
     ModuleSingleplayerListWorldsAction listWorldsAction,
     ModuleSingleplayerNewWorldMenu newWorldMenu,
@@ -18,7 +16,6 @@ public class ModuleSingleplayerWorldSelectMenu(
     {
         var worlds = listWorldsAction.Run();
         bool[] filtered = new bool[worlds.Count];
-
         WorldEntry? selected = null;
 
         Node(root, out var topBar)
@@ -66,12 +63,14 @@ public class ModuleSingleplayerWorldSelectMenu(
             .OffsetV((0, s.BarHeight));
         {
             float scroll = 0;
+            var screenshots = scope.New<ModuleWorldScreenshots>();
 
             Node(middle, out var select)
                 .Mutate(s.VerticalList)
                 .InnerScrollOffsetF(() => (0, -scroll))
                 .SizeInnerMaxRelativeV((1, 0))
-                .AlignmentV(Alignment.Horizontal);
+                .AlignmentV(Alignment.Horizontal)
+                .OnFrameF(() => screenshots.RefillBucket());
             for (int i = 0; i < worlds.Count; i++)
             {
                 var world = worlds[i];
@@ -92,27 +91,13 @@ public class ModuleSingleplayerWorldSelectMenu(
                         .SizeRelativeV((1, 1))
                         .PaddingV((s.ItemSpacingS, s.ItemSpacingS, s.ItemSpacingS, s.ItemSpacingS));
                     {
-                        var screenshotFile = Path.Join(world.Dir, "Screenshot.png");
-                        ScreenshotTexture? screenshot = null;
-
-                        if (File.Exists(screenshotFile))
-                        {
-                            var image = pngs[screenshotFile];
-                            screenshot = new(bin, new Texture2D(gl, image.Size)
-                            {
-                                PixelsMipmap = image.Pixels.Span,
-                                MagFilter = TextureMagFilter.Linear,
-                                MinFilter = TextureMinFilter.LinearMipmapLinear
-                            });
-                        }
-
                         Node(itemContainer, out var itemIcon)
                             .Mutate(s.PointingCursor)
                             .IsSelectableV(true)
                             .SizeRelativeV((0, 0))
                             .SizeV((itemHeight, itemHeight))
                             .ColorV((0.2f, 0, 0.6f, 1))
-                            .TextureF(() => screenshot?.Texture)
+                            .TextureF(() => screenshots[world.Dir]?.Texture)
                             .OnPressF(() => singleplayerLoadWorldAction.Run(world.Paths));
                         {
                             Node(itemIcon)
