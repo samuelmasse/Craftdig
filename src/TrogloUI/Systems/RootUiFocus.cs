@@ -13,7 +13,7 @@ public class RootUiFocus(RootKeyboard keyboard)
     {
         tabMode = tab;
 
-        var defer = Get(ent.DeferFocusV, ent.DeferFocusFDelegate);
+        var defer = ent.DeferFocusFV.Resolve();
         if (defer != default && DeferFocus(defer))
             return;
 
@@ -21,7 +21,7 @@ public class RootUiFocus(RootKeyboard keyboard)
         ent.IsFocusedR = true;
         focused = ent;
 
-        var focusGroup = Get(ent.FocusGroupV, ent.FocusGroupFDelegate);
+        var focusGroup = ent.FocusGroupFV.Resolve();
         if (focusGroup != default)
         {
             RemoveSelect(focusGroup);
@@ -30,7 +30,7 @@ public class RootUiFocus(RootKeyboard keyboard)
         else RemoveSelect(ent);
 
         ent.IsSelectedR = true;
-        ent.OnFocusFDelegate?.Invoke();
+        ent.OnFocusFV.Resolve()?.Invoke();
     }
 
     private bool DeferFocus(EntMut ent)
@@ -52,7 +52,7 @@ public class RootUiFocus(RootKeyboard keyboard)
         if (ent.IsSelectedR)
         {
             ent.IsSelectedR = false;
-            ent.OnUnselectFDelegate?.Invoke();
+            ent.OnUnselectFV.Resolve()?.Invoke();
         }
 
         foreach (var c in ent.NodesR.Span)
@@ -87,7 +87,7 @@ public class RootUiFocus(RootKeyboard keyboard)
             Focus(target, tabMode);
         }
 
-        var focusGroup = Get(focused.FocusGroupV, focused.FocusGroupFDelegate);
+        var focusGroup = focused.FocusGroupFV.Resolve();
 
         if (focusables.Count > 0 && keyboard.IsKeyPressedRepeated(Keys.Tab))
         {
@@ -96,7 +96,7 @@ public class RootUiFocus(RootKeyboard keyboard)
             while (offset < focusables.Count)
             {
                 var focusable = focusables[(index + offset) % focusables.Count];
-                var nextFocuseGroup = Get(focusable.FocusGroupV, focusable.FocusGroupFDelegate);
+                var nextFocuseGroup = focusable.FocusGroupFV.Resolve();
 
                 if (nextFocuseGroup == default || nextFocuseGroup != focusGroup)
                     break;
@@ -107,7 +107,7 @@ public class RootUiFocus(RootKeyboard keyboard)
             if (offset < focusables.Count)
             {
                 var focusable = focusables[(index + offset) % focusables.Count];
-                var nextFocuseGroup = Get(focusable.FocusGroupV, focusable.FocusGroupFDelegate);
+                var nextFocuseGroup = focusable.FocusGroupFV.Resolve();
 
                 if (nextFocuseGroup != default)
                 {
@@ -123,14 +123,14 @@ public class RootUiFocus(RootKeyboard keyboard)
 
     private void CollectFocusables(EntMut n)
     {
-        var isFocusable = Get(n.IsFocusableV, n.IsFocusableFDelegate);
-        var isInputDisabled = Get(n.IsInputDisabledV, n.IsInputDisabledFDelegate);
+        var isFocusable = n.IsFocusableFV.Resolve();
+        var isInputDisabled = n.IsInputDisabledFV.Resolve();
 
         if (isFocusable && !isInputDisabled)
         {
             focusables.Add(n);
 
-            if (Get(n.IsInitialFocusV, n.IsInitialFocusFDelegate))
+            if (n.IsInitialFocusFV.Resolve())
                 newInits.Add(n);
         }
 
@@ -142,10 +142,11 @@ public class RootUiFocus(RootKeyboard keyboard)
     {
         if (n.SelectedR != default)
         {
-            if (!HasChild(n, n.SelectedR))
+            var selected = n.SelectedR;
+            if (!HasChild(n, selected))
             {
-                n.SelectedR.Mutate().IsSelectedR(false);
-                n.SelectedR.OnUnselectFDelegate?.Invoke();
+                selected.IsSelectedR = false;
+                selected.OnUnselectFV.Resolve()?.Invoke();
                 n.SelectedR = default;
             }
         }

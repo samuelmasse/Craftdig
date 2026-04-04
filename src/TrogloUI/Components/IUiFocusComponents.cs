@@ -1,30 +1,29 @@
 namespace TrogloUI;
 
-[Components]
+[Components(SkipBuilder = true)]
 public interface IUiFocusComponents
 {
-    bool IsInputDisabledV { get; set; }
-    Func<bool>? IsInputDisabledF { get; set; }
+    /// <summary>Whether input is disabled for this node.</summary>
+    UiProp<bool> IsInputDisabledFV { get; set; }
+    /// <summary>Whether this node can receive focus.</summary>
+    UiProp<bool> IsFocusableFV { get; set; }
+    /// <summary>Whether this node can receive focus via mouse but not keyboard Tab.</summary>
+    UiProp<bool> IsSilentFocusableFV { get; set; }
+    /// <summary>Whether this node should receive initial focus.</summary>
+    UiProp<bool> IsInitialFocusFV { get; set; }
+    /// <summary>Node subtree to preserve focus within when this node is focused.</summary>
+    UiProp<EntMut> DeferFocusFV { get; set; }
+    /// <summary>Focus group this node belongs to.</summary>
+    UiProp<EntMut> FocusGroupFV { get; set; }
+    /// <summary>Callback invoked when this node receives focus.</summary>
+    UiCallback<Action?> OnFocusFV { get; set; }
+    /// <summary>Callback invoked when this node is unselected.</summary>
+    UiCallback<Action?> OnUnselectFV { get; set; }
 
-    bool IsFocusableV { get; set; }
-    Func<bool>? IsFocusableF { get; set; }
-
-    bool IsSilentFocusableV { get; set; }
-    Func<bool>? IsSilentFocusableF { get; set; }
-
-    bool IsInitialFocusV { get; set; }
-    Func<bool>? IsInitialFocusF { get; set; }
-
-    EntMut DeferFocusV { get; set; }
-    Func<EntMut>? DeferFocusF { get; set; }
-
-    EntMut FocusGroupV { get; set; }
-    Func<EntMut>? FocusGroupF { get; set; }
-
-    Action? OnFocusF { get; set; }
-    Action? OnUnselectF { get; set; }
-
+    /// <summary>Whether this node currently has focus.</summary>
     bool IsFocusedR { get; set; }
+    /// <summary>Whether this node is the selected node within its focus group.</summary>
     bool IsSelectedR { get; set; }
+    /// <summary>The currently selected child node within this focus group.</summary>
     EntMut SelectedR { get; set; }
 }

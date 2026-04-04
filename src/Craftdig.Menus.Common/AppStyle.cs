@@ -84,7 +84,7 @@ public class AppStyle(RootText text, RootKeyboard keyboard, AppMenuTextures menu
 
     public Vector4 InputItemBorderColor(EntMut ent)
     {
-        if (Get(ent.IsInputDisabledV, ent.IsInputDisabledFDelegate))
+        if (ent.IsInputDisabledFV.Resolve())
             return (0.2f, 0.2f, 0.2f, 1f);
 
         if ((ent.IsFocusedR || ent.IsHoveredR))
@@ -169,7 +169,7 @@ public class AppStyle(RootText text, RootKeyboard keyboard, AppMenuTextures menu
         })
         .ColorF(() =>
         {
-            if (Get(ent.IsInputDisabledV, ent.IsInputDisabledFDelegate))
+            if (ent.IsInputDisabledFV.Resolve())
                 return ButtonColorDisabled;
 
             return ButtonColor;
@@ -219,7 +219,7 @@ public class AppStyle(RootText text, RootKeyboard keyboard, AppMenuTextures menu
 
 
     public void PointingCursor(EntMut ent) => ent.Mutate()
-        .CursorF(() => Get(ent.IsInputDisabledV, ent.IsInputDisabledFDelegate) ? MouseCursor.Default : MouseCursor.PointingHand);
+        .CursorF(() => ent.IsInputDisabledFV.Resolve() ? MouseCursor.Default : MouseCursor.PointingHand);
 
     public void VerticalList(EntMut ent) => ent.Mutate()
         .Tag(nameof(VerticalList))

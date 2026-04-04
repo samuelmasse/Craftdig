@@ -87,7 +87,7 @@ public class RootUiMouse(RootMouse mouse, RootUiScale scale, RootUiFocus focus, 
         if (!InputEnabled(e))
             return;
 
-        if (Get(e.IsFocusableV, e.IsFocusableFDelegate) || Get(e.IsSilentFocusableV, e.IsSilentFocusableFDelegate))
+        if (e.IsFocusableFV.Resolve() || e.IsSilentFocusableFV.Resolve())
             focus.Focus(e, false);
 
         e.IsPressedR = true;
@@ -174,5 +174,5 @@ public class RootUiMouse(RootMouse mouse, RootUiScale scale, RootUiFocus focus, 
         return scrolled;
     }
 
-    private bool InputEnabled(EntMut n) => !Get(n.IsInputDisabledV, n.IsInputDisabledFDelegate);
+    private bool InputEnabled(EntMut n) => !n.IsInputDisabledFV.Resolve();
 }
