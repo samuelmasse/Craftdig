@@ -6,9 +6,9 @@ public class ModuleSingleplayerEditWorldMenu(
     ModuleScope scope,
     ModuleWriteWorldMetaAction writeWorldMetaAction)
 {
-    public void Create(EntMut root, WorldMeta meta, WorldPaths paths)
+    public void Create(EntMut root, WorldEntry world)
     {
-        var name = new StringBuilder(meta.Name);
+        var name = new StringBuilder(world.Meta.Name);
 
         Node(root, out var form)
             .Mutate(s.VerticalList)
@@ -47,9 +47,9 @@ public class ModuleSingleplayerEditWorldMenu(
                     {
                         var worldName = name.ToString();
                         if (string.IsNullOrEmpty(worldName))
-                            worldName = meta.Name;
+                            worldName = world.Meta.Name;
 
-                        writeWorldMetaAction.Write(meta with { Name = worldName }, paths);
+                        writeWorldMetaAction.Write(world.Meta with { Name = worldName }, world.Paths);
                         root.StackRootV.NodeStack.Pop();
                         root.StackRootV.NodeStack.Pop();
                         NodeStack(root.StackRootV).StackRootV(root.StackRootV)

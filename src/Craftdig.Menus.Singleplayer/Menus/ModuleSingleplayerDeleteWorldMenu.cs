@@ -5,7 +5,7 @@ public class ModuleSingleplayerDeleteWorldMenu(
     AppStyle s,
     ModuleScope scope)
 {
-    public void Create(EntMut root, WorldMeta meta, string dir)
+    public void Create(EntMut root, WorldEntry world)
     {
         Node(root, out var form)
             .Mutate(s.VerticalList)
@@ -21,7 +21,7 @@ public class ModuleSingleplayerDeleteWorldMenu(
             Node(form)
                 .Mutate(s.Label)
                 .AlignmentV(Alignment.Horizontal)
-                .TextV($"'{meta.Name}' will be lost forever! (A long time!)");
+                .TextV($"'{world.Meta.Name}' will be lost forever! (A long time!)");
 
             Node(form)
                 .Mutate(s.Label);
@@ -36,7 +36,7 @@ public class ModuleSingleplayerDeleteWorldMenu(
                 Node(buttons)
                     .OnPressF(() =>
                     {
-                        Directory.Delete(dir, true);
+                        Directory.Delete(world.Dir, true);
 
                         root.StackRootV.NodeStack.Pop();
                         root.StackRootV.NodeStack.Pop();

@@ -7,10 +7,8 @@ public class ModuleSingleplayerWorldSelectMenu(
     RootGlw gl,
     RootPngs pngs,
     AppStyle s,
-    AppPaths paths,
     ModuleSingleplayerLoadWorldAction singleplayerLoadWorldAction,
-    ModuleReadWorldMetaAction readWorldMetaAction,
-    ModuleReadWorldStateAction readWorldStateAction,
+    ModuleSingleplayerListWorldsAction listWorldsAction,
     ModuleSingleplayerNewWorldMenu newWorldMenu,
     ModuleSingleplayerDeleteWorldMenu deleteWorldMenu,
     ModuleSingleplayerEditWorldMenu editWorldMenu)
@@ -18,26 +16,10 @@ public class ModuleSingleplayerWorldSelectMenu(
 {
     public void Create(EntMut root)
     {
-        var worlds = new List<(string, WorldPaths, WorldMeta, WorldState)>();
-        Directory.CreateDirectory(paths.SavePath);
-        var dirs = Directory.GetDirectories(paths.SavePath);
-
-        foreach (var dir in dirs)
-        {
-            try
-            {
-                var paths = new WorldPaths(dir);
-                var meta = readWorldMetaAction.Read(paths);
-                var state = readWorldStateAction.Read(paths);
-                worlds.Add((dir, paths, meta, state));
-            }
-            catch { }
-        }
-
-        worlds.Sort((a, b) => b.Item4.LastPlayed.CompareTo(a.Item4.LastPlayed));
+        var worlds = listWorldsAction.Run();
         bool[] filtered = new bool[worlds.Count];
 
-        WorldMeta? selected = null;
+        WorldEntry? selected = null;
 
         Node(root, out var topBar)
             .SizeRelativeV(s.Horizontal)
@@ -73,10 +55,7 @@ public class ModuleSingleplayerWorldSelectMenu(
 
                         var term = search.ToString();
                         for (int i = 0; i < worlds.Count; i++)
-                        {
-                            var (dir, paths, meta, state) = worlds[i];
-                            filtered[i] = !meta.Name.Contains(term, StringComparison.InvariantCultureIgnoreCase);
-                        }
+                            filtered[i] = !worlds[i].Meta.Name.Contains(term, StringComparison.InvariantCultureIgnoreCase);
                     });
             }
         }
@@ -95,7 +74,7 @@ public class ModuleSingleplayerWorldSelectMenu(
                 .AlignmentV(Alignment.Horizontal);
             for (int i = 0; i < worlds.Count; i++)
             {
-                var (dir, paths, meta, state) = worlds[i];
+                var world = worlds[i];
                 var itemHeight = s.ItemHeight * 1.5f;
                 int index = i;
 
@@ -103,9 +82,9 @@ public class ModuleSingleplayerWorldSelectMenu(
                     .Mutate(s.SelectorItem)
                     .SizeRelativeV((0, 0))
                     .SizeV((s.ItemWidthL * 1.7f, itemHeight + s.ItemSpacingS * 2))
-                    .OnFocusF(() => selected = meta)
+                    .OnFocusF(() => selected = world)
                     .OnUnselectF(() => selected = null)
-                    .OnDoubleClickF(() => singleplayerLoadWorldAction.Run(paths))
+                    .OnDoubleClickF(() => singleplayerLoadWorldAction.Run(world.Paths))
                     .FocusGroupV(select)
                     .IsDisabledF(() => filtered[index]);
                 {
@@ -113,7 +92,7 @@ public class ModuleSingleplayerWorldSelectMenu(
                         .SizeRelativeV((1, 1))
                         .PaddingV((s.ItemSpacingS, s.ItemSpacingS, s.ItemSpacingS, s.ItemSpacingS));
                     {
-                        var screenshotFile = Path.Join(dir, "Screenshot.png");
+                        var screenshotFile = Path.Join(world.Dir, "Screenshot.png");
                         ScreenshotTexture? screenshot = null;
 
                         if (File.Exists(screenshotFile))
@@ -134,7 +113,7 @@ public class ModuleSingleplayerWorldSelectMenu(
                             .SizeV((itemHeight, itemHeight))
                             .ColorV((0.2f, 0, 0.6f, 1))
                             .TextureF(() => screenshot?.Texture)
-                            .OnPressF(() => singleplayerLoadWorldAction.Run(paths));
+                            .OnPressF(() => singleplayerLoadWorldAction.Run(world.Paths));
                         {
                             Node(itemIcon)
                                 .ColorV((1, 1, 1, 0.5f))
@@ -151,17 +130,17 @@ public class ModuleSingleplayerWorldSelectMenu(
                             Node(itemList)
                                 .Mutate(s.Label)
                                 .SizeV((0, s.ItemSpacingS))
-                                .TextV(meta.Name);
+                                .TextV(world.Meta.Name);
 
                             Node(itemList)
                                 .Mutate(s.Label)
                                 .TextColorV(s.TextColorFaint)
-                                .TextV($"{Path.GetFileName(dir)!} ({state.LastPlayed.ToLocalTime():yyyy-MM-dd HH 'h' mm})");
+                                .TextV($"{Path.GetFileName(world.Dir)!} ({world.State.LastPlayed.ToLocalTime():yyyy-MM-dd HH 'h' mm})");
 
                             Node(itemList)
                                 .Mutate(s.Label)
                                 .TextColorV(s.TextColorFaint)
-                                .TextV(meta.GameMode.Name);
+                                .TextV(world.Meta.GameMode.Name);
                         }
                     }
                 }
@@ -242,7 +221,7 @@ public class ModuleSingleplayerWorldSelectMenu(
                         .TextV("Play Selected World")
                         .Mutate(s.Button)
                         .IsInputDisabledF(() => selected == null)
-                        .OnPressF(() => singleplayerLoadWorldAction.Run(worlds.First(x => x.Item3 == selected).Item2));
+                        .OnPressF(() => singleplayerLoadWorldAction.Run(selected!.Paths));
 
                     Node(leftButtonsVertical, out var leftButtonsHorizontal)
                         .SizeRelativeV(s.Horizontal)
@@ -254,9 +233,8 @@ public class ModuleSingleplayerWorldSelectMenu(
                         Node(leftButtonsHorizontal)
                             .OnPressF(() =>
                             {
-                                var (dir, worldPaths, _, _) = worlds.First(x => x.Item3 == selected);
                                 NodeStack(root.StackRootV).StackRootV(root.StackRootV)
-                                    .Mutate(r => editWorldMenu.Create(r, selected!, worldPaths));
+                                    .Mutate(r => editWorldMenu.Create(r, selected!));
                             })
                             .TextV("Edit")
                             .Mutate(s.Button)
@@ -265,10 +243,8 @@ public class ModuleSingleplayerWorldSelectMenu(
                         Node(leftButtonsHorizontal)
                             .OnPressF(() =>
                             {
-                                var dir = worlds.First(x => x.Item3 == selected).Item1;
-
                                 NodeStack(root.StackRootV).StackRootV(root.StackRootV)
-                                    .Mutate(r => deleteWorldMenu.Create(r, selected!, dir));
+                                    .Mutate(r => deleteWorldMenu.Create(r, selected!));
                             })
                             .TextV("Delete")
                             .Mutate(s.Button)
@@ -297,7 +273,7 @@ public class ModuleSingleplayerWorldSelectMenu(
                             .OnPressF(() =>
                             {
                                 NodeStack(root.StackRootV).StackRootV(root.StackRootV)
-                                    .Mutate(r => newWorldMenu.Create(r, selected));
+                                    .Mutate(r => newWorldMenu.Create(r, selected!.Meta));
                             })
                             .TextV("Re-Create")
                             .Mutate(s.Button)
