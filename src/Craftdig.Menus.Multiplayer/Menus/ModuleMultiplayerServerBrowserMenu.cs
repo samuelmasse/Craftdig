@@ -17,9 +17,7 @@ public class ModuleMultiplayerServerBrowserMenu(
         StringBuilder? user = clientOptions.NoAuthUser != null ? new(clientOptions.NoAuthUser) : null;
 
         Node(root, out var topBar)
-            .SizeRelativeV(s.Horizontal)
-            .SizeV((0, s.BarHeight))
-            .ColorV(s.BoardColor);
+            .Mutate(s.TopBar);
         {
             Node(topBar, out var topBarContent)
                 .Mutate(s.VerticalList)
@@ -73,9 +71,7 @@ public class ModuleMultiplayerServerBrowserMenu(
         }
 
         Node(root, out var middle)
-            .SizeRelativeV((1, 1))
-            .SizeV((0, -s.BarHeight * 2))
-            .OffsetV((0, s.BarHeight));
+            .Mutate(s.MiddleBar);
         {
             s.Selector(middle, out var select);
 
@@ -125,18 +121,10 @@ public class ModuleMultiplayerServerBrowserMenu(
         }
 
         Node(root, out var bottomBar)
-            .SizeRelativeV(s.Horizontal)
-            .SizeV((0, s.BarHeight))
-            .AlignmentV(Alignment.Horizontal | Alignment.Bottom)
-            .ColorV(s.BoardColor);
+            .Mutate(s.BottomBar);
         {
             Node(bottomBar, out var buttonsList)
-                .Mutate(s.HorizontalList)
-                .AlignmentV(Alignment.Center)
-                .OffsetMultiplierV(s.ItemSpacingXS)
-                .SizeInnerMaxRelativeV(s.Vertical)
-                .InnerSpacingV(s.ItemSpacingL)
-                .ColorV(s.BoardColor2);
+                .Mutate(s.ButtonBar);
             {
                 Node(buttonsList, out var leftButtons)
                     .Mutate(s.VerticalList)
@@ -144,11 +132,7 @@ public class ModuleMultiplayerServerBrowserMenu(
                     .InnerSpacingV(s.ItemSpacing);
                 {
                     Node(leftButtons, out var topRow)
-                        .SizeRelativeV(s.Horizontal)
-                        .SizeInnerMaxRelativeV(s.Vertical)
-                        .InnerSpacingV(s.ItemSpacing)
-                        .InnerLayoutV(InnerLayout.HorizontalList)
-                        .InnerSizingV(InnerSizing.HorizontalWeight);
+                        .Mutate(s.ButtonRow);
                     {
                         Node(topRow)
                             .Mutate(s.Button)
@@ -169,11 +153,7 @@ public class ModuleMultiplayerServerBrowserMenu(
                     }
 
                     Node(leftButtons, out var bottomRow)
-                        .SizeRelativeV(s.Horizontal)
-                        .SizeInnerMaxRelativeV(s.Vertical)
-                        .InnerSpacingV(s.ItemSpacing)
-                        .InnerLayoutV(InnerLayout.HorizontalList)
-                        .InnerSizingV(InnerSizing.HorizontalWeight);
+                        .Mutate(s.ButtonRow);
                     {
                         Node(bottomRow)
                             .Mutate(s.Button)

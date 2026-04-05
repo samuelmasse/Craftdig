@@ -9,10 +9,7 @@ public class ModuleMultiplayerDeleteServerMenu(
     public void Create(EntMut root, ServerEntry server)
     {
         Node(root, out var form)
-            .Mutate(s.VerticalList)
-            .SizeInnerMaxRelativeV((1, 0))
-            .InnerSpacingV(s.ItemSpacing)
-            .AlignmentV(Alignment.Center);
+            .Mutate(s.Dialog);
         {
             Node(form)
                 .Mutate(s.Label)
@@ -25,12 +22,8 @@ public class ModuleMultiplayerDeleteServerMenu(
                 .TextV($"'{server.Name}' will be lost forever! (A long time!)");
 
             Node(form, out var buttons)
-                .MarginV((0, s.ItemHeight, 0, 0))
-                .SizeInnerMaxRelativeV(s.Vertical)
-                .SizeInnerSumRelativeV((1, 0))
-                .AlignmentV(Alignment.Horizontal)
-                .InnerSpacingV(s.ItemSpacing)
-                .InnerLayoutV(InnerLayout.HorizontalList);
+                .Mutate(s.DialogButtons)
+                .MarginV((0, s.ItemHeight, 0, 0));
             {
                 Node(buttons)
                     .OnPressF(() =>

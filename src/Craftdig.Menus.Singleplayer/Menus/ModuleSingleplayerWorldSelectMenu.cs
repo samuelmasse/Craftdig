@@ -17,9 +17,7 @@ public class ModuleSingleplayerWorldSelectMenu(
         WorldEntry? selected = null;
 
         Node(root, out var topBar)
-            .SizeRelativeV(s.Horizontal)
-            .SizeV((0, s.BarHeight))
-            .ColorV(s.BoardColor);
+            .Mutate(s.TopBar);
         {
             Node(topBar, out var topBarHor)
                 .Mutate(s.VerticalList)
@@ -56,9 +54,7 @@ public class ModuleSingleplayerWorldSelectMenu(
         }
 
         Node(root, out var middle)
-            .SizeRelativeV((1, 1))
-            .SizeV((0, -s.BarHeight * 2))
-            .OffsetV((0, s.BarHeight));
+            .Mutate(s.MiddleBar);
         {
             var screenshots = scope.New<ModuleWorldScreenshots>();
 
@@ -128,18 +124,10 @@ public class ModuleSingleplayerWorldSelectMenu(
         }
 
         Node(root, out var bottomBar)
-            .SizeRelativeV(s.Horizontal)
-            .SizeV((0, s.BarHeight))
-            .AlignmentV(Alignment.Horizontal | Alignment.Bottom)
-            .ColorV(s.BoardColor);
+            .Mutate(s.BottomBar);
         {
             Node(bottomBar, out var buttonsList)
-                .Mutate(s.HorizontalList)
-                .AlignmentV(Alignment.Center)
-                .OffsetMultiplierV(s.ItemSpacingXS)
-                .SizeInnerMaxRelativeV(s.Vertical)
-                .InnerSpacingV(s.ItemSpacingL)
-                .ColorV(s.BoardColor2);
+                .Mutate(s.ButtonBar);
             {
                 Node(buttonsList, out var leftButtonsVertical)
                     .Mutate(s.VerticalList)
@@ -153,11 +141,7 @@ public class ModuleSingleplayerWorldSelectMenu(
                         .OnPressF(() => singleplayerLoadWorldAction.Run(selected!.Paths));
 
                     Node(leftButtonsVertical, out var leftButtonsHorizontal)
-                        .SizeRelativeV(s.Horizontal)
-                        .SizeInnerMaxRelativeV(s.Vertical)
-                        .InnerSpacingV(s.ItemSpacing)
-                        .InnerLayoutV(InnerLayout.HorizontalList)
-                        .InnerSizingV(InnerSizing.HorizontalWeight);
+                        .Mutate(s.ButtonRow);
                     {
                         Node(leftButtonsHorizontal)
                             .OnPressF(() => NodeSR(root).Mutate(r => editWorldMenu.Create(r, selected!)))
@@ -184,11 +168,7 @@ public class ModuleSingleplayerWorldSelectMenu(
                         .Mutate(s.Button);
 
                     Node(rightButtonsVertical, out var rightButtonsHorizontal)
-                        .SizeRelativeV(s.Horizontal)
-                        .SizeInnerMaxRelativeV(s.Vertical)
-                        .InnerSpacingV(s.ItemSpacing)
-                        .InnerLayoutV(InnerLayout.HorizontalList)
-                        .InnerSizingV(InnerSizing.HorizontalWeight);
+                        .Mutate(s.ButtonRow);
                     {
                         Node(rightButtonsHorizontal)
                             .OnPressF(() => NodeSR(root).Mutate(r => newWorldMenu.Create(r, selected!.Meta)))

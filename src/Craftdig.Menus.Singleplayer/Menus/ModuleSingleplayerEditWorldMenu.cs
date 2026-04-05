@@ -11,11 +11,8 @@ public class ModuleSingleplayerEditWorldMenu(
         var name = new StringBuilder(world.Meta.Name);
 
         Node(root, out var form)
-            .Mutate(s.VerticalList)
-            .OffsetV((0, s.ItemHeight))
-            .SizeV((s.ItemWidth * 2, 0))
-            .InnerSpacingV(s.ItemSpacing)
-            .AlignmentV(Alignment.Horizontal);
+            .Mutate(s.Form)
+            .OffsetV((0, s.ItemHeight));
         {
             Node(form)
                 .Mutate(s.Label)
@@ -29,18 +26,11 @@ public class ModuleSingleplayerEditWorldMenu(
         }
 
         Node(root, out var bottomBar)
-            .SizeRelativeV(s.Horizontal)
-            .SizeV((0, s.BarHeight - s.ItemHeight))
-            .AlignmentV(Alignment.Horizontal | Alignment.Bottom)
-            .ColorV(s.BoardColor);
+            .Mutate(s.BottomBar)
+            .SizeV((0, s.BarHeight - s.ItemHeight));
         {
             Node(bottomBar, out var buttonsList)
-                .Mutate(s.HorizontalList)
-                .AlignmentV(Alignment.Center)
-                .OffsetMultiplierV(s.ItemSpacingXS)
-                .SizeInnerMaxRelativeV(s.Vertical)
-                .InnerSpacingV(s.ItemSpacingL)
-                .ColorV(s.BoardColor2);
+                .Mutate(s.ButtonBar);
             {
                 Node(buttonsList)
                     .OnPressF(() =>

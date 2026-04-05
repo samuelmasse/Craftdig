@@ -9,9 +9,7 @@ public class ModuleMultiplayerLoginMenu(
     public void Create(EntMut root)
     {
         Node(root, out var form)
-            .Mutate(s.VerticalList)
-            .SizeV((s.ItemWidth * 2, 0))
-            .InnerSpacingV(s.ItemSpacing)
+            .Mutate(s.Form)
             .AlignmentV(Alignment.Center);
         {
             Node(form)

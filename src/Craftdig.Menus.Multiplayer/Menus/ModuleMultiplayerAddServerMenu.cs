@@ -12,10 +12,7 @@ public class ModuleMultiplayerAddServerMenu(
         var host = new StringBuilder(editing?.Host ?? "");
 
         Node(root, out var form)
-            .Mutate(s.VerticalList)
-            .SizeV((s.ItemWidth * 2, 0))
-            .InnerSpacingV(s.ItemSpacing)
-            .AlignmentV(Alignment.Horizontal)
+            .Mutate(s.Form)
             .OffsetV((0, s.ItemSpacingXXL));
         {
             Node(form)

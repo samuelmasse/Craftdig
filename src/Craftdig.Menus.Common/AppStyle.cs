@@ -281,6 +281,56 @@ public class AppStyle(RootText text, RootUiMouse mouse, RootKeyboard keyboard, A
             });
     }
 
+    public void Form(EntMut ent) => ent.Mutate()
+        .Mutate(VerticalList)
+        .SizeV((ItemWidth * 2, 0))
+        .InnerSpacingV(ItemSpacing)
+        .AlignmentV(Alignment.Horizontal);
+
+    public void Dialog(EntMut ent) => ent.Mutate()
+        .Mutate(VerticalList)
+        .SizeInnerMaxRelativeV((1, 0))
+        .InnerSpacingV(ItemSpacing)
+        .AlignmentV(Alignment.Center);
+
+    public void DialogButtons(EntMut ent) => ent.Mutate()
+        .SizeInnerMaxRelativeV(Vertical)
+        .SizeInnerSumRelativeV((1, 0))
+        .AlignmentV(Alignment.Horizontal)
+        .InnerSpacingV(ItemSpacing)
+        .InnerLayoutV(InnerLayout.HorizontalList);
+
+    public void TopBar(EntMut ent) => ent.Mutate()
+        .SizeRelativeV(Horizontal)
+        .SizeV((0, BarHeight))
+        .ColorV(BoardColor);
+
+    public void BottomBar(EntMut ent) => ent.Mutate()
+        .SizeRelativeV(Horizontal)
+        .SizeV((0, BarHeight))
+        .AlignmentV(Alignment.Horizontal | Alignment.Bottom)
+        .ColorV(BoardColor);
+
+    public void MiddleBar(EntMut ent) => ent.Mutate()
+        .SizeRelativeV((1, 1))
+        .SizeV((0, -BarHeight * 2))
+        .OffsetV((0, BarHeight));
+
+    public void ButtonBar(EntMut ent) => ent.Mutate()
+        .Mutate(HorizontalList)
+        .AlignmentV(Alignment.Center)
+        .OffsetMultiplierV(ItemSpacingXS)
+        .SizeInnerMaxRelativeV(Vertical)
+        .InnerSpacingV(ItemSpacingL)
+        .ColorV(BoardColor2);
+
+    public void ButtonRow(EntMut ent) => ent.Mutate()
+        .SizeRelativeV(Horizontal)
+        .SizeInnerMaxRelativeV(Vertical)
+        .InnerSpacingV(ItemSpacing)
+        .InnerLayoutV(InnerLayout.HorizontalList)
+        .InnerSizingV(InnerSizing.HorizontalWeight);
+
     public void PointingCursor(EntMut ent) => ent.Mutate()
         .CursorF(() => ent.IsInputDisabledFV.Resolve() ? MouseCursor.Default : MouseCursor.PointingHand);
 
