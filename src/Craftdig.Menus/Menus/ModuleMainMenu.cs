@@ -8,7 +8,7 @@ public class ModuleMainMenu(
     AppStyle s,
     AppClientOptions clientOptions,
     ModuleSingleplayerWorldSelectMenu worldSelectMenu,
-    ModuleMultiplayerConnectMenu connectMenu,
+    ModuleMultiplayerServerBrowserMenu serverBrowserMenu,
     ModuleMultiplayerLoginMenu loginMenu,
     ModuleMultiplayerCredentials multiplayerCredentials)
 {
@@ -55,11 +55,11 @@ public class ModuleMainMenu(
                             {
                                 multiplayerCredentials.StartLogin();
                                 multiplayerCredentials.WaitLogin();
-                                node.Mutate(connectMenu.Create);
+                                node.Mutate(serverBrowserMenu.Create);
                             }
                             else node.Mutate(loginMenu.Create);
                         }
-                        else node.Mutate(connectMenu.Create);
+                        else node.Mutate(serverBrowserMenu.Create);
                     });
 
                 Node(list2)

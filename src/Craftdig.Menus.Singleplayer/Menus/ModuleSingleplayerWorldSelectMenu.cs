@@ -62,15 +62,11 @@ public class ModuleSingleplayerWorldSelectMenu(
             .SizeV((0, -s.BarHeight * 2))
             .OffsetV((0, s.BarHeight));
         {
-            float scroll = 0;
             var screenshots = scope.New<ModuleWorldScreenshots>();
 
-            Node(middle, out var select)
-                .Mutate(s.VerticalList)
-                .InnerScrollOffsetF(() => (0, -scroll))
-                .SizeInnerMaxRelativeV((1, 0))
-                .AlignmentV(Alignment.Horizontal)
-                .OnFrameF(() => screenshots.RefillBucket());
+            s.Selector(middle, mouse, out var select);
+            select.Mutate().OnFrameF(() => screenshots.RefillBucket());
+
             for (int i = 0; i < worlds.Count; i++)
             {
                 var world = worlds[i];
@@ -131,56 +127,6 @@ public class ModuleSingleplayerWorldSelectMenu(
                 }
             }
 
-            Node(middle, out var scrollBar)
-                .SizeV((20, 0))
-                .SizeRelativeV((0, 1))
-                .OffsetV((s.ItemWidthL - s.ItemSpacingXXL - s.ItemSpacingS, 0))
-                .AlignmentV(Alignment.Center)
-                .ColorV((0, 1, 1, 1))
-                .IsDisabledF(() => middle.SizeR.Y / select.SizeInnerSumR.Y >= 1);
-            {
-                Vector2 pressPoint = default;
-                float pressScroll = default;
-
-                Node(scrollBar, out var scrollPuck)
-                    .IsSelectableV(true)
-                    .IsSilentFocusableV(true)
-                    .DeferFocusV(select)
-                    .CursorF(() => scrollPuck.IsPressedR ? MouseCursor.ResizeNS : MouseCursor.PointingHand)
-                    .ColorF(() => scrollPuck.IsPressedR ? (1, 1, 0, 1) : (0.5f, 0.5f, 1, 1))
-                    .OffsetF(() => (0, scroll / select.SizeInnerSumR.Y) * scrollBar.SizeR)
-                    .SizeRelativeF(() => (1, Math.Min(1, middle.SizeR.Y / select.SizeInnerSumR.Y)))
-                    .OnPressF(() =>
-                    {
-                        pressScroll = scroll;
-                        pressPoint = mouse.Position - scrollBar.DrawOffsetR;
-                    })
-                    .OnUpdateF(() =>
-                    {
-                        if (!scrollPuck.IsPressedR)
-                            return;
-
-                        var newPoint = mouse.Position - scrollBar.DrawOffsetR;
-                        var delta = newPoint.Y - pressPoint.Y;
-                        var deltaRelative = delta / scrollBar.SizeR.Y;
-                        var deltaTranslated = deltaRelative * select.SizeInnerSumR.Y;
-                        scroll = pressScroll + deltaTranslated;
-                    });
-            }
-
-            Node(middle)
-                .SizeRelativeV((1, 1))
-                .IsScrollableV(true)
-                .OnScrollF((wheel) => scroll += -wheel.Y * s.ScrollStep)
-                .OnUpdateF(() =>
-                {
-                    if (scroll < 0)
-                        scroll = 0;
-
-                    var maxScroll = Math.Max(0, select.SizeInnerSumR.Y - middle.SizeR.Y);
-                    if (scroll > maxScroll)
-                        scroll = maxScroll;
-                });
         }
 
         Node(root, out var bottomBar)

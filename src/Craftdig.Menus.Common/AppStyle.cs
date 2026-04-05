@@ -218,6 +218,69 @@ public class AppStyle(RootText text, RootKeyboard keyboard, AppMenuTextures menu
         });
 
 
+    public void Selector(EntMut parent, RootUiMouse mouse, out EntMut list)
+    {
+        float scroll = 0;
+
+        Node(parent, out var select)
+            .Mutate(VerticalList)
+            .InnerScrollOffsetF(() => (0, -scroll))
+            .SizeInnerMaxRelativeV((1, 0))
+            .AlignmentV(Alignment.Horizontal);
+        list = select;
+
+        Node(parent, out var scrollBar)
+            .SizeV((20, 0))
+            .SizeRelativeV((0, 1))
+            .OffsetV((ItemWidthL - ItemSpacingXXL - ItemSpacingS, 0))
+            .AlignmentV(Alignment.Center)
+            .ColorV((0, 1, 1, 1))
+            .IsDisabledF(() => parent.SizeR.Y / select.SizeInnerSumR.Y >= 1);
+        {
+            Vector2 pressPoint = default;
+            float pressScroll = default;
+
+            Node(scrollBar, out var scrollPuck)
+                .IsSelectableV(true)
+                .IsSilentFocusableV(true)
+                .DeferFocusV(select)
+                .CursorF(() => scrollPuck.IsPressedR ? MouseCursor.ResizeNS : MouseCursor.PointingHand)
+                .ColorF(() => scrollPuck.IsPressedR ? (1, 1, 0, 1) : (0.5f, 0.5f, 1, 1))
+                .OffsetF(() => (0, scroll / select.SizeInnerSumR.Y) * scrollBar.SizeR)
+                .SizeRelativeF(() => (1, Math.Min(1, parent.SizeR.Y / select.SizeInnerSumR.Y)))
+                .OnPressF(() =>
+                {
+                    pressScroll = scroll;
+                    pressPoint = mouse.Position - scrollBar.DrawOffsetR;
+                })
+                .OnUpdateF(() =>
+                {
+                    if (!scrollPuck.IsPressedR)
+                        return;
+
+                    var newPoint = mouse.Position - scrollBar.DrawOffsetR;
+                    var delta = newPoint.Y - pressPoint.Y;
+                    var deltaRelative = delta / scrollBar.SizeR.Y;
+                    var deltaTranslated = deltaRelative * select.SizeInnerSumR.Y;
+                    scroll = pressScroll + deltaTranslated;
+                });
+        }
+
+        Node(parent)
+            .SizeRelativeV((1, 1))
+            .IsScrollableV(true)
+            .OnScrollF((wheel) => scroll += -wheel.Y * ScrollStep)
+            .OnUpdateF(() =>
+            {
+                if (scroll < 0)
+                    scroll = 0;
+
+                var maxScroll = Math.Max(0, select.SizeInnerSumR.Y - parent.SizeR.Y);
+                if (scroll > maxScroll)
+                    scroll = maxScroll;
+            });
+    }
+
     public void PointingCursor(EntMut ent) => ent.Mutate()
         .CursorF(() => ent.IsInputDisabledFV.Resolve() ? MouseCursor.Default : MouseCursor.PointingHand);
 
