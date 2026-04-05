@@ -24,10 +24,8 @@ public class ModuleMultiplayerAddServerMenu(
                 .TextV(editing != null ? "Edit Server Info" : "Add Server");
 
             Node(form)
-                .Mutate(s.Label);
-
-            Node(form)
                 .Mutate(s.Label)
+                .MarginV((0, s.ItemHeight, 0, 0))
                 .TextV("Server Name");
 
             Node(form)
@@ -46,10 +44,8 @@ public class ModuleMultiplayerAddServerMenu(
                 .StringBuilderV(host);
 
             Node(form)
-                .Mutate(s.Label);
-
-            Node(form)
                 .Mutate(s.Button)
+                .MarginV((0, s.ItemHeight, 0, 0))
                 .TextV("Done")
                 .IsInputDisabledF(() => host.Length == 0)
                 .OnPressF(() =>

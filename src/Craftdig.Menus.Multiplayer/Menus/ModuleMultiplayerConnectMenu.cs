@@ -25,10 +25,8 @@ public class ModuleMultiplayerConnectMenu(
                 .TextV("Direct Connection");
 
             Node(form)
-                .Mutate(s.Label);
-
-            Node(form)
                 .Mutate(s.Label)
+                .MarginV((0, s.ItemHeight, 0, 0))
                 .TextV("Server Address");
 
             Node(form)
@@ -38,10 +36,8 @@ public class ModuleMultiplayerConnectMenu(
                 .IsInitialFocusV(true);
 
             Node(form)
-                .Mutate(s.Label);
-
-            Node(form)
                 .Mutate(s.Button)
+                .MarginV((0, s.ItemHeight, 0, 0))
                 .TextV("Join Server")
                 .IsInputDisabledF(() => address.Length == 0)
                 .OnPressF(() =>

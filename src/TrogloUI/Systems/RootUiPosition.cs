@@ -32,8 +32,9 @@ public class RootUiPosition(RootSprites sprites, RootUiScale scale)
                 if (c.IsFloatingFV.Resolve())
                     continue;
 
-                ce.OffsetR += (0, y);
-                y += c.SizeR.Y;
+                y += c.MarginR.Y;
+                ce.OffsetR += (c.MarginR.X, y);
+                y += c.SizeR.Y + c.MarginR.W;
                 y += innerSpacing;
             }
         }
@@ -47,8 +48,9 @@ public class RootUiPosition(RootSprites sprites, RootUiScale scale)
                 if (c.IsFloatingFV.Resolve())
                     continue;
 
-                ce.OffsetR += (x, 0);
-                x += c.SizeR.X;
+                x += c.MarginR.X;
+                ce.OffsetR += (x, c.MarginR.Y);
+                x += c.SizeR.X + c.MarginR.Z;
                 x += innerSpacing;
             }
         }

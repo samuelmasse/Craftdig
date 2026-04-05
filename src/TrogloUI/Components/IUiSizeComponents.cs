@@ -17,6 +17,8 @@ public interface IUiSizeComponents
     UiProp<float?> SizeWeightFV { get; set; }
     /// <summary>Padding around the node's content area (left, top, right, bottom).</summary>
     UiProp<Vector4> PaddingFV { get; set; }
+    /// <summary>Margin around the node (left, top, right, bottom).</summary>
+    UiProp<Vector4> MarginFV { get; set; }
     /// <summary>Fixed size of this node.</summary>
     UiProp<Vector2> SizeFV { get; set; }
     /// <summary>Size as a fraction of the parent's available space.</summary>
@@ -44,6 +46,8 @@ public interface IUiSizeComponents
     Vector2 SizeInnerSumR { get; internal set; }
     /// <summary>Resolved padding of this node.</summary>
     Vector4 PaddingR { get; internal set; }
+    /// <summary>Resolved margin of this node.</summary>
+    Vector4 MarginR { get; internal set; }
     /// <summary>Resolved horizontal size from weighted distribution.</summary>
     float? HorizontalWeightSizeR { get; internal set; }
     /// <summary>Resolved vertical size from weighted distribution.</summary>

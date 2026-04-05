@@ -24,10 +24,8 @@ public class ModuleMultiplayerDeleteServerMenu(
                 .AlignmentV(Alignment.Horizontal)
                 .TextV($"'{server.Name}' will be lost forever! (A long time!)");
 
-            Node(form)
-                .Mutate(s.Label);
-
             Node(form, out var buttons)
+                .MarginV((0, s.ItemHeight, 0, 0))
                 .SizeInnerMaxRelativeV(s.Vertical)
                 .SizeInnerSumRelativeV((1, 0))
                 .AlignmentV(Alignment.Horizontal)
