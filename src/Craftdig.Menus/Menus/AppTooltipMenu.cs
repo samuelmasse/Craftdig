@@ -15,10 +15,7 @@ public class AppTooltipMenu(RootUiMouse uiMouse, AppStyle s)
         ReadOnlySpan<char> Value()
         {
             var hovered = uiMouse.Hovered;
-            if (!hovered.HasTooltipV && !hovered.HasTooltipF)
-                return string.Empty;
-
-            return Get(hovered.TooltipV ?? string.Empty, hovered.TooltipFDelegate);
+            return hovered.TooltipFV.Resolve();
         }
     }
 }

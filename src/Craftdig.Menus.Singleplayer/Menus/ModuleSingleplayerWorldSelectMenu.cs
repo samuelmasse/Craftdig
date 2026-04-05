@@ -42,7 +42,7 @@ public class ModuleSingleplayerWorldSelectMenu(
                     .SizeV((s.ItemWidthL * 1.4f, s.ItemHeight))
                     .StringBuilderV(search)
                     .IsInitialFocusV(true)
-                    .OnTextUpdated(() =>
+                    .OnTextUpdatedF(() =>
                     {
                         if (search.Length == 0)
                         {
@@ -218,7 +218,7 @@ public class ModuleSingleplayerWorldSelectMenu(
                         Node(leftButtonsHorizontal)
                             .OnPressF(() =>
                             {
-                                NodeStack(root.StackRootV).StackRootV(root.StackRootV)
+                                NodeStack(root.StackRootFV.Resolve()).StackRootV(root.StackRootFV.Resolve())
                                     .Mutate(r => editWorldMenu.Create(r, selected!));
                             })
                             .TextV("Edit")
@@ -228,7 +228,7 @@ public class ModuleSingleplayerWorldSelectMenu(
                         Node(leftButtonsHorizontal)
                             .OnPressF(() =>
                             {
-                                NodeStack(root.StackRootV).StackRootV(root.StackRootV)
+                                NodeStack(root.StackRootFV.Resolve()).StackRootV(root.StackRootFV.Resolve())
                                     .Mutate(r => deleteWorldMenu.Create(r, selected!));
                             })
                             .TextV("Delete")
@@ -243,7 +243,7 @@ public class ModuleSingleplayerWorldSelectMenu(
                     .InnerSpacingV(s.ItemSpacing);
                 {
                     Node(rightButtonsVertical)
-                        .OnPressF(() => NodeStack(root.StackRootV).StackRootV(root.StackRootV).Mutate(newWorldMenu.Create))
+                        .OnPressF(() => NodeStack(root.StackRootFV.Resolve()).StackRootV(root.StackRootFV.Resolve()).Mutate(newWorldMenu.Create))
                         .TextV("Create New World")
                         .Mutate(s.Button);
 
@@ -257,7 +257,7 @@ public class ModuleSingleplayerWorldSelectMenu(
                         Node(rightButtonsHorizontal)
                             .OnPressF(() =>
                             {
-                                NodeStack(root.StackRootV).StackRootV(root.StackRootV)
+                                NodeStack(root.StackRootFV.Resolve()).StackRootV(root.StackRootFV.Resolve())
                                     .Mutate(r => newWorldMenu.Create(r, selected!.Meta));
                             })
                             .TextV("Re-Create")
@@ -265,7 +265,7 @@ public class ModuleSingleplayerWorldSelectMenu(
                             .IsInputDisabledF(() => selected == null);
 
                         Node(rightButtonsHorizontal)
-                            .OnPressF(() => root.StackRootV.NodeStack.Pop())
+                            .OnPressF(() => root.StackRootFV.Resolve().NodeStack.Pop())
                             .TextV("Back")
                             .Mutate(s.Button);
                     }

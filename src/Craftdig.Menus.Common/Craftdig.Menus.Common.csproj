@@ -34,6 +34,8 @@
         <ProjectReference Include="..\Craftdig.Player.Frontend\Craftdig.Player.Frontend.csproj" />
         <ProjectReference Include="..\Craftdig.World\Craftdig.World.csproj" />
         <ProjectReference Include="..\TrogloUI\TrogloUI.csproj" />
+        <ProjectReference Include="..\TrogloUI.Generator\TrogloUI.Generator.csproj"
+            OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
     </ItemGroup>
 
 </Project>

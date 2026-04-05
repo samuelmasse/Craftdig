@@ -50,9 +50,9 @@ public class ModuleSingleplayerEditWorldMenu(
                             worldName = world.Meta.Name;
 
                         writeWorldMetaAction.Write(world.Meta with { Name = worldName }, world.Paths);
-                        root.StackRootV.NodeStack.Pop();
-                        root.StackRootV.NodeStack.Pop();
-                        NodeStack(root.StackRootV).StackRootV(root.StackRootV)
+                        root.StackRootFV.Resolve().NodeStack.Pop();
+                        root.StackRootFV.Resolve().NodeStack.Pop();
+                        NodeStack(root.StackRootFV.Resolve()).StackRootV(root.StackRootFV.Resolve())
                             .Mutate(scope.Get<ModuleSingleplayerWorldSelectMenu>().Create);
                     })
                     .TextV("Save")
@@ -60,7 +60,7 @@ public class ModuleSingleplayerEditWorldMenu(
                     .SizeV((s.ItemWidthL, s.ItemHeight));
 
                 Node(buttonsList)
-                    .OnPressF(() => root.StackRootV.NodeStack.Pop())
+                    .OnPressF(() => root.StackRootFV.Resolve().NodeStack.Pop())
                     .TextV("Cancel")
                     .Mutate(s.Button)
                     .SizeV((s.ItemWidthL, s.ItemHeight));
