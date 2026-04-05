@@ -101,7 +101,7 @@ public class RootUiMouse(RootMouse mouse, RootUiScale scale, RootUiFocus focus, 
 
         var now = Environment.TickCount64;
 
-        if (lastClickTarget == e && now - lastClickTicks <= DoubleClickMs)
+        if (lastClickTarget == e && now - lastClickTicks <= DoubleClickMs && e.OnDoubleClickFV.Resolve() != null)
         {
             e.OnDoubleClickFV.Resolve()?.Invoke();
             lastClickTarget = default;
