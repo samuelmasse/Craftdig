@@ -4,8 +4,10 @@ namespace Craftdig.Menus.Multiplayer;
 public class ModuleMultiplayerServerBrowserMenu(
     RootUiMouse mouse,
     AppStyle s,
+    AppClientOptions clientOptions,
     ModuleScope module,
     ModuleMultiplayerServerList serverList,
+    ModuleMultiplayerCredentials multiplayerCredentials,
     ModuleMultiplayerConnectAction multiplayerConnectAction,
     ModuleMultiplayerConnectMenu connectMenu,
     ModuleMultiplayerConnectingMenu connectingMenu)
@@ -13,16 +15,62 @@ public class ModuleMultiplayerServerBrowserMenu(
     public void Create(EntMut root)
     {
         ServerEntry? selected = null;
+        StringBuilder? user = clientOptions.NoAuthUser != null ? new(clientOptions.NoAuthUser) : null;
 
         Node(root, out var topBar)
             .SizeRelativeV(s.Horizontal)
             .SizeV((0, s.BarHeight))
             .ColorV(s.BoardColor);
         {
-            Node(topBar)
-                .Mutate(s.Label)
-                .AlignmentV(Alignment.Center)
-                .TextV("Play Multiplayer");
+            Node(topBar, out var topBarContent)
+                .Mutate(s.VerticalList)
+                .InnerSpacingV(s.ItemSpacing)
+                .SizeInnerMaxRelativeV((1, 0))
+                .AlignmentV(Alignment.Center);
+            {
+                Node(topBarContent)
+                    .Mutate(s.Label)
+                    .AlignmentV(Alignment.Horizontal)
+                    .TextV("Play Multiplayer");
+
+                if (user != null)
+                {
+                    Node(topBarContent)
+                        .Mutate(s.Textbox)
+                        .SizeV((s.ItemWidthL, s.ItemHeight))
+                        .StringBuilderV(user)
+                        .OnTextUpdatedF(() =>
+                        {
+                            clientOptions.NoAuthUser = user.ToString();
+                            clientOptions.DefaultNoAuthUser = clientOptions.NoAuthUser;
+                        });
+                }
+                else
+                {
+                    Node(topBarContent)
+                        .Mutate(s.Label)
+                        .AlignmentV(Alignment.Horizontal)
+                        .TextColorV(s.TextColorFaint)
+                        .TextV(multiplayerCredentials.Email ?? string.Empty);
+                }
+            }
+
+            if (user == null)
+            {
+                Node(topBar)
+                    .Mutate(s.Button)
+                    .SizeRelativeV((0, 0))
+                    .SizeV((s.ItemWidth, s.ItemHeight))
+                    .AlignmentV(Alignment.Top | Alignment.Right)
+                    .OffsetV((-s.ItemSpacingS, s.ItemSpacingS))
+                    .TextV("Logout")
+                    .OnPressF(() =>
+                    {
+                        multiplayerCredentials.Logout();
+                        NodeStackPopR(root);
+                        NodeSR(root).Mutate(module.Get<ModuleMultiplayerLoginMenu>().Create);
+                    });
+            }
         }
 
         Node(root, out var middle)

@@ -54,16 +54,7 @@ public class ModuleMultiplayerAddServerMenu(
                 .IsInputDisabledF(() => host.Length == 0)
                 .OnPressF(() =>
                 {
-                    var hostStr = host.ToString();
-                    int port = 36676;
-
-                    var colonIdx = hostStr.LastIndexOf(':');
-                    if (colonIdx >= 0 && int.TryParse(hostStr.AsSpan()[(colonIdx + 1)..], out var parsed))
-                    {
-                        port = parsed;
-                        hostStr = hostStr[..colonIdx];
-                    }
-
+                    var (hostStr, port) = ServerEntry.ParseAddress(host.ToString());
                     var entry = new ServerEntry(name.ToString(), hostStr, port);
 
                     if (editing != null)
