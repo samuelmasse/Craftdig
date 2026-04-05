@@ -2,7 +2,6 @@ namespace Craftdig.Menus.Singleplayer;
 
 [Module]
 public class ModuleSingleplayerWorldSelectMenu(
-    RootUiMouse mouse,
     AppStyle s,
     ModuleScope scope,
     ModuleSingleplayerLoadWorldAction singleplayerLoadWorldAction,
@@ -10,7 +9,6 @@ public class ModuleSingleplayerWorldSelectMenu(
     ModuleSingleplayerNewWorldMenu newWorldMenu,
     ModuleSingleplayerDeleteWorldMenu deleteWorldMenu,
     ModuleSingleplayerEditWorldMenu editWorldMenu)
-
 {
     public void Create(EntMut root)
     {
@@ -64,7 +62,7 @@ public class ModuleSingleplayerWorldSelectMenu(
         {
             var screenshots = scope.New<ModuleWorldScreenshots>();
 
-            s.Selector(middle, mouse, out var select);
+            s.Selector(middle, out var select);
             select.Mutate().OnFrameF(() => screenshots.RefillBucket());
 
             for (int i = 0; i < worlds.Count; i++)

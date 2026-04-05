@@ -1,7 +1,7 @@
 namespace Craftdig.Menus.Common;
 
 [App]
-public class AppStyle(RootText text, RootKeyboard keyboard, AppMenuTextures menuTextures, AppMonocraft monocraft)
+public class AppStyle(RootText text, RootUiMouse mouse, RootKeyboard keyboard, AppMenuTextures menuTextures, AppMonocraft monocraft)
 {
     public readonly Texture ArrowTexture = menuTextures["MenuArrow"];
     public readonly Texture SlotTexture = menuTextures["MenuSlot"];
@@ -218,7 +218,7 @@ public class AppStyle(RootText text, RootKeyboard keyboard, AppMenuTextures menu
         });
 
 
-    public void Selector(EntMut parent, RootUiMouse mouse, out EntMut list)
+    public void Selector(EntMut parent, out EntMut list)
     {
         float scroll = 0;
 

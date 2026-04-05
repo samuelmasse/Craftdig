@@ -2,7 +2,6 @@ namespace Craftdig.Menus.Multiplayer;
 
 [Module]
 public class ModuleMultiplayerServerBrowserMenu(
-    RootUiMouse mouse,
     AppStyle s,
     AppClientOptions clientOptions,
     ModuleScope module,
@@ -78,7 +77,7 @@ public class ModuleMultiplayerServerBrowserMenu(
             .SizeV((0, -s.BarHeight * 2))
             .OffsetV((0, s.BarHeight));
         {
-            s.Selector(middle, mouse, out var select);
+            s.Selector(middle, out var select);
 
             for (int i = 0; i < serverList.Servers.Length; i++)
             {
