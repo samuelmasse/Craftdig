@@ -1,8 +1,10 @@
 namespace TrogloUI;
 
-public readonly record struct UiCallback<T>(T Value)
+public readonly struct UiCallback<T>(T value)
 {
-    public T Resolve() => Value;
+    public T Resolve() => value;
 
     public static implicit operator UiCallback<T>(T value) => new(value);
+
+    public override string ToString() => $"{value}";
 }

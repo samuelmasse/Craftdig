@@ -7,11 +7,14 @@ public class RootUi : EntObj
 {
     public static implicit operator EntMut(RootUi value) => (EntMut)(value as EntObj);
 
+    private readonly NodeArrayAllocator allocator = new();
     private readonly EntArena arena = new();
     private long nextId = 1;
     private long alive = 1;
     private List<EntPtr> ents = [];
     private List<EntPtr> buffer = [];
+
+    internal NodeArrayAllocator Allocator => allocator;
 
     public RootUi()
     {
@@ -40,9 +43,13 @@ public class RootUi : EntObj
 
         foreach (var ent in ents)
         {
-            if (ent.UiAliveToken == alive)
-                buffer.Add(ent);
-            else ent.Dispose();
+            if (ent.UiToken != alive)
+            {
+                allocator.Free(ent.UiNodes);
+                allocator.Free(ent.UiNodeStack);
+                ent.Dispose();
+            }
+            else buffer.Add(ent);
         }
 
         (ents, buffer) = (buffer, ents);
@@ -51,12 +58,12 @@ public class RootUi : EntObj
 
     private void Mark(EntMut ent)
     {
-        ent.UiAliveToken = alive;
+        ent.UiToken = alive;
 
         foreach (var child in Nodes(ent))
             Mark(child);
 
-        foreach (var child in NodeStackSpan(ent))
+        foreach (var child in NodeStack(ent))
             Mark(child);
     }
 }

@@ -1,16 +1,16 @@
 namespace TrogloUI;
 
-public readonly record struct UiText(string Value, Func<ReadOnlySpan<char>>? Func)
+public readonly struct UiText(string value, Func<ReadOnlySpan<char>>? func)
 {
-    public ReadOnlySpan<char> Resolve() => Func != null ? Func() : Value;
+    public ReadOnlySpan<char> Resolve() => func != null ? func() : value;
 
     public static implicit operator UiText(string value) => new(value, null);
     public static implicit operator UiText(Func<ReadOnlySpan<char>> func) => new(null!, func);
 
     public override string ToString()
     {
-        if (Value != null)
-            return $"\"{Value}\"";
+        if (value != null)
+            return $"\"{value}\"";
         else return base.ToString()!;
     }
 }
