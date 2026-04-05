@@ -38,11 +38,10 @@ public class ModuleSingleplayerDeleteWorldMenu(
                     {
                         Directory.Delete(world.Dir, true);
 
-                        NodeStackPop(root.StackRootFV.Resolve());
-                        NodeStackPop(root.StackRootFV.Resolve());
+                        NodeStackPopR(root);
+                        NodeStackPopR(root);
 
-                        NodeS(root.StackRootFV.Resolve()).StackRootV(root.StackRootFV.Resolve())
-                            .Mutate(scope.Get<ModuleSingleplayerWorldSelectMenu>().Create);
+                        NodeSR(root).Mutate(scope.Get<ModuleSingleplayerWorldSelectMenu>().Create);
                     })
                     .TextV("Delete")
                     .Mutate(s.Button)
@@ -50,7 +49,7 @@ public class ModuleSingleplayerDeleteWorldMenu(
                     .SizeV((s.ItemWidthL, s.ItemHeight));
 
                 Node(buttons)
-                    .OnPressF(() => NodeStackPop(root.StackRootFV.Resolve()))
+                    .OnPressF(() => NodeStackPopR(root))
                     .TextV("Cancel")
                     .Mutate(s.Button)
                     .SizeRelativeV((0, 0))

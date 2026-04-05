@@ -216,21 +216,13 @@ public class ModuleSingleplayerWorldSelectMenu(
                         .InnerSizingV(InnerSizing.HorizontalWeight);
                     {
                         Node(leftButtonsHorizontal)
-                            .OnPressF(() =>
-                            {
-                                NodeS(root.StackRootFV.Resolve()).StackRootV(root.StackRootFV.Resolve())
-                                    .Mutate(r => editWorldMenu.Create(r, selected!));
-                            })
+                            .OnPressF(() => NodeSR(root).Mutate(r => editWorldMenu.Create(r, selected!)))
                             .TextV("Edit")
                             .Mutate(s.Button)
                             .IsInputDisabledF(() => selected == null);
 
                         Node(leftButtonsHorizontal)
-                            .OnPressF(() =>
-                            {
-                                NodeS(root.StackRootFV.Resolve()).StackRootV(root.StackRootFV.Resolve())
-                                    .Mutate(r => deleteWorldMenu.Create(r, selected!));
-                            })
+                            .OnPressF(() => NodeSR(root).Mutate(r => deleteWorldMenu.Create(r, selected!)))
                             .TextV("Delete")
                             .Mutate(s.Button)
                             .IsInputDisabledF(() => selected == null);
@@ -243,7 +235,7 @@ public class ModuleSingleplayerWorldSelectMenu(
                     .InnerSpacingV(s.ItemSpacing);
                 {
                     Node(rightButtonsVertical)
-                        .OnPressF(() => NodeS(root.StackRootFV.Resolve()).StackRootV(root.StackRootFV.Resolve()).Mutate(newWorldMenu.Create))
+                        .OnPressF(() => NodeSR(root).Mutate(newWorldMenu.Create))
                         .TextV("Create New World")
                         .Mutate(s.Button);
 
@@ -255,17 +247,13 @@ public class ModuleSingleplayerWorldSelectMenu(
                         .InnerSizingV(InnerSizing.HorizontalWeight);
                     {
                         Node(rightButtonsHorizontal)
-                            .OnPressF(() =>
-                            {
-                                NodeS(root.StackRootFV.Resolve()).StackRootV(root.StackRootFV.Resolve())
-                                    .Mutate(r => newWorldMenu.Create(r, selected!.Meta));
-                            })
+                            .OnPressF(() => NodeSR(root).Mutate(r => newWorldMenu.Create(r, selected!.Meta)))
                             .TextV("Re-Create")
                             .Mutate(s.Button)
                             .IsInputDisabledF(() => selected == null);
 
                         Node(rightButtonsHorizontal)
-                            .OnPressF(() => NodeStackPop(root.StackRootFV.Resolve()))
+                            .OnPressF(() => NodeStackPopR(root))
                             .TextV("Back")
                             .Mutate(s.Button);
                     }

@@ -57,6 +57,7 @@ public class PlayerCommonState(
         ent.CanSprint = true;
         ent.PrevPosition = ent.Position;
 
+        menus.Mutate().StackRootV(menus);
         Node(menus).Mutate(debugMenu.Create);
         Node(menus).Mutate(dimensionSharedVertexBufferMenu.Create);
     }
@@ -78,7 +79,7 @@ public class PlayerCommonState(
             else
             {
                 paused = true;
-                NodeS(menus).StackRootV(menus).Mutate(escapeMenu.Create);
+                NodeSR(menus).Mutate(escapeMenu.Create);
             }
         }
 
@@ -100,7 +101,7 @@ public class PlayerCommonState(
                 {
                     inv = true;
                     currentKeyMenu = keyMenus[key];
-                    NodeS(menus).Mutate(keyMenus[key]);
+                    NodeSR(menus).Mutate(keyMenus[key]);
                 }
             }
         }

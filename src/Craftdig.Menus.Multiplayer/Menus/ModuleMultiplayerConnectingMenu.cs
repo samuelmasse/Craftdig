@@ -45,7 +45,7 @@ public class ModuleMultiplayerConnectingMenu(
                 .OnPressF(() =>
                 {
                     multiplayerConnectAction.Cancel();
-                    NodeStackPop(root.StackRootFV.Resolve());
+                    NodeStackPopR(root);
                 })
                 .TextV("Cancel")
                 .Mutate(s.Button);

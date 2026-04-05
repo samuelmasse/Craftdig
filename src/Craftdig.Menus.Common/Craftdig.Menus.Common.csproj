@@ -15,6 +15,9 @@
             <Static>true</Static>
         </Using>
         <Using Include="Craftdig.Menus" />
+        <Using Include="Craftdig.Menus.Common.AppUiSyntax">
+            <Static>true</Static>
+        </Using>
         <Using Include="Craftdig.Module" />
         <Using Include="Craftdig.Module.Frontend" />
         <Using Include="Craftdig.Player.Frontend" />

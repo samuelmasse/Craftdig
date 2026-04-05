@@ -36,8 +36,8 @@ public class ModuleMultiplayerConnectMenu(
                     {
                         multiplayerCredentials.Logout();
 
-                        NodeStackPop(root.StackRootFV.Resolve());
-                        NodeS(root.StackRootFV.Resolve()).StackRootV(root.StackRootFV.Resolve()).Mutate(module.Get<ModuleMultiplayerLoginMenu>().Create);
+                        NodeStackPopR(root);
+                        NodeSR(root).Mutate(module.Get<ModuleMultiplayerLoginMenu>().Create);
                     })
                     .TextV("Logout")
                     .Mutate(s.Button);
@@ -108,7 +108,7 @@ public class ModuleMultiplayerConnectMenu(
 
                             multiplayerConnectAction.Start(connHost, connPort);
 
-                            NodeS(root.StackRootFV.Resolve()).StackRootV(root.StackRootFV.Resolve()).Mutate(multiplayerConnectingMenu.Create);
+                            NodeSR(root).Mutate(multiplayerConnectingMenu.Create);
                         })
                         .IsInputDisabledF(() =>
                         {
@@ -125,7 +125,7 @@ public class ModuleMultiplayerConnectMenu(
                     .InnerSpacingV(s.ItemSpacing);
                 {
                     Node(rightButtonsVertical)
-                        .OnPressF(() => NodeStackPop(root.StackRootFV.Resolve()))
+                        .OnPressF(() => NodeStackPopR(root))
                         .TextV("Cancel")
                         .Mutate(s.Button);
                 }

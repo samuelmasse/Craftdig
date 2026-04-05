@@ -11,17 +11,14 @@ public class ModuleMenuState(
 {
     private readonly EntMut menus = Node(ui);
     private readonly Stopwatch watch = new();
+    private int update;
+    private bool gc;
 
     public override void Load()
     {
-        GCSettings.LargeObjectHeapCompactionMode = GCLargeObjectHeapCompactionMode.CompactOnce;
-        GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced, blocking: true, compacting: true);
-        GC.WaitForPendingFinalizers();
-        GCSettings.LargeObjectHeapCompactionMode = GCLargeObjectHeapCompactionMode.CompactOnce;
-        GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced, blocking: true, compacting: true);
-
+        menus.Mutate().StackRootV(menus);
         Node(menus).Mutate(mainBackgroundMenu.Create);
-        NodeS(menus).StackRootV(menus).Mutate(mainMenu.Create);
+        NodeSR(menus).Mutate(mainMenu.Create);
         watch.Start();
     }
 
@@ -40,6 +37,19 @@ public class ModuleMenuState(
 
         if (watch.ElapsedMilliseconds > 30)
             screen.IsVisible = true;
+
+        if (!gc && update >= 3 && watch.ElapsedMilliseconds > 15)
+        {
+            GCSettings.LargeObjectHeapCompactionMode = GCLargeObjectHeapCompactionMode.CompactOnce;
+            GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced, blocking: true, compacting: true);
+            GC.WaitForPendingFinalizers();
+            GCSettings.LargeObjectHeapCompactionMode = GCLargeObjectHeapCompactionMode.CompactOnce;
+            GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced, blocking: true, compacting: true);
+
+            gc = true;
+        }
+
+        update++;
     }
 
     public override void Render() => backbuffer.Clear();

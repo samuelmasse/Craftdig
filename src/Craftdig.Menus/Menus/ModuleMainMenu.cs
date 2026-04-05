@@ -39,7 +39,7 @@ public class ModuleMainMenu(
             {
                 Node(list2)
                     .Mutate(s.Button)
-                    .OnPressF(() => NodeS(root.StackRootFV.Resolve()).StackRootV(root.StackRootFV.Resolve()).Mutate(worldSelectMenu.Create))
+                    .OnPressF(() => NodeSR(root).Mutate(worldSelectMenu.Create))
                     .TextV("Singleplayer");
 
                 Node(list2)
@@ -47,7 +47,7 @@ public class ModuleMainMenu(
                     .TextV("Multiplayer")
                     .OnPressF(() =>
                     {
-                        var node = NodeS(root.StackRootFV.Resolve()).StackRootV(root.StackRootFV.Resolve());
+                        var node = NodeSR(root);
 
                         if (clientOptions.NoAuthUser == null)
                         {
