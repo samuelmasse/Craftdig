@@ -29,6 +29,9 @@ internal class PropGenerator : IIncrementalGenerator
                     if (p.GetMethod is null || p.SetMethod is null) continue;
                     if (p.Type is not INamedTypeSymbol named) continue;
 
+                    var getAccess = ToAccessString(p.GetMethod!.DeclaredAccessibility);
+                    var setAccess = ToAccessString(p.SetMethod!.DeclaredAccessibility);
+
                     PropKind kind;
                     string innerType;
                     if (named.Name == "UiText" && named.TypeArguments.Length == 0)
@@ -63,11 +66,12 @@ internal class PropGenerator : IIncrementalGenerator
                             doc = xml.Substring(start + 9, end - start - 9).Trim();
                     }
 
-                    propList.Add(new PropInfo(fullName, baseName, innerType, kind, doc));
+                    propList.Add(new PropInfo(fullName, baseName, innerType, kind, doc, getAccess, setAccess));
                 }
                 var props = propList.ToArray();
+                var ifaceAccess = ToAccessString(ifaceSymbol.DeclaredAccessibility);
 
-                return new Model(ns, ifaceSymbol.Name, props);
+                return new Model(ns, ifaceSymbol.Name, props, ifaceAccess);
             });
 
         context.RegisterSourceOutput(provider, static (spc, model) =>
@@ -92,7 +96,7 @@ internal class PropGenerator : IIncrementalGenerator
             if (className.Length >= 2 && className[0] == 'I' && char.IsUpper(className[1]))
                 className = className.Substring(1);
 
-            sb.AppendLine($"public static class {className}PropExtensions");
+            sb.AppendLine($"{model.InterfaceAccess} static class {className}PropExtensions");
             sb.AppendLine("{");
             sb.AppendLine("    extension<T>(EntMutator<T> mut) where T : IEntMut");
             sb.AppendLine("    {");
@@ -108,7 +112,7 @@ internal class PropGenerator : IIncrementalGenerator
                 {
                     if (prop.Doc != null)
                         sb.AppendLine($"        /// <summary>{prop.Doc}</summary>");
-                    sb.AppendLine($"        public EntMutator<T> {prop.BaseName}F(in {prop.InnerType} value)");
+                    sb.AppendLine($"        {prop.SetAccess} EntMutator<T> {prop.BaseName}F(in {prop.InnerType} value)");
                     sb.AppendLine("        {");
                     sb.AppendLine($"            mut.Ent.{prop.FullName} = new(value);");
                     sb.AppendLine("            return mut;");
@@ -118,7 +122,7 @@ internal class PropGenerator : IIncrementalGenerator
                 {
                     if (prop.Doc != null)
                         sb.AppendLine($"        /// <summary>{prop.Doc}</summary>");
-                    sb.AppendLine($"        public EntMutator<T> {prop.BaseName}V(string value)");
+                    sb.AppendLine($"        {prop.SetAccess} EntMutator<T> {prop.BaseName}V(string value)");
                     sb.AppendLine("        {");
                     sb.AppendLine($"            mut.Ent.{prop.FullName} = new(value, null);");
                     sb.AppendLine("            return mut;");
@@ -127,7 +131,7 @@ internal class PropGenerator : IIncrementalGenerator
                     sb.AppendLine();
                     if (prop.Doc != null)
                         sb.AppendLine($"        /// <summary>{prop.Doc}</summary>");
-                    sb.AppendLine($"        public EntMutator<T> {prop.BaseName}F(global::System.Func<global::System.ReadOnlySpan<char>>? func)");
+                    sb.AppendLine($"        {prop.SetAccess} EntMutator<T> {prop.BaseName}F(global::System.Func<global::System.ReadOnlySpan<char>>? func)");
                     sb.AppendLine("        {");
                     sb.AppendLine($"            mut.Ent.{prop.FullName} = new(null!, func);");
                     sb.AppendLine("            return mut;");
@@ -137,7 +141,7 @@ internal class PropGenerator : IIncrementalGenerator
                 {
                     if (prop.Doc != null)
                         sb.AppendLine($"        /// <summary>{prop.Doc}</summary>");
-                    sb.AppendLine($"        public EntMutator<T> {prop.BaseName}V(in {prop.InnerType} value)");
+                    sb.AppendLine($"        {prop.SetAccess} EntMutator<T> {prop.BaseName}V(in {prop.InnerType} value)");
                     sb.AppendLine("        {");
                     sb.AppendLine($"            mut.Ent.{prop.FullName} = new(value, null);");
                     sb.AppendLine("            return mut;");
@@ -146,7 +150,7 @@ internal class PropGenerator : IIncrementalGenerator
                     sb.AppendLine();
                     if (prop.Doc != null)
                         sb.AppendLine($"        /// <summary>{prop.Doc}</summary>");
-                    sb.AppendLine($"        public EntMutator<T> {prop.BaseName}F(global::System.Func<{prop.InnerType}>? func)");
+                    sb.AppendLine($"        {prop.SetAccess} EntMutator<T> {prop.BaseName}F(global::System.Func<{prop.InnerType}>? func)");
                     sb.AppendLine("        {");
                     sb.AppendLine($"            mut.Ent.{prop.FullName} = new(default!, func);");
                     sb.AppendLine("            return mut;");
@@ -162,6 +166,15 @@ internal class PropGenerator : IIncrementalGenerator
     }
 
     private enum PropKind { Prop, Callback, Text }
-    private record Model(string Namespace, string InterfaceName, PropInfo[] Props);
-    private record PropInfo(string FullName, string BaseName, string InnerType, PropKind Kind, string? Doc);
+    private record Model(string Namespace, string InterfaceName, PropInfo[] Props, string InterfaceAccess);
+    private record PropInfo(string FullName, string BaseName, string InnerType, PropKind Kind, string? Doc, string GetAccess, string SetAccess);
+
+    private static string ToAccessString(Accessibility a) => a switch
+    {
+        Accessibility.Internal => "internal",
+        Accessibility.Protected => "protected",
+        Accessibility.ProtectedOrInternal => "protected internal",
+        Accessibility.Private => "private",
+        _ => "public"
+    };
 }

@@ -1,5 +1,7 @@
 namespace TrogloUI;
 
+using TrogloUI.Root;
+
 [Root]
 public class RootUi : EntObj
 {

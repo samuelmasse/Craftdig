@@ -23,9 +23,9 @@ public interface IUiMouseComponents
     UiCallback<Action<Vector2>?> OnScrollFV { get; set; }
 
     /// <summary>Whether this node is currently hovered.</summary>
-    bool IsHoveredR { get; set; }
+    bool IsHoveredR { get; internal set; }
     /// <summary>Whether this node is currently pressed with the left mouse button.</summary>
-    bool IsPressedR { get; set; }
+    bool IsPressedR { get; internal set; }
     /// <summary>Whether this node is currently pressed with the right mouse button.</summary>
-    bool IsSecondaryPressedR { get; set; }
+    bool IsSecondaryPressedR { get; internal set; }
 }

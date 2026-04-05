@@ -17,5 +17,5 @@ public interface IUiPositionComponents
     UiProp<float> OffsetMultiplierFV { get; set; }
 
     /// <summary>Resolved position offset of this node.</summary>
-    Vector2 OffsetR { get; set; }
+    Vector2 OffsetR { get; internal set; }
 }

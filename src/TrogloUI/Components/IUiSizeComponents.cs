@@ -39,13 +39,13 @@ public interface IUiSizeComponents
     UiProp<Vector4> TextPaddingFV { get; set; }
 
     /// <summary>Resolved size of this node.</summary>
-    Vector2 SizeR { get; set; }
+    Vector2 SizeR { get; internal set; }
     /// <summary>Resolved sum of children's sizes plus spacing.</summary>
-    Vector2 SizeInnerSumR { get; set; }
+    Vector2 SizeInnerSumR { get; internal set; }
     /// <summary>Resolved padding of this node.</summary>
-    Vector4 PaddingR { get; set; }
+    Vector4 PaddingR { get; internal set; }
     /// <summary>Resolved horizontal size from weighted distribution.</summary>
-    float? HorizontalWeightSizeR { get; set; }
+    float? HorizontalWeightSizeR { get; internal set; }
     /// <summary>Resolved vertical size from weighted distribution.</summary>
-    float? VerticalWeightSizeR { get; set; }
+    float? VerticalWeightSizeR { get; internal set; }
 }

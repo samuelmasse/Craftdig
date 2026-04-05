@@ -19,5 +19,5 @@ public interface IUiDrawComponents
     UiCallback<Action?> OnFrameFV { get; set; }
 
     /// <summary>Resolved draw position of this node relative to the UI root.</summary>
-    Vector2 DrawOffsetR { get; set; }
+    Vector2 DrawOffsetR { get; internal set; }
 }

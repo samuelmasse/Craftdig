@@ -21,9 +21,9 @@ public interface IUiFocusComponents
     UiCallback<Action?> OnUnselectFV { get; set; }
 
     /// <summary>Whether this node currently has focus.</summary>
-    bool IsFocusedR { get; set; }
+    bool IsFocusedR { get; internal set; }
     /// <summary>Whether this node is the selected node within its focus group.</summary>
-    bool IsSelectedR { get; set; }
+    bool IsSelectedR { get; internal set; }
     /// <summary>The currently selected child node within this focus group.</summary>
-    EntMut SelectedR { get; set; }
+    EntMut SelectedR { get; internal set; }
 }
