@@ -4,7 +4,7 @@ namespace Craftdig.Menus.Multiplayer;
 public class ModuleMultiplayerLoginMenu(
     AppStyle s,
     ModuleMultiplayerCredentials multiplayerCredentials,
-    ModuleMultiplayerConnectMenu connectMenu)
+    ModuleScope module)
 {
     public void Create(EntMut root)
     {
@@ -24,7 +24,7 @@ public class ModuleMultiplayerLoginMenu(
                         return;
 
                     NodeStackPopR(root);
-                    NodeSR(root).Mutate(connectMenu.Create);
+                    NodeSR(root).Mutate(module.Get<ModuleMultiplayerServerBrowserMenu>().Create);
                 });
 
             bool loginStarted = false;
