@@ -28,7 +28,7 @@ internal class NodeArrayAllocator
                 Array.Resize(ref data[rank], (int)System.Numerics.BitOperations.RoundUpToPowerOf2((uint)(size + 1)));
         }
 
-        return new NodeArray(rank, index, 0);
+        return new NodeArray(rank, index, 0, this);
     }
 
     public void Free(NodeArray slot)
