@@ -139,13 +139,8 @@ public class ModuleMultiplayerServerBrowserMenu(
                             .Mutate(s.Button)
                             .TextV("Delete")
                             .IsInputDisabledF(() => selected == null)
-                            .OnPressF(() =>
-                            {
-                                serverList.Remove(selected!);
-                                selected = null;
-                                NodeStackPopR(root);
-                                NodeSR(root).Mutate(Create);
-                            });
+                            .OnPressF(() => NodeSR(root).Mutate(r =>
+                                module.Get<ModuleMultiplayerDeleteServerMenu>().Create(r, selected!)));
 
                         Node(bottomRow)
                             .Mutate(s.Button)
