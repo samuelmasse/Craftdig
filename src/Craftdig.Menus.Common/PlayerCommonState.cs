@@ -4,6 +4,7 @@ namespace Craftdig.Menus.Common;
 public class PlayerCommonState(
     RootCanvas canvas,
     RootMouse mouse,
+    RootUiFocus focus,
     RootKeyboard keyboard,
     RootSprites sprites,
     RootUi ui,
@@ -119,8 +120,9 @@ public class PlayerCommonState(
         }
 
         mouse.Track = !paused && !inv;
-        if (!mouse.Track)
-            construction.Reject();
+        if (mouse.Track)
+            focus.Focus(default, false);
+        else construction.Reject();
     }
 
     public override void Render()
