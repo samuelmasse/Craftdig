@@ -240,7 +240,7 @@ public class AppStyle(RootText text, RootKeyboard keyboard, AppMenuTextures menu
         .TextureV(SlotTexture)
         .Mutate((ent) =>
         {
-            ent.Nodes.Clear();
+            NodesClear(ent);
 
             Node(ent)
                 .Mutate(Text)

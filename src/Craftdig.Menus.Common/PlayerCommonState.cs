@@ -63,22 +63,22 @@ public class PlayerCommonState(
 
     public override void Unload()
     {
-        ui.Nodes.Remove(hand);
-        ui.Nodes.Remove(menus);
-        ui.Nodes.Remove(overlay);
-        ui.Nodes.Remove(dark);
+        NodesRemove(ui, hand);
+        NodesRemove(ui, menus);
+        NodesRemove(ui, overlay);
+        NodesRemove(ui, dark);
     }
 
     public override void Update(double time)
     {
         if (keyboard.IsKeyPressed(Keys.Escape))
         {
-            if (menus.NodeStack.Count > 0)
-                menus.NodeStack.Pop();
+            if (NodeStackCount(menus) > 0)
+                NodeStackPop(menus);
             else
             {
                 paused = true;
-                NodeStack(menus).StackRootV(menus).Mutate(escapeMenu.Create);
+                NodeS(menus).StackRootV(menus).Mutate(escapeMenu.Create);
             }
         }
 
@@ -86,12 +86,12 @@ public class PlayerCommonState(
         {
             if (keyboard.IsKeyPressed(key))
             {
-                if (menus.NodeStack.Count > 0)
+                if (NodeStackCount(menus) > 0)
                 {
                     if (inv && currentKeyMenu == keyMenus[key])
                     {
-                        while (menus.NodeStack.Count > 0)
-                            menus.NodeStack.Pop();
+                        while (NodeStackCount(menus) > 0)
+                            NodeStackPop(menus);
 
                         inv = false;
                     }
@@ -100,15 +100,15 @@ public class PlayerCommonState(
                 {
                     inv = true;
                     currentKeyMenu = keyMenus[key];
-                    NodeStack(menus).Mutate(keyMenus[key]);
+                    NodeS(menus).Mutate(keyMenus[key]);
                 }
             }
         }
 
-        if (menus.NodeStack.Count > 0 && dark.IsDisabledFV.Resolve())
+        if (NodeStackCount(menus) > 0 && dark.IsDisabledFV.Resolve())
             dark.Mutate().IsDisabledV(false);
 
-        if (menus.NodeStack.Count == 0 && !dark.IsDisabledFV.Resolve())
+        if (NodeStackCount(menus) == 0 && !dark.IsDisabledFV.Resolve())
         {
             paused = false;
             inv = false;

@@ -51,10 +51,10 @@ public class RootUi : EntObj
     {
         ent.UiAliveToken = alive;
 
-        foreach (var child in ent.Nodes)
+        foreach (var child in Nodes(ent))
             Mark(child);
 
-        foreach (var child in ent.NodeStack)
+        foreach (var child in NodeStackSpan(ent))
             Mark(child);
     }
 }

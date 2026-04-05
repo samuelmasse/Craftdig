@@ -118,7 +118,7 @@ public class ModuleSingleplayerNewWorldMenu(
                     .InnerSpacingV(s.ItemSpacing);
                 {
                     Node(rightButtonsVertical)
-                        .OnPressF(() => root.StackRootFV.Resolve().NodeStack.Pop())
+                        .OnPressF(() => NodeStackPop(root.StackRootFV.Resolve()))
                         .TextV("Cancel")
                         .Mutate(s.Button);
                 }

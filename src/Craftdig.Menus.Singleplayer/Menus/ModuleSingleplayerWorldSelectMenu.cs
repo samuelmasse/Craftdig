@@ -218,7 +218,7 @@ public class ModuleSingleplayerWorldSelectMenu(
                         Node(leftButtonsHorizontal)
                             .OnPressF(() =>
                             {
-                                NodeStack(root.StackRootFV.Resolve()).StackRootV(root.StackRootFV.Resolve())
+                                NodeS(root.StackRootFV.Resolve()).StackRootV(root.StackRootFV.Resolve())
                                     .Mutate(r => editWorldMenu.Create(r, selected!));
                             })
                             .TextV("Edit")
@@ -228,7 +228,7 @@ public class ModuleSingleplayerWorldSelectMenu(
                         Node(leftButtonsHorizontal)
                             .OnPressF(() =>
                             {
-                                NodeStack(root.StackRootFV.Resolve()).StackRootV(root.StackRootFV.Resolve())
+                                NodeS(root.StackRootFV.Resolve()).StackRootV(root.StackRootFV.Resolve())
                                     .Mutate(r => deleteWorldMenu.Create(r, selected!));
                             })
                             .TextV("Delete")
@@ -243,7 +243,7 @@ public class ModuleSingleplayerWorldSelectMenu(
                     .InnerSpacingV(s.ItemSpacing);
                 {
                     Node(rightButtonsVertical)
-                        .OnPressF(() => NodeStack(root.StackRootFV.Resolve()).StackRootV(root.StackRootFV.Resolve()).Mutate(newWorldMenu.Create))
+                        .OnPressF(() => NodeS(root.StackRootFV.Resolve()).StackRootV(root.StackRootFV.Resolve()).Mutate(newWorldMenu.Create))
                         .TextV("Create New World")
                         .Mutate(s.Button);
 
@@ -257,7 +257,7 @@ public class ModuleSingleplayerWorldSelectMenu(
                         Node(rightButtonsHorizontal)
                             .OnPressF(() =>
                             {
-                                NodeStack(root.StackRootFV.Resolve()).StackRootV(root.StackRootFV.Resolve())
+                                NodeS(root.StackRootFV.Resolve()).StackRootV(root.StackRootFV.Resolve())
                                     .Mutate(r => newWorldMenu.Create(r, selected!.Meta));
                             })
                             .TextV("Re-Create")
@@ -265,7 +265,7 @@ public class ModuleSingleplayerWorldSelectMenu(
                             .IsInputDisabledF(() => selected == null);
 
                         Node(rightButtonsHorizontal)
-                            .OnPressF(() => root.StackRootFV.Resolve().NodeStack.Pop())
+                            .OnPressF(() => NodeStackPop(root.StackRootFV.Resolve()))
                             .TextV("Back")
                             .Mutate(s.Button);
                     }

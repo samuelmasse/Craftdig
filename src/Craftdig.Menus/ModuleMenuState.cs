@@ -21,21 +21,21 @@ public class ModuleMenuState(
         GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced, blocking: true, compacting: true);
 
         Node(menus).Mutate(mainBackgroundMenu.Create);
-        NodeStack(menus).StackRootV(menus).Mutate(mainMenu.Create);
+        NodeS(menus).StackRootV(menus).Mutate(mainMenu.Create);
         watch.Start();
     }
 
     public override void Unload()
     {
-        ui.Nodes.Remove(menus);
+        NodesRemove(ui, menus);
     }
 
     public override void Update(double time)
     {
         if (keyboard.IsKeyPressed(Keys.Escape))
         {
-            if (menus.NodeStack.Count > 1)
-                menus.NodeStack.Pop();
+            if (NodeStackCount(menus) > 1)
+                NodeStackPop(menus);
         }
 
         if (watch.ElapsedMilliseconds > 30)

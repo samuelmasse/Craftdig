@@ -7,9 +7,6 @@ public interface IUiTraverseComponents
     RootUi UiRoot { get; set; }
     long UiAliveToken { get; set; }
 
-    [ComponentLazyInitialize] List<EntMut> Nodes { get; set; }
-    [ComponentLazyInitialize] Stack<EntMut> NodeStack { get; set; }
-
     /// <summary>Whether this node is marked for deletion.</summary>
     UiProp<bool> IsDeletedFV { get; set; }
     /// <summary>Whether this node is disabled and excluded from traversal.</summary>
