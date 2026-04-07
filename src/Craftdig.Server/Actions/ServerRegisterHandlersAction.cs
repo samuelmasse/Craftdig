@@ -7,11 +7,13 @@ public class ServerRegisterHandlersAction(
     ServerDefaults defaults,
     ServerAuthReceiver authReceiver,
     ServerPingReceiver pingReceiver,
+    ServerStatusReceiver statusReceiver,
     ServerSpawnPlayerReceiver spawnPlayerReceiver)
 {
     public void Run()
     {
         loop.Register<PingCommand>(pingReceiver.Receive);
+        loop.Register<ServerStatusCommand>(statusReceiver.Receive);
 
         loop.Register<BeginAuthCommand>(authReceiver.BeginAuth);
         loop.Register<CompleteAuthCommand, byte>(authReceiver.CompleteAuth);

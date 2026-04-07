@@ -102,6 +102,10 @@ public class ModuleMultiplayerServerBrowserMenu(
                             .SizeV((itemHeight, itemHeight))
                             .ColorV((0.2f, 0, 0.6f, 1));
 
+                        var start = DateTime.UtcNow;
+                        var speed = TimeSpan.FromMilliseconds(150);
+                        var wait = speed * 2;
+
                         Node(itemContainer, out var itemList)
                             .Mutate(s.VerticalList)
                             .SizeRelativeV((1, 0))
@@ -116,45 +120,82 @@ public class ModuleMultiplayerServerBrowserMenu(
 
                             Node(itemList)
                                 .Mutate(s.Label)
-                                .TextColorV(s.TextColorFaint)
-                                .TextV($"{server.Address.Host}:{server.Address.Port}");
+                                .TextF(() =>
+                                {
+                                    var result = serverPinger[server.Address];
+                                    var elapsed = DateTime.UtcNow - start;
+
+                                    if (result == null || elapsed < wait)
+                                        return string.Empty;
+
+                                    if (!result.Success)
+                                        return "Can't connect to server";
+
+                                    if (result.Description != null)
+                                        return text.Format("{0}", result.Description);
+
+                                    return "A Craftdig Server";
+                                })
+                                .TextColorF(() =>
+                                {
+                                    var result = serverPinger[server.Address];
+                                    if (result?.Success == false)
+                                        return (1, 0, 0, 1);
+
+                                    return s.TextColorFaint;
+                                });
                         }
 
-                        var start = DateTime.UtcNow;
-                        var speed = TimeSpan.FromMilliseconds(150);
-                        var wait = speed * 2;
-
-                        Node(itemContainer)
-                            .Mutate(s.Label)
+                        Node(itemContainer, out var rightInfo)
+                            .Mutate(s.VerticalList)
+                            .SizeInnerMaxRelativeV((1, 0))
                             .AlignmentV(Alignment.Right | Alignment.Vertical)
-                            .OffsetV((-s.ItemSpacing, 0))
-                            .TextF(() =>
-                            {
-                                var result = serverPinger[server.Address];
-                                var elapsed = DateTime.UtcNow - start;
-
-                                if (result == null || elapsed < wait)
+                            .OffsetV((-s.ItemSpacing, 0));
+                        {
+                            Node(rightInfo)
+                                .Mutate(s.Label)
+                                .AlignmentV(Alignment.Right)
+                                .TextF(() =>
                                 {
-                                    var dots = (int)(elapsed / speed) % 3 + 1;
-                                    string Dot(int i) => dots >= i ? "." : "";
-                                    return text.Format("{0}{1}{2}", Dot(1), Dot(2), Dot(3));
-                                }
+                                    var result = serverPinger[server.Address];
+                                    var elapsed = DateTime.UtcNow - start;
 
-                                if (result.Ping.HasValue)
-                                    return text.Format("{0:0}ms", result.Ping.Value.TotalMilliseconds);
+                                    if (result == null || elapsed < wait)
+                                    {
+                                        var dots = (int)(elapsed / speed) % 3 + 1;
+                                        string Dot(int i) => dots >= i ? "." : "";
+                                        return text.Format("{0}{1}{2}", Dot(1), Dot(2), Dot(3));
+                                    }
 
-                                return "x";
-                            })
-                            .TextColorF(() =>
-                            {
-                                var result = serverPinger[server.Address];
-                                var elapsed = DateTime.UtcNow - start;
+                                    if (result.Ping.HasValue)
+                                        return text.Format("{0:0}ms", result.Ping.Value.TotalMilliseconds);
 
-                                if (result == null || elapsed < wait)
-                                    return (0, 1, 1, 1);
+                                    return "x";
+                                })
+                                .TextColorF(() =>
+                                {
+                                    var result = serverPinger[server.Address];
+                                    var elapsed = DateTime.UtcNow - start;
 
-                                return result.Success ? (0, 1, 0, 1) : (1, 0, 0, 1);
-                            });
+                                    if (result == null || elapsed < wait)
+                                        return (0, 1, 1, 1);
+
+                                    return result.Success ? (0, 1, 0, 1) : (1, 0, 0, 1);
+                                });
+
+                            Node(rightInfo)
+                                .Mutate(s.Label)
+                                .AlignmentV(Alignment.Right)
+                                .TextColorV(s.TextColorFaint)
+                                .TextF(() =>
+                                {
+                                    var result = serverPinger[server.Address];
+                                    if (result?.CurrentPlayers != null && result?.MaxPlayers != null)
+                                        return text.Format("{0}/{1}", result.CurrentPlayers, result.MaxPlayers);
+
+                                    return string.Empty;
+                                });
+                        }
                     }
                 }
             }

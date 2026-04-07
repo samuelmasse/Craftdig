@@ -23,7 +23,6 @@ public class ModuleMultiplayerServerPinger(AppLog log, AppClientOptions clientOp
         {
             task.Token?.Cancel();
             task.Socket?.Disconnect();
-            task.Thread?.Join();
         }
 
         tasks.Clear();
@@ -53,21 +52,43 @@ public class ModuleMultiplayerServerPinger(AppLog log, AppClientOptions clientOp
             var loop = new NetLoop(log);
             var done = new ManualResetEventSlim(false);
             TimeSpan? ping = null;
+            int? maxPlayers = null;
+            int? currentPlayers = null;
+            string? description = null;
 
             loop.Register((NetSocket ns, PongCommand cmd) =>
             {
                 ping = DateTimeOffset.UtcNow - DateTimeOffset.FromUnixTimeMilliseconds(cmd.Ping.Timestamp);
-                done.Set();
             });
+
+            loop.Register((NetSocket ns, ServerPopulationCommand cmd) =>
+            {
+                maxPlayers = cmd.MaxPlayers;
+                currentPlayers = cmd.CurrentPlayers;
+            });
+
+            loop.Register((NetSocket ns, ServerDescriptionCommand cmd, ReadOnlySpan<byte> data) =>
+            {
+                description = Encoding.UTF8.GetString(data);
+            });
+
+            loop.Register<ServerStatusDoneCommand>(() => done.Set());
 
             var loopThread = new Thread(() => { try { loop.Run(socket); } catch { } });
             var pushThread = new Thread(() => { try { socket.Push(task.Token.Token); } catch { } });
             loopThread.Start();
             pushThread.Start();
 
-            socket.Send(new PingCommand { Timestamp = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() });
+            socket.Send(new ServerStatusCommand { Timestamp = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() });
             done.Wait(2000, task.Token.Token);
-            task.Result = new(ping != null, ping);
+            task.Result = new()
+            {
+                Success = ping != null,
+                Ping = ping,
+                MaxPlayers = maxPlayers,
+                CurrentPlayers = currentPlayers,
+                Description = description
+            };
 
             socket.Disconnect();
             loopThread.Join();
@@ -75,7 +96,7 @@ public class ModuleMultiplayerServerPinger(AppLog log, AppClientOptions clientOp
         }
         catch
         {
-            task.Result = new(false, null);
+            task.Result = new() { Success = false };
             socket?.Disconnect();
             tcp?.Dispose();
         }

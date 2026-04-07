@@ -15,6 +15,7 @@ public enum Commands : ushort
     MovePlayer,
     ForgetChunk,
     ForgetSection,
+    ServerStatus,
 
     ClientStart = 30000,
     ReadyAuth,
@@ -24,5 +25,8 @@ public enum Commands : ushort
     SlowDown,
     SlowTick,
     SectionUpdate,
-    EntUpdate
+    EntUpdate,
+    ServerPopulation,
+    ServerDescription,
+    ServerStatusDone,
 }
