@@ -4,7 +4,7 @@ using System.IdentityModel.Tokens.Jwt;
 using Microsoft.IdentityModel.Tokens;
 
 [Server]
-public class ServerAuth(AppLog log, ServerSockets sockets, ServerClientLimits clientLimits, SeverAllowlist allowlist)
+public class ServerAuth(AppLog log, ServerConfig config, ServerSockets sockets, ServerClientLimits clientLimits, SeverAllowlist allowlist)
 {
     private readonly HttpClient http = new();
     private readonly JwtSecurityTokenHandler jwts = new();
@@ -66,6 +66,10 @@ public class ServerAuth(AppLog log, ServerSockets sockets, ServerClientLimits cl
         // a session and there was another user that took their username
         DisconnectSocketsWithSameUidOrUsername(uid, username);
 
+        // Prevent connection when server is full
+        if (GuardMaxPlayers(ns))
+            return;
+
         // Strongly associate this socket as being authenticated with this uid and username
         ns.AuthenticatedUid = uid;
         ns.AuthenticatedUsername = username;
@@ -99,6 +103,10 @@ public class ServerAuth(AppLog log, ServerSockets sockets, ServerClientLimits cl
         // No auth access can be opened on a specific port that only they have access to
         var uid = $"#{Encoding.UTF8.GetString(data)}#";
         DisconnectSocketsWithSameUidOrUsername(uid, uid);
+
+        // Prevent connection when server is full
+        if (GuardMaxPlayers(ns))
+            return;
 
         // Strongly associate this socket as being authenticated with this uid and username
         ns.AuthenticatedUid = uid;
@@ -218,6 +226,24 @@ public class ServerAuth(AppLog log, ServerSockets sockets, ServerClientLimits cl
         if (nonceClaim == null || nonceClaim.Value != ns.AuthNonce)
         {
             log.Warn("Socket {0} tried to authenticate with a wrong nonce", ns.Tag);
+            ns.Disconnect();
+            return true;
+        }
+        else return false;
+    }
+
+    private bool GuardMaxPlayers(NetSocket ns)
+    {
+        int count = 0;
+        sockets.ForEach(s =>
+        {
+            if (s.Connected && s.IsAuthenticated)
+                count++;
+        });
+
+        if (count >= config.MaxPlayers)
+        {
+            log.Warn("Socket {0} rejected : server full ({1}/{2})", ns.Tag, count, config.MaxPlayers);
             ns.Disconnect();
             return true;
         }
