@@ -1,7 +1,7 @@
 namespace Craftdig.Menus.Multiplayer;
 
 [Module]
-public class ModuleMultiplayerServerPinger(AppLog log, AppClientOptions clientOptions)
+public class ModuleMultiplayerServerPinger(AppLog log, AppClientOptions clientOptions, ModuleMultiplayerServerCache serverCache)
 {
     private readonly Dictionary<ServerAddress, ServerPingTask> tasks = [];
 
@@ -96,6 +96,8 @@ public class ModuleMultiplayerServerPinger(AppLog log, AppClientOptions clientOp
                 Description = description,
                 IconData = iconData
             };
+
+            serverCache.Save(task.Address, task.Result);
 
             socket.Disconnect();
             loopThread.Join();

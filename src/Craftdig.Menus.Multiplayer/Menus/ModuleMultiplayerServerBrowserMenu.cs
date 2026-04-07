@@ -9,6 +9,7 @@ public class ModuleMultiplayerServerBrowserMenu(
     ModuleMultiplayerServerList serverList,
     ModuleMultiplayerCredentials multiplayerCredentials,
     ModuleMultiplayerConnectAction multiplayerConnectAction,
+    ModuleMultiplayerServerCache serverCache,
     ModuleMultiplayerConnectMenu connectMenu,
     ModuleMultiplayerConnectingMenu connectingMenu)
 {
@@ -19,6 +20,7 @@ public class ModuleMultiplayerServerBrowserMenu(
 
         var serverIcons = module.New<ModuleMultiplayerServerIcons>();
         var serverPinger = module.New<ModuleMultiplayerServerPinger>();
+        serverCache.Prune(serverList.Servers);
         serverPinger.PingAll(serverList.Servers);
 
         Node(root, out var topBar)
@@ -84,6 +86,8 @@ public class ModuleMultiplayerServerBrowserMenu(
             {
                 var server = serverList.Servers[i];
                 var itemHeight = s.ItemHeight * 1.5f;
+                var cachedDesc = serverCache.LoadDescription(server.Address);
+                var cachedIcon = serverCache.LoadIcon(server.Address);
 
                 Node(select, out var item)
                     .Mutate(s.SelectorItem)
@@ -105,10 +109,8 @@ public class ModuleMultiplayerServerBrowserMenu(
                             .TextureF(() =>
                             {
                                 var result = serverPinger[server.Address];
-                                if (result?.IconData != null)
-                                    return serverIcons[result.IconData];
-
-                                return null;
+                                var data = result?.IconData ?? cachedIcon;
+                                return data != null ? serverIcons[data] : null;
                             });
 
                         var start = DateTime.UtcNow;
@@ -132,16 +134,13 @@ public class ModuleMultiplayerServerBrowserMenu(
                                 .TextF(() =>
                                 {
                                     var result = serverPinger[server.Address];
-                                    var elapsed = DateTime.UtcNow - start;
+                                    var desc = result?.Description ?? cachedDesc;
 
-                                    if (result == null || elapsed < wait)
-                                        return string.Empty;
-
-                                    if (!result.Success)
+                                    if (result is { Success: false })
                                         return "Can't connect to server";
 
-                                    if (result.Description != null)
-                                        return text.Format("{0}", result.Description);
+                                    if (desc != null)
+                                        return text.Format("{0}", desc);
 
                                     return "A Craftdig Server";
                                 })
