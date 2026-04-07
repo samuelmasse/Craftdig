@@ -20,9 +20,11 @@ public class ModuleSingleplayerDeleteWorldMenu(
                 .AlignmentV(Alignment.Horizontal)
                 .TextV($"'{world.Meta.Name}' will be lost forever! (A long time!)");
 
+            Node(form)
+                .SizeV((0, s.ItemHeight));
+
             Node(form, out var buttons)
-                .Mutate(s.DialogButtons)
-                .MarginV((0, s.ItemHeight, 0, 0));
+                .Mutate(s.DialogButtons);
             {
                 Node(buttons)
                     .OnPressF(() =>
