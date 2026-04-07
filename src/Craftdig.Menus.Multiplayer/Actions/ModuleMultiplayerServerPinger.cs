@@ -17,7 +17,7 @@ public class ModuleMultiplayerServerPinger(AppLog log, AppClientOptions clientOp
             PingOne(server.Address);
     }
 
-    public void CancelAll()
+    private void CancelAll()
     {
         foreach (var task in tasks.Values)
         {
@@ -55,6 +55,7 @@ public class ModuleMultiplayerServerPinger(AppLog log, AppClientOptions clientOp
             int? maxPlayers = null;
             int? currentPlayers = null;
             string? description = null;
+            byte[]? iconData = null;
 
             loop.Register((NetSocket ns, PongCommand cmd) =>
             {
@@ -72,7 +73,12 @@ public class ModuleMultiplayerServerPinger(AppLog log, AppClientOptions clientOp
                 description = Encoding.UTF8.GetString(data);
             });
 
-            loop.Register<ServerStatusDoneCommand>(() => done.Set());
+            loop.Register((NetSocket ns, ServerIconCommand cmd, ReadOnlySpan<byte> data) =>
+            {
+                iconData = data.ToArray();
+            });
+
+            loop.Register<ServerStatusDoneCommand>(done.Set);
 
             var loopThread = new Thread(() => { try { loop.Run(socket); } catch { } });
             var pushThread = new Thread(() => { try { socket.Push(task.Token.Token); } catch { } });
@@ -87,7 +93,8 @@ public class ModuleMultiplayerServerPinger(AppLog log, AppClientOptions clientOp
                 Ping = ping,
                 MaxPlayers = maxPlayers,
                 CurrentPlayers = currentPlayers,
-                Description = description
+                Description = description,
+                IconData = iconData
             };
 
             socket.Disconnect();

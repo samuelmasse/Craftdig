@@ -9,7 +9,6 @@ public class ModuleMultiplayerServerBrowserMenu(
     ModuleMultiplayerServerList serverList,
     ModuleMultiplayerCredentials multiplayerCredentials,
     ModuleMultiplayerConnectAction multiplayerConnectAction,
-    ModuleMultiplayerServerPinger serverPinger,
     ModuleMultiplayerConnectMenu connectMenu,
     ModuleMultiplayerConnectingMenu connectingMenu)
 {
@@ -18,6 +17,8 @@ public class ModuleMultiplayerServerBrowserMenu(
         ServerEntry? selected = null;
         StringBuilder? user = clientOptions.NoAuthUser != null ? new(clientOptions.NoAuthUser) : null;
 
+        var serverIcons = module.New<ModuleMultiplayerServerIcons>();
+        var serverPinger = module.New<ModuleMultiplayerServerPinger>();
         serverPinger.PingAll(serverList.Servers);
 
         Node(root, out var topBar)
@@ -100,7 +101,15 @@ public class ModuleMultiplayerServerBrowserMenu(
                         Node(itemContainer)
                             .SizeRelativeV((0, 0))
                             .SizeV((itemHeight, itemHeight))
-                            .ColorV((0.2f, 0, 0.6f, 1));
+                            .ColorV((0.2f, 0, 0.6f, 1))
+                            .TextureF(() =>
+                            {
+                                var result = serverPinger[server.Address];
+                                if (result?.IconData != null)
+                                    return serverIcons[result.IconData];
+
+                                return null;
+                            });
 
                         var start = DateTime.UtcNow;
                         var speed = TimeSpan.FromMilliseconds(150);
@@ -255,7 +264,6 @@ public class ModuleMultiplayerServerBrowserMenu(
                             .TextV("Refresh")
                             .OnPressF(() =>
                             {
-                                serverPinger.CancelAll();
                                 NodeStackPopR(root);
                                 NodeSR(root).Mutate(Create);
                             });
@@ -263,11 +271,7 @@ public class ModuleMultiplayerServerBrowserMenu(
                         Node(bottomRow)
                             .Mutate(s.Button)
                             .TextV("Back")
-                            .OnPressF(() =>
-                            {
-                                serverPinger.CancelAll();
-                                NodeStackPopR(root);
-                            });
+                            .OnPressF(() => NodeStackPopR(root));
                     }
                 }
             }

@@ -7,4 +7,5 @@ public record ServerPingResult
     public int? MaxPlayers { get; init; }
     public int? CurrentPlayers { get; init; }
     public string? Description { get; init; }
+    public byte[]? IconData { get; init; }
 }

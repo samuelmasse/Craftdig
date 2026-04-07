@@ -28,5 +28,6 @@ public enum Commands : ushort
     EntUpdate,
     ServerPopulation,
     ServerDescription,
+    ServerIcon,
     ServerStatusDone,
 }
