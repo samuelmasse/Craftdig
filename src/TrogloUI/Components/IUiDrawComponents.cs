@@ -14,10 +14,7 @@ public interface IUiDrawComponents
     /// <summary>Color of the text.</summary>
     UiProp<Vector4> TextColorFV { get; set; }
     /// <summary>Callback invoked during draw with the node's screen offset.</summary>
-    UiCallback<Action<Vector2>?> OnDrawFV { get; set; }
+    UiCallback<Action?> OnDrawFV { get; set; }
     /// <summary>Callback invoked every frame.</summary>
     UiCallback<Action?> OnFrameFV { get; set; }
-
-    /// <summary>Resolved draw position of this node relative to the UI root.</summary>
-    Vector2 DrawOffsetR { get; internal set; }
 }

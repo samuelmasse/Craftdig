@@ -5,6 +5,7 @@ using TrogloUI.Root;
 [Root]
 public class RootUi : EntObj
 {
+    public static implicit operator Ent(RootUi value) => (Ent)(value as EntObj);
     public static implicit operator EntMut(RootUi value) => (EntMut)(value as EntObj);
 
     private readonly NodeArrayAllocator allocator = new();

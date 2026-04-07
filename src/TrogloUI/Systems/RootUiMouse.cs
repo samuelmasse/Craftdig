@@ -17,15 +17,15 @@ public class RootUiMouse(RootMouse mouse, RootUiScale scale, RootUiFocus focus, 
     public Vector2 Position => position;
     public EntMut Hovered => prevHovered;
 
-    internal void Update(Vector2 o, EntMut n)
+    internal void Update(EntMut n)
     {
         position = mouse.Position / scale.Scale;
 
-        var scrolled = FindScrolled(null, o, n);
+        var scrolled = FindScrolled(null, n);
         if (mouse.Wheel != default)
             scrolled.OnScrollFV.Resolve()?.Invoke(mouse.Wheel);
 
-        var hovered = FindHovered(null, o, n);
+        var hovered = FindHovered(null, n);
 
         if (hovered != prevHovered)
         {
@@ -132,11 +132,9 @@ public class RootUiMouse(RootMouse mouse, RootUiScale scale, RootUiFocus focus, 
         e.OnSecondaryClickFV.Resolve()?.Invoke();
     }
 
-    private EntMut FindHovered(Box2? clip, Vector2 o, EntMut n)
+    private EntMut FindHovered(Box2? clip, EntMut n)
     {
-        var nOffset = o + n.OffsetR;
-        var nSize = n.SizeR;
-        var box = clipping.IntersectClips(clip, new Box2(nOffset, nOffset + nSize));
+        var box = clipping.IntersectClips(clip, new Box2(n.PositionR, n.PositionR + n.SizeR));
 
         EntMut hovered = default;
 
@@ -145,7 +143,7 @@ public class RootUiMouse(RootMouse mouse, RootUiScale scale, RootUiFocus focus, 
 
         foreach (var c in n.NodesR.Span)
         {
-            var child = FindHovered(box, nOffset, c);
+            var child = FindHovered(box, c);
             if (child != default)
                 hovered = child;
         }
@@ -153,11 +151,9 @@ public class RootUiMouse(RootMouse mouse, RootUiScale scale, RootUiFocus focus, 
         return hovered;
     }
 
-    private EntMut FindScrolled(Box2? clip, Vector2 o, EntMut n)
+    private EntMut FindScrolled(Box2? clip, EntMut n)
     {
-        var nOffset = o + n.OffsetR;
-        var nSize = n.SizeR;
-        var box = clipping.IntersectClips(clip, new Box2(nOffset, nOffset + nSize));
+        var box = clipping.IntersectClips(clip, new Box2(n.PositionR, n.PositionR + n.SizeR));
 
         EntMut scrolled = default;
 
@@ -166,7 +162,7 @@ public class RootUiMouse(RootMouse mouse, RootUiScale scale, RootUiFocus focus, 
 
         foreach (var c in n.NodesR.Span)
         {
-            var child = FindScrolled(box, nOffset, c);
+            var child = FindScrolled(box, c);
             if (child != default)
                 scrolled = child;
         }

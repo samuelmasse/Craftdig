@@ -251,14 +251,14 @@ public class AppStyle(RootText text, RootUiMouse mouse, RootKeyboard keyboard, A
                 .OnPressF(() =>
                 {
                     pressScroll = scroll;
-                    pressPoint = mouse.Position - scrollBar.DrawOffsetR;
+                    pressPoint = mouse.Position - scrollBar.PositionR;
                 })
                 .OnUpdateF(() =>
                 {
                     if (!scrollPuck.IsPressedR)
                         return;
 
-                    var newPoint = mouse.Position - scrollBar.DrawOffsetR;
+                    var newPoint = mouse.Position - scrollBar.PositionR;
                     var delta = newPoint.Y - pressPoint.Y;
                     var deltaRelative = delta / scrollBar.SizeR.Y;
                     var deltaTranslated = deltaRelative * select.SizeInnerSumR.Y;
@@ -289,11 +289,14 @@ public class AppStyle(RootText text, RootUiMouse mouse, RootKeyboard keyboard, A
 
     public void Dialog(EntMut ent) => ent.Mutate()
         .Mutate(VerticalList)
+        .SizeRelativeV((0, 0))
         .SizeInnerMaxRelativeV((1, 0))
+        .SizeInnerSumRelativeV((0, 1))
         .InnerSpacingV(ItemSpacing)
         .AlignmentV(Alignment.Center);
 
     public void DialogButtons(EntMut ent) => ent.Mutate()
+        .SizeRelativeV((0, 0))
         .SizeInnerMaxRelativeV(Vertical)
         .SizeInnerSumRelativeV((1, 0))
         .AlignmentV(Alignment.Horizontal)

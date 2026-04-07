@@ -17,7 +17,7 @@ public class DimensionSharedVertexBufferMenu(
             .AlignmentV(Alignment.Bottom)
             .ColorV((0, 0, 0, 1))
             .IsDisabledV(true)
-            .OnDrawF((o) =>
+            .OnDrawF(() =>
             {
                 var slots = svb.Allocator.AllocationSlots;
 
@@ -27,7 +27,7 @@ public class DimensionSharedVertexBufferMenu(
                     if (slot.Index != 0)
                     {
                         sprites.Batch.Draw((
-                            o.X + (slot.Index / (float)svb.Size) * menu.SizeR.X, o.Y),
+                            menu.PositionR.X + (slot.Index / (float)svb.Size) * menu.SizeR.X, menu.PositionR.Y),
                             ((slot.Size / (float)svb.Size) * menu.SizeR.X, menu.SizeR.Y), (1, 0, 0, 1));
                     }
                 }

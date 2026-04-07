@@ -19,7 +19,7 @@ public class RootUiScript(
     {
         ResetRoot();
         Traverse();
-        mouse.Update((0, 0), ui);
+        mouse.Update(ui);
         focus.Update(ui);
         update.Update(ui);
         ui.Cleanup();
@@ -29,7 +29,7 @@ public class RootUiScript(
     {
         ResetRoot();
         Traverse();
-        draw.Draw(ui.OffsetR, ui);
+        draw.Draw(ui);
     }
 
     private void ResetRoot()
@@ -44,5 +44,6 @@ public class RootUiScript(
         traverse.Traverse(ui, 0);
         size.Size(ui.SizeR, ui);
         position.Position(ui.SizeR, ui);
+        position.Finalize(ui.OffsetR, ui);
     }
 }

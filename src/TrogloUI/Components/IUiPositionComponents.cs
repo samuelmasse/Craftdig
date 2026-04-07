@@ -18,4 +18,6 @@ public interface IUiPositionComponents
 
     /// <summary>Resolved position offset of this node.</summary>
     Vector2 OffsetR { get; internal set; }
+    /// <summary>Resolved absolute position of this node relative to root.</summary>
+    Vector2 PositionR { get; internal set; }
 }

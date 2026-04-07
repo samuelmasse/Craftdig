@@ -3,50 +3,48 @@ namespace TrogloUI;
 [Root]
 public class RootUiDraw(RootSprites sprites, RootUiScale scale, RootUiPosition position, RootUiClipping clipping)
 {
-    internal void Draw(Vector2 o, EntMut n)
+    internal void Draw(Ent n)
     {
         var clip = sprites.Batch.Clip;
-        sprites.Batch.Clip = clipping.IntersectClips(clip, new(o + n.OffsetR, o + n.OffsetR + n.SizeR));
+        sprites.Batch.Clip = clipping.IntersectClips(clip, new(n.PositionR, n.PositionR + n.SizeR));
 
-        DrawNode(o + n.OffsetR, n);
+        DrawNode(n);
         foreach (var sc in n.NodesR.Span)
-            Draw(o + n.OffsetR, sc);
+            Draw(sc);
 
         sprites.Batch.Clip = clip;
     }
 
-    private void DrawNode(Vector2 o, EntMut n)
+    private void DrawNode(Ent n)
     {
-        n.DrawOffsetR = o;
+        DrawFlatSurface(n);
+        DrawTexture(n);
+        DrawText(n);
 
-        DrawFlatSurface(o, n);
-        DrawTexture(o, n);
-        DrawText(o, n);
-
-        n.OnDrawFV.Resolve()?.Invoke(o);
+        n.OnDrawFV.Resolve()?.Invoke();
         n.OnFrameFV.Resolve()?.Invoke();
     }
 
-    private void DrawFlatSurface(Vector2 o, EntMut n)
+    private void DrawFlatSurface(Ent n)
     {
         var color = n.ColorFV.Resolve();
         if (n.SizeR == (0, 0) || color.W == 0)
             return;
 
-        sprites.Batch.Draw(o, n.SizeR, color);
+        sprites.Batch.Draw(n.PositionR, n.SizeR, color);
     }
 
-    private void DrawTexture(Vector2 o, EntMut n)
+    private void DrawTexture(Ent n)
     {
         var texture = n.TextureFV.Resolve();
         if (texture == null)
             return;
 
         var tint = n.TintFV.Resolve() ?? Vector4.One;
-        sprites.Batch.Draw(texture, o, n.SizeR, tint);
+        sprites.Batch.Draw(texture, n.PositionR, n.SizeR, tint);
     }
 
-    private void DrawText(Vector2 o, EntMut n)
+    private void DrawText(Ent n)
     {
         var font = n.FontFV.Resolve();
         if (font == null)
@@ -79,6 +77,6 @@ public class RootUiDraw(RootSprites sprites, RootUiScale scale, RootUiPosition p
         offset = position.Align(offset, size, n.SizeR, alignment);
         offset.Y += size.Y / 2;
 
-        sprites.Batch.Write(font.Size(fontSize), text, (o + offset) * scale.Scale, textColor, scale.Scale);
+        sprites.Batch.Write(font.Size(fontSize), text, (n.PositionR + offset) * scale.Scale, textColor, scale.Scale);
     }
 }

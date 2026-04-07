@@ -56,6 +56,14 @@ public class RootUiPosition(RootSprites sprites, RootUiScale scale)
         }
     }
 
+    internal void Finalize(Vector2 o, EntMut n)
+    {
+        n.PositionR = o + n.OffsetR;
+
+        foreach (var sc in n.NodesR.Span)
+            Finalize(o + n.OffsetR, sc);
+    }
+
     private void PositionNode(Vector2 s, EntMut n)
     {
         n.OffsetR = default;

@@ -1,7 +1,5 @@
 namespace Craftdig.Menus.Multiplayer;
 
-using System.Text.Json;
-
 [Module]
 public class ModuleMultiplayerServerList(AppPaths paths)
 {
