@@ -2,12 +2,14 @@ namespace Craftdig.Menus.Multiplayer;
 
 [Module]
 public class ModuleMultiplayerServerBrowserMenu(
+    RootText text,
     AppStyle s,
     AppClientOptions clientOptions,
     ModuleScope module,
     ModuleMultiplayerServerList serverList,
     ModuleMultiplayerCredentials multiplayerCredentials,
     ModuleMultiplayerConnectAction multiplayerConnectAction,
+    ModuleMultiplayerServerPinger serverPinger,
     ModuleMultiplayerConnectMenu connectMenu,
     ModuleMultiplayerConnectingMenu connectingMenu)
 {
@@ -15,6 +17,8 @@ public class ModuleMultiplayerServerBrowserMenu(
     {
         ServerEntry? selected = null;
         StringBuilder? user = clientOptions.NoAuthUser != null ? new(clientOptions.NoAuthUser) : null;
+
+        serverPinger.PingAll(serverList.Servers);
 
         Node(root, out var topBar)
             .Mutate(s.TopBar);
@@ -113,8 +117,44 @@ public class ModuleMultiplayerServerBrowserMenu(
                             Node(itemList)
                                 .Mutate(s.Label)
                                 .TextColorV(s.TextColorFaint)
-                                .TextV($"{server.Host}:{server.Port}");
+                                .TextV($"{server.Address.Host}:{server.Address.Port}");
                         }
+
+                        var start = DateTime.UtcNow;
+                        var speed = TimeSpan.FromMilliseconds(150);
+                        var wait = speed * 2;
+
+                        Node(itemContainer)
+                            .Mutate(s.Label)
+                            .AlignmentV(Alignment.Right | Alignment.Vertical)
+                            .OffsetV((-s.ItemSpacing, 0))
+                            .TextF(() =>
+                            {
+                                var result = serverPinger[server.Address];
+                                var elapsed = DateTime.UtcNow - start;
+
+                                if (result == null || elapsed < wait)
+                                {
+                                    var dots = (int)(elapsed / speed) % 3 + 1;
+                                    string Dot(int i) => dots >= i ? "." : "";
+                                    return text.Format("{0}{1}{2}", Dot(1), Dot(2), Dot(3));
+                                }
+
+                                if (result.Ping.HasValue)
+                                    return text.Format("{0:0}ms", result.Ping.Value.TotalMilliseconds);
+
+                                return "x";
+                            })
+                            .TextColorF(() =>
+                            {
+                                var result = serverPinger[server.Address];
+                                var elapsed = DateTime.UtcNow - start;
+
+                                if (result == null || elapsed < wait)
+                                    return (0, 1, 1, 1);
+
+                                return result.Success ? (0, 1, 0, 1) : (1, 0, 0, 1);
+                            });
                     }
                 }
             }
@@ -171,12 +211,22 @@ public class ModuleMultiplayerServerBrowserMenu(
 
                         Node(bottomRow)
                             .Mutate(s.Button)
-                            .TextV("Refresh");
+                            .TextV("Refresh")
+                            .OnPressF(() =>
+                            {
+                                serverPinger.CancelAll();
+                                NodeStackPopR(root);
+                                NodeSR(root).Mutate(Create);
+                            });
 
                         Node(bottomRow)
                             .Mutate(s.Button)
                             .TextV("Back")
-                            .OnPressF(() => NodeStackPopR(root));
+                            .OnPressF(() =>
+                            {
+                                serverPinger.CancelAll();
+                                NodeStackPopR(root);
+                            });
                     }
                 }
             }
@@ -184,7 +234,7 @@ public class ModuleMultiplayerServerBrowserMenu(
 
         void Connect()
         {
-            multiplayerConnectAction.Start(selected!.Host, selected!.Port);
+            multiplayerConnectAction.Start(selected!.Address);
             NodeSR(root).Mutate(connectingMenu.Create);
         }
     }

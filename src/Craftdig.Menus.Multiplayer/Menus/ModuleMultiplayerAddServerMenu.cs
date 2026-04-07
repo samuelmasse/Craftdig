@@ -9,7 +9,7 @@ public class ModuleMultiplayerAddServerMenu(
     public void Create(EntMut root, ServerEntry? editing)
     {
         var name = new StringBuilder(editing?.Name ?? "Craftdig Server");
-        var host = new StringBuilder(editing?.Host ?? "");
+        var host = new StringBuilder(editing != null ? $"{editing.Address.Host}:{editing.Address.Port}" : "");
 
         Node(root, out var form)
             .Mutate(s.Form)
@@ -47,8 +47,7 @@ public class ModuleMultiplayerAddServerMenu(
                 .IsInputDisabledF(() => host.Length == 0)
                 .OnPressF(() =>
                 {
-                    var (hostStr, port) = ServerEntry.ParseAddress(host.ToString());
-                    var entry = new ServerEntry(name.ToString(), hostStr, port);
+                    var entry = new ServerEntry(name.ToString(), ServerAddress.Parse(host.ToString()));
 
                     if (editing != null)
                         serverList.Edit(editing, entry);

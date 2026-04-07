@@ -39,8 +39,7 @@ public class ModuleMultiplayerConnectMenu(
                 .IsInputDisabledF(() => address.Length == 0)
                 .OnPressF(() =>
                 {
-                    var (host, port) = ServerEntry.ParseAddress(address.ToString(), defaultPort);
-                    multiplayerConnectAction.Start(host, port);
+                    multiplayerConnectAction.Start(ServerAddress.Parse(address.ToString(), defaultPort));
                     NodeSR(root).Mutate(multiplayerConnectingMenu.Create);
                 });
 

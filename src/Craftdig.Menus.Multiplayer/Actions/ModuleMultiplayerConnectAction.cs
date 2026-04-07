@@ -6,28 +6,25 @@ using System.Net.Http.Json;
 [Module]
 public class ModuleMultiplayerConnectAction(AppLog log, AppClientOptions clientOptions, ModuleMultiplayerCredentials credentials)
 {
-    private string? host;
-    private int port;
+    private ServerAddress? address;
     private Thread? thread;
     private TcpClient? tcp;
     private Stream? stream;
     private NetSocket? socket;
     private Exception? exception;
 
-    public string? Host => host;
-    public int Port => port;
+    public ServerAddress? Address => address;
     public bool Connecting => thread != null;
     public TcpClient? Tcp => tcp;
     public Stream? Stream => stream;
     public Exception? Exception => exception;
 
-    public void Start(string host, int port)
+    public void Start(ServerAddress address)
     {
         while (thread != null)
             Thread.Sleep(10);
 
-        this.host = host;
-        this.port = port;
+        this.address = address;
 
         tcp = null;
         stream = null;
@@ -67,46 +64,11 @@ public class ModuleMultiplayerConnectAction(AppLog log, AppClientOptions clientO
     private void EstablishConnection()
     {
         tcp = new TcpClient() { NoDelay = true };
-        tcp.Connect(host!, port);
+        tcp.Connect(address!.Host, address.Port);
 
         if (clientOptions.UseRawTcp)
             stream = tcp.GetStream();
-        else ConnectTls();
-    }
-
-    private void ConnectTls()
-    {
-        var ssl = new SslStream(tcp!.GetStream(), false, (sender, certificate, chain, errors) =>
-        {
-            if (host == "127.0.0.1")
-                errors &= ~SslPolicyErrors.RemoteCertificateChainErrors;
-
-            if (errors == SslPolicyErrors.None)
-                return true;
-
-            if (errors == SslPolicyErrors.RemoteCertificateChainErrors && chain != null)
-            {
-                foreach (var s in chain.ChainStatus)
-                {
-                    if (s.Status != X509ChainStatusFlags.NoError &&
-                        s.Status != X509ChainStatusFlags.RevocationStatusUnknown)
-                        return false;
-                }
-
-                return true;
-            }
-
-            return false;
-        });
-        stream = ssl;
-
-        var opt = new SslClientAuthenticationOptions()
-        {
-            TargetHost = host,
-            EnabledSslProtocols = SslProtocols.Tls13,
-            CertificateRevocationCheckMode = X509RevocationMode.Online
-        };
-        ssl.AuthenticateAsClient(opt);
+        else stream = ClientTls.Connect(tcp, address.Host);
     }
 
     private void AuthenticateConnection()
@@ -171,7 +133,7 @@ public class ModuleMultiplayerConnectAction(AppLog log, AppClientOptions clientO
         http.DefaultRequestHeaders.Authorization =
             new AuthenticationHeaderValue("Bearer", credentials.GetFreshToken());
 
-        var postTask = http.PostAsJsonAsync($"https://craftdig.io/api/GetToken", new { host, nonce });
+        var postTask = http.PostAsJsonAsync($"https://craftdig.io/api/GetToken", new { host = address!.Host, nonce });
         while (loopThread.IsAlive && !postTask.IsCompleted && sw.Elapsed < timeout) { Wait(); }
 
         var bodyTask = postTask.Result.Content.ReadFromJsonAsync<GetTokenResponse>();
