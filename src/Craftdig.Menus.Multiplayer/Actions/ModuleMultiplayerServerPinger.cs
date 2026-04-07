@@ -30,6 +30,9 @@ public class ModuleMultiplayerServerPinger(AppLog log, AppClientOptions clientOp
 
     private void PingOne(ServerAddress address)
     {
+        if (tasks.ContainsKey(address))
+            return;
+
         var task = new ServerPingTask { Address = address };
 
         task.Thread = new Thread(() => RunPingTask(task));
@@ -85,7 +88,12 @@ public class ModuleMultiplayerServerPinger(AppLog log, AppClientOptions clientOp
             loopThread.Start();
             pushThread.Start();
 
-            socket.Send(new ServerStatusCommand { Timestamp = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() });
+            socket.Send(new ServerStatusCommand()
+            {
+                Timestamp = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds(),
+                DescriptionHash = serverCache.DescriptionHash(task.Address),
+                IconHash = serverCache.IconHash(task.Address)
+            });
             done.Wait(2000, task.Token.Token);
             task.Result = new()
             {

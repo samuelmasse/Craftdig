@@ -8,6 +8,12 @@ public class ModuleMultiplayerServerCache(AppPaths paths)
     private string ServerDir(ServerAddress address) =>
         Path.Combine(CacheDir, $"{address.Host}_{address.Port}");
 
+    private string DescriptionPath(ServerAddress address) =>
+        Path.Combine(ServerDir(address), "Description.txt");
+
+    private string IconPath(ServerAddress address) =>
+        Path.Combine(ServerDir(address), "Icon.png");
+
     public void Save(ServerAddress address, ServerPingResult result)
     {
         if (!result.Success)
@@ -16,17 +22,10 @@ public class ModuleMultiplayerServerCache(AppPaths paths)
         var dir = ServerDir(address);
         Directory.CreateDirectory(dir);
 
-        var descPath = Path.Combine(dir, "Description.txt");
         if (result.Description != null)
-            File.WriteAllText(descPath, result.Description);
-        else if (File.Exists(descPath))
-            File.Delete(descPath);
-
-        var iconPath = Path.Combine(dir, "Icon.png");
+            File.WriteAllBytes(DescriptionPath(address), Encoding.UTF8.GetBytes(result.Description));
         if (result.IconData != null)
-            File.WriteAllBytes(iconPath, result.IconData);
-        else if (File.Exists(iconPath))
-            File.Delete(iconPath);
+            File.WriteAllBytes(IconPath(address), result.IconData);
     }
 
     public void Prune(ReadOnlySpan<ServerEntry> servers)
@@ -45,15 +44,21 @@ public class ModuleMultiplayerServerCache(AppPaths paths)
         }
     }
 
-    public string? LoadDescription(ServerAddress address)
-    {
-        var path = Path.Combine(ServerDir(address), "Description.txt");
-        return File.Exists(path) ? File.ReadAllText(path) : null;
-    }
+    public string? LoadDescription(ServerAddress address) =>
+        LoadFile(DescriptionPath(address)) is { } bytes ? Encoding.UTF8.GetString(bytes) : null;
 
-    public byte[]? LoadIcon(ServerAddress address)
-    {
-        var path = Path.Combine(ServerDir(address), "Icon.png");
-        return File.Exists(path) ? File.ReadAllBytes(path) : null;
-    }
+    public byte[]? LoadIcon(ServerAddress address) =>
+        LoadFile(IconPath(address));
+
+    public long DescriptionHash(ServerAddress address) =>
+        HashFile(DescriptionPath(address));
+
+    public long IconHash(ServerAddress address) =>
+        HashFile(IconPath(address));
+
+    private static byte[]? LoadFile(string path) =>
+        File.Exists(path) ? File.ReadAllBytes(path) : null;
+
+    private static long HashFile(string path) =>
+        File.Exists(path) ? BinaryPrimitives.ReadInt64LittleEndian(SHA256.HashData(File.ReadAllBytes(path))) : 0;
 }
