@@ -235,6 +235,7 @@ public class AppStyle(RootText text, RootUiMouse mouse, RootKeyboard keyboard, A
             .OffsetV((ItemWidthL - ItemSpacingXXL - ItemSpacingS, 0))
             .AlignmentV(Alignment.Center)
             .ColorV((0, 1, 1, 1))
+            .RenderDelayV(1)
             .IsDisabledF(() => parent.SizeR.Y / select.SizeInnerSumR.Y >= 1);
         {
             Vector2 pressPoint = default;

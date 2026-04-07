@@ -11,6 +11,8 @@ public interface IUiTraverseComponents
     UiProp<bool> IsOrderedFV { get; set; }
     /// <summary>Sort priority when the parent has ordering enabled.</summary>
     UiProp<float> OrderValueFV { get; set; }
+    /// <summary>Number of additional UI tree traversals to perform when this node is first added.</summary>
+    UiValue<int> RenderDelayFV { get; set; }
 
     /// <summary>The stacked node currently displayed from the node stack.</summary>
     EntMut StackedNodeR { get; internal set; }

@@ -43,6 +43,7 @@ internal class PropGenerator : IIncrementalGenerator
                     {
                         if (named.Name == "UiProp") kind = PropKind.Prop;
                         else if (named.Name == "UiCallback") kind = PropKind.Callback;
+                        else if (named.Name == "UiValue") kind = PropKind.Value;
                         else continue;
 
                         var typeArg = named.TypeArguments[0];
@@ -137,6 +138,16 @@ internal class PropGenerator : IIncrementalGenerator
                     sb.AppendLine("            return mut;");
                     sb.AppendLine("        }");
                 }
+                else if (prop.Kind == PropKind.Value)
+                {
+                    if (prop.Doc != null)
+                        sb.AppendLine($"        /// <summary>{prop.Doc}</summary>");
+                    sb.AppendLine($"        {prop.SetAccess} EntMutator<T> {prop.BaseName}V(in {prop.InnerType} value)");
+                    sb.AppendLine("        {");
+                    sb.AppendLine($"            mut.Ent.{prop.FullName} = value;");
+                    sb.AppendLine("            return mut;");
+                    sb.AppendLine("        }");
+                }
                 else
                 {
                     if (prop.Doc != null)
@@ -165,7 +176,7 @@ internal class PropGenerator : IIncrementalGenerator
         });
     }
 
-    private enum PropKind { Prop, Callback, Text }
+    private enum PropKind { Prop, Callback, Text, Value }
     private record Model(string Namespace, string InterfaceName, PropInfo[] Props, string InterfaceAccess);
     private record PropInfo(string FullName, string BaseName, string InnerType, PropKind Kind, string? Doc, string GetAccess, string SetAccess);
 

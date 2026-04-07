@@ -23,6 +23,26 @@ public class RootUiTraverse
             Traverse(c, depth + 1);
     }
 
+    internal bool Delay(EntMut n)
+    {
+        bool delay = false;
+        var rem = n.RenderDelayFV.Resolve();
+
+        if (rem > 0)
+        {
+            n.RenderDelayFV = rem - 1;
+            delay = true;
+        }
+
+        foreach (var c in n.NodesR.Span)
+        {
+            if (Delay(c))
+                delay = true;
+        }
+
+        return delay;
+    }
+
     private void OrderNodes(EntMut n)
     {
         var ordered = n.IsOrderedFV.Resolve();

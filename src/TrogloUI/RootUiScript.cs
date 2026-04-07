@@ -41,9 +41,13 @@ public class RootUiScript(
 
     private void Traverse()
     {
-        traverse.Traverse(ui, 0);
-        size.Size(ui.SizeR, ui);
-        position.Position(ui.SizeR, ui);
-        position.Finalize(ui.OffsetR, ui);
+        do
+        {
+            traverse.Traverse(ui, 0);
+            size.Size(ui.SizeR, ui);
+            position.Position(ui.SizeR, ui);
+            position.Finalize(ui.OffsetR, ui);
+        }
+        while (traverse.Delay(ui));
     }
 }
