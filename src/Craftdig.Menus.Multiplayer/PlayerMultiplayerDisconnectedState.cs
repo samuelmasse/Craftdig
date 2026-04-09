@@ -13,7 +13,7 @@ public class PlayerMultiplayerDisconnectedState(
     {
         menus.Mutate().StackRootV(menus);
         Node(menus).Mutate(mainBackgroundMenu.Create);
-        NodeSR(menus).Mutate(multiplayerDisconnectedMenu.Create);
+        PushMenu(menus, multiplayerDisconnectedMenu.Create);
     }
 
     public override void Unload()

@@ -40,13 +40,13 @@ public class ModuleMultiplayerConnectMenu(
                 .OnPressF(() =>
                 {
                     multiplayerConnectAction.Start(ServerAddress.Parse(address.ToString(), defaultPort));
-                    NodeSR(root).Mutate(multiplayerConnectingMenu.Create);
+                    PushMenu(root, multiplayerConnectingMenu.Create);
                 });
 
             Node(form)
                 .Mutate(s.Button)
                 .TextV("Cancel")
-                .OnPressF(() => NodeStackPopR(root));
+                .OnPressF(() => PopMenu(root));
         }
     }
 }

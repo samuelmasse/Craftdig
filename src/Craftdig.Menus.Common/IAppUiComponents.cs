@@ -7,6 +7,8 @@ public interface IAppUiComponents
     UiText TooltipFV { get; set; }
     /// <summary>Root node for stack-based menu navigation.</summary>
     UiProp<EntMut> StackRootFV { get; set; }
+    /// <summary>Method used to create a menu within the menu stack.</summary>
+    UiCallback<Action<EntMut>> MenuOriginFV { get; set; }
     /// <summary>Player entity associated with this node.</summary>
     UiProp<EntMutIdx> PlayerFV { get; set; }
     /// <summary>Callback that returns the item slot value.</summary>

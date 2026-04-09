@@ -22,7 +22,7 @@ public class PlayerEscapeMenu(AppReset reset, AppStyle s)
 
             Node(list)
                 .Mutate(s.Button)
-                .OnPressF(() => NodeStackPopR(root))
+                .OnPressF(() => PopMenu(root))
                 .TextV("Back to Game");
 
             Node(list)

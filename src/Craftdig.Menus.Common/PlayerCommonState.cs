@@ -76,11 +76,11 @@ public class PlayerCommonState(
         if (keyboard.IsKeyPressed(Keys.Escape))
         {
             if (NodeStackCount(menus) > 0)
-                NodeStackPop(menus);
+                PopMenu(menus);
             else
             {
                 paused = true;
-                NodeSR(menus).Mutate(escapeMenu.Create);
+                PushMenu(menus, escapeMenu.Create);
             }
         }
 
@@ -93,7 +93,7 @@ public class PlayerCommonState(
                     if (inv && currentKeyMenu == keyMenus[key])
                     {
                         while (NodeStackCount(menus) > 0)
-                            NodeStackPop(menus);
+                            PopMenu(menus);
 
                         inv = false;
                     }
@@ -102,7 +102,7 @@ public class PlayerCommonState(
                 {
                     inv = true;
                     currentKeyMenu = keyMenus[key];
-                    NodeSR(menus).Mutate(keyMenus[key]);
+                    PushMenu(menus, keyMenus[key]);
                 }
             }
         }

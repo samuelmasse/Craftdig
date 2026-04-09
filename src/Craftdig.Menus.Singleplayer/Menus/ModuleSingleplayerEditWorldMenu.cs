@@ -3,7 +3,6 @@ namespace Craftdig.Menus.Singleplayer;
 [Module]
 public class ModuleSingleplayerEditWorldMenu(
     AppStyle s,
-    ModuleScope scope,
     ModuleWriteWorldMetaAction writeWorldMetaAction)
 {
     public void Create(EntMut root, WorldEntry world)
@@ -41,16 +40,15 @@ public class ModuleSingleplayerEditWorldMenu(
 
                         writeWorldMetaAction.Write(world.Meta with { Name = worldName }, world.Paths);
 
-                        NodeStackPopR(root);
-                        NodeStackPopR(root);
-                        NodeSR(root).Mutate(scope.Get<ModuleSingleplayerWorldSelectMenu>().Create);
+                        PopMenu(root);
+                        RefreshMenu(root);
                     })
                     .TextV("Save")
                     .Mutate(s.Button)
                     .SizeV((s.ItemWidthL, s.ItemHeight));
 
                 Node(buttonsList)
-                    .OnPressF(() => NodeStackPopR(root))
+                    .OnPressF(() => PopMenu(root))
                     .TextV("Cancel")
                     .Mutate(s.Button)
                     .SizeV((s.ItemWidthL, s.ItemHeight));

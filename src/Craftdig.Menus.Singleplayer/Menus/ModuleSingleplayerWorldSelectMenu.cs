@@ -144,13 +144,13 @@ public class ModuleSingleplayerWorldSelectMenu(
                         .Mutate(s.ButtonRow);
                     {
                         Node(leftButtonsHorizontal)
-                            .OnPressF(() => NodeSR(root).Mutate(r => editWorldMenu.Create(r, selected!)))
+                            .OnPressF(() => PushMenu(root, r => editWorldMenu.Create(r, selected!)))
                             .TextV("Edit")
                             .Mutate(s.Button)
                             .IsInputDisabledF(() => selected == null);
 
                         Node(leftButtonsHorizontal)
-                            .OnPressF(() => NodeSR(root).Mutate(r => deleteWorldMenu.Create(r, selected!)))
+                            .OnPressF(() => PushMenu(root, r => deleteWorldMenu.Create(r, selected!)))
                             .TextV("Delete")
                             .Mutate(s.Button)
                             .IsInputDisabledF(() => selected == null);
@@ -163,7 +163,7 @@ public class ModuleSingleplayerWorldSelectMenu(
                     .InnerSpacingV(s.ItemSpacing);
                 {
                     Node(rightButtonsVertical)
-                        .OnPressF(() => NodeSR(root).Mutate(newWorldMenu.Create))
+                        .OnPressF(() => PushMenu(root, newWorldMenu.Create))
                         .TextV("Create New World")
                         .Mutate(s.Button);
 
@@ -171,13 +171,13 @@ public class ModuleSingleplayerWorldSelectMenu(
                         .Mutate(s.ButtonRow);
                     {
                         Node(rightButtonsHorizontal)
-                            .OnPressF(() => NodeSR(root).Mutate(r => newWorldMenu.Create(r, selected!.Meta)))
+                            .OnPressF(() => PushMenu(root, r => newWorldMenu.Create(r, selected!.Meta)))
                             .TextV("Re-Create")
                             .Mutate(s.Button)
                             .IsInputDisabledF(() => selected == null);
 
                         Node(rightButtonsHorizontal)
-                            .OnPressF(() => NodeStackPopR(root))
+                            .OnPressF(() => PopMenu(root))
                             .TextV("Back")
                             .Mutate(s.Button);
                     }

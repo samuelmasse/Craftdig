@@ -3,7 +3,6 @@ namespace Craftdig.Menus.Multiplayer;
 [Module]
 public class ModuleMultiplayerAddServerMenu(
     AppStyle s,
-    ModuleScope module,
     ModuleMultiplayerServerList serverList)
 {
     public void Create(EntMut root, ServerEntry? editing)
@@ -53,15 +52,14 @@ public class ModuleMultiplayerAddServerMenu(
                         serverList.Edit(editing, entry);
                     else serverList.Add(entry);
 
-                    NodeStackPopR(root);
-                    NodeStackPopR(root);
-                    NodeSR(root).Mutate(module.Get<ModuleMultiplayerServerBrowserMenu>().Create);
+                    PopMenu(root);
+                    RefreshMenu(root);
                 });
 
             Node(form)
                 .Mutate(s.Button)
                 .TextV("Cancel")
-                .OnPressF(() => NodeStackPopR(root));
+                .OnPressF(() => PopMenu(root));
         }
     }
 }

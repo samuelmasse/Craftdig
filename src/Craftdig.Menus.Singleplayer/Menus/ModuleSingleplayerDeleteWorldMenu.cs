@@ -2,8 +2,7 @@ namespace Craftdig.Menus.Singleplayer;
 
 [Module]
 public class ModuleSingleplayerDeleteWorldMenu(
-    AppStyle s,
-    ModuleScope scope)
+    AppStyle s)
 {
     public void Create(EntMut root, WorldEntry world)
     {
@@ -29,10 +28,8 @@ public class ModuleSingleplayerDeleteWorldMenu(
                     {
                         Directory.Delete(world.Dir, true);
 
-                        NodeStackPopR(root);
-                        NodeStackPopR(root);
-
-                        NodeSR(root).Mutate(scope.Get<ModuleSingleplayerWorldSelectMenu>().Create);
+                        PopMenu(root);
+                        RefreshMenu(root);
                     })
                     .TextV("Delete")
                     .Mutate(s.Button)
@@ -40,7 +37,7 @@ public class ModuleSingleplayerDeleteWorldMenu(
                     .SizeV((s.ItemWidthL, s.ItemHeight));
 
                 Node(buttons)
-                    .OnPressF(() => NodeStackPopR(root))
+                    .OnPressF(() => PopMenu(root))
                     .TextV("Cancel")
                     .Mutate(s.Button)
                     .SizeRelativeV((0, 0))

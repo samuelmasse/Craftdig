@@ -71,8 +71,8 @@ public class ModuleMultiplayerServerBrowserMenu(
                     .OnPressF(() =>
                     {
                         multiplayerCredentials.Logout();
-                        NodeStackPopR(root);
-                        NodeSR(root).Mutate(module.Get<ModuleMultiplayerLoginMenu>().Create);
+                        PopMenu(root);
+                        PushMenu(root, module.Get<ModuleMultiplayerLoginMenu>().Create);
                     });
             }
         }
@@ -232,12 +232,12 @@ public class ModuleMultiplayerServerBrowserMenu(
                         Node(topRow)
                             .Mutate(s.Button)
                             .TextV("Direct Connection")
-                            .OnPressF(() => NodeSR(root).Mutate(connectMenu.Create));
+                            .OnPressF(() => PushMenu(root, connectMenu.Create));
 
                         Node(topRow)
                             .Mutate(s.Button)
                             .TextV("Add Server")
-                            .OnPressF(() => NodeSR(root).Mutate(r =>
+                            .OnPressF(() => PushMenu(root, r =>
                                 module.Get<ModuleMultiplayerAddServerMenu>().Create(r, null)));
                     }
 
@@ -248,29 +248,25 @@ public class ModuleMultiplayerServerBrowserMenu(
                             .Mutate(s.Button)
                             .TextV("Edit")
                             .IsInputDisabledF(() => selected == null)
-                            .OnPressF(() => NodeSR(root).Mutate(r =>
+                            .OnPressF(() => PushMenu(root, r =>
                                 module.Get<ModuleMultiplayerAddServerMenu>().Create(r, selected)));
 
                         Node(bottomRow)
                             .Mutate(s.Button)
                             .TextV("Delete")
                             .IsInputDisabledF(() => selected == null)
-                            .OnPressF(() => NodeSR(root).Mutate(r =>
+                            .OnPressF(() => PushMenu(root, r =>
                                 module.Get<ModuleMultiplayerDeleteServerMenu>().Create(r, selected!)));
 
                         Node(bottomRow)
                             .Mutate(s.Button)
                             .TextV("Refresh")
-                            .OnPressF(() =>
-                            {
-                                NodeStackPopR(root);
-                                NodeSR(root).Mutate(Create);
-                            });
+                            .OnPressF(() => RefreshMenu(root));
 
                         Node(bottomRow)
                             .Mutate(s.Button)
                             .TextV("Back")
-                            .OnPressF(() => NodeStackPopR(root));
+                            .OnPressF(() => PopMenu(root));
                     }
                 }
             }
@@ -279,7 +275,7 @@ public class ModuleMultiplayerServerBrowserMenu(
         void Connect()
         {
             multiplayerConnectAction.Start(selected!.Address);
-            NodeSR(root).Mutate(connectingMenu.Create);
+            PushMenu(root, connectingMenu.Create);
         }
     }
 }

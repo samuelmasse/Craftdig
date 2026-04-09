@@ -35,6 +35,6 @@ public class DimensionServer(
         sectionReminder.Tick();
         positionStreamer.Tick();
 
-        log.Debug("{0} rigids", rigidBag.Ents.Length);
+        log.Trace("{0} rigids", rigidBag.Ents.Length);
     }
 }

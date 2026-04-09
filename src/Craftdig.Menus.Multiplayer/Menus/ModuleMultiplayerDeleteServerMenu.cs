@@ -3,7 +3,6 @@ namespace Craftdig.Menus.Multiplayer;
 [Module]
 public class ModuleMultiplayerDeleteServerMenu(
     AppStyle s,
-    ModuleScope module,
     ModuleMultiplayerServerList serverList)
 {
     public void Create(EntMut root, ServerEntry server)
@@ -29,11 +28,8 @@ public class ModuleMultiplayerDeleteServerMenu(
                     .OnPressF(() =>
                     {
                         serverList.Remove(server);
-
-                        NodeStackPopR(root);
-                        NodeStackPopR(root);
-
-                        NodeSR(root).Mutate(module.Get<ModuleMultiplayerServerBrowserMenu>().Create);
+                        PopMenu(root);
+                        RefreshMenu(root);
                     })
                     .TextV("Delete")
                     .Mutate(s.Button)
@@ -41,7 +37,7 @@ public class ModuleMultiplayerDeleteServerMenu(
                     .SizeV((s.ItemWidthL, s.ItemHeight));
 
                 Node(buttons)
-                    .OnPressF(() => NodeStackPopR(root))
+                    .OnPressF(() => PopMenu(root))
                     .TextV("Cancel")
                     .Mutate(s.Button)
                     .SizeRelativeV((0, 0))

@@ -39,7 +39,7 @@ public class ModuleMainMenu(
             {
                 Node(list2)
                     .Mutate(s.Button)
-                    .OnPressF(() => NodeSR(root).Mutate(worldSelectMenu.Create))
+                    .OnPressF(() => PushMenu(root, worldSelectMenu.Create))
                     .TextV("Singleplayer");
 
                 Node(list2)
@@ -47,19 +47,17 @@ public class ModuleMainMenu(
                     .TextV("Multiplayer")
                     .OnPressF(() =>
                     {
-                        var node = NodeSR(root);
-
                         if (clientOptions.NoAuthUser == null)
                         {
                             if (!multiplayerCredentials.NeedLogin)
                             {
                                 multiplayerCredentials.StartLogin();
                                 multiplayerCredentials.WaitLogin();
-                                node.Mutate(serverBrowserMenu.Create);
+                                PushMenu(root, serverBrowserMenu.Create);
                             }
-                            else node.Mutate(loginMenu.Create);
+                            else PushMenu(root, loginMenu.Create);
                         }
-                        else node.Mutate(serverBrowserMenu.Create);
+                        else PushMenu(root, serverBrowserMenu.Create);
                     });
 
                 Node(list2)

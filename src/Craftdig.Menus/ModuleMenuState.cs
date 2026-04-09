@@ -18,7 +18,7 @@ public class ModuleMenuState(
     {
         menus.Mutate().StackRootV(menus);
         Node(menus).Mutate(mainBackgroundMenu.Create);
-        NodeSR(menus).Mutate(mainMenu.Create);
+        PushMenu(menus, mainMenu.Create);
         watch.Start();
     }
 
@@ -32,7 +32,7 @@ public class ModuleMenuState(
         if (keyboard.IsKeyPressed(Keys.Escape))
         {
             if (NodeStackCount(menus) > 1)
-                NodeStackPop(menus);
+                PopMenu(menus);
         }
 
         if (watch.ElapsedMilliseconds > 30)

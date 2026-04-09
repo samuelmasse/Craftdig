@@ -21,8 +21,8 @@ public class ModuleMultiplayerLoginMenu(
                     if (multiplayerCredentials.Email == null)
                         return;
 
-                    NodeStackPopR(root);
-                    NodeSR(root).Mutate(module.Get<ModuleMultiplayerServerBrowserMenu>().Create);
+                    PopMenu(root);
+                    PushMenu(root, module.Get<ModuleMultiplayerServerBrowserMenu>().Create);
                 });
 
             bool loginStarted = false;
@@ -41,7 +41,7 @@ public class ModuleMultiplayerLoginMenu(
                 .OnPressF(() =>
                 {
                     multiplayerCredentials.StopLogin();
-                    NodeStackPopR(root);
+                    PopMenu(root);
                 })
                 .TextV("Cancel")
                 .Mutate(s.Button);
