@@ -40,8 +40,13 @@ public class RootUiDraw(RootSprites sprites, RootUiScale scale, RootUiPosition p
         if (texture == null)
             return;
 
-        var tint = n.TintFV.Resolve() ?? Vector4.One;
-        sprites.Batch.Draw(texture, n.PositionR, n.SizeR, tint);
+        var color = n.TextureColorFV.Resolve() ?? Vector4.One;
+        var subPosition = n.TextureSubPositionFV.Resolve() ?? Vector2.Zero;
+        var subSize = n.TextureSubSizeFV.Resolve() ?? texture.Size;
+        var rotation = n.TextureRotationFV.Resolve() ?? SpriteBatchRotation.None;
+        var flip = n.TextureFlipFV.Resolve() ?? SpriteBatchFlip.None;
+
+        sprites.Batch.Draw(texture, n.PositionR, n.SizeR, subPosition, subSize, color, rotation, flip);
     }
 
     private void DrawText(Ent n)
