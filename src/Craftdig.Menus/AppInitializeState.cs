@@ -13,7 +13,8 @@ public class AppInitializeState(
     AppMouseTrackMenu mouseTrackMenu,
     AppTooltipMenu tooltipMenu,
     AppReset reset,
-    AppZoomMenu zoomMenu) : State
+    AppZoomMenu zoomMenu,
+    AppFpsMenu fpsMenu) : State
 {
     public override void Load()
     {
@@ -25,6 +26,7 @@ public class AppInitializeState(
         Node(ui).Mutate(mouseTrackMenu.Create);
         Node(ui).OrderValueV(2).Mutate(tooltipMenu.Create);
         Node(ui).OrderValueV(5).Mutate(zoomMenu.Create);
+        Node(ui).OrderValueV(5).Mutate(fpsMenu.Create);
 
         scope.Scope<ModuleScope>()
             .Run(x => x.Handler(x.Get<ModuleEntMutInjector>()))

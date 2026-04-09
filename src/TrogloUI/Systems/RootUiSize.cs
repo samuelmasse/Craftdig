@@ -23,12 +23,13 @@ public class RootUiSize(RootSprites sprites, RootUiScale scale)
         SizeInnerMaxRelative(s, n);
         SizeInnerSumRelative(s, n);
 
+        var postInnerSpace = n.SizeR - n.PaddingR.Xy - n.PaddingR.Zw;
         foreach (var c in n.NodesR.Span)
         {
             if (!c.IsPostSizedFV.Resolve())
                 continue;
 
-            Size(innerSpace - c.MarginR.Xy - c.MarginR.Zw, c);
+            Size(postInnerSpace - c.MarginR.Xy - c.MarginR.Zw, c);
         }
     }
 
