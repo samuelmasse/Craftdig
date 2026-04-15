@@ -41,12 +41,19 @@ public class RootUiDraw(RootSprites sprites, RootUiScale scale, RootUiPosition p
             return;
 
         var color = n.TextureColorFV.Resolve() ?? Vector4.One;
+        var margin = n.TextureMarginFV.Resolve();
+        var position = n.PositionR + margin.Xy;
+        var size = n.SizeR - margin.Xy - margin.Zw;
+        var subSizeRelative = n.TextureSubSizeRelativeFV.Resolve();
+        var subSizeFixed = n.TextureSubSizeFV.Resolve();
         var subPosition = n.TextureSubPositionFV.Resolve() ?? Vector2.Zero;
-        var subSize = n.TextureSubSizeFV.Resolve() ?? texture.Size;
+        var subSize = subSizeRelative.HasValue || subSizeFixed.HasValue
+            ? (subSizeRelative ?? default) * size + (subSizeFixed ?? default)
+            : texture.Size;
         var rotation = n.TextureRotationFV.Resolve() ?? SpriteBatchRotation.None;
         var flip = n.TextureFlipFV.Resolve() ?? SpriteBatchFlip.None;
 
-        sprites.Batch.Draw(texture, n.PositionR, n.SizeR, subPosition, subSize, color, rotation, flip);
+        sprites.Batch.Draw(texture, position, size, subPosition, subSize, color, rotation, flip);
     }
 
     private void DrawText(Ent n)
@@ -81,6 +88,14 @@ public class RootUiDraw(RootSprites sprites, RootUiScale scale, RootUiPosition p
 
         offset = position.Align(offset, size, n.SizeR, alignment);
         offset.Y += size.Y / 2;
+
+        var shadowOffset = n.TextShadowOffsetFV.Resolve();
+        if (shadowOffset.HasValue)
+        {
+            var shadowColor = n.TextShadowColorFV.Resolve()
+                ?? (n.TextShadowColorRelativeFV.Resolve() ?? Vector4.One) * textColor;
+            sprites.Batch.Write(font.Size(fontSize), text, (n.PositionR + offset + shadowOffset.Value) * scale.Scale, shadowColor, scale.Scale);
+        }
 
         sprites.Batch.Write(font.Size(fontSize), text, (n.PositionR + offset) * scale.Scale, textColor, scale.Scale);
     }

@@ -1,7 +1,10 @@
 namespace Craftdig.Menus.Common;
 
 [Module]
-public class ModuleMainBackgroundMenu
+public class ModuleMainBackgroundMenu(AppStyle s)
 {
-    public void Create(EntMut root) => Node(root).ColorV((0.4f, 0.2f, 0.2f, 1));
+    public void Create(EntMut root) => Node(root)
+        .TextureV(s.BackgroundTexture)
+        .TextureSubSizeRelativeV(s.TextureScale)
+        .TextureColorV((0.7f, 0.7f, 0.7f, 1));
 }

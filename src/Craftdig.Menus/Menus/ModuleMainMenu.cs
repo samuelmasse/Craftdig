@@ -19,23 +19,20 @@ public class ModuleMainMenu(
             .AlignmentV(Alignment.Center)
             .OffsetMultiplierV(s.ItemSpacingXS)
             .InnerSpacingV(s.ItemSpacingXXL)
-            .SizeInnerMaxRelativeV(s.Horizontal)
-            .ColorV(s.BoardColor);
+            .SizeInnerMaxRelativeV(s.Horizontal);
         {
             Node(list)
                 .Mutate(s.Label)
                 .TextV("Craftdig")
                 .FontSizeV(s.FontSizeTitle)
                 .FontPaddingV((s.ItemSpacing, 0, s.ItemSpacing, 0))
-                .ColorV(s.ButtonColor)
                 .AlignmentV(Alignment.Horizontal);
 
             Node(list, out var list2)
                 .Mutate(s.VerticalList)
                 .AlignmentV(Alignment.Horizontal)
                 .InnerSpacingV(s.ItemSpacing)
-                .SizeV((s.ItemWidth, 0))
-                .ColorV(s.BoardColor2);
+                .SizeV((s.ItemWidth, 0));
             {
                 Node(list2)
                     .Mutate(s.Button)

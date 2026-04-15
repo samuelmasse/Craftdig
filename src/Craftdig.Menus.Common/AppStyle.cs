@@ -5,6 +5,8 @@ public class AppStyle(RootText text, RootUiMouse mouse, RootKeyboard keyboard, A
 {
     public readonly Texture ArrowTexture = menuTextures["MenuArrow"];
     public readonly Texture SlotTexture = menuTextures["MenuSlot"];
+    public readonly Texture ButtonTexture = menuTextures["MenuButton"];
+    public readonly Texture BackgroundTexture = menuTextures["MenuBackground"];
 
     public int FontSize => 32;
     public int FontSizeTitle => 160;
@@ -30,10 +32,13 @@ public class AppStyle(RootText text, RootUiMouse mouse, RootKeyboard keyboard, A
 
     public Vector4 TextColor => (1, 1, 1, 1);
     public Vector4 TextColorFaint => (0.5f, 0.5f, 0.5f, 1);
-    public Vector4 ButtonColor => (1, 0, 1, 1);
-    public Vector4 ButtonColorDisabled => (0.4f, 0, 0.4f, 1);
+    public Vector4 SlotColor => (1, 0, 1, 1);
+    public Vector4 ButtonColor => (1, 1, 1, 1);
+    public Vector4 ButtonColorDisabled => (0.4f, 0.4f, 0.4f, 1);
     public Vector4 ButtonColorHovered => (1, 0.7f, 1, 1);
     public Vector4 TooltipColor => (0.5f, 0.28f, 1, 1);
+
+    public Vector2 TextureScale => (0.25f, 0.25f);
 
     public Font Font => monocraft.Font;
 
@@ -42,7 +47,9 @@ public class AppStyle(RootText text, RootUiMouse mouse, RootKeyboard keyboard, A
         .FontV(Font)
         .FontSizeV(FontSize)
         .FontPaddingV((ItemSpacingXS, 0, ItemSpacingXS, 0))
-        .TextColorV(TextColor);
+        .TextColorV(TextColor)
+        .TextShadowOffsetV((ItemSpacingXS, ItemSpacingXS))
+        .TextShadowColorV((0, 0, 0, 0.5f));
 
     public void Label(EntMut ent) => ent.Mutate()
         .Mutate(Text)
@@ -50,7 +57,7 @@ public class AppStyle(RootText text, RootUiMouse mouse, RootKeyboard keyboard, A
         .SizeTextRelativeV((1, 1))
         .SizeRelativeV((0, 0));
 
-    public void InputItem(EntMut ent) => ent.Mutate()
+    public void InputItem(EntMut ent, Func<Vector4> colorF) => ent.Mutate()
         .SizeV((0, ItemHeight))
         .SizeRelativeV((1, 0))
         .IsSelectableV(true)
@@ -59,30 +66,30 @@ public class AppStyle(RootText text, RootUiMouse mouse, RootKeyboard keyboard, A
         {
             Node(ent)
                 .AlignmentV(Alignment.Top | Alignment.Left)
-                .ColorF(() => InputItemBorderColor(ent))
+                .ColorF(colorF)
                 .SizeV((ItemSpacingXS, 0))
                 .SizeRelativeV((0, 1));
 
             Node(ent)
                 .AlignmentV(Alignment.Top | Alignment.Right)
-                .ColorF(() => InputItemBorderColor(ent))
+                .ColorF(colorF)
                 .SizeV((ItemSpacingXS, 0))
                 .SizeRelativeV((0, 1));
 
             Node(ent)
                 .AlignmentV(Alignment.Top | Alignment.Left)
-                .ColorF(() => InputItemBorderColor(ent))
+                .ColorF(colorF)
                 .SizeV((0, ItemSpacingXS))
                 .SizeRelativeV((1, 0));
 
             Node(ent)
                 .AlignmentV(Alignment.Bottom | Alignment.Left)
-                .ColorF(() => InputItemBorderColor(ent))
+                .ColorF(colorF)
                 .SizeV((0, ItemSpacingXS))
                 .SizeRelativeV((1, 0));
         });
 
-    public Vector4 InputItemBorderColor(EntMut ent)
+    public Vector4 ButtonBorderColor(EntMut ent)
     {
         if (ent.IsInputDisabledFV.Resolve())
             return (0.2f, 0.2f, 0.2f, 1f);
@@ -93,12 +100,20 @@ public class AppStyle(RootText text, RootUiMouse mouse, RootKeyboard keyboard, A
         return (0, 0, 0, 1);
     }
 
+    public Vector4 TextBoxBorderColor(EntMut ent)
+    {
+        if ((ent.IsFocusedR || ent.IsHoveredR))
+            return (1, 1, 1, 1);
+
+        return ButtonColorDisabled;
+    }
+
     public void Textbox(EntMut ent) => ent.Mutate()
-        .Mutate(InputItem)
+        .Mutate((ent) => InputItem(ent, () => TextBoxBorderColor(ent)))
         .Mutate(Text)
         .Tag(nameof(Textbox))
         .TextAlignmentV(Alignment.Left | Alignment.Vertical)
-        .ColorV(ButtonColorDisabled)
+        .ColorV((0, 0, 0, 1))
         .TextF(() => text.Format("{0}{1}", ent.StringBuilderFV.Resolve(), ent.CarretR))
         .TextPaddingV((ItemSpacingXS, ItemSpacingXS, ItemSpacingXS, ItemSpacingXS))
         .CursorV(MouseCursor.IBeam)
@@ -158,7 +173,7 @@ public class AppStyle(RootText text, RootUiMouse mouse, RootKeyboard keyboard, A
         });
 
     public void Button(EntMut ent) => ent.Mutate()
-        .Mutate(InputItem)
+        .Mutate((ent) => InputItem(ent, () => ButtonBorderColor(ent)))
         .Mutate(Text)
         .Mutate(PointingCursor)
         .Tag(nameof(Button))
@@ -167,7 +182,10 @@ public class AppStyle(RootText text, RootUiMouse mouse, RootKeyboard keyboard, A
             if (ent.IsFocusedR && keyboard.IsKeyPressedRepeated(Keys.Enter))
                 ent.OnPressFV.Resolve()?.Invoke();
         })
-        .ColorF(() =>
+        .TextureV(ButtonTexture)
+        .TextureSubSizeRelativeV(TextureScale)
+        .TextureMarginV((ItemSpacingXS, ItemSpacingXS, ItemSpacingXS, ItemSpacingXS))
+        .TextureColorF(() =>
         {
             if (ent.IsInputDisabledFV.Resolve())
                 return ButtonColorDisabled;
@@ -305,17 +323,24 @@ public class AppStyle(RootText text, RootUiMouse mouse, RootKeyboard keyboard, A
         .InnerLayoutV(InnerLayout.HorizontalList);
 
     public void TopBar(EntMut ent) => ent.Mutate()
+        .TextureV(ButtonTexture)
+        .TextureSubSizeRelativeV(TextureScale)
+        .TextureColorV((0.6f, 0.6f, 0.6f, 1))
         .SizeRelativeV(Horizontal)
         .SizeV((0, BarHeight))
         .ColorV(BoardColor);
 
     public void BottomBar(EntMut ent) => ent.Mutate()
+        .TextureV(ButtonTexture)
+        .TextureSubSizeRelativeV(TextureScale)
+        .TextureColorV((0.6f, 0.6f, 0.6f, 1))
         .SizeRelativeV(Horizontal)
         .SizeV((0, BarHeight))
         .AlignmentV(Alignment.Horizontal | Alignment.Bottom)
         .ColorV(BoardColor);
 
     public void MiddleBar(EntMut ent) => ent.Mutate()
+        .ColorV((0, 0, 0, 0.2f))
         .SizeRelativeV((1, 1))
         .SizeV((0, -BarHeight * 2))
         .OffsetV((0, BarHeight));
@@ -325,8 +350,7 @@ public class AppStyle(RootText text, RootUiMouse mouse, RootKeyboard keyboard, A
         .AlignmentV(Alignment.Center)
         .OffsetMultiplierV(ItemSpacingXS)
         .SizeInnerMaxRelativeV(Vertical)
-        .InnerSpacingV(ItemSpacingL)
-        .ColorV(BoardColor2);
+        .InnerSpacingV(ItemSpacingL);
 
     public void ButtonRow(EntMut ent) => ent.Mutate()
         .SizeRelativeV(Horizontal)
@@ -354,7 +378,11 @@ public class AppStyle(RootText text, RootUiMouse mouse, RootKeyboard keyboard, A
         .Tag(nameof(Slot))
         .SizeV((SlotSize, SlotSize))
         .SizeRelativeV((0, 0))
+        .ColorV(SlotColor)
         .TextureV(SlotTexture)
+        .TextureColorV(null)
+        .TextureSubSizeRelativeV(null)
+        .TextureMarginV(default)
         .Mutate((ent) =>
         {
             NodesClear(ent);
