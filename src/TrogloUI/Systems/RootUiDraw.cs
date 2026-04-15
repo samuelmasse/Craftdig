@@ -46,10 +46,12 @@ public class RootUiDraw(RootSprites sprites, RootUiScale scale, RootUiPosition p
         var size = n.SizeR - margin.Xy - margin.Zw;
         var subSizeRelative = n.TextureSubSizeRelativeFV.Resolve();
         var subSizeFixed = n.TextureSubSizeFV.Resolve();
-        var subPosition = n.TextureSubPositionFV.Resolve() ?? Vector2.Zero;
         var subSize = subSizeRelative.HasValue || subSizeFixed.HasValue
             ? (subSizeRelative ?? default) * size + (subSizeFixed ?? default)
             : texture.Size;
+        var anchor = n.TextureOriginRelativeFV.Resolve();
+        var subPosition = (n.TextureSubPositionFV.Resolve() ?? Vector2.Zero)
+            - (anchor ?? default) * subSize;
         var rotation = n.TextureRotationFV.Resolve() ?? SpriteBatchRotation.None;
         var flip = n.TextureFlipFV.Resolve() ?? SpriteBatchFlip.None;
 

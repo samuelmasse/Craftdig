@@ -21,6 +21,8 @@ public interface IUiDrawComponents
     UiProp<SpriteBatchFlip?> TextureFlipFV { get; set; }
     /// <summary>Margin around the texture (left, top, right, bottom).</summary>
     UiProp<Vector4> TextureMarginFV { get; set; }
+    /// <summary>Origin point for tiling relative to the sub size (0,0 = top-left, 1,1 = bottom-right).</summary>
+    UiProp<Vector2?> TextureOriginRelativeFV { get; set; }
     /// <summary>Text alignment within the node.</summary>
     UiProp<Alignment?> TextAlignmentFV { get; set; }
     /// <summary>Color of the text.</summary>

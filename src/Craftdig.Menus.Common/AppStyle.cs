@@ -325,6 +325,7 @@ public class AppStyle(RootText text, RootUiMouse mouse, RootKeyboard keyboard, A
     public void TopBar(EntMut ent) => ent.Mutate()
         .TextureV(ButtonTexture)
         .TextureSubSizeRelativeV(TextureScale)
+        .TextureOriginRelativeV((0.5f, 0))
         .TextureColorV((0.6f, 0.6f, 0.6f, 1))
         .SizeRelativeV(Horizontal)
         .SizeV((0, BarHeight))
@@ -333,6 +334,7 @@ public class AppStyle(RootText text, RootUiMouse mouse, RootKeyboard keyboard, A
     public void BottomBar(EntMut ent) => ent.Mutate()
         .TextureV(ButtonTexture)
         .TextureSubSizeRelativeV(TextureScale)
+        .TextureOriginRelativeV((0.5f, 1f))
         .TextureColorV((0.6f, 0.6f, 0.6f, 1))
         .SizeRelativeV(Horizontal)
         .SizeV((0, BarHeight))
@@ -348,7 +350,6 @@ public class AppStyle(RootText text, RootUiMouse mouse, RootKeyboard keyboard, A
     public void ButtonBar(EntMut ent) => ent.Mutate()
         .Mutate(HorizontalList)
         .AlignmentV(Alignment.Center)
-        .OffsetMultiplierV(ItemSpacingXS)
         .SizeInnerMaxRelativeV(Vertical)
         .InnerSpacingV(ItemSpacingL);
 
