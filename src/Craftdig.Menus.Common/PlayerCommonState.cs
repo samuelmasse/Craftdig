@@ -60,8 +60,8 @@ public class PlayerCommonState(
         ent.PrevPosition = ent.Position;
 
         menus.Mutate().StackRootV(menus);
-        Node(menus).Mutate(debugMenu.Create);
-        Node(menus).Mutate(dimensionSharedVertexBufferMenu.Create);
+        Node(overlay).Mutate(debugMenu.Create);
+        Node(overlay).Mutate(dimensionSharedVertexBufferMenu.Create);
     }
 
     public override void Unload()

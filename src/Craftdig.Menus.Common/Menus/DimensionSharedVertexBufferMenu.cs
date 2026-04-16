@@ -62,7 +62,8 @@ public class DimensionSharedVertexBufferMenu(
                         .FontV(roboto.Font)
                         .FontSizeV(24)
                         .TextAlignmentV(Alignment.Left)
-                        .TextF(col);
+                        .TextF(col)
+                        .TextShadowOffsetV(null);
                 }
             }
         }
