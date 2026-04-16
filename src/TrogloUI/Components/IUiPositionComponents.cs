@@ -13,8 +13,10 @@ public interface IUiPositionComponents
     UiProp<Vector2> InnerScrollOffsetFV { get; set; }
     /// <summary>Position offset relative to text size.</summary>
     UiProp<Vector2> OffsetTextRelativeFV { get; set; }
-    /// <summary>Snaps the resolved offset to the nearest multiple of this value.</summary>
-    UiProp<float> OffsetMultiplierFV { get; set; }
+    /// <summary>Snaps alignment to the nearest multiple of this value. Inherited from parent's InnerAlignmentSnap if null.</summary>
+    UiProp<float?> AlignmentSnapFV { get; set; }
+    /// <summary>Default alignment snap applied to child nodes.</summary>
+    UiProp<float?> InnerAlignmentSnapFV { get; set; }
 
     /// <summary>Resolved position offset of this node.</summary>
     Vector2 OffsetR { get; internal set; }

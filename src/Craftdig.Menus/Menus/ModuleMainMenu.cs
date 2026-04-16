@@ -17,7 +17,6 @@ public class ModuleMainMenu(
         Node(root, out var list)
             .Mutate(s.VerticalList)
             .AlignmentV(Alignment.Center)
-            .OffsetMultiplierV(s.ItemSpacingXS)
             .InnerSpacingV(s.ItemSpacingXXL)
             .SizeInnerMaxRelativeV(s.Horizontal);
         {

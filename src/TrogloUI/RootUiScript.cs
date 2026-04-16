@@ -19,6 +19,7 @@ public class RootUiScript(
     {
         ResetRoot();
         Traverse();
+        mouse.Hover(ui);
         mouse.Update(ui);
         focus.Update(ui);
         update.Update(ui);
@@ -29,6 +30,8 @@ public class RootUiScript(
     {
         ResetRoot();
         Traverse();
+        mouse.Hover(ui);
+        mouse.Draw();
         draw.Draw(ui);
     }
 

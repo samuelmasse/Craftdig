@@ -17,27 +17,37 @@ public class RootUiMouse(RootMouse mouse, RootUiScale scale, RootUiFocus focus, 
     public Vector2 Position => position;
     public EntMut Hovered => prevHovered;
 
-    internal void Update(EntMut n)
+    internal void Hover(EntMut n)
     {
         position = mouse.Position / scale.Scale;
 
-        var scrolled = FindScrolled(null, n);
-        if (mouse.Wheel != default)
-            scrolled.OnScrollFV.Resolve()?.Invoke(mouse.Wheel);
-
         var hovered = FindHovered(null, n);
-
         if (hovered != prevHovered)
         {
             prevHovered.IsHoveredR = false;
             hovered.IsHoveredR = true;
+            prevHovered = hovered;
         }
+    }
+
+    internal void Draw()
+    {
+        mouse.Cursor = prevHovered != default
+            ? (prevHovered.CursorFV.Resolve() ?? MouseCursor.Default)
+            : MouseCursor.Default;
+    }
+
+    internal void Update(EntMut n)
+    {
+        var scrolled = FindScrolled(null, n);
+        if (mouse.Wheel != default)
+            scrolled.OnScrollFV.Resolve()?.Invoke(mouse.Wheel);
 
         if (mouse.IsMainDown())
         {
             if (!prevMainDown)
             {
-                pressedMain = hovered;
+                pressedMain = prevHovered;
                 if (pressedMain != default)
                     OnLeftPress(pressedMain);
             }
@@ -46,7 +56,7 @@ public class RootUiMouse(RootMouse mouse, RootUiScale scale, RootUiFocus focus, 
         }
         else
         {
-            if (prevMainDown && pressedMain != default && pressedMain == hovered)
+            if (prevMainDown && pressedMain != default && pressedMain == prevHovered)
                 OnLeftClick(pressedMain);
 
             pressedMain.IsPressedR = false;
@@ -58,7 +68,7 @@ public class RootUiMouse(RootMouse mouse, RootUiScale scale, RootUiFocus focus, 
         {
             if (!prevSecondaryDown)
             {
-                pressedSecondary = hovered;
+                pressedSecondary = prevHovered;
                 if (pressedSecondary != default)
                     OnRightPress(pressedSecondary);
             }
@@ -67,19 +77,13 @@ public class RootUiMouse(RootMouse mouse, RootUiScale scale, RootUiFocus focus, 
         }
         else
         {
-            if (prevSecondaryDown && pressedSecondary != default && pressedSecondary == hovered)
+            if (prevSecondaryDown && pressedSecondary != default && pressedSecondary == prevHovered)
                 OnRightClick(pressedSecondary);
 
             pressedSecondary.IsSecondaryPressedR = false;
             pressedSecondary = default;
             prevSecondaryDown = false;
         }
-
-        prevHovered = hovered;
-
-        mouse.Cursor = hovered != default
-            ? (hovered.CursorFV.Resolve() ?? MouseCursor.Default)
-            : MouseCursor.Default;
     }
 
     private void OnLeftPress(EntMut e)

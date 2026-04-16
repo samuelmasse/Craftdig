@@ -250,8 +250,8 @@ public class AppStyle(RootText text, RootUiMouse mouse, RootKeyboard keyboard, A
         Node(parent, out var scrollBar)
             .SizeV((20, 0))
             .SizeRelativeV((0, 1))
-            .OffsetV((ItemWidthL - ItemSpacingXXL - ItemSpacingS, 0))
-            .AlignmentV(Alignment.Center)
+            .AlignmentV(Alignment.Horizontal)
+            .OffsetF(() => (select.SizeR.X / 2 + ItemSpacing, 0))
             .ColorV((0, 1, 1, 1))
             .RenderDelayV(1)
             .IsDisabledF(() => parent.SizeR.Y / select.SizeInnerSumR.Y >= 1);

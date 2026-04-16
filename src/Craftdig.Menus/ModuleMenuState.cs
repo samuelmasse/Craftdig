@@ -6,10 +6,11 @@ public class ModuleMenuState(
     RootScreen screen,
     RootUi ui,
     RootKeyboard keyboard,
+    AppStyle s,
     ModuleMainBackgroundMenu mainBackgroundMenu,
     ModuleMainMenu mainMenu) : State
 {
-    private readonly EntMut menus = Node(ui);
+    private readonly EntMut menus = Node(ui).InnerAlignmentSnapV(s.ItemSpacingXS);
     private readonly Stopwatch watch = new();
     private int update;
     private bool gc;

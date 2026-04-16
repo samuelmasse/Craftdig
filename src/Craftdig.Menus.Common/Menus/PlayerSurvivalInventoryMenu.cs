@@ -12,8 +12,7 @@ public class PlayerSurvivalInventoryMenu(AppStyle s, PlayerEnt player)
             .InnerSpacingV(s.ItemSpacing)
             .ColorV(s.BoardColor)
             .IsSelectableV(true)
-            .AlignmentV(Alignment.Center)
-            .OffsetMultiplierV(s.ItemSpacingXS);
+            .AlignmentV(Alignment.Center);
 
         Node(vert, out var playerHor)
             .Mutate(s.HorizontalList)

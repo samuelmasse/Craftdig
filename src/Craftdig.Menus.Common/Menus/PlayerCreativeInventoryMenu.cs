@@ -22,8 +22,7 @@ public class PlayerCreativeInventoryMenu(ModuleEnts ents, AppStyle s, PlayerEnt 
             .InnerSpacingV(s.ItemSpacing)
             .ColorV(s.BoardColor)
             .IsSelectableV(true)
-            .AlignmentV(Alignment.Center)
-            .OffsetMultiplierV(s.ItemSpacingXS);
+            .AlignmentV(Alignment.Center);
 
         Node(vert, out var title)
             .Mutate(s.Label)

@@ -3,13 +3,22 @@ namespace TrogloUI;
 [Root]
 public class RootUiPosition(RootSprites sprites, RootUiScale scale)
 {
-    internal void Position(Vector2 s, EntMut n)
+    internal void Position(Vector2 s, EntMut n, float? parentSnap = null)
     {
-        PositionNode(s, n);
+        PositionNode(s, n, parentSnap);
+
+        var innerSnap = n.InnerAlignmentSnapFV.Resolve();
+        if (innerSnap == null)
+        {
+            var aligned = (n.AlignmentFV.Resolve() & (Alignment.Horizontal | Alignment.Vertical)) != 0;
+            if (!aligned)
+                innerSnap = n.AlignmentSnapFV.Resolve() ?? parentSnap;
+        }
+
         foreach (var c in n.NodesR.Span)
         {
             var ce = c;
-            Position(n.SizeR, c);
+            Position(n.SizeR, c, innerSnap);
 
             var alignment = c.AlignmentFV.Resolve();
             if ((alignment & (Alignment.Right | Alignment.Horizontal)) == 0)
@@ -61,22 +70,22 @@ public class RootUiPosition(RootSprites sprites, RootUiScale scale)
         n.PositionR = o + n.OffsetR;
 
         foreach (var sc in n.NodesR.Span)
-            Finalize(o + n.OffsetR, sc);
+            Finalize(n.PositionR, sc);
     }
 
-    private void PositionNode(Vector2 s, EntMut n)
+    private void PositionNode(Vector2 s, EntMut n, float? parentSnap)
     {
         n.OffsetR = default;
         n.OffsetR += n.OffsetFV.Resolve();
         PositionTextRelative(n);
-        PositionAlignement(s, n);
-        PositionMultiplier(n);
+        PositionAlignement(s, n, parentSnap);
     }
 
-    private void PositionAlignement(Vector2 s, EntMut n)
+    private void PositionAlignement(Vector2 s, EntMut n, float? parentSnap)
     {
         var alignment = n.AlignmentFV.Resolve();
-        n.OffsetR = Align(n.OffsetR, n.SizeR, s, alignment);
+        var snap = n.AlignmentSnapFV.Resolve() ?? parentSnap ?? 0;
+        n.OffsetR = Align(n.OffsetR, n.SizeR, s, alignment, snap);
     }
 
     private void PositionTextRelative(EntMut n)
@@ -97,23 +106,18 @@ public class RootUiPosition(RootSprites sprites, RootUiScale scale)
         n.OffsetR += n.OffsetTextRelativeFV.Resolve() * size;
     }
 
-    private void PositionMultiplier(EntMut n)
-    {
-        var multiplier = n.OffsetMultiplierFV.Resolve();
-        if (multiplier == 0)
-            return;
-
-        n.OffsetR = (
-            (float)Math.Round(n.OffsetR.X / multiplier) * multiplier,
-            (float)Math.Round(n.OffsetR.Y / multiplier) * multiplier);
-    }
-
-    internal Vector2 Align(Vector2 val, Vector2 size, Vector2 parent, Alignment alignment)
+    internal Vector2 Align(Vector2 val, Vector2 size, Vector2 parent, Alignment alignment, float multiplier = 0)
     {
         if ((alignment & Alignment.Horizontal) != 0)
-            val.X += parent.X / 2 - size.X / 2;
+        {
+            var half = multiplier > 0 ? (float)Math.Round(parent.X / 2 / multiplier) * multiplier : parent.X / 2;
+            val.X += half - size.X / 2;
+        }
         if ((alignment & Alignment.Vertical) != 0)
-            val.Y += parent.Y / 2 - size.Y / 2;
+        {
+            var half = multiplier > 0 ? (float)Math.Round(parent.Y / 2 / multiplier) * multiplier : parent.Y / 2;
+            val.Y += half - size.Y / 2;
+        }
 
         if ((alignment & Alignment.Right) != 0)
             val.X += parent.X - size.X;
