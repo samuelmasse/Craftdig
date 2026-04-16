@@ -3,59 +3,15 @@ namespace TrogloUI;
 [Root]
 public class RootUiPosition(RootSprites sprites, RootUiScale scale)
 {
-    internal void Position(Vector2 s, float? snap, EntMut n)
+    internal void Position(Vector2 s, float? snap, Vector2 padding, EntMut n)
     {
-        PositionNode(s, snap, n);
+        PositionNode(s, snap, padding, n);
         var innerSnap = ResolveInnerSnap(n, snap);
 
         foreach (var c in n.NodesR.Span)
-        {
-            var ce = c;
-            Position(n.SizeR, innerSnap, c);
+            Position(n.SizeR, innerSnap, n.PaddingR.Xy, c);
 
-            var alignment = c.AlignmentFV.Resolve();
-            if ((alignment & (Alignment.Right | Alignment.Horizontal)) == 0)
-                ce.OffsetR += (n.PaddingR.X, 0);
-            if ((alignment & (Alignment.Bottom | Alignment.Vertical)) == 0)
-                ce.OffsetR += (0, n.PaddingR.Y);
-        }
-
-        var innerLayout = n.InnerLayoutFV.Resolve();
-        var innerSpacing = n.InnerSpacingFV.Resolve();
-        var innerScrollOffset = n.InnerScrollOffsetFV.Resolve();
-
-        if (innerLayout == InnerLayout.VerticalList)
-        {
-            float y = innerScrollOffset.Y;
-
-            foreach (var c in n.NodesR.Span)
-            {
-                var ce = c;
-                if (c.IsFloatingFV.Resolve())
-                    continue;
-
-                y += c.MarginR.Y;
-                ce.OffsetR += (c.MarginR.X, y);
-                y += c.SizeR.Y + c.MarginR.W;
-                y += innerSpacing;
-            }
-        }
-        else if (innerLayout == InnerLayout.HorizontalList)
-        {
-            float x = innerScrollOffset.X;
-
-            foreach (var c in n.NodesR.Span)
-            {
-                var ce = c;
-                if (c.IsFloatingFV.Resolve())
-                    continue;
-
-                x += c.MarginR.X;
-                ce.OffsetR += (x, c.MarginR.Y);
-                x += c.SizeR.X + c.MarginR.Z;
-                x += innerSpacing;
-            }
-        }
+        PositionInnerLayout(n);
     }
 
     internal void Finalize(Vector2 o, EntMut n)
@@ -66,12 +22,67 @@ public class RootUiPosition(RootSprites sprites, RootUiScale scale)
             Finalize(n.PositionR, sc);
     }
 
-    private void PositionNode(Vector2 s, float? snap, EntMut n)
+    private void PositionNode(Vector2 s, float? snap, Vector2 padding, EntMut n)
     {
-        n.OffsetR = default;
-        n.OffsetR += n.OffsetFV.Resolve();
+        n.OffsetR = n.OffsetFV.Resolve();
+        PositionPadding(padding, n);
         PositionTextRelative(n);
         PositionAlignement(s, snap, n);
+    }
+
+    private void PositionInnerLayout(EntMut n)
+    {
+        var innerLayout = n.InnerLayoutFV.Resolve();
+
+        if (innerLayout == InnerLayout.VerticalList)
+            PositionVerticalList(n);
+        else if (innerLayout == InnerLayout.HorizontalList)
+            PositionHorizontalList(n);
+    }
+
+    private void PositionVerticalList(EntMut n)
+    {
+        var innerSpacing = n.InnerSpacingFV.Resolve();
+        float y = n.InnerScrollOffsetFV.Resolve().Y;
+
+        foreach (var c in n.NodesR.Span)
+        {
+            var ce = c;
+            if (c.IsFloatingFV.Resolve())
+                continue;
+
+            y += c.MarginR.Y;
+            ce.OffsetR += (c.MarginR.X, y);
+            y += c.SizeR.Y + c.MarginR.W;
+            y += innerSpacing;
+        }
+    }
+
+    private void PositionHorizontalList(EntMut n)
+    {
+        var innerSpacing = n.InnerSpacingFV.Resolve();
+        float x = n.InnerScrollOffsetFV.Resolve().X;
+
+        foreach (var c in n.NodesR.Span)
+        {
+            var ce = c;
+            if (c.IsFloatingFV.Resolve())
+                continue;
+
+            x += c.MarginR.X;
+            ce.OffsetR += (x, c.MarginR.Y);
+            x += c.SizeR.X + c.MarginR.Z;
+            x += innerSpacing;
+        }
+    }
+
+    private void PositionPadding(Vector2 padding, EntMut n)
+    {
+        var alignment = n.AlignmentFV.Resolve();
+        if ((alignment & (Alignment.Right | Alignment.Horizontal)) == 0)
+            n.OffsetR += (padding.X, 0);
+        if ((alignment & (Alignment.Bottom | Alignment.Vertical)) == 0)
+            n.OffsetR += (0, padding.Y);
     }
 
     private void PositionAlignement(Vector2 s, float? snap, EntMut n)
