@@ -37,7 +37,7 @@ public class PlayerCommonState(
     private bool paused;
     private bool inv;
 
-    public EntMut Menus => menus;
+    public EntMut Overlay => overlay;
     public bool Paused => paused;
     public bool Inv => inv;
 
