@@ -35,7 +35,7 @@ public class ModuleMainMenu(
             {
                 Node(list2)
                     .Mutate(s.Button)
-                    .OnPressF(() => PushMenu(root, worldSelectMenu.Create))
+                    .OnPressF(() => PushMenu(root, worldSelectMenu.Create, s.Darken))
                     .TextV("Singleplayer");
 
                 Node(list2)
@@ -49,11 +49,11 @@ public class ModuleMainMenu(
                             {
                                 multiplayerCredentials.StartLogin();
                                 multiplayerCredentials.WaitLogin();
-                                PushMenu(root, serverBrowserMenu.Create);
+                                PushMenu(root, serverBrowserMenu.Create, s.Darken);
                             }
-                            else PushMenu(root, loginMenu.Create);
+                            else PushMenu(root, loginMenu.Create, s.Darken);
                         }
-                        else PushMenu(root, serverBrowserMenu.Create);
+                        else PushMenu(root, serverBrowserMenu.Create, s.Darken);
                     });
 
                 Node(list2)

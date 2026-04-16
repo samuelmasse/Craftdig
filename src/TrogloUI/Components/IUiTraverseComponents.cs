@@ -14,8 +14,9 @@ public interface IUiTraverseComponents
     /// <summary>Number of additional UI tree traversals to perform when this node is first added.</summary>
     UiValue<int> RenderDelayFV { get; set; }
 
-    /// <summary>The stacked node currently displayed from the node stack.</summary>
-    EntMut StackedNodeR { get; internal set; }
+    /// <summary>Companion node that renders behind this menu while it's on the stack.</summary>
+    UiValue<EntMut> CompanionFV { get; set; }
+
     /// <summary>Compiled list of active child nodes after traversal.</summary>
     Memory<EntMut> NodesR { get; internal set; }
 }

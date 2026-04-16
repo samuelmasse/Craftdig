@@ -9,6 +9,8 @@ public interface IAppUiComponents
     UiProp<EntMut> StackRootFV { get; set; }
     /// <summary>Method used to create a menu within the menu stack.</summary>
     UiCallback<Action<EntMut>> MenuOriginFV { get; set; }
+    /// <summary>Method used to create the companion node for this menu stack entry.</summary>
+    UiCallback<Action<EntMut>?> CompanionOriginFV { get; set; }
     /// <summary>Player entity associated with this node.</summary>
     UiProp<EntMutIdx> PlayerFV { get; set; }
     /// <summary>Callback that returns the item slot value.</summary>

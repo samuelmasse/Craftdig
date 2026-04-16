@@ -61,6 +61,10 @@ public class RootUi : EntObj
     {
         ent.UiToken = alive;
 
+        var companion = ent.CompanionFV.Resolve();
+        if (companion != default)
+            Mark(companion);
+
         foreach (var child in Nodes(ent))
             Mark(child);
 

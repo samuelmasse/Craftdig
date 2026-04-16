@@ -4,6 +4,8 @@ using TrogloUI.Root;
 
 public static class UiSyntax
 {
+    public static EntMut NodeC(EntMut parent) => parent.UiRoot.Alloc();
+
     public static EntMutator<EntMut> Node(EntMut parent)
     {
         var val = parent.UiRoot.Alloc();

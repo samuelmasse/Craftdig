@@ -18,8 +18,7 @@ public class ModuleMenuState(
     public override void Load()
     {
         menus.Mutate().StackRootV(menus);
-        Node(menus).Mutate(mainBackgroundMenu.Create);
-        PushMenu(menus, mainMenu.Create);
+        PushMenu(menus, mainMenu.Create, mainBackgroundMenu.Create);
         watch.Start();
     }
 

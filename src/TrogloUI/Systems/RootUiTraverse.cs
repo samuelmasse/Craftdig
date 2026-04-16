@@ -16,7 +16,6 @@ public class RootUiTraverse
 
         RemoveNodes(n);
         OrderNodes(n);
-        StackNodes(n);
         CompileNodes(n);
 
         foreach (var c in n.NodesR.Span)
@@ -83,19 +82,6 @@ public class RootUiTraverse
         }
     }
 
-    private void StackNodes(EntMut n)
-    {
-        var stackedNode = n.StackedNodeR;
-        if (stackedNode != default)
-            NodesRemove(n, stackedNode);
-
-        if (NodeStackTryPeek(n, out var topStack))
-        {
-            NodesAdd(n, topStack);
-            n.StackedNodeR = topStack;
-        }
-    }
-
     private void CompileNodes(EntMut n)
     {
         int start = traverseBufferIndex;
@@ -107,12 +93,33 @@ public class RootUiTraverse
             if (disabled)
                 continue;
 
-            if (traverseBufferIndex == traverseBuffer.Length)
-                Array.Resize(ref traverseBuffer, traverseBuffer.Length * 2);
-            traverseBuffer[traverseBufferIndex++] = c;
+            AddToBuffer(c);
+            count++;
+        }
+
+        foreach (var entry in NodeStack(n))
+        {
+            var companion = entry.CompanionFV.Resolve();
+            if (companion != default && !companion.IsDisabledFV.Resolve())
+            {
+                AddToBuffer(companion);
+                count++;
+            }
+        }
+
+        if (NodeStackTryPeek(n, out var top))
+        {
+            AddToBuffer(top);
             count++;
         }
 
         n.NodesR = traverseBuffer.AsMemory().Slice(start, count);
+    }
+
+    private void AddToBuffer(EntMut n)
+    {
+        if (traverseBufferIndex == traverseBuffer.Length)
+            Array.Resize(ref traverseBuffer, traverseBuffer.Length * 2);
+        traverseBuffer[traverseBufferIndex++] = n;
     }
 }

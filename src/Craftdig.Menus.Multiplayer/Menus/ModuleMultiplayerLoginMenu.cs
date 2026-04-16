@@ -22,7 +22,7 @@ public class ModuleMultiplayerLoginMenu(
                         return;
 
                     PopMenu(root);
-                    PushMenu(root, module.Get<ModuleMultiplayerServerBrowserMenu>().Create);
+                    PushMenu(root, module.Get<ModuleMultiplayerServerBrowserMenu>().Create, s.Darken);
                 });
 
             bool loginStarted = false;

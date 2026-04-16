@@ -344,10 +344,13 @@ public class AppStyle(RootText text, RootUiMouse mouse, RootKeyboard keyboard, A
         .ColorV(BoardColor);
 
     public void MiddleBar(EntMut ent) => ent.Mutate()
-        .ColorV((0, 0, 0, 0.2f))
         .SizeRelativeV((1, 1))
         .SizeV((0, -BarHeight * 2))
         .OffsetV((0, BarHeight));
+
+    public void Darken(EntMut ent) => Node(ent)
+        .SizeRelativeV((1, 1))
+        .ColorV((0, 0, 0, 0.2f));
 
     public void ButtonBar(EntMut ent) => ent.Mutate()
         .Mutate(HorizontalList)
