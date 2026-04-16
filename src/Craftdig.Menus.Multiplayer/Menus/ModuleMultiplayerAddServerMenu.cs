@@ -8,7 +8,7 @@ public class ModuleMultiplayerAddServerMenu(
     public void Create(EntMut root, ServerEntry? editing)
     {
         var name = new StringBuilder(editing?.Name ?? "Craftdig Server");
-        var host = new StringBuilder(editing != null ? $"{editing.Address.Host}:{editing.Address.Port}" : "");
+        var host = new StringBuilder(editing?.Address.ToString() ?? "");
 
         Node(root, out var form)
             .Mutate(s.Form)
