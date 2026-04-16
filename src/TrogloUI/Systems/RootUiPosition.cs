@@ -3,15 +3,15 @@ namespace TrogloUI;
 [Root]
 public class RootUiPosition(RootSprites sprites, RootUiScale scale)
 {
-    internal void Position(Vector2 s, EntMut n, float? snap)
+    internal void Position(Vector2 s, float? snap, EntMut n)
     {
-        PositionNode(s, n, snap);
+        PositionNode(s, snap, n);
         var innerSnap = ResolveInnerSnap(n, snap);
 
         foreach (var c in n.NodesR.Span)
         {
             var ce = c;
-            Position(n.SizeR, c, innerSnap);
+            Position(n.SizeR, innerSnap, c);
 
             var alignment = c.AlignmentFV.Resolve();
             if ((alignment & (Alignment.Right | Alignment.Horizontal)) == 0)
@@ -66,15 +66,15 @@ public class RootUiPosition(RootSprites sprites, RootUiScale scale)
             Finalize(n.PositionR, sc);
     }
 
-    private void PositionNode(Vector2 s, EntMut n, float? snap)
+    private void PositionNode(Vector2 s, float? snap, EntMut n)
     {
         n.OffsetR = default;
         n.OffsetR += n.OffsetFV.Resolve();
         PositionTextRelative(n);
-        PositionAlignement(s, n, snap);
+        PositionAlignement(s, snap, n);
     }
 
-    private void PositionAlignement(Vector2 s, EntMut n, float? snap)
+    private void PositionAlignement(Vector2 s, float? snap, EntMut n)
     {
         var alignment = n.AlignmentFV.Resolve();
         var snapValue = n.AlignmentSnapFV.Resolve() ?? snap ?? 0;
