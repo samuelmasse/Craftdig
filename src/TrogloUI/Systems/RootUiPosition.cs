@@ -3,17 +3,10 @@ namespace TrogloUI;
 [Root]
 public class RootUiPosition(RootSprites sprites, RootUiScale scale)
 {
-    internal void Position(Vector2 s, EntMut n, float? parentSnap = null)
+    internal void Position(Vector2 s, EntMut n, float? snap)
     {
-        PositionNode(s, n, parentSnap);
-
-        var innerSnap = n.InnerAlignmentSnapFV.Resolve();
-        if (innerSnap == null)
-        {
-            var aligned = (n.AlignmentFV.Resolve() & (Alignment.Horizontal | Alignment.Vertical)) != 0;
-            if (!aligned)
-                innerSnap = n.AlignmentSnapFV.Resolve() ?? parentSnap;
-        }
+        PositionNode(s, n, snap);
+        var innerSnap = ResolveInnerSnap(n, snap);
 
         foreach (var c in n.NodesR.Span)
         {
@@ -73,19 +66,19 @@ public class RootUiPosition(RootSprites sprites, RootUiScale scale)
             Finalize(n.PositionR, sc);
     }
 
-    private void PositionNode(Vector2 s, EntMut n, float? parentSnap)
+    private void PositionNode(Vector2 s, EntMut n, float? snap)
     {
         n.OffsetR = default;
         n.OffsetR += n.OffsetFV.Resolve();
         PositionTextRelative(n);
-        PositionAlignement(s, n, parentSnap);
+        PositionAlignement(s, n, snap);
     }
 
-    private void PositionAlignement(Vector2 s, EntMut n, float? parentSnap)
+    private void PositionAlignement(Vector2 s, EntMut n, float? snap)
     {
         var alignment = n.AlignmentFV.Resolve();
-        var snap = n.AlignmentSnapFV.Resolve() ?? parentSnap ?? 0;
-        n.OffsetR = Align(n.OffsetR, n.SizeR, s, alignment, snap);
+        var snapValue = n.AlignmentSnapFV.Resolve() ?? snap ?? 0;
+        n.OffsetR = Align(n.OffsetR, n.SizeR, s, alignment, snapValue);
     }
 
     private void PositionTextRelative(EntMut n)
@@ -106,18 +99,12 @@ public class RootUiPosition(RootSprites sprites, RootUiScale scale)
         n.OffsetR += n.OffsetTextRelativeFV.Resolve() * size;
     }
 
-    internal Vector2 Align(Vector2 val, Vector2 size, Vector2 parent, Alignment alignment, float multiplier = 0)
+    internal Vector2 Align(Vector2 val, Vector2 size, Vector2 parent, Alignment alignment, float snap)
     {
         if ((alignment & Alignment.Horizontal) != 0)
-        {
-            var half = multiplier > 0 ? (float)Math.Round(parent.X / 2 / multiplier) * multiplier : parent.X / 2;
-            val.X += half - size.X / 2;
-        }
+            val.X += Snap(parent.X / 2, snap) - size.X / 2;
         if ((alignment & Alignment.Vertical) != 0)
-        {
-            var half = multiplier > 0 ? (float)Math.Round(parent.Y / 2 / multiplier) * multiplier : parent.Y / 2;
-            val.Y += half - size.Y / 2;
-        }
+            val.Y += Snap(parent.Y / 2, snap) - size.Y / 2;
 
         if ((alignment & Alignment.Right) != 0)
             val.X += parent.X - size.X;
@@ -126,4 +113,22 @@ public class RootUiPosition(RootSprites sprites, RootUiScale scale)
 
         return val;
     }
+
+    private static float? ResolveInnerSnap(EntMut n, float? snap)
+    {
+        // If the node explicitly defines an inner snap, carry that forward to children
+        var innerSnap = n.InnerAlignmentSnapFV.Resolve();
+        if (innerSnap != null)
+            return innerSnap;
+
+        // If this node has centering alignment, the snap is consumed by this node and not passed down
+        var aligned = (n.AlignmentFV.Resolve() & (Alignment.Horizontal | Alignment.Vertical)) != 0;
+        if (aligned)
+            return null;
+
+        // Otherwise pass down the inherited snap to children until first consumer is reached
+        return snap;
+    }
+
+    private float Snap(float value, float snap) => snap > 0 ? (float)Math.Round(value / snap) * snap : value;
 }

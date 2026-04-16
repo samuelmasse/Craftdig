@@ -88,7 +88,7 @@ public class RootUiDraw(RootSprites sprites, RootUiScale scale, RootUiPosition p
         if ((alignment & (Alignment.Bottom | Alignment.Vertical)) == 0)
             offset.Y += fontPadding.Y + textPadding.Y;
 
-        offset = position.Align(offset, size, n.SizeR, alignment);
+        offset = position.Align(offset, size, n.SizeR, alignment, 0);
         offset.Y += size.Y / 2;
 
         var shadowOffset = n.TextShadowOffsetFV.Resolve();
