@@ -52,6 +52,9 @@ public class RootUiDraw(RootSprites sprites, RootUiScale scale, RootUiPosition p
         var anchor = n.TextureOriginRelativeFV.Resolve();
         var subPosition = (n.TextureSubPositionFV.Resolve() ?? Vector2.Zero)
             - (anchor ?? default) * subSize;
+        var textureSnap = n.TextureAlignmentSnapFV.Resolve();
+        if (textureSnap > 0)
+            subPosition = (Snap(subPosition.X, textureSnap), Snap(subPosition.Y, textureSnap));
         var rotation = n.TextureRotationFV.Resolve() ?? SpriteBatchRotation.None;
         var flip = n.TextureFlipFV.Resolve() ?? SpriteBatchFlip.None;
 
@@ -101,4 +104,6 @@ public class RootUiDraw(RootSprites sprites, RootUiScale scale, RootUiPosition p
 
         sprites.Batch.Write(font.Size(fontSize), text, (n.PositionR + offset) * scale.Scale, textColor, scale.Scale);
     }
+
+    private static float Snap(float value, float snap) => (float)Math.Round(value / snap) * snap;
 }

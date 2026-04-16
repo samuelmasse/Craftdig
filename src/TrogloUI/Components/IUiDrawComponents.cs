@@ -23,6 +23,8 @@ public interface IUiDrawComponents
     UiProp<Vector4> TextureMarginFV { get; set; }
     /// <summary>Origin point for tiling relative to the sub size (0,0 = top-left, 1,1 = bottom-right).</summary>
     UiProp<Vector2?> TextureOriginRelativeFV { get; set; }
+    /// <summary>Snaps texture sub-position to the nearest multiple of this value in texture pixels.</summary>
+    UiProp<float> TextureAlignmentSnapFV { get; set; }
     /// <summary>Text alignment within the node.</summary>
     UiProp<Alignment?> TextAlignmentFV { get; set; }
     /// <summary>Color of the text.</summary>
