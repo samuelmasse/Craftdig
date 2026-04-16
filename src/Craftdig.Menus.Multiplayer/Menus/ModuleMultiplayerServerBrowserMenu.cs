@@ -198,7 +198,9 @@ public class ModuleMultiplayerServerBrowserMenu(
                                 .TextF(() =>
                                 {
                                     var result = serverPinger[server.Address];
-                                    if (result?.CurrentPlayers != null && result?.MaxPlayers != null)
+                                    var elapsed = DateTime.UtcNow - start;
+
+                                    if (result?.CurrentPlayers != null && result?.MaxPlayers != null && elapsed >= wait)
                                         return text.Format("{0}/{1}", result.CurrentPlayers, result.MaxPlayers);
 
                                     return string.Empty;
