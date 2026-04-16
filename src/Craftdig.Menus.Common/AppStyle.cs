@@ -338,7 +338,7 @@ public class AppStyle(RootText text, RootUiMouse mouse, RootKeyboard keyboard, A
         .TextureColorV((0.6f, 0.6f, 0.6f, 1))
         .SizeRelativeV(Horizontal)
         .SizeV((0, BarHeight))
-        .AlignmentV(Alignment.Horizontal | Alignment.Bottom)
+        .AlignmentV(Alignment.Bottom)
         .ColorV(BoardColor);
 
     public void MiddleBar(EntMut ent) => ent.Mutate()
