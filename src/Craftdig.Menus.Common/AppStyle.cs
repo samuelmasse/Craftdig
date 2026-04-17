@@ -8,8 +8,8 @@ public class AppStyle(RootText text, RootUiMouse mouse, RootKeyboard keyboard, A
     public readonly Texture ButtonTexture = menuTextures["MenuButton"];
     public readonly Texture BackgroundTexture = menuTextures["MenuBackground"];
 
-    public int FontSize => 32;
-    public int FontSizeTitle => 160;
+    public int FontSize => 36;
+    public int FontSizeTitle => 180;
 
     public float ItemSpacingXS => 4;
     public float ItemSpacingS => 8;

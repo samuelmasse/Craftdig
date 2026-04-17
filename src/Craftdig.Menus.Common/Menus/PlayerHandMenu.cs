@@ -7,6 +7,7 @@ public class PlayerHandMenu(RootUiMouse mouse, AppStyle s, PlayerEnt player)
     {
         Node(root)
             .Mutate(s.Slot)
+            .ColorV(default)
             .TextureV(null)
             .GetSlotValueF(() => player.Offhand)
             .OffsetF(() => mouse.Position - (s.SlotSize / 2, s.SlotSize / 2))

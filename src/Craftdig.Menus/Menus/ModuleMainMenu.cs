@@ -31,7 +31,7 @@ public class ModuleMainMenu(
                 .Mutate(s.VerticalList)
                 .AlignmentV(Alignment.Horizontal)
                 .InnerSpacingV(s.ItemSpacing)
-                .SizeV((s.ItemWidth, 0));
+                .SizeV((s.ItemWidthL, 0));
             {
                 Node(list2)
                     .Mutate(s.Button)

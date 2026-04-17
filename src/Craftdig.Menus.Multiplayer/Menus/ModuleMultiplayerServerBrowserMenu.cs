@@ -85,14 +85,14 @@ public class ModuleMultiplayerServerBrowserMenu(
             for (int i = 0; i < serverList.Servers.Length; i++)
             {
                 var server = serverList.Servers[i];
-                var itemHeight = s.ItemHeight * 1.5f;
+                var itemHeight = 128;
                 var cachedDesc = serverCache.LoadDescription(server.Address);
                 var cachedIcon = serverCache.LoadIcon(server.Address);
 
                 Node(select, out var item)
                     .Mutate(s.SelectorItem)
                     .SizeRelativeV((0, 0))
-                    .SizeV((s.ItemWidthL * 1.7f, itemHeight + s.ItemSpacingS * 2))
+                    .SizeV((s.ItemWidthL * 2f, itemHeight + s.ItemSpacingS * 2))
                     .OnFocusF(() => selected = server)
                     .OnUnselectF(() => selected = null)
                     .OnDoubleClickF(Connect)
@@ -233,7 +233,7 @@ public class ModuleMultiplayerServerBrowserMenu(
 
                         Node(topRow)
                             .Mutate(s.Button)
-                            .TextV("Direct Connection")
+                            .TextV("Direct Connect")
                             .OnPressF(() => PushMenu(root, connectMenu.Create));
 
                         Node(topRow)

@@ -67,13 +67,13 @@ public class ModuleSingleplayerWorldSelectMenu(
             for (int i = 0; i < worlds.Count; i++)
             {
                 var world = worlds[i];
-                var itemHeight = s.ItemHeight * 1.5f;
+                var itemHeight = 128;
                 int index = i;
 
                 Node(select, out var item)
                     .Mutate(s.SelectorItem)
                     .SizeRelativeV((0, 0))
-                    .SizeV((s.ItemWidthL * 1.7f, itemHeight + s.ItemSpacingS * 2))
+                    .SizeV((s.ItemWidthL * 2f, itemHeight + s.ItemSpacingS * 2))
                     .OnFocusF(() => selected = world)
                     .OnUnselectF(() => selected = null)
                     .OnDoubleClickF(() => Load(world.Paths))
