@@ -15,7 +15,6 @@ public class WorldComponentIndicesFile
         if (!File.Exists(file))
         {
             lines = [string.Empty];
-            File.WriteAllLines(file, lines);
             return;
         }
 

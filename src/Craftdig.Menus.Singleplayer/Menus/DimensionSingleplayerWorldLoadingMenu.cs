@@ -63,7 +63,7 @@ public class DimensionSingleplayerWorldLoadingMenu(
             }
 
             float tileSize = 12;
-            
+
             Node(form, out var grid)
                 .SizeRelativeV((0, 0))
                 .SizeV((tileSize * gridSize, tileSize * gridSize))

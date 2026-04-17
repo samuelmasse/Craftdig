@@ -2,6 +2,7 @@
 
     <PropertyGroup>
         <ServerGarbageCollection>true</ServerGarbageCollection>
+        <ApplicationIcon>..\..\res\Icons\Client.ico</ApplicationIcon>
     </PropertyGroup>
 
     <ItemGroup>

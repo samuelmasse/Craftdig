@@ -3,6 +3,7 @@
     <PropertyGroup>
         <OutputType>Exe</OutputType>
         <AssemblyName>CraftdigServer</AssemblyName>
+        <ApplicationIcon>..\..\res\Icons\Server.ico</ApplicationIcon>
     </PropertyGroup>
 
     <ItemGroup>

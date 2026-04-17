@@ -10,6 +10,7 @@ public class AppInitializeState(
     RootUi ui,
     AppScope scope,
     AppFiles files,
+    AppLoadIconAction loadIconAction,
     AppMouseTrackMenu mouseTrackMenu,
     AppTooltipMenu tooltipMenu,
     AppReset reset,
@@ -20,6 +21,7 @@ public class AppInitializeState(
     {
         controlsToml.AddFromFile(files["Controls.toml"]);
         screen.Title = "Craftdig";
+        screen.Icon = loadIconAction.Run();
         screen.Size = screen.MonitorSize / 4 * 3;
 
         scripts.Add(root.Get<RootUiScript>());
