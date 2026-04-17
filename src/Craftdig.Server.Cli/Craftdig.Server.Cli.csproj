@@ -4,6 +4,8 @@
         <OutputType>Exe</OutputType>
         <AssemblyName>CraftdigServer</AssemblyName>
         <ApplicationIcon>..\..\res\Icons\Server.ico</ApplicationIcon>
+        <AssemblyTitle>Craftdig Server</AssemblyTitle>
+        <Product>Craftdig Server</Product>
     </PropertyGroup>
 
     <ItemGroup>

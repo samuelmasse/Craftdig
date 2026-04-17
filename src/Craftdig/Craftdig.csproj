@@ -4,6 +4,8 @@
         <OutputType>WinExe</OutputType>
         <ServerGarbageCollection>true</ServerGarbageCollection>
         <ApplicationIcon>..\..\res\Icons\Client.ico</ApplicationIcon>
+        <AssemblyTitle>Craftdig</AssemblyTitle>
+        <Product>Craftdig</Product>
     </PropertyGroup>
 
     <ItemGroup>
