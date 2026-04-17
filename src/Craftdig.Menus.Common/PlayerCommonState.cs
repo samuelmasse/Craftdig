@@ -53,6 +53,7 @@ public class PlayerCommonState(
             ent.IsLoaded = true;
         }
 
+        ent.IsSeer = true;
         ent.CanMove = true;
         ent.CanFly = true;
         ent.CanJump = true;
