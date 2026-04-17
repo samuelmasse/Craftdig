@@ -50,9 +50,9 @@ public class PlayerCommonState(
             ent.IsFlying = true;
             ent.HitBox = new Box3d((-0.3, -0.3, -1.62), (0.3, 0.3, 0.18));
             ent.Position = (15, 0, 120);
+            ent.IsLoaded = true;
         }
 
-        ent.IsSeer = true;
         ent.CanMove = true;
         ent.CanFly = true;
         ent.CanJump = true;

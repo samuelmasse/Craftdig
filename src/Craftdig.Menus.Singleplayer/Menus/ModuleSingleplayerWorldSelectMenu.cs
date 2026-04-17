@@ -4,7 +4,7 @@ namespace Craftdig.Menus.Singleplayer;
 public class ModuleSingleplayerWorldSelectMenu(
     AppStyle s,
     ModuleScope scope,
-    ModuleSingleplayerLoadWorldAction singleplayerLoadWorldAction,
+    ModuleSingleplayerPrepareWorldAction singleplayerPrepareWorldAction,
     ModuleSingleplayerListWorldsAction listWorldsAction,
     ModuleSingleplayerNewWorldMenu newWorldMenu,
     ModuleSingleplayerDeleteWorldMenu deleteWorldMenu,
@@ -15,6 +15,9 @@ public class ModuleSingleplayerWorldSelectMenu(
         var worlds = listWorldsAction.Run();
         bool[] filtered = new bool[worlds.Count];
         WorldEntry? selected = null;
+
+        void Load(WorldPaths paths) => PushMenu(root, singleplayerPrepareWorldAction.Run(paths)
+            .Get<DimensionSingleplayerWorldLoadingMenu>().Create);
 
         Node(root, out var topBar)
             .Mutate(s.TopBar);
@@ -73,7 +76,7 @@ public class ModuleSingleplayerWorldSelectMenu(
                     .SizeV((s.ItemWidthL * 1.7f, itemHeight + s.ItemSpacingS * 2))
                     .OnFocusF(() => selected = world)
                     .OnUnselectF(() => selected = null)
-                    .OnDoubleClickF(() => singleplayerLoadWorldAction.Run(world.Paths))
+                    .OnDoubleClickF(() => Load(world.Paths))
                     .FocusGroupV(select)
                     .IsDisabledF(() => filtered[index]);
                 {
@@ -88,7 +91,7 @@ public class ModuleSingleplayerWorldSelectMenu(
                             .SizeV((itemHeight, itemHeight))
                             .ColorV((0.2f, 0, 0.6f, 1))
                             .TextureF(() => screenshots[world.Dir]?.Texture)
-                            .OnPressF(() => singleplayerLoadWorldAction.Run(world.Paths));
+                            .OnPressF(() => Load(world.Paths));
                         {
                             Node(itemIcon)
                                 .ColorV((1, 1, 1, 0.5f))
@@ -138,7 +141,7 @@ public class ModuleSingleplayerWorldSelectMenu(
                         .TextV("Play Selected World")
                         .Mutate(s.Button)
                         .IsInputDisabledF(() => selected == null)
-                        .OnPressF(() => singleplayerLoadWorldAction.Run(selected!.Paths));
+                        .OnPressF(() => Load(selected!.Paths));
 
                     Node(leftButtonsVertical, out var leftButtonsHorizontal)
                         .Mutate(s.ButtonRow);

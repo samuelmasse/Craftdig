@@ -14,6 +14,8 @@ public class PlayerSingleplayerState(
     PlayerSingleplayerUnloadWorldAction singleplayerUnloadWorldAction,
     PlayerScreenshot screenshot) : State
 {
+    private bool initialTick = true;
+
     public override void Load()
     {
         if (ent.IsPlayer)
@@ -41,7 +43,9 @@ public class PlayerSingleplayerState(
 
         if (!commonState.Paused)
         {
-            int ticks = tick.Update(time);
+            int ticks = initialTick ? 1 : tick.Update(time);
+            initialTick = false;
+
             while (ticks > 0)
             {
                 if (!commonState.Inv)

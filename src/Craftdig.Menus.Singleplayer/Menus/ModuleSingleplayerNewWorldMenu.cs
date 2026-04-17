@@ -6,7 +6,7 @@ public class ModuleSingleplayerNewWorldMenu(
     AppStyle s,
     ModuleEnts ents,
     ModuleSingleplayerCreateWorldAction singleplayerCreateWorldAction,
-    ModuleSingleplayerLoadWorldAction singleplayerLoadWorldAction)
+    ModuleSingleplayerPrepareWorldAction singleplayerPrepareWorldAction)
 {
     public void Create(EntMut root) => Create(root, null);
 
@@ -96,7 +96,8 @@ public class ModuleSingleplayerNewWorldMenu(
                             }
 
                             var paths = singleplayerCreateWorldAction.Run(new(worldName, numberSeed, gameMode, difficulty));
-                            singleplayerLoadWorldAction.Run(paths);
+                            PushMenu(root, singleplayerPrepareWorldAction.Run(paths)
+                                .Get<DimensionSingleplayerWorldLoadingMenu>().Create);
                         })
                         .TextV("Create New World")
                         .Mutate(s.Button);

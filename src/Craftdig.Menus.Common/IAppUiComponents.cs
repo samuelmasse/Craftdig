@@ -11,6 +11,8 @@ public interface IAppUiComponents
     UiCallback<Action<EntMut>> MenuOriginFV { get; set; }
     /// <summary>Method used to create the companion node for this menu stack entry.</summary>
     UiCallback<Action<EntMut>?> CompanionOriginFV { get; set; }
+    /// <summary>Whether this menu stack entry blocks Escape from popping it.</summary>
+    UiProp<bool> IsModalFV { get; set; }
     /// <summary>Player entity associated with this node.</summary>
     UiProp<EntMutIdx> PlayerFV { get; set; }
     /// <summary>Callback that returns the item slot value.</summary>

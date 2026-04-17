@@ -31,7 +31,7 @@ public class ModuleMenuState(
     {
         if (keyboard.IsKeyPressed(Keys.Escape))
         {
-            if (NodeStackCount(menus) > 1)
+            if (NodeStackCount(menus) > 1 && NodeStackTryPeek(menus, out var top) && !top.IsModalFV.Resolve())
                 PopMenu(menus);
         }
 
