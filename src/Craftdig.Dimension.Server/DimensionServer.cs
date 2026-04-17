@@ -19,7 +19,6 @@ public class DimensionServer(
     public void Tick()
     {
         context.Frame();
-        backend.Frame();
 
         playerSpawner.Tick();
         playerSocketsCleaner.Tick();
@@ -34,6 +33,8 @@ public class DimensionServer(
         sectionUpdateStreamer.Tick();
         sectionReminder.Tick();
         positionStreamer.Tick();
+
+        backend.Frame();
 
         log.Trace("{0} rigids", rigidBag.Ents.Length);
     }
