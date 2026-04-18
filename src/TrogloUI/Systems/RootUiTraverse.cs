@@ -9,17 +9,31 @@ public class RootUiTraverse
     private EntMut[] orderBufferKeys = new EntMut[16];
     private float[] orderBufferVals = new float[16];
 
-    internal void Traverse(EntMut n, int depth)
+    internal void Traverse(EntMut n, float? snap, int depth)
     {
         if (depth == 0)
             traverseBufferIndex = 0;
+
+        n.SnapR = n.AlignmentSnapFV.Resolve() ?? snap ?? 0;
 
         RemoveNodes(n);
         OrderNodes(n);
         CompileNodes(n);
 
+        var innerSnap = ResolveInnerSnap(n, snap);
         foreach (var c in n.NodesR.Span)
-            Traverse(c, depth + 1);
+            Traverse(c, innerSnap, depth + 1);
+    }
+
+    private static float? ResolveInnerSnap(EntMut n, float? snap)
+    {
+        var innerSnap = n.InnerAlignmentSnapFV.Resolve();
+        if (innerSnap != null)
+            return innerSnap;
+        var aligned = (n.AlignmentFV.Resolve() & (Alignment.Horizontal | Alignment.Vertical)) != 0;
+        if (aligned)
+            return null;
+        return snap;
     }
 
     internal bool Delay(EntMut n)

@@ -339,12 +339,13 @@ public class AppStyle(RootText text, RootUiMouse mouse, RootKeyboard keyboard, A
     public void BottomBar(EntMut ent) => ent.Mutate()
         .TextureV(ButtonTexture)
         .TextureSubSizeRelativeV(TextureScale)
-        .TextureOriginRelativeV((0.5f, 1f))
+        .TextureOriginRelativeV((0.5f, 0f))
         .TextureAlignmentSnapV(1)
         .TextureColorV((0.6f, 0.6f, 0.6f, 1))
         .SizeRelativeV(Horizontal)
         .SizeV((0, BarHeight))
         .AlignmentV(Alignment.Bottom)
+        .AlignmentSnapV(ItemSpacingXS)
         .ColorV(BoardColor);
 
     public void MiddleBar(EntMut ent) => ent.Mutate()

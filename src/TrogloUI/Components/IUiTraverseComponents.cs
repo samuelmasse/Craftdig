@@ -19,4 +19,6 @@ public interface IUiTraverseComponents
 
     /// <summary>Compiled list of active child nodes after traversal.</summary>
     Memory<EntMut> NodesR { get; internal set; }
+    /// <summary>Resolved alignment snap for this node.</summary>
+    float SnapR { get; internal set; }
 }

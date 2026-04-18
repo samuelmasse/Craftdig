@@ -23,8 +23,8 @@ public class RootUiSize(RootSprites sprites, RootUiScale scale)
         SizeInnerMaxRelative(s, n);
         SizeInnerSumRelative(s, n);
 
-        var sizeSnap = n.SizeAlignmentSnapFV.Resolve();
-        n.SizeR = (Snap.Ceiling(n.SizeR.X, sizeSnap), Snap.Ceiling(n.SizeR.Y, sizeSnap));
+        SizeAlignmentSnap(n);
+        SizeEdgeAlignmentFill(s, n);
 
         var postInnerSpace = n.SizeR - n.PaddingR.Xy - n.PaddingR.Zw;
         foreach (var c in n.NodesR.Span)
@@ -124,6 +124,30 @@ public class RootUiSize(RootSprites sprites, RootUiScale scale)
         var innerSum = sizeInnerSum + new Vector2(innerSpacing) * Math.Max(0, (n.NodesR.Length - 1));
         n.SizeR += sizeInnerSumRelative * innerSum;
         n.SizeInnerSumR = innerSum;
+    }
+
+    private void SizeAlignmentSnap(EntMut n)
+    {
+        var sizeSnap = n.SizeAlignmentSnapFV.Resolve();
+        n.SizeR = (Snap.Ceiling(n.SizeR.X, sizeSnap), Snap.Ceiling(n.SizeR.Y, sizeSnap));
+    }
+
+    private void SizeEdgeAlignmentFill(Vector2 s, EntMut n)
+    {
+        if (n.SnapR <= 0)
+            return;
+
+        var alignment = n.AlignmentFV.Resolve();
+        if ((alignment & Alignment.Right) != 0)
+        {
+            var desiredLeft = s.X - n.SizeR.X;
+            n.SizeR = n.SizeR with { X = n.SizeR.X + desiredLeft - Snap.Floor(desiredLeft, n.SnapR) };
+        }
+        if ((alignment & Alignment.Bottom) != 0)
+        {
+            var desiredTop = s.Y - n.SizeR.Y;
+            n.SizeR = n.SizeR with { Y = n.SizeR.Y + desiredTop - Snap.Floor(desiredTop, n.SnapR) };
+        }
     }
 
     private void SizeInnerSizing(Vector2 s, EntMut n)

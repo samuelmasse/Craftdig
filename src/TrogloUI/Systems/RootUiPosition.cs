@@ -3,13 +3,12 @@ namespace TrogloUI;
 [Root]
 public class RootUiPosition(RootSprites sprites, RootUiScale scale)
 {
-    internal void Position(Vector2 s, float? snap, Vector2 padding, EntMut n)
+    internal void Position(Vector2 s, Vector2 padding, EntMut n)
     {
-        PositionNode(s, snap, padding, n);
-        var innerSnap = ResolveInnerSnap(n, snap);
+        PositionNode(s, padding, n);
 
         foreach (var c in n.NodesR.Span)
-            Position(n.SizeR, innerSnap, n.PaddingR.Xy, c);
+            Position(n.SizeR, n.PaddingR.Xy, c);
 
         PositionInnerLayout(n);
     }
@@ -22,12 +21,12 @@ public class RootUiPosition(RootSprites sprites, RootUiScale scale)
             Finalize(n.PositionR, sc);
     }
 
-    private void PositionNode(Vector2 s, float? snap, Vector2 padding, EntMut n)
+    private void PositionNode(Vector2 s, Vector2 padding, EntMut n)
     {
         n.OffsetR = n.OffsetFV.Resolve();
         PositionPadding(padding, n);
         PositionTextRelative(n);
-        PositionAlignement(s, snap, n);
+        PositionAlignement(s, n);
     }
 
     private void PositionInnerLayout(EntMut n)
@@ -85,11 +84,10 @@ public class RootUiPosition(RootSprites sprites, RootUiScale scale)
             n.OffsetR += (0, padding.Y);
     }
 
-    private void PositionAlignement(Vector2 s, float? snap, EntMut n)
+    private void PositionAlignement(Vector2 s, EntMut n)
     {
         var alignment = n.AlignmentFV.Resolve();
-        var snapValue = n.AlignmentSnapFV.Resolve() ?? snap ?? 0;
-        n.OffsetR = Align(n.OffsetR, n.SizeR, s, alignment, snapValue);
+        n.OffsetR = Align(n.OffsetR, n.SizeR, s, alignment, n.SnapR);
     }
 
     private void PositionTextRelative(EntMut n)
@@ -123,22 +121,6 @@ public class RootUiPosition(RootSprites sprites, RootUiScale scale)
             val.Y += parent.Y - size.Y;
 
         return val;
-    }
-
-    private static float? ResolveInnerSnap(EntMut n, float? snap)
-    {
-        // If the node explicitly defines an inner snap, carry that forward to children
-        var innerSnap = n.InnerAlignmentSnapFV.Resolve();
-        if (innerSnap != null)
-            return innerSnap;
-
-        // If this node has centering alignment, the snap is consumed by this node and not passed down
-        var aligned = (n.AlignmentFV.Resolve() & (Alignment.Horizontal | Alignment.Vertical)) != 0;
-        if (aligned)
-            return null;
-
-        // Otherwise pass down the inherited snap to children until first consumer is reached
-        return snap;
     }
 
 }
