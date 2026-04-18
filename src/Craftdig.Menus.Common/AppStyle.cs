@@ -27,12 +27,13 @@ public class AppStyle(RootText text, RootUiMouse mouse, RootKeyboard keyboard, A
     public Vector2 Horizontal => (1, 0);
     public Vector2 Vertical => (0, 1);
 
-    public Vector4 BoardColor => (1, 0, 0, 1);
-    public Vector4 BoardColor2 => (1, 1, 0, 1);
+    public Vector4 BoardColor => (0.77f, 0.77f, 0.77f, 1);
 
     public Vector4 TextColor => (1, 1, 1, 1);
+    public Vector4 TextColorDark => (0.25f, 0.25f, 0.25f, 1);
+    public Vector4 TextShadowColor => (0, 0, 0, 0.5f);
     public Vector4 TextColorFaint => (0.5f, 0.5f, 0.5f, 1);
-    public Vector4 SlotColor => (1, 0, 1, 1);
+    public Vector4 SlotColor => (0.55f, 0.55f, 0.55f, 1);
     public Vector4 ButtonColor => (1, 1, 1, 1);
     public Vector4 ButtonColorDisabled => (0.4f, 0.4f, 0.4f, 1);
     public Vector4 ButtonColorHovered => (1, 0.7f, 1, 1);
@@ -49,7 +50,7 @@ public class AppStyle(RootText text, RootUiMouse mouse, RootKeyboard keyboard, A
         .FontPaddingV((ItemSpacingXS, 0, ItemSpacingXS, 0))
         .TextColorV(TextColor)
         .TextShadowOffsetV((ItemSpacingXS, ItemSpacingXS))
-        .TextShadowColorV((0, 0, 0, 0.5f))
+        .TextShadowColorV(TextShadowColor)
         .TextAlignmentSnapV(ItemSpacingXS)
         .TextGlyphAlignmentSnapV(ItemSpacingXS);
 
@@ -60,6 +61,11 @@ public class AppStyle(RootText text, RootUiMouse mouse, RootKeyboard keyboard, A
         .SizeRelativeV((0, 0))
         .SizeAlignmentSnapV(ItemSpacingS)
         .TextAlignmentV(Alignment.Left);
+
+    public void LabelDark(EntMut ent) => ent.Mutate()
+        .Mutate(Label)
+        .TextShadowOffsetV(default)
+        .TextColorV(TextColorDark);
 
     public void InputItem(EntMut ent, Func<Vector4> colorF) => ent.Mutate()
         .SizeV((0, ItemHeight))
@@ -256,7 +262,7 @@ public class AppStyle(RootText text, RootUiMouse mouse, RootKeyboard keyboard, A
             .SizeRelativeV((0, 1))
             .AlignmentV(Alignment.Horizontal)
             .OffsetF(() => (select.SizeR.X / 2 + ItemSpacing, 0))
-            .ColorV((0, 1, 1, 1))
+            .ColorV((0, 0, 0, 0.5f))
             .RenderDelayV(1)
             .IsDisabledF(() => parent.SizeR.Y / select.SizeInnerSumR.Y >= 1);
         {
@@ -268,7 +274,7 @@ public class AppStyle(RootText text, RootUiMouse mouse, RootKeyboard keyboard, A
                 .IsSilentFocusableV(true)
                 .DeferFocusV(select)
                 .CursorF(() => scrollPuck.IsPressedR ? MouseCursor.ResizeNS : MouseCursor.PointingHand)
-                .ColorF(() => scrollPuck.IsPressedR ? (1, 1, 0, 1) : (0.5f, 0.5f, 1, 1))
+                .ColorV((1, 1, 1, 0.5f))
                 .OffsetF(() => (0, scroll / select.SizeInnerSumR.Y) * scrollBar.SizeR)
                 .SizeRelativeF(() => (1, Math.Min(1, parent.SizeR.Y / select.SizeInnerSumR.Y)))
                 .OnPressF(() =>

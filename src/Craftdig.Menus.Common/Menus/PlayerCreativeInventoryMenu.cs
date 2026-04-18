@@ -25,7 +25,7 @@ public class PlayerCreativeInventoryMenu(ModuleEnts ents, AppStyle s, PlayerEnt 
             .AlignmentV(Alignment.Center);
 
         Node(vert, out var title)
-            .Mutate(s.Label)
+            .Mutate(s.LabelDark)
             .TextV("Building Blocks");
 
         Node(vert, out var blocksVert)

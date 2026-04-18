@@ -15,7 +15,7 @@ public class PlayerEscapeMenu(AppReset reset, AppStyle s)
             .ColorV(s.BoardColor);
         {
             Node(list)
-                .Mutate(s.Label)
+                .Mutate(s.LabelDark)
                 .TextV("Game Menu")
                 .AlignmentV(Alignment.Horizontal);
 
