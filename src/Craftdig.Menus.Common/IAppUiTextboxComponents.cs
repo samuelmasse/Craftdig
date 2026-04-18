@@ -22,6 +22,8 @@ public interface IAppUiTextboxComponents
     bool TextboxWasPressedR { get; set; }
     /// <summary>Timestamp of the last mouse-down on the textbox.</summary>
     DateTime TextboxLastClickAtR { get; set; }
+    /// <summary>Mouse position at the last mouse-down.</summary>
+    Vector2 TextboxLastClickPositionR { get; set; }
     /// <summary>Consecutive click count on the textbox.</summary>
     int TextboxClickCountR { get; set; }
     /// <summary>Caret index where the current textbox press started.</summary>

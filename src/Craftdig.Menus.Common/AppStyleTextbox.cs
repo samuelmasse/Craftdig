@@ -188,11 +188,12 @@ public partial class AppStyle
     {
         var now = DateTime.UtcNow;
         bool withinTimeWindow = (now - ent.TextboxLastClickAtR).TotalMilliseconds < TextboxDoubleClickWindowMs;
-        bool samePosition = hit == ent.TextboxPressStartIndexR;
+        bool samePosition = mouse.Position == ent.TextboxLastClickPositionR;
         bool chainContinues = withinTimeWindow && samePosition;
 
         ent.TextboxClickCountR = chainContinues ? ent.TextboxClickCountR + 1 : 1;
         ent.TextboxLastClickAtR = now;
+        ent.TextboxLastClickPositionR = mouse.Position;
         ent.TextboxPressStartIndexR = hit;
 
         if (ent.TextboxClickCountR == 2)
