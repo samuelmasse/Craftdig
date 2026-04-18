@@ -10,6 +10,7 @@ public class AppFpsMenu(RootKeyboard keyboard, RootText text, RootMetrics metric
             .AlignmentV(Alignment.Top | Alignment.Left)
             .IsDisabledV(true)
             .TextF(() => text.Format("{0} FPS", metrics.FrameWindow.Ticks))
+            .TextAlignmentV(Alignment.Center)
             .ColorV((0.5f, 0.5f, 0.5f, 0.5f))
             .SizeV((s.ItemSpacing, s.ItemSpacing));
 

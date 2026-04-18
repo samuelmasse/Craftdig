@@ -23,6 +23,9 @@ public class RootUiSize(RootSprites sprites, RootUiScale scale)
         SizeInnerMaxRelative(s, n);
         SizeInnerSumRelative(s, n);
 
+        var sizeSnap = n.SizeAlignmentSnapFV.Resolve();
+        n.SizeR = (Snap.Ceiling(n.SizeR.X, sizeSnap), Snap.Ceiling(n.SizeR.Y, sizeSnap));
+
         var postInnerSpace = n.SizeR - n.PaddingR.Xy - n.PaddingR.Zw;
         foreach (var c in n.NodesR.Span)
         {
@@ -61,7 +64,10 @@ public class RootUiSize(RootSprites sprites, RootUiScale scale)
 
         var text = n.TextFV.Resolve();
         var sizeTextRelative = n.SizeTextRelativeFV.Resolve();
-        var size = new Vector2(sprites.Batch.Measure(font.Size(fontSize), text) / scale.Scale, font.Size(fontSize).Metrics.Height / scale.Scale);
+        var glyphSnap = n.TextGlyphAlignmentSnapFV.Resolve() * scale.Scale;
+        var size = new Vector2(
+            sprites.Batch.Measure(font.Size(fontSize), text, glyphSnap) / scale.Scale,
+            font.Size(fontSize).Metrics.Height / scale.Scale);
 
         var fontPadding = n.FontPaddingFV.Resolve();
         var textPadding = n.TextPaddingFV.Resolve();

@@ -113,9 +113,9 @@ public class RootUiPosition(RootSprites sprites, RootUiScale scale)
     internal Vector2 Align(Vector2 val, Vector2 size, Vector2 parent, Alignment alignment, float snap)
     {
         if ((alignment & Alignment.Horizontal) != 0)
-            val.X += Snap(parent.X / 2, snap) - size.X / 2;
+            val.X += Snap.Round(parent.X / 2, snap) - size.X / 2;
         if ((alignment & Alignment.Vertical) != 0)
-            val.Y += Snap(parent.Y / 2, snap) - size.Y / 2;
+            val.Y += Snap.Round(parent.Y / 2, snap) - size.Y / 2;
 
         if ((alignment & Alignment.Right) != 0)
             val.X += parent.X - size.X;
@@ -141,5 +141,4 @@ public class RootUiPosition(RootSprites sprites, RootUiScale scale)
         return snap;
     }
 
-    private float Snap(float value, float snap) => snap > 0 ? (float)Math.Round(value / snap) * snap : value;
 }

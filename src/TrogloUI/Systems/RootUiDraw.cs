@@ -53,8 +53,7 @@ public class RootUiDraw(RootSprites sprites, RootUiScale scale, RootUiPosition p
         var subPosition = (n.TextureSubPositionFV.Resolve() ?? Vector2.Zero)
             - (anchor ?? default) * subSize;
         var textureSnap = n.TextureAlignmentSnapFV.Resolve();
-        if (textureSnap > 0)
-            subPosition = (Snap(subPosition.X, textureSnap), Snap(subPosition.Y, textureSnap));
+        subPosition = (Snap.Round(subPosition.X, textureSnap), Snap.Round(subPosition.Y, textureSnap));
         var rotation = n.TextureRotationFV.Resolve() ?? SpriteBatchRotation.None;
         var flip = n.TextureFlipFV.Resolve() ?? SpriteBatchFlip.None;
 
@@ -80,7 +79,10 @@ public class RootUiDraw(RootSprites sprites, RootUiScale scale, RootUiPosition p
             return;
 
         var alignment = n.TextAlignmentFV.Resolve() ?? Alignment.Center;
-        var size = new Vector2(sprites.Batch.Measure(font.Size(fontSize), text), font.Size(fontSize).Metrics.Height) / scale.Scale;
+        var glyphSnap = n.TextGlyphAlignmentSnapFV.Resolve() * scale.Scale;
+        var size = new Vector2(
+            sprites.Batch.Measure(font.Size(fontSize), text, glyphSnap) / scale.Scale,
+            font.Size(fontSize).Metrics.Height / scale.Scale);
         var offset = Vector2.Zero;
 
         var fontPadding = n.FontPaddingFV.Resolve();
@@ -94,16 +96,20 @@ public class RootUiDraw(RootSprites sprites, RootUiScale scale, RootUiPosition p
         offset = position.Align(offset, size, n.SizeR, alignment, 0);
         offset.Y += size.Y / 2;
 
+        var blockSnap = n.TextAlignmentSnapFV.Resolve();
+        offset.X = Snap.Round(offset.X, blockSnap);
+        offset.Y = Snap.Round(offset.Y, blockSnap);
+
+        var pos = n.PositionR + offset;
+
         var shadowOffset = n.TextShadowOffsetFV.Resolve();
         if (shadowOffset.HasValue)
         {
             var shadowColor = n.TextShadowColorFV.Resolve()
                 ?? (n.TextShadowColorRelativeFV.Resolve() ?? Vector4.One) * textColor;
-            sprites.Batch.Write(font.Size(fontSize), text, (n.PositionR + offset + shadowOffset.Value) * scale.Scale, shadowColor, scale.Scale);
+            sprites.Batch.Write(font.Size(fontSize), text, (pos + shadowOffset.Value) * scale.Scale, shadowColor, scale.Scale, glyphSnap);
         }
 
-        sprites.Batch.Write(font.Size(fontSize), text, (n.PositionR + offset) * scale.Scale, textColor, scale.Scale);
+        sprites.Batch.Write(font.Size(fontSize), text, pos * scale.Scale, textColor, scale.Scale, glyphSnap);
     }
-
-    private static float Snap(float value, float snap) => (float)Math.Round(value / snap) * snap;
 }

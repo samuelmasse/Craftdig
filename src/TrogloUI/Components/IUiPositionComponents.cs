@@ -17,6 +17,8 @@ public interface IUiPositionComponents
     UiProp<float?> AlignmentSnapFV { get; set; }
     /// <summary>Default alignment snap applied to child nodes.</summary>
     UiProp<float?> InnerAlignmentSnapFV { get; set; }
+    /// <summary>Rounds this node's resolved size up to the nearest multiple of this value</summary>
+    UiProp<float> SizeAlignmentSnapFV { get; set; }
 
     /// <summary>Resolved position offset of this node.</summary>
     Vector2 OffsetR { get; internal set; }

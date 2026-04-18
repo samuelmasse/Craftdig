@@ -7,7 +7,7 @@ public class PlayerEscapeMenu(AppReset reset, AppStyle s)
     {
         Node(root, out var list)
             .Mutate(s.VerticalList)
-            .SizeV((s.ItemWidth, 0))
+            .SizeV((s.ItemWidthL, 0))
             .AlignmentV(Alignment.Horizontal)
             .InnerSpacingV(s.ItemSpacing)
             .PaddingV((s.ItemSpacing, s.ItemSpacing, s.ItemSpacing, s.ItemSpacing))

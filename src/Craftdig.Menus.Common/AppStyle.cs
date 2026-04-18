@@ -49,13 +49,17 @@ public class AppStyle(RootText text, RootUiMouse mouse, RootKeyboard keyboard, A
         .FontPaddingV((ItemSpacingXS, 0, ItemSpacingXS, 0))
         .TextColorV(TextColor)
         .TextShadowOffsetV((ItemSpacingXS, ItemSpacingXS))
-        .TextShadowColorV((0, 0, 0, 0.5f));
+        .TextShadowColorV((0, 0, 0, 0.5f))
+        .TextAlignmentSnapV(ItemSpacingXS)
+        .TextGlyphAlignmentSnapV(ItemSpacingXS);
 
     public void Label(EntMut ent) => ent.Mutate()
         .Mutate(Text)
         .Tag(nameof(Label))
         .SizeTextRelativeV((1, 1))
-        .SizeRelativeV((0, 0));
+        .SizeRelativeV((0, 0))
+        .SizeAlignmentSnapV(ItemSpacingS)
+        .TextAlignmentV(Alignment.Left);
 
     public void InputItem(EntMut ent, Func<Vector4> colorF) => ent.Mutate()
         .SizeV((0, ItemHeight))
@@ -242,7 +246,7 @@ public class AppStyle(RootText text, RootUiMouse mouse, RootKeyboard keyboard, A
 
         Node(parent, out var select)
             .Mutate(VerticalList)
-            .InnerScrollOffsetF(() => (0, -scroll))
+            .InnerScrollOffsetF(() => (0, -Snap.Round(scroll, ItemSpacingXS)))
             .SizeInnerMaxRelativeV((1, 0))
             .AlignmentV(Alignment.Horizontal);
         list = select;
@@ -568,4 +572,5 @@ public class AppStyle(RootText text, RootUiMouse mouse, RootKeyboard keyboard, A
 
             ent.SlotAddedR = false;
         });
+
 }

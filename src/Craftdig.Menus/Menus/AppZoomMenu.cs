@@ -27,6 +27,7 @@ public class AppZoomMenu(RootKeyboard keyboard, RootText text, RootUiScale scale
             .Mutate(s.Label)
             .AlignmentV(Alignment.Top | Alignment.Right)
             .TextF(() => text.Format("{0}%", scale.Scale * 100))
+            .TextAlignmentV(Alignment.Center)
             .OnUpdateF(() =>
             {
                 if (scale.Scale != last)
