@@ -399,19 +399,8 @@ public class AppStyle(RootText text, RootUiMouse mouse, RootKeyboard keyboard, A
             NodesClear(ent);
 
             Node(ent)
-                .Mutate(Text)
                 .OffsetV((ItemSpacingXS, ItemSpacingXS))
                 .SizeV((-ItemSpacingXS * 2, -ItemSpacingXS * 2))
-                .TextF(() =>
-                {
-                    var c = ent.GetSlotValueFV.Resolve()?.Invoke() ?? default;
-
-                    if (c == default || c.Count == 1)
-                        return string.Empty;
-
-                    return text.Format("{0}", c.Count);
-                })
-                .TextAlignmentV(Alignment.Bottom | Alignment.Right)
                 .TextureF(() =>
                 {
                     var c = ent.GetSlotValueFV.Resolve()?.Invoke() ?? default;
@@ -421,6 +410,22 @@ public class AppStyle(RootText text, RootUiMouse mouse, RootKeyboard keyboard, A
 
                     return null;
                 });
+
+            Node(ent)
+                .Mutate(Text)
+                .SizeRelativeV((1, 1))
+                .OffsetV((0, 0))
+                .TextF(() =>
+                {
+                    var c = ent.GetSlotValueFV.Resolve()?.Invoke() ?? default;
+
+                    if (c == default || c.Count == 1)
+                        return string.Empty;
+
+                    return text.Format("{0}", c.Count);
+                })
+                .TextOffsetV((-ItemSpacingXS, ItemSpacingXS))
+                .TextAlignmentV(Alignment.Bottom | Alignment.Right);
         });
 
     public void SlotTooltip(EntMut ent) => ent.Mutate()

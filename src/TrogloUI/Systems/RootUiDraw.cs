@@ -95,6 +95,7 @@ public class RootUiDraw(RootSprites sprites, RootUiScale scale, RootUiPosition p
 
         offset = position.Align(offset, size, n.SizeR, alignment, 0);
         offset.Y += size.Y / 2;
+        offset += n.TextOffsetFV.Resolve();
 
         var blockSnap = n.TextAlignmentSnapFV.Resolve();
         offset.X = Snap.Round(offset.X, blockSnap);

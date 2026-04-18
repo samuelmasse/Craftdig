@@ -27,6 +27,8 @@ public interface IUiDrawComponents
     UiProp<float> TextureAlignmentSnapFV { get; set; }
     /// <summary>Text alignment within the node.</summary>
     UiProp<Alignment?> TextAlignmentFV { get; set; }
+    /// <summary>Additional offset applied to the text rendering within the node.</summary>
+    UiProp<Vector2> TextOffsetFV { get; set; }
     /// <summary>Snaps the text block's starting position to the nearest multiple of this value (in UI units).</summary>
     UiProp<float> TextAlignmentSnapFV { get; set; }
     /// <summary>Snaps each individual glyph's position to the nearest multiple of this value (in UI units).</summary>
