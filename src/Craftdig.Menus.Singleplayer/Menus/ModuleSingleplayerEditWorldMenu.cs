@@ -19,8 +19,8 @@ public class ModuleSingleplayerEditWorldMenu(
 
             Node(form)
                 .Mutate(s.Textbox)
-                .MaxLengthV(29)
-                .StringBuilderV(name)
+                .TextboxMaxLengthV(29)
+                .TextboxStringBuilderV(name)
                 .IsInitialFocusV(true);
         }
 

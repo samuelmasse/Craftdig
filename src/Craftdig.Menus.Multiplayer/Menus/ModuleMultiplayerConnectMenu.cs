@@ -28,8 +28,8 @@ public class ModuleMultiplayerConnectMenu(
 
             Node(form)
                 .Mutate(s.Textbox)
-                .MaxLengthV(120)
-                .StringBuilderV(address)
+                .TextboxMaxLengthV(120)
+                .TextboxStringBuilderV(address)
                 .IsInitialFocusV(true);
 
             Node(form)

@@ -1,7 +1,7 @@
 namespace Craftdig.Menus.Common;
 
 [App]
-public class AppStyle(RootText text, RootUiMouse mouse, RootKeyboard keyboard, AppMenuTextures menuTextures, AppMonocraft monocraft)
+public partial class AppStyle(RootText text, RootUiMouse mouse, RootKeyboard keyboard, RootSprites sprites, RootUiScale scale, AppMenuTextures menuTextures, AppMonocraft monocraft)
 {
     public readonly Texture ArrowTexture = menuTextures["MenuArrow"];
     public readonly Texture SlotTexture = menuTextures["MenuSlot"];
@@ -117,70 +117,6 @@ public class AppStyle(RootText text, RootUiMouse mouse, RootKeyboard keyboard, A
 
         return ButtonColorDisabled;
     }
-
-    public void Textbox(EntMut ent) => ent.Mutate()
-        .Mutate((ent) => InputItem(ent, () => TextBoxBorderColor(ent)))
-        .Mutate(Text)
-        .Tag(nameof(Textbox))
-        .TextAlignmentV(Alignment.Left | Alignment.Vertical)
-        .ColorV((0, 0, 0, 1))
-        .TextF(() => text.Format("{0}{1}", ent.StringBuilderFV.Resolve(), ent.CarretR))
-        .TextPaddingV((ItemSpacingXS, ItemSpacingXS, ItemSpacingXS, ItemSpacingXS))
-        .CursorV(MouseCursor.IBeam)
-        .OnUpdateF(() =>
-        {
-            ent.CarretR = string.Empty;
-
-            var sb = ent.StringBuilderFV.Resolve();
-            if (sb == null)
-                return;
-
-            if (ent.IsFocusedR)
-            {
-                if (!ent.WasFocusedR)
-                {
-                    ent.FocusStartR = DateTime.UtcNow;
-                    ent.WasFocusedR = true;
-                }
-
-                int dt = (int)(DateTime.UtcNow - ent.FocusStartR).TotalMilliseconds;
-                if ((dt / 500) % 2 == 0)
-                    ent.CarretR = "_";
-
-                bool modified = false;
-
-                if (keyboard.IsKeyPressedRepeated(Keys.Backspace) && sb.Length > 0)
-                {
-                    sb.Remove(sb.Length - 1, 1);
-                    modified = true;
-                }
-
-                if (keyboard.Text.Count > 0)
-                {
-                    foreach (var rune in keyboard.Text)
-                    {
-                        sb.Append(rune);
-                        modified = true;
-                    }
-                }
-
-                if (keyboard.IsKeyDown(Keys.LeftControl) && keyboard.IsKeyPressed(Keys.V))
-                {
-                    sb.Append(keyboard.Clipboard);
-                    modified = true;
-                }
-
-                if (modified)
-                    ent.OnTextUpdatedFV.Resolve()?.Invoke();
-            }
-            else ent.WasFocusedR = false;
-
-            if (ent.MaxLengthFV.Resolve() > 0)
-            {
-                while (sb.Length > ent.MaxLengthFV.Resolve())
-                    sb.Remove(sb.Length - 1, 1);
-            }
-        });
 
     public void Button(EntMut ent) => ent.Mutate()
         .Mutate((ent) => InputItem(ent, () => ButtonBorderColor(ent)))

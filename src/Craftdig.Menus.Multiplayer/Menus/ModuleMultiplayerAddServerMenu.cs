@@ -26,8 +26,8 @@ public class ModuleMultiplayerAddServerMenu(
 
             Node(form)
                 .Mutate(s.Textbox)
-                .MaxLengthV(64)
-                .StringBuilderV(name)
+                .TextboxMaxLengthV(64)
+                .TextboxStringBuilderV(name)
                 .IsInitialFocusV(true);
 
             Node(form)
@@ -36,8 +36,8 @@ public class ModuleMultiplayerAddServerMenu(
 
             Node(form)
                 .Mutate(s.Textbox)
-                .MaxLengthV(120)
-                .StringBuilderV(host);
+                .TextboxMaxLengthV(120)
+                .TextboxStringBuilderV(host);
 
             Node(form)
                 .Mutate(s.Button)

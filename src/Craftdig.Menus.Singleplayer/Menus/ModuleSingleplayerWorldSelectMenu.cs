@@ -37,11 +37,11 @@ public class ModuleSingleplayerWorldSelectMenu(
 
                 Node(topBarHor)
                     .Mutate(s.Textbox)
-                    .MaxLengthV(29)
-                    .SizeV((s.ItemWidthL * 1.4f, s.ItemHeight))
-                    .StringBuilderV(search)
+                    .TextboxMaxLengthV(29)
+                    .SizeV((716, s.ItemHeight))
+                    .TextboxStringBuilderV(search)
                     .IsInitialFocusV(true)
-                    .OnTextUpdatedF(() =>
+                    .TextboxOnTextUpdatedF(() =>
                     {
                         if (search.Length == 0)
                         {

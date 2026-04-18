@@ -42,8 +42,8 @@ public class ModuleMultiplayerServerBrowserMenu(
                     Node(topBarContent)
                         .Mutate(s.Textbox)
                         .SizeV((s.ItemWidthL, s.ItemHeight))
-                        .StringBuilderV(user)
-                        .OnTextUpdatedF(() =>
+                        .TextboxStringBuilderV(user)
+                        .TextboxOnTextUpdatedF(() =>
                         {
                             clientOptions.NoAuthUser = user.ToString();
                             clientOptions.DefaultNoAuthUser = clientOptions.NoAuthUser;
