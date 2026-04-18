@@ -387,7 +387,7 @@ public partial class AppStyle
         ent.TextboxOnTextUpdatedFV.Resolve()?.Invoke();
     }
 
-    private bool TextboxHasSelection(EntMut ent) =>  ent.TextboxCaretIndexR != ent.TextboxSelectionAnchorR;
+    private bool TextboxHasSelection(EntMut ent) => ent.TextboxCaretIndexR != ent.TextboxSelectionAnchorR;
 
     private bool TextboxShowEndCaret(EntMut ent, StringBuilder sb) =>
         ent.IsFocusedR
