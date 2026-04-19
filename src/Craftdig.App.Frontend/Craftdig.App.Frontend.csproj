@@ -16,7 +16,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="AlvorEngine" Version="0.10.2" />
+        <PackageReference Include="AlvorEngine" Version="0.10.3" />
     </ItemGroup>
 
     <ItemGroup>

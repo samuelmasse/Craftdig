@@ -4,15 +4,17 @@ namespace Craftdig.Menus.Common;
 public class AppSettings
 {
     private readonly RootUiScale scale;
+    private readonly RootScreen screen;
     private readonly AppPaths paths;
     private readonly JsonSerializerOptions options;
     private readonly string file;
 
     private SettingsData data;
 
-    public AppSettings(RootUiScale scale, AppPaths paths)
+    public AppSettings(RootUiScale scale, RootScreen screen, AppPaths paths)
     {
         this.scale = scale;
+        this.screen = screen;
         this.paths = paths;
 
         data = new();
@@ -38,13 +40,32 @@ public class AppSettings
         set => Apply(data with { Scale = value });
     }
 
-    private void Apply(SettingsData newData)
+    public bool Vsync
     {
-        if (newData.Scale != data.Scale)
-            scale.Scale = newData.Scale.GetValueOrDefault();
+        get => data.Vsync ?? screen.IsVsyncOn;
+        set => Apply(data with { Vsync = value });
+    }
 
-        data = newData;
+    public bool Fullscreen
+    {
+        get => data.Fullscreen ?? screen.IsFullscreen;
+        set => Apply(data with { Fullscreen = value });
+    }
+
+    private void Apply(SettingsData value)
+    {
+        var old = data;
+        data = value;
         Save();
+
+        if (Scale != old.Scale)
+            scale.Scale = Scale;
+
+        if (Vsync != old.Vsync)
+            screen.IsVsyncOn = Vsync;
+
+        if (Fullscreen != old.Fullscreen)
+            screen.IsFullscreen = Fullscreen;
     }
 
     private void Save()
@@ -56,5 +77,7 @@ public class AppSettings
     private record class SettingsData
     {
         public float? Scale { get; set; }
+        public bool? Vsync { get; set; }
+        public bool? Fullscreen { get; set; }
     }
 }

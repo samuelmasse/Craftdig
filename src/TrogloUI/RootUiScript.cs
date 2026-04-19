@@ -15,7 +15,7 @@ public class RootUiScript(
 {
     public override Vector2? DrawArea => canvas.Size / scale.Scale;
 
-    public override void Update(double time)
+    public override void Frame(double time)
     {
         ResetRoot();
         Traverse();

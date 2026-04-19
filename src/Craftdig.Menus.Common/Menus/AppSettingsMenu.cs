@@ -50,6 +50,16 @@ public class AppSettingsMenu(RootText text, AppSettings settings, AppStyle s)
 
             Node(list)
                 .Mutate(s.Button)
+                .OnPressF(() => settings.Vsync = !settings.Vsync)
+                .TextF(() => text.Format("VSync: {0}", settings.Vsync ? "On" : "Off"));
+
+            Node(list)
+                .Mutate(s.Button)
+                .OnPressF(() => settings.Fullscreen = !settings.Fullscreen)
+                .TextF(() => text.Format("Fullscreen: {0}", settings.Fullscreen ? "On" : "Off"));
+
+            Node(list)
+                .Mutate(s.Button)
                 .OnPressF(() => PopMenu(root))
                 .TextV("Back");
         }
