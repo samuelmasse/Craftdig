@@ -5,7 +5,6 @@ public class AppZoomMenu(RootKeyboard keyboard, RootText text, RootUiScale scale
 {
     public void Create(EntMut root)
     {
-        int zoom = (int)(scale.Scale * 8);
         var sw = Stopwatch.StartNew();
 
         float last = scale.Scale;
@@ -14,6 +13,8 @@ public class AppZoomMenu(RootKeyboard keyboard, RootText text, RootUiScale scale
         Node(root)
             .OnUpdateF(() =>
             {
+                int zoom = (int)(scale.Scale * 8);
+
                 if (keyboard.IsKeyDown(Keys.LeftControl) && keyboard.IsKeyPressedRepeated(Keys.Equal) && zoom < 32)
                     zoom++;
 

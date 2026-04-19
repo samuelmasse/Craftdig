@@ -7,6 +7,7 @@ public class ModuleMainMenu(
     RootText text,
     AppStyle s,
     AppClientOptions clientOptions,
+    AppSettingsMenu settingsMenu,
     ModuleSingleplayerWorldSelectMenu worldSelectMenu,
     ModuleMultiplayerServerBrowserMenu serverBrowserMenu,
     ModuleMultiplayerLoginMenu loginMenu,
@@ -55,6 +56,11 @@ public class ModuleMainMenu(
                         }
                         else PushMenu(root, serverBrowserMenu.Create, s.Darken);
                     });
+
+                Node(list2)
+                    .Mutate(s.Button)
+                    .OnPressF(() => PushMenu(root, settingsMenu.Create, s.Darken))
+                    .TextV("Settings");
 
                 Node(list2)
                     .Mutate(s.Button)

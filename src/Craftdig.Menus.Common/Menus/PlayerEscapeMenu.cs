@@ -1,7 +1,7 @@
 namespace Craftdig.Menus.Common;
 
 [Player]
-public class PlayerEscapeMenu(AppReset reset, AppStyle s)
+public class PlayerEscapeMenu(AppReset reset, AppSettingsMenu settingsMenu, AppStyle s)
 {
     public void Create(EntMut root)
     {
@@ -23,6 +23,11 @@ public class PlayerEscapeMenu(AppReset reset, AppStyle s)
                 .Mutate(s.Button)
                 .OnPressF(() => PopMenu(root))
                 .TextV("Back to Game");
+
+            Node(list)
+                .Mutate(s.Button)
+                .OnPressF(() => PushMenu(root, settingsMenu.Create))
+                .TextV("Settings");
 
             Node(list)
                 .Mutate(s.Button)
