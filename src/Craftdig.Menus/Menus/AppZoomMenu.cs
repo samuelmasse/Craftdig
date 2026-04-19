@@ -1,19 +1,20 @@
 namespace Craftdig.Menus;
 
 [App]
-public class AppZoomMenu(RootKeyboard keyboard, RootText text, RootUiScale scale, AppStyle s)
+public class AppZoomMenu(RootKeyboard keyboard, RootText text, AppSettings settings, AppStyle s)
 {
     public void Create(EntMut root)
     {
         var sw = Stopwatch.StartNew();
 
-        float last = scale.Scale;
+        float last = settings.Scale;
         bool initial = true;
 
         Node(root)
             .OnUpdateF(() =>
             {
-                int zoom = (int)(scale.Scale * 8);
+                int zoom = (int)Math.Round(settings.Scale * 8);
+                int oldZoom = zoom;
 
                 if (keyboard.IsKeyDown(Keys.LeftControl) && keyboard.IsKeyPressedRepeated(Keys.Equal) && zoom < 32)
                     zoom++;
@@ -21,20 +22,21 @@ public class AppZoomMenu(RootKeyboard keyboard, RootText text, RootUiScale scale
                 if (keyboard.IsKeyDown(Keys.LeftControl) && keyboard.IsKeyPressedRepeated(Keys.Minus) && zoom > 1)
                     zoom--;
 
-                scale.Scale = zoom / 8f;
+                if (zoom != oldZoom)
+                    settings.Scale = zoom / 8f;
             });
 
         Node(root)
             .Mutate(s.Label)
             .AlignmentV(Alignment.Top | Alignment.Right)
-            .TextF(() => text.Format("{0}%", scale.Scale * 100))
+            .TextF(() => text.Format("{0}%", settings.Scale * 100))
             .TextAlignmentV(Alignment.Center)
             .OnUpdateF(() =>
             {
-                if (scale.Scale != last)
+                if (settings.Scale != last)
                 {
                     initial = false;
-                    last = scale.Scale;
+                    last = settings.Scale;
                     sw.Restart();
                 }
             })

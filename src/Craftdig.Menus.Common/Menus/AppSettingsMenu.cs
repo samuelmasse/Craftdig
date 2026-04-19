@@ -1,7 +1,7 @@
 namespace Craftdig.Menus.Common;
 
 [App]
-public class AppSettingsMenu(RootUiScale scale, RootText text, AppStyle s)
+public class AppSettingsMenu(RootText text, AppSettings settings, AppStyle s)
 {
     public void Create(EntMut root)
     {
@@ -21,7 +21,7 @@ public class AppSettingsMenu(RootUiScale scale, RootText text, AppStyle s)
 
             Node(list)
                 .Mutate(s.LabelDark)
-                .TextF(() => text.Format("GUI Scale: {0}%", scale.Scale * 100))
+                .TextF(() => text.Format("GUI Scale: {0}%", settings.Scale * 100))
                 .AlignmentV(Alignment.Horizontal);
 
             Node(list, out var row)
@@ -32,9 +32,9 @@ public class AppSettingsMenu(RootUiScale scale, RootText text, AppStyle s)
                     .TextV("-")
                     .OnPressF(() =>
                     {
-                        int zoom = (int)Math.Round(scale.Scale * 8);
+                        int zoom = (int)Math.Round(settings.Scale * 8);
                         if (zoom > 1)
-                            scale.Scale = (zoom - 1) / 8f;
+                            settings.Scale = (zoom - 1) / 8f;
                     });
 
                 Node(row)
@@ -42,9 +42,9 @@ public class AppSettingsMenu(RootUiScale scale, RootText text, AppStyle s)
                     .TextV("+")
                     .OnPressF(() =>
                     {
-                        int zoom = (int)Math.Round(scale.Scale * 8);
+                        int zoom = (int)Math.Round(settings.Scale * 8);
                         if (zoom < 32)
-                            scale.Scale = (zoom + 1) / 8f;
+                            settings.Scale = (zoom + 1) / 8f;
                     });
             }
 
