@@ -67,6 +67,7 @@ public class PlayerCommonState(
 
     public override void Unload()
     {
+        mouse.Track = false;
         NodesRemove(ui, hand);
         NodesRemove(ui, menus);
         NodesRemove(ui, overlay);

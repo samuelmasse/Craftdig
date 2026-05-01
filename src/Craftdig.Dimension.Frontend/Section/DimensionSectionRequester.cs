@@ -2,8 +2,8 @@ namespace Craftdig.Dimension.Frontend;
 
 [Dimension]
 public class DimensionSectionRequester(
+    AppRenderDistance renderDistance,
     DimensionSeerBag seerBag,
-    DimensionDrawDistance drawDistance,
     DimensionChunks chunks,
     DimensionSections sections,
     DimensionSectionLoader sectionLoader)
@@ -51,7 +51,7 @@ public class DimensionSectionRequester(
     {
         cloc = default;
 
-        for (int r = 0; r <= drawDistance.Far; r++)
+        for (int r = 0; r <= renderDistance.Far; r++)
         {
             for (int dx = -r; dx <= r; dx++)
             {

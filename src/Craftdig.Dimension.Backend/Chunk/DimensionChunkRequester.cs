@@ -2,7 +2,7 @@ namespace Craftdig.Dimension.Backend;
 
 [Dimension]
 public class DimensionChunkRequester(
-    DimensionDrawDistance drawDistance,
+    AppRenderDistance renderDistance,
     DimensionSeerBag seerBag,
     DimensionChunks chunks,
     DimensionChunkThreadWorkQueue chunkThreadWorkQueue,
@@ -49,7 +49,7 @@ public class DimensionChunkRequester(
     {
         cloc = default;
 
-        for (int r = 0; r <= drawDistance.Far; r++)
+        for (int r = 0; r <= renderDistance.Far; r++)
         {
             for (int dx = -r; dx <= r; dx++)
             {

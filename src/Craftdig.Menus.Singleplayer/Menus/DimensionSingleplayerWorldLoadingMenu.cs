@@ -3,6 +3,7 @@ namespace Craftdig.Menus.Singleplayer;
 [Dimension]
 public class DimensionSingleplayerWorldLoadingMenu(
     AppStyle s,
+    AppRenderDistance renderDistance,
     DimensionSingleplayerFindPlayerAction findPlayerAction,
     DimensionSingleplayerEnterWorldAction enterWorldAction,
     DimensionChunks chunks,
@@ -17,7 +18,7 @@ public class DimensionSingleplayerWorldLoadingMenu(
         var playerEnt = findPlayerAction.Run();
         playerEnt.IsSeer = true;
 
-        int radius = 10;
+        int radius = Math.Min(10, renderDistance.Far / 2);
         int gridSize = radius * 2 + 1;
         int totalChunks = gridSize * gridSize;
 

@@ -59,6 +59,13 @@ public class AppSettingsMenu(RootText text, AppSettings settings, AppStyle s)
                 .TextF(() => text.Format("Fullscreen: {0}", settings.Fullscreen ? "On" : "Off"));
 
             Node(list)
+                .Mutate(s.LabelDark)
+                .TextF(() => text.Format("Render Distance: {0}", settings.RenderDistance))
+                .AlignmentV(Alignment.Horizontal);
+
+            s.Slider(list, 8, 64, () => settings.RenderDistance, v => settings.RenderDistance = v);
+
+            Node(list)
                 .Mutate(s.Button)
                 .OnPressF(() => PopMenu(root))
                 .TextV("Back");

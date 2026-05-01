@@ -3,13 +3,13 @@ namespace Craftdig.Player.Frontend;
 [Player]
 public class PlayerRenderer(
     RootQuadIndexBuffer quadIndexBuffer,
+    AppRenderDistance renderDistance,
     ModuleFaceAtlas blockAtlas,
     WorldTick tick,
     DimensionSharedVertexBuffer svb,
     DimensionBlockProgram blockProgram,
     DimensionChunks chunks,
     DimensionSections sections,
-    DimensionDrawDistance drawDistance,
     DimensionSectionSharedVertexArray sectionSharedVertexArray,
     PlayerMetrics metrics,
     PlayerGlw gl,
@@ -58,15 +58,15 @@ public class PlayerRenderer(
         schunks.Clear();
         dists.Clear();
 
-        for (int dy = -drawDistance.Far; dy <= drawDistance.Far; dy++)
+        for (int dy = -renderDistance.Far; dy <= renderDistance.Far; dy++)
         {
-            for (int dx = -drawDistance.Far; dx <= drawDistance.Far; dx++)
+            for (int dx = -renderDistance.Far; dx <= renderDistance.Far; dx++)
             {
                 var ncloc = cloc + (dx, dy);
 
                 var delta = Vector2i.Abs(cloc - ncloc);
                 var dist = delta.X + delta.Y;
-                if (dist > drawDistance.Far)
+                if (dist > renderDistance.Far)
                     continue;
 
                 if (!chunks.TryGet(ncloc, out var chunk))

@@ -2,7 +2,7 @@ namespace Craftdig.Dimension;
 
 [Dimension]
 public class DimensionChunkCollector(
-    DimensionDrawDistance drawDistance,
+    AppRenderDistance renderDistance,
     DimensionChunkBag chunkBag,
     DimensionSeerBag seerBag,
     DimensionChunkUnloader chunkUnloader)
@@ -30,7 +30,7 @@ public class DimensionChunkCollector(
 
     private bool ShouldCollect(Ent chunk)
     {
-        var far = drawDistance.Far;
+        var far = renderDistance.Far;
 
         foreach (var seer in seerBag.Ents)
         {

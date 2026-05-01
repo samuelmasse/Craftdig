@@ -2,7 +2,7 @@ namespace Craftdig.Dimension.Server;
 
 [Dimension]
 public class DimensionChunkStreamerRequester(
-    DimensionDrawDistance drawDistance,
+    AppRenderDistance renderDistance,
     DimensionSockets sockets,
     DimensionChunks chunks,
     DimensionChunkStreamer chunkStreamer)
@@ -61,7 +61,7 @@ public class DimensionChunkStreamerRequester(
     {
         cloc = default;
 
-        for (int r = 0; r <= drawDistance.Far; r++)
+        for (int r = 0; r <= renderDistance.Far; r++)
         {
             for (int dx = -r; dx <= r; dx++)
             {

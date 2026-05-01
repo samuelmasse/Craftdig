@@ -9,7 +9,6 @@ public class AppMouseTrackMenu(RootMouse mouse)
             .OnUpdateF(() =>
             {
                 mouse.CursorState = mouse.Track ? CursorState.Grabbed : CursorState.Normal;
-                mouse.Track = false;
             });
     }
 }

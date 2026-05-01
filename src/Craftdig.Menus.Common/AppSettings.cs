@@ -5,16 +5,18 @@ public class AppSettings
 {
     private readonly RootUiScale scale;
     private readonly RootScreen screen;
+    private readonly AppRenderDistance renderDistance;
     private readonly AppPaths paths;
     private readonly JsonSerializerOptions options;
     private readonly string file;
 
     private SettingsData data;
 
-    public AppSettings(RootUiScale scale, RootScreen screen, AppPaths paths)
+    public AppSettings(RootUiScale scale, RootScreen screen, AppRenderDistance renderDistance, AppPaths paths)
     {
         this.scale = scale;
         this.screen = screen;
+        this.renderDistance = renderDistance;
         this.paths = paths;
 
         data = new();
@@ -52,6 +54,12 @@ public class AppSettings
         set => Apply(data with { Fullscreen = value });
     }
 
+    public int RenderDistance
+    {
+        get => data.RenderDistance ?? renderDistance.Far;
+        set => Apply(data with { RenderDistance = value });
+    }
+
     private void Apply(SettingsData value)
     {
         var old = data;
@@ -66,6 +74,9 @@ public class AppSettings
 
         if (Fullscreen != old.Fullscreen)
             screen.IsFullscreen = Fullscreen;
+
+        if (RenderDistance != old.RenderDistance)
+            renderDistance.Far = RenderDistance;
     }
 
     private void Save()
@@ -79,5 +90,6 @@ public class AppSettings
         public float? Scale { get; set; }
         public bool? Vsync { get; set; }
         public bool? Fullscreen { get; set; }
+        public int? RenderDistance { get; set; }
     }
 }
