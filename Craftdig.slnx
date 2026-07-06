@@ -45,7 +45,7 @@
     <Folder Name="/Scripts/">
         <Project Path="scripts/Craftdig.Dev.Server/Craftdig.Dev.Server.csproj"
             Id="33843de9-783f-44d5-a71d-0ea813d958d2" />
-        <Project Path="scripts/Craftdig.Dev/Craftdig.Dev.csproj" />
+        <Project Path="scripts/Craftdig.Dev/Craftdig.Dev.csproj" DefaultStartup="true" />
         <Project Path="scripts/Craftdig.Script.Package/Craftdig.Script.Package.csproj"
             Id="0dc9d1d4-deff-4f88-952d-1b80de3de613" />
     </Folder>
