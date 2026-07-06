@@ -1,12 +1,13 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <ItemGroup>
-        <Using Include="AlvorEngine" />
-        <Using Include="AlvorEngine.Loop" />
+        <Using Include="AlvorKit.Engine" />
+        <Using Include="AlvorKit.Engine.Loop" />
         <Using Include="BigGustave" />
-        <Using Include="GlwLayer" />
-        <Using Include="Glw2D" />
-        <Using Include="Glw2D.Fonts" />
+        <Using Include="AlvorKit.OpenGL" />
+        <Using Include="AlvorKit.OpenGL.Layer" />
+        <Using Include="AlvorKit.Graphics2D" />
+        <Using Include="AlvorKit.Graphics2D.Fonts" />
         <Using Include="Craftdig" />
         <Using Include="Craftdig.App" />
         <Using Include="Craftdig.App.Frontend" />
@@ -27,12 +28,9 @@
         <Using Include="Craftdig.World" />
         <Using Include="Craftdig.World.Backend" />
         <Using Include="Craftdig.World.Frontend" />
-        <Using Include="OpenTK.Windowing.Common" />
-        <Using Include="OpenTK.Windowing.Common.Input" />
-        <Using Include="OpenTK.Windowing.Desktop" />
-        <Using Include="OpenTK.Windowing.GraphicsLibraryFramework" />
-        <Using Include="TrogloUI" />
-        <Using Include="TrogloUI.UiSyntax">
+        <Using Include="AlvorKit.Windowing" />
+        <Using Include="AlvorKit.UI" />
+        <Using Include="AlvorKit.UI.UiSyntax">
             <Static>true</Static>
         </Using>
     </ItemGroup>

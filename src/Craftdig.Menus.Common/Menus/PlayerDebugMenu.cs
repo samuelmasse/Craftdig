@@ -2,7 +2,7 @@ namespace Craftdig.Menus.Common;
 
 [Player]
 public class PlayerDebugMenu(
-    RootGlw gl,
+    RootGl gl,
     RootText text,
     RootMetrics metrics,
     RootKeyboard keyboard,
@@ -17,7 +17,7 @@ public class PlayerDebugMenu(
 {
     public void Create(EntMut root)
     {
-        var gpu = gl.GetString(StringName.Renderer);
+        var gpu = gl.GetString(GlStringName.Renderer);
 
         List<Func<ReadOnlySpan<char>>> lines =
         [
@@ -31,7 +31,7 @@ public class PlayerDebugMenu(
             () => text.Format("Spike: {0}", metrics.Frame.Max),
             () => text.Format("Tick: {0}", playerMetrics.TickMetric.Value.Max),
             () => text.Format("Render: {0}", playerMetrics.RenderMetric.Value.Max),
-            () => text.Format("Buffers: {0}", gl.BufferTotalUsage),
+            () => text.Format("Buffers: {0}", gl.BufferUsage),
             () => text.Format("Selected Loc: {0}", selected[ent].GetValueOrDefault().Loc),
             () => text.Format("Selected Normal: {0}", selected[ent].GetValueOrDefault().Normal),
             () => text.Format("TPS: {0}", playerMetrics.TickMetricWindow.Value.Ticks),

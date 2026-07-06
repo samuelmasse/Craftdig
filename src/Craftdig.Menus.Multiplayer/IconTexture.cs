@@ -1,6 +1,6 @@
 namespace Craftdig.Menus.Multiplayer;
 
-public class IconTexture(GlwBin bin, Texture texture)
+public class IconTexture(GlBin bin, Texture texture)
 {
     public Texture Texture => texture;
 

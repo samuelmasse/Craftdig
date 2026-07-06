@@ -1,22 +1,19 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <ItemGroup>
-        <Using Include="AlvorEngine" />
+        <Using Include="AlvorKit.Engine" />
         <Using Include="Craftdig" />
         <Using Include="Craftdig.App" />
         <Using Include="Craftdig.App.Frontend" />
-        <Using Include="GlwLayer" />
-        <Using Include="Glw2D" />
-        <Using Include="Glw2D.Fonts" />
-        <Using Include="GlwLayer" />
-        <Using Include="OpenTK.Windowing.Common" />
-        <Using Include="OpenTK.Windowing.Common.Input" />
-        <Using Include="OpenTK.Windowing.Desktop" />
-        <Using Include="OpenTK.Windowing.GraphicsLibraryFramework" />
+        <Using Include="AlvorKit.OpenGL" />
+        <Using Include="AlvorKit.OpenGL.Layer" />
+        <Using Include="AlvorKit.Graphics2D" />
+        <Using Include="AlvorKit.Graphics2D.Fonts" />
+        <Using Include="AlvorKit.Windowing" />
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="AlvorEngine" Version="0.10.3" />
+        <ProjectReference Include="$(AlvorKitRoot)src\AlvorKit.Engine.Loop\AlvorKit.Engine.Loop.csproj" />
     </ItemGroup>
 
     <ItemGroup>

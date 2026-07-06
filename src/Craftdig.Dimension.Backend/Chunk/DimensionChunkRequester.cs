@@ -29,13 +29,13 @@ public class DimensionChunkRequester(
         }
     }
 
-    private Vector2i RandomSeerChunkLocation()
+    private Vec2i RandomSeerChunkLocation()
     {
         var seer = seerBag.Ents[rng.Next(seerBag.Ents.Length)];
-        return seer.Position.ToLoc().Xy.ToCloc();
+        return seer.Position.ToLoc().XY.ToCloc();
     }
 
-    private bool LoadNearestChunk(Vector2i cloc)
+    private bool LoadNearestChunk(Vec2i cloc)
     {
         if (!TryGetNearestUnloadedChunk(cloc, out var nearest))
             return false;
@@ -45,7 +45,7 @@ public class DimensionChunkRequester(
         return true;
     }
 
-    private bool TryGetNearestUnloadedChunk(Vector2i center, out Vector2i cloc)
+    private bool TryGetNearestUnloadedChunk(Vec2i center, out Vec2i cloc)
     {
         cloc = default;
 
@@ -67,7 +67,7 @@ public class DimensionChunkRequester(
                     return true;
                 }
 
-                bool Visit(Vector2i delta)
+                bool Visit(Vec2i delta)
                 {
                     return !chunks.TryGet(center + delta, out _) && !chunkPending.Contains(center + delta);
                 }

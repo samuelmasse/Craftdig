@@ -3,7 +3,7 @@ namespace Craftdig.Native;
 [Dimension]
 public class DimensionNativeBiomeGenerator(ModuleNative m) : IBiomeGenerator
 {
-    public void Generate(ChunkBlocks blocks, Vector2i cloc)
+    public void Generate(ChunkBlocks blocks, Vec2i cloc)
     {
         int maxZ = FindMaxZ(blocks);
         bool wasAir = true;
@@ -40,10 +40,10 @@ public class DimensionNativeBiomeGenerator(ModuleNative m) : IBiomeGenerator
         return 0;
     }
 
-    private void Generate(ChunkBlocks blocks, Vector3i loc)
+    private void Generate(ChunkBlocks blocks, Vec3i loc)
     {
         blocks[loc] = m.GrassBlock;
-        blocks[(loc - (0, 0, 1))] = m.DirtBlock;
-        blocks[(loc - (0, 0, 2))] = m.DirtBlock;
+        blocks[loc - (0, 0, 1)] = m.DirtBlock;
+        blocks[loc - (0, 0, 2)] = m.DirtBlock;
     }
 }

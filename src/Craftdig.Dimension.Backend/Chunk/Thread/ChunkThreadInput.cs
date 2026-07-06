@@ -1,3 +1,3 @@
 namespace Craftdig.Dimension.Backend;
 
-public record struct ChunkThreadInput(ChunkBlocks Blocks, Vector2i Cloc, bool Noop);
+public record struct ChunkThreadInput(ChunkBlocks Blocks, Vec2i Cloc, bool Noop);

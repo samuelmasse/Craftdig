@@ -31,7 +31,7 @@ public class PlayerMovement(
         if (controls.CameraJump.Run())
             movement.Jump = true;
 
-        Vector3d mov = default;
+        Vec3d mov = default;
         if (controls.CameraFront.Run())
         {
             if (controls.CameraFast.Run())
@@ -48,7 +48,7 @@ public class PlayerMovement(
         if (controls.CameraRight.Run())
             mov += camera.Right;
 
-        movement.Vector += (Vector3)mov.Swizzle();
+        movement.Vector += (Vec3)mov.Swizzle();
         movement.LookAt = camera.LookAt.Swizzle();
 
         ent.Movement = movement;

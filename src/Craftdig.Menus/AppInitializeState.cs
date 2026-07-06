@@ -21,8 +21,8 @@ public class AppInitializeState(
     {
         controlsToml.AddFromFile(files["Controls.toml"]);
         screen.Title = "Craftdig";
-        screen.Icon = loadIconAction.Run();
-        screen.Size = screen.MonitorSize / 4 * 3;
+        loadIconAction.Run();
+        screen.Size = screen.MonitorSize / 4u * 3u;
 
         scripts.Add(root.Get<RootUiScript>());
         Node(ui).Mutate(mouseTrackMenu.Create);

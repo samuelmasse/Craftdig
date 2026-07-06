@@ -5,7 +5,7 @@ public class DimensionChunkUnloader(
     DimensionChunks chunks,
     DimensionChunkUnloaderHandlers chunkUnloaderHandlers)
 {
-    public void Unload(Vector2i cloc)
+    public void Unload(Vec2i cloc)
     {
         if (!chunks.TryGet(cloc, out var chunk))
             return;

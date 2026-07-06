@@ -118,7 +118,8 @@ public class DimensionMovement(DimensionPlayerBag bag)
             speed = ent.IsFlying ? 0.1f : 0.13f;
 
         var vec = ent.Movement.Vector;
-        vec.NormalizeFast();
+        if (vec != default)
+            vec = vec.Normalized;
         ent.Velocity += vec * speed;
     }
 }

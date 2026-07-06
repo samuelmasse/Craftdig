@@ -6,11 +6,11 @@ public class WorldEntRegionStates(
     WorldEntRegionBuckets buckets,
     WorldEntRegionReader regionReader)
 {
-    private readonly Dictionary<Vector2i, EntRegionState> dict = [];
+    private readonly Dictionary<Vec2i, EntRegionState> dict = [];
 
-    public EntRegionState this[Vector2i rloc] => EnsureLoaded(rloc);
+    public EntRegionState this[Vec2i rloc] => EnsureLoaded(rloc);
 
-    public EntRegionState EnsureLoaded(Vector2i rloc)
+    public EntRegionState EnsureLoaded(Vec2i rloc)
     {
         if (!dict.TryGetValue(rloc, out var state))
         {
@@ -21,12 +21,12 @@ public class WorldEntRegionStates(
         return state;
     }
 
-    private EntRegionState New(Vector2i rloc)
+    private EntRegionState New(Vec2i rloc)
     {
         var state = new EntRegionState(Dir(rloc), rloc, buckets.Count);
         regionReader.ReadEntsFromRegion(state);
         return state;
     }
 
-    protected virtual string Dir(Vector2i rloc) => Path.Join(paths.Ents, "World");
+    protected virtual string Dir(Vec2i rloc) => Path.Join(paths.Ents, "World");
 }

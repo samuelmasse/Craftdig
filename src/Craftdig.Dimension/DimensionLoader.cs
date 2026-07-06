@@ -15,7 +15,7 @@ public class DimensionLoader(
         context.AddBagUnloaded(seerBag);
         context.AddBag(playerBag);
         context.AddBag(rigidBag);
-        context.AddPost<Vector3d, DimensionComponents.Position>(chunkRigids.Intercept);
+        context.AddPost<Vec3d, DimensionComponents.Position>(chunkRigids.Intercept);
         context.AddPost<bool, DimensionComponents.IsRigid>(chunkRigids.Intercept);
         chunkContext.AddBag(chunkBag);
     }

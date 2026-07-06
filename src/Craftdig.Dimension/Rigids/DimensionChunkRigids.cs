@@ -4,9 +4,9 @@ namespace Craftdig.Dimension;
 public class DimensionChunkRigids
 {
     private readonly HashSet<EntMutIdx> empty = [];
-    private readonly Dictionary<Vector2i, HashSet<EntMutIdx>> dict = [];
+    private readonly Dictionary<Vec2i, HashSet<EntMutIdx>> dict = [];
 
-    public HashSet<EntMutIdx> this[Vector2i index]
+    public HashSet<EntMutIdx> this[Vec2i index]
     {
         get
         {
@@ -18,7 +18,7 @@ public class DimensionChunkRigids
 
     public void Intercept(EntMutIdx ent)
     {
-        Vector2i? cloc = ent.IsRigid ? ent.Position.ToLoc().Xy.ToCloc() : null;
+        Vec2i? cloc = ent.IsRigid ? ent.Position.ToLoc().XY.ToCloc() : null;
         var prevCloc = ent.RigidCloc;
 
         if (prevCloc == cloc)

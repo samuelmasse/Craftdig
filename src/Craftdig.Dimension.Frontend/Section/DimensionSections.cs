@@ -5,9 +5,9 @@ public class DimensionSections(DimensionChunks chunks, DimensionChunkArena chunk
 {
     private readonly Queue<Memory<EntPtrIdx>> pool = [];
 
-    public bool TryGet(Vector3i sloc, out EntMutIdx ent)
+    public bool TryGet(Vec3i sloc, out EntMutIdx ent)
     {
-        if (!chunks.TryGet(sloc.Xy, out var chunk))
+        if (!chunks.TryGet(sloc.XY, out var chunk))
         {
             ent = default;
             return false;

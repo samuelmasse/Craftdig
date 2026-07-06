@@ -28,7 +28,7 @@ public partial class AppStyle
                     float t = Math.Clamp((get() - min) / (float)(max - min), 0, 1);
                     return (t * travel, 0);
                 })
-                .CursorF(() => puck.IsPressedR ? MouseCursor.ResizeEW : MouseCursor.PointingHand)
+                .CursorF(() => puck.IsPressedR ? CursorShape.ResizeHorizontal : CursorShape.Hand)
                 .OnPressF(() =>
                 {
                     pressMouseX = mouse.Position.X;

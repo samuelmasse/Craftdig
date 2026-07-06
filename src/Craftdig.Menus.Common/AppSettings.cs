@@ -44,7 +44,7 @@ public class AppSettings
 
     public bool Vsync
     {
-        get => data.Vsync ?? screen.IsVsyncOn;
+        get => data.Vsync ?? screen.IsVSyncEnabled;
         set => Apply(data with { Vsync = value });
     }
 
@@ -70,7 +70,7 @@ public class AppSettings
             scale.Scale = Scale;
 
         if (Vsync != old.Vsync)
-            screen.IsVsyncOn = Vsync;
+            screen.IsVSyncEnabled = Vsync;
 
         if (Fullscreen != old.Fullscreen)
             screen.IsFullscreen = Fullscreen;

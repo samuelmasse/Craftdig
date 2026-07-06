@@ -13,7 +13,7 @@ public class DimensionSingleplayerFindPlayerAction(
 
         if (existingPlayer != default)
         {
-            var rloc = existingPlayer.WorldPosition.ToLoc().Xy.ToCloc().ToRloc();
+            var rloc = existingPlayer.WorldPosition.ToLoc().XY.ToCloc().ToRloc();
             var dimensionEntRegion = dimensionEntRegionStates[rloc];
             return dimensionEntRegion.Ents.First(x => x.WorldPlayer == existingPlayer);
         }

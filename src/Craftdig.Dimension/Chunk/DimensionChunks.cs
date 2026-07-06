@@ -5,7 +5,7 @@ public class DimensionChunks(DimensionChunkArena chunkArena)
 {
     private readonly L3Map512<EntPtrIdx> map = new();
 
-    public EntMutIdx this[Vector2i cloc]
+    public EntMutIdx this[Vec2i cloc]
     {
         get
         {
@@ -16,16 +16,16 @@ public class DimensionChunks(DimensionChunkArena chunkArena)
         }
     }
 
-    public bool TryGet(Vector2i cloc, out EntMutIdx chunk)
+    public bool TryGet(Vec2i cloc, out EntMutIdx chunk)
     {
         bool res = map.TryGetValue(cloc, out var val);
         chunk = val;
         return res;
     }
 
-    public bool Contains(Vector2i cloc) => map.ContainsKey(cloc);
+    public bool Contains(Vec2i cloc) => map.ContainsKey(cloc);
 
-    public void Alloc(Vector2i cloc)
+    public void Alloc(Vec2i cloc)
     {
         if (Contains(cloc))
             return;
@@ -39,7 +39,7 @@ public class DimensionChunks(DimensionChunkArena chunkArena)
         map.Add(cloc, chunk);
     }
 
-    public void Free(Vector2i cloc)
+    public void Free(Vec2i cloc)
     {
         if (!Contains(cloc))
             return;

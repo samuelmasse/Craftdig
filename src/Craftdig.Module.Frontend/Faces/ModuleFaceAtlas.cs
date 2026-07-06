@@ -1,17 +1,17 @@
 namespace Craftdig.Module.Frontend;
 
 [Module]
-public class ModuleFaceAtlas(ModuleGlw gl, ModuleImages imgs)
+public class ModuleFaceAtlas(ModuleGl gl, ModuleImages imgs)
 {
-    private readonly Texture texture = new(gl, (0xF, 0xF), TextureTarget.Texture2DArray)
+    private readonly Texture texture = new(gl, (0xF, 0xF), GlTextureTarget.Texture2DArray)
     {
-        MagFilter = TextureMagFilter.Nearest,
-        MinFilter = TextureMinFilter.NearestMipmapLinear,
-        WrapS = TextureWrapMode.Repeat,
-        WrapT = TextureWrapMode.Repeat
+        MagFilter = GlTextureMagFilter.Nearest,
+        MinFilter = GlTextureMinFilter.NearestMipmapLinear,
+        WrapS = GlTextureWrapMode.Repeat,
+        WrapT = GlTextureWrapMode.Repeat
     };
     private readonly Dictionary<string, int> indices = [];
-    private readonly List<ImageData> images = [new((0xF, 0xF), new (byte, byte, byte, byte)[0xFF])];
+    private readonly List<ImageData> images = [new((0xF, 0xF), new Vec4u8[0xFF])];
     private int lastCount;
     private int textureDepth;
 
@@ -29,7 +29,7 @@ public class ModuleFaceAtlas(ModuleGlw gl, ModuleImages imgs)
         }
     }
 
-    public void Bind(TextureUnit unit)
+    public void Bind(GlTextureUnit unit)
     {
         if (lastCount != images.Count)
             BuildAtlas();
@@ -37,14 +37,14 @@ public class ModuleFaceAtlas(ModuleGlw gl, ModuleImages imgs)
         texture.Bind(unit);
     }
 
-    public void Unbind(TextureUnit unit) => texture.Unbind(unit);
+    public void Unbind(GlTextureUnit unit) => texture.Unbind(unit);
 
     private void BuildAtlas()
     {
         int start = lastCount;
         if (textureDepth <= images.Count)
         {
-            ResizeTexture(MathHelper.NextPowerOfTwo(images.Count + 1));
+            ResizeTexture((int)BitOperations.RoundUpToPowerOf2((uint)(images.Count + 1)));
             start = 0;
         }
 
@@ -59,14 +59,14 @@ public class ModuleFaceAtlas(ModuleGlw gl, ModuleImages imgs)
     private void WriteImage(int index)
     {
         var image = images[index];
-        var pixels = new (byte, byte, byte, byte)[image.Pixels.Length];
+        var pixels = new Vec4u8[image.Pixels.Length];
         image.Pixels.CopyTo(pixels);
 
         texture.Bind();
-        gl.ActiveTexture(TextureUnit.Texture0);
+        gl.ActiveTexture(GlTextureUnit.Texture0);
 
         gl.TexSubImage3D(
-            TextureTarget.Texture2DArray,
+            GlTextureTarget.Texture2DArray,
             0,
             0,
             0,
@@ -74,8 +74,8 @@ public class ModuleFaceAtlas(ModuleGlw gl, ModuleImages imgs)
             (int)texture.Size.X,
             (int)texture.Size.Y,
             1,
-            PixelFormat.Rgba,
-            PixelType.UnsignedByte,
+            GlPixelFormat.Rgba,
+            GlPixelType.UnsignedByte,
             pixels);
 
         gl.ResetActiveTexture();
@@ -85,17 +85,18 @@ public class ModuleFaceAtlas(ModuleGlw gl, ModuleImages imgs)
     private void ResizeTexture(int depth)
     {
         texture.Bind();
-        gl.ActiveTexture(TextureUnit.Texture0);
+        gl.ActiveTexture(GlTextureUnit.Texture0);
 
-        gl.TexImage3D(TextureTarget.Texture2DArray,
+        gl.TexImage3D(GlTextureTarget.Texture2DArray,
             0,
-            PixelInternalFormat.Rgba,
+            GlInternalFormat.Rgba,
             (int)texture.Size.X,
             (int)texture.Size.Y,
             depth,
             0,
-            PixelFormat.Rgba,
-            PixelType.UnsignedByte);
+            GlPixelFormat.Rgba,
+            GlPixelType.UnsignedByte,
+            0);
 
         gl.ResetActiveTexture();
         texture.Unbind();

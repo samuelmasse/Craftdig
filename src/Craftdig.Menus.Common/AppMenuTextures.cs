@@ -1,7 +1,7 @@
 namespace Craftdig.Menus.Common;
 
 [App]
-public class AppMenuTextures(RootPngs pngs, AppFiles files, AppGlw gl)
+public class AppMenuTextures(RootPngs pngs, AppFiles files, AppGl gl)
 {
     private readonly Dictionary<string, Texture2D> textures = [];
 
@@ -13,13 +13,13 @@ public class AppMenuTextures(RootPngs pngs, AppFiles files, AppGlw gl)
             {
                 var data = pngs[files[Path.Combine("Textures", file) + ".png"]];
 
-                value = new Texture2D(gl, data.Size)
+                value = new Texture2D(gl, (Vec2u)data.Size)
                 {
                     PixelsMipmap = data.Pixels.Span,
-                    MagFilter = TextureMagFilter.Nearest,
-                    MinFilter = TextureMinFilter.NearestMipmapLinear,
-                    WrapS = TextureWrapMode.Repeat,
-                    WrapT = TextureWrapMode.Repeat,
+                    MagFilter = GlTextureMagFilter.Nearest,
+                    MinFilter = GlTextureMinFilter.NearestMipmapLinear,
+                    WrapS = GlTextureWrapMode.Repeat,
+                    WrapT = GlTextureWrapMode.Repeat,
                 };
 
                 textures.Add(file, value);

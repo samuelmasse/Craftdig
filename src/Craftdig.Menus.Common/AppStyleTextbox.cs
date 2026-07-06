@@ -13,7 +13,7 @@ public partial class AppStyle
         .Mutate(Text)
         .Tag(nameof(Textbox))
         .ColorV((0, 0, 0, 1))
-        .CursorV(MouseCursor.IBeam)
+        .CursorV(CursorShape.Text)
         .TextAlignmentV(Alignment.Left | Alignment.Vertical)
         .TextPaddingV((ItemSpacingXS, ItemSpacingXS, ItemSpacingXS, ItemSpacingXS))
         .TextF(() => TextboxResolveDisplayText(ent))
@@ -55,7 +55,7 @@ public partial class AppStyle
         return TextboxSelectionStart(ent, sb) == TextboxSelectionEnd(ent, sb);
     }
 
-    private Vector2 TextboxSelectionOffset(EntMut ent)
+    private Vec2 TextboxSelectionOffset(EntMut ent)
     {
         var sb = ent.TextboxStringBuilderFV.Resolve();
         if (sb == null)
@@ -65,7 +65,7 @@ public partial class AppStyle
         return (startX, TextboxContentVerticalInset);
     }
 
-    private Vector2 TextboxSelectionSize(EntMut ent)
+    private Vec2 TextboxSelectionSize(EntMut ent)
     {
         var sb = ent.TextboxStringBuilderFV.Resolve();
         if (sb == null)
@@ -104,7 +104,7 @@ public partial class AppStyle
         return ent.TextboxCaretIndexR >= sb.Length;
     }
 
-    private Vector2 TextboxCaretBarOffset(EntMut ent)
+    private Vec2 TextboxCaretBarOffset(EntMut ent)
     {
         var sb = ent.TextboxStringBuilderFV.Resolve();
         if (sb == null)
@@ -350,9 +350,9 @@ public partial class AppStyle
         if (TextboxHasSelection(ent))
             TextboxDeleteSelection(ent, sb);
 
-        sb.Insert(ent.TextboxCaretIndexR, keyboard.Clipboard);
+        sb.Insert(ent.TextboxCaretIndexR, input.Clipboard);
 
-        ent.TextboxCaretIndexR += keyboard.Clipboard.Length;
+        ent.TextboxCaretIndexR += input.Clipboard.Length;
         ent.TextboxSelectionAnchorR = ent.TextboxCaretIndexR;
 
         return true;

@@ -42,8 +42,8 @@ public class DimensionRigids(DimensionBlocks blocks, DimensionRigidBag rigidBag)
             velocity -= (0, 0, 0.08);
         }
 
-        if (velocity.Xy.Length < 0.0001)
-            velocity.Xy = default;
+        if (velocity.XY.Length < 0.0001)
+            velocity.XY = default;
         if (Math.Abs(velocity.Z) < 0.0001)
             velocity.Z = 0;
 
@@ -53,7 +53,7 @@ public class DimensionRigids(DimensionBlocks blocks, DimensionRigidBag rigidBag)
         ent.CollisionNormal = collisionNormal;
     }
 
-    private void Collide(ref Vector3d position, ref Vector3d velocity, ref Box3d hitBox, ref Vector3i collisionNormal)
+    private void Collide(ref Vec3d position, ref Vec3d velocity, ref Box3d hitBox, ref Vec3i collisionNormal)
     {
         var size = hitBox.Max - hitBox.Min;
 
@@ -68,7 +68,7 @@ public class DimensionRigids(DimensionBlocks blocks, DimensionRigidBag rigidBag)
             CollideAxis(ref position, ref velocity, ref hitBox, ref collisionNormal);
     }
 
-    private bool TryCollideBottom(ref Vector3d position, ref Vector3d velocity, Box3d hitBox, ref Vector3i collisionNormal)
+    private bool TryCollideBottom(ref Vec3d position, ref Vec3d velocity, Box3d hitBox, ref Vec3i collisionNormal)
     {
         var box = new Box3d(hitBox.Min + position, hitBox.Max + position);
         var tbox = new Box3d(box.Min + velocity, box.Max + velocity);
@@ -91,18 +91,18 @@ public class DimensionRigids(DimensionBlocks blocks, DimensionRigidBag rigidBag)
         return false;
     }
 
-    private bool IsSolidCorner(Vector3d pos) => blocks.TryGet(pos.ToLoc(), out var block) && block.IsSolid;
+    private bool IsSolidCorner(Vec3d pos) => blocks.TryGet(pos.ToLoc(), out var block) && block.IsSolid;
 
-    private void CollideAxis(ref Vector3d position, ref Vector3d velocity, ref Box3d hitBox, ref Vector3i collisionNormal)
+    private void CollideAxis(ref Vec3d position, ref Vec3d velocity, ref Box3d hitBox, ref Vec3i collisionNormal)
     {
         var box = new Box3d(hitBox.Min + position, hitBox.Max + position);
         var tbox = new Box3d(box.Min + velocity, box.Max + velocity);
 
-        var smin = Vector3d.ComponentMin(box.Min, tbox.Min).ToLoc() - Vector3i.One;
-        var smax = Vector3d.ComponentMax(box.Max, tbox.Max).ToLoc() + Vector3i.One;
+        var smin = Vec3d.Min(box.Min, tbox.Min).ToLoc() - Vec3i.One;
+        var smax = Vec3d.Max(box.Max, tbox.Max).ToLoc() + Vec3i.One;
 
         double tmin = double.PositiveInfinity;
-        Vector3i nmin = default;
+        Vec3i nmin = default;
 
         for (int z = smin.Z; z <= smax.Z; z++)
         {
@@ -110,12 +110,12 @@ public class DimensionRigids(DimensionBlocks blocks, DimensionRigidBag rigidBag)
             {
                 for (int y = smin.Y; y <= smax.Y; y++)
                 {
-                    var loc = new Vector3i(x, y, z);
+                    var loc = new Vec3i(x, y, z);
 
                     if (!blocks.TryGet(loc, out var block) || !block.IsSolid)
                         continue;
 
-                    var bbox = new Box3d(loc, loc + Vector3i.One);
+                    var bbox = new Box3d(loc, loc + Vec3i.One);
                     if (!Collide(box, velocity, bbox, out var t, out var n) || t >= tmin)
                         continue;
 
@@ -129,12 +129,12 @@ public class DimensionRigids(DimensionBlocks blocks, DimensionRigidBag rigidBag)
             return;
 
         tmin -= 0.001;
-        position += velocity * tmin * Vector3i.Abs(nmin);
-        velocity *= Vector3i.One - Vector3i.Abs(nmin);
-        collisionNormal = Vector3i.Clamp(collisionNormal + nmin, -Vector3i.One, Vector3i.One);
+        position += velocity * tmin * Vec3i.Abs(nmin);
+        velocity *= Vec3i.One - Vec3i.Abs(nmin);
+        collisionNormal = Vec3i.Clamp(collisionNormal + nmin, -Vec3i.One, Vec3i.One);
     }
 
-    private static bool Collide(Box3d moving, Vector3d vel, Box3d solid, out double time, out Vector3i normal)
+    private static bool Collide(Box3d moving, Vec3d vel, Box3d solid, out double time, out Vec3i normal)
     {
         time = 1.0;
         normal = default;

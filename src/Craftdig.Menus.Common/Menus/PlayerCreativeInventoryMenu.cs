@@ -39,7 +39,7 @@ public class PlayerCreativeInventoryMenu(ModuleEnts ents, AppStyle s, PlayerEnt 
 
             for (int x = 0; x < Slots.HotBarCount; x++)
             {
-                Vector2i loc = (x, y);
+                Vec2i loc = (x, y);
 
                 Node(blocksHor, out var square)
                     .Mutate(s.Button)

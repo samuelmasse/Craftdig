@@ -6,12 +6,12 @@ public class DimensionRegionThreadStates(
     DimensionRegionThreadBuckets buckets,
     DimensionRegionThreadFileHandles fileHandles)
 {
-    private readonly Dictionary<Vector2i, RegionState> dict = [];
-    private readonly Dictionary<Vector2i, DateTime> access = [];
-    private readonly List<Vector2i> remove = [];
+    private readonly Dictionary<Vec2i, RegionState> dict = [];
+    private readonly Dictionary<Vec2i, DateTime> access = [];
+    private readonly List<Vec2i> remove = [];
     private readonly List<string> flush = [];
 
-    public RegionState this[Vector2i rloc]
+    public RegionState this[Vec2i rloc]
     {
         get
         {
@@ -60,7 +60,7 @@ public class DimensionRegionThreadStates(
         flush.Clear();
     }
 
-    private RegionState New(Vector2i rloc)
+    private RegionState New(Vec2i rloc)
     {
         var state = new RegionState(paths.Regions, rloc, buckets.Count);
         var handle = fileHandles[state.Files.Index];

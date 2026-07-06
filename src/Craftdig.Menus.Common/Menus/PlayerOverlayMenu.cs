@@ -26,7 +26,7 @@ public class PlayerOverlayMenu(AppStyle s, PlayerEnt ent)
             .SizeRelativeV((0, 0))
             .OffsetF(() => bar.OffsetR + (ent.HotBarIndex * s.SlotSize, 0));
         {
-            var color = new Vector4(0.35f, 0.35f, 0.35f, 1);
+            var color = new Vec4(0.35f, 0.35f, 0.35f, 1);
 
             Node(puck, out var puckTop)
                 .SizeRelativeV(s.Horizontal)
@@ -53,7 +53,7 @@ public class PlayerOverlayMenu(AppStyle s, PlayerEnt ent)
 
         var sw = Stopwatch.StartNew();
         Ent lastSelected = default;
-        Vector4 Multiplier() => (1, 1, 1, Math.Clamp(3 - (float)sw.Elapsed.TotalSeconds * 4, 0, 1));
+        Vec4 Multiplier() => (1, 1, 1, Math.Clamp(3 - (float)sw.Elapsed.TotalSeconds * 4, 0, 1));
 
         Node(root, out var itemTooltip)
             .Mutate(s.Label)

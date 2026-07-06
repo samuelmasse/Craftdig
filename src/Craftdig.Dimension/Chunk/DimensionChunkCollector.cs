@@ -34,9 +34,9 @@ public class DimensionChunkCollector(
 
         foreach (var seer in seerBag.Ents)
         {
-            var pcloc = seer.Position.ToLoc().Xy.ToCloc();
+            var pcloc = seer.Position.ToLoc().XY.ToCloc();
 
-            var delta = Vector2i.Abs(chunk.Cloc - pcloc);
+            var delta = Vec2i.Abs(chunk.Cloc - pcloc);
             var dist = delta.X + delta.Y;
             if (dist < far + 5)
                 return false;

@@ -83,7 +83,7 @@ public class PlayerSurvivalInventoryMenu(AppStyle s, PlayerEnt player)
 
                         for (int x = 0; x < 2; x++)
                         {
-                            Vector2i loc = (x, y);
+                            Vec2i loc = (x, y);
                             ItemSlot val = default;
 
                             Node(craftingGridHor, out var square)
@@ -137,7 +137,7 @@ public class PlayerSurvivalInventoryMenu(AppStyle s, PlayerEnt player)
 
             for (int x = 0; x < Slots.HotBarCount; x++)
             {
-                Vector2i loc = (x, y);
+                Vec2i loc = (x, y);
 
                 Node(inventoryHor, out var square)
                     .Mutate(s.Button)

@@ -12,9 +12,9 @@ public class DimensionRegionWriter(
     private readonly byte[] zeroes = new byte[SectionVolume * RegionBlockEntry.Size];
     private int bytes;
 
-    public void Write(ChunkBlocks blocks, int sz, Vector3i sloc)
+    public void Write(ChunkBlocks blocks, int sz, Vec3i sloc)
     {
-        var state = regionStates[sloc.Xy.ToRloc()];
+        var state = regionStates[sloc.XY.ToRloc()];
         var offset = sloc - state.Origin;
         ref var alloc = ref state.Index[offset];
 

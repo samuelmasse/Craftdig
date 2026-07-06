@@ -6,7 +6,7 @@ public class PlayerTeleporter(
     PlayerEnt player)
 {
     private readonly Random rng = new();
-    private readonly List<Vector3d> history = [];
+    private readonly List<Vec3d> history = [];
     private int index;
 
     public void Update()

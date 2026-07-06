@@ -1,7 +1,7 @@
 namespace Craftdig.Menus.Common;
 
 [App]
-public partial class AppStyle(RootText text, RootUiMouse mouse, RootKeyboard keyboard, RootSprites sprites, RootUiScale scale, AppMenuTextures menuTextures, AppMonocraft monocraft)
+public partial class AppStyle(RootText text, RootUiMouse mouse, RootKeyboard keyboard, RootInput input, RootUiScale scale, AppMenuTextures menuTextures, AppMonocraft monocraft)
 {
     public readonly Texture ArrowTexture = menuTextures["MenuArrow"];
     public readonly Texture SlotTexture = menuTextures["MenuSlot"];
@@ -24,22 +24,22 @@ public partial class AppStyle(RootText text, RootUiMouse mouse, RootKeyboard key
     public float SlotSize => 72;
     public float ScrollStep => 65;
 
-    public Vector2 Horizontal => (1, 0);
-    public Vector2 Vertical => (0, 1);
+    public Vec2 Horizontal => (1, 0);
+    public Vec2 Vertical => (0, 1);
 
-    public Vector4 BoardColor => (0.77f, 0.77f, 0.77f, 1);
+    public Vec4 BoardColor => (0.77f, 0.77f, 0.77f, 1);
 
-    public Vector4 TextColor => (1, 1, 1, 1);
-    public Vector4 TextColorDark => (0.25f, 0.25f, 0.25f, 1);
-    public Vector4 TextShadowColor => (0, 0, 0, 0.5f);
-    public Vector4 TextColorFaint => (0.5f, 0.5f, 0.5f, 1);
-    public Vector4 SlotColor => (0.55f, 0.55f, 0.55f, 1);
-    public Vector4 ButtonColor => (1, 1, 1, 1);
-    public Vector4 ButtonColorDisabled => (0.4f, 0.4f, 0.4f, 1);
-    public Vector4 ButtonColorHovered => (1, 0.7f, 1, 1);
-    public Vector4 TooltipColor => (0.5f, 0.28f, 1, 1);
+    public Vec4 TextColor => (1, 1, 1, 1);
+    public Vec4 TextColorDark => (0.25f, 0.25f, 0.25f, 1);
+    public Vec4 TextShadowColor => (0, 0, 0, 0.5f);
+    public Vec4 TextColorFaint => (0.5f, 0.5f, 0.5f, 1);
+    public Vec4 SlotColor => (0.55f, 0.55f, 0.55f, 1);
+    public Vec4 ButtonColor => (1, 1, 1, 1);
+    public Vec4 ButtonColorDisabled => (0.4f, 0.4f, 0.4f, 1);
+    public Vec4 ButtonColorHovered => (1, 0.7f, 1, 1);
+    public Vec4 TooltipColor => (0.5f, 0.28f, 1, 1);
 
-    public Vector2 TextureScale => (0.25f, 0.25f);
+    public Vec2 TextureScale => (0.25f, 0.25f);
 
     public Font Font => monocraft.Font;
 
@@ -67,7 +67,7 @@ public partial class AppStyle(RootText text, RootUiMouse mouse, RootKeyboard key
         .TextShadowOffsetV(default)
         .TextColorV(TextColorDark);
 
-    public void InputItem(EntMut ent, Func<Vector4> colorF) => ent.Mutate()
+    public void InputItem(EntMut ent, Func<Vec4> colorF) => ent.Mutate()
         .SizeV((0, ItemHeight))
         .SizeRelativeV((1, 0))
         .IsSelectableV(true)
@@ -99,7 +99,7 @@ public partial class AppStyle(RootText text, RootUiMouse mouse, RootKeyboard key
                 .SizeRelativeV((1, 0));
         });
 
-    public Vector4 ButtonBorderColor(EntMut ent)
+    public Vec4 ButtonBorderColor(EntMut ent)
     {
         if (ent.IsInputDisabledFV.Resolve())
             return (0.2f, 0.2f, 0.2f, 1f);
@@ -110,7 +110,7 @@ public partial class AppStyle(RootText text, RootUiMouse mouse, RootKeyboard key
         return (0, 0, 0, 1);
     }
 
-    public Vector4 TextBoxBorderColor(EntMut ent)
+    public Vec4 TextBoxBorderColor(EntMut ent)
     {
         if ((ent.IsFocusedR || ent.IsHoveredR))
             return (1, 1, 1, 1);
@@ -202,14 +202,14 @@ public partial class AppStyle(RootText text, RootUiMouse mouse, RootKeyboard key
             .RenderDelayV(1)
             .IsDisabledF(() => parent.SizeR.Y / select.SizeInnerSumR.Y >= 1);
         {
-            Vector2 pressPoint = default;
+            Vec2 pressPoint = default;
             float pressScroll = default;
 
             Node(scrollBar, out var scrollPuck)
                 .IsSelectableV(true)
                 .IsSilentFocusableV(true)
                 .DeferFocusV(select)
-                .CursorF(() => scrollPuck.IsPressedR ? MouseCursor.ResizeNS : MouseCursor.PointingHand)
+                .CursorF(() => scrollPuck.IsPressedR ? CursorShape.ResizeVertical : CursorShape.Hand)
                 .ColorV((1, 1, 1, 0.5f))
                 .OffsetF(() => (0, scroll / select.SizeInnerSumR.Y) * scrollBar.SizeR)
                 .SizeRelativeF(() => (1, Math.Min(1, parent.SizeR.Y / select.SizeInnerSumR.Y)))
@@ -313,7 +313,7 @@ public partial class AppStyle(RootText text, RootUiMouse mouse, RootKeyboard key
         .InnerSizingV(InnerSizing.HorizontalWeight);
 
     public void PointingCursor(EntMut ent) => ent.Mutate()
-        .CursorF(() => ent.IsInputDisabledFV.Resolve() ? MouseCursor.Default : MouseCursor.PointingHand);
+        .CursorF(() => ent.IsInputDisabledFV.Resolve() ? CursorShape.Default : CursorShape.Hand);
 
     public void VerticalList(EntMut ent) => ent.Mutate()
         .Tag(nameof(VerticalList))

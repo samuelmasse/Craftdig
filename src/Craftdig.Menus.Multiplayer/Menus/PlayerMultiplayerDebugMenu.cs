@@ -53,7 +53,7 @@ public class PlayerMultiplayerDebugMenu(
                     double min = double.MaxValue;
                     foreach (var r in playerPosition.Received)
                     {
-                        var dist = Vector3d.Distance(r.Position, cmd.Position);
+                        var dist = Vec3d.Distance(r.Position, cmd.Position);
                         if (dist < min)
                             min = dist;
                     }

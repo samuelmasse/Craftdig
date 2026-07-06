@@ -12,7 +12,7 @@ public class DimensionNativeTerrainGenerator(ModuleNative m, DimensionNativeNois
     private static readonly int StoneMaxZ = (int)MathF.Floor(BiasCenterZ + BiasScale * NoiseMin);
     private static readonly int AirMinZ = (int)MathF.Ceiling(BiasCenterZ + BiasScale * NoiseMax);
 
-    public void Generate(ChunkBlocks blocks, Vector2i cloc)
+    public void Generate(ChunkBlocks blocks, Vec2i cloc)
     {
         var loc = cloc * SectionSize;
 
@@ -35,7 +35,7 @@ public class DimensionNativeTerrainGenerator(ModuleNative m, DimensionNativeNois
         }
     }
 
-    private Ent Generate(Vector3i loc)
+    private Ent Generate(Vec3i loc)
     {
         if (loc.X == 0 && loc.Y == 0)
             return m.StoneBlock;

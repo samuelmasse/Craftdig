@@ -3,7 +3,7 @@ namespace Craftdig.Dimension.Frontend;
 [Dimension]
 public class DimensionChunkRenderDescheduler(DimensionChunks chunks)
 {
-    public void Remove(Vector2i cloc)
+    public void Remove(Vec2i cloc)
     {
         Process(cloc);
         Process(cloc + (1, 0));
@@ -16,7 +16,7 @@ public class DimensionChunkRenderDescheduler(DimensionChunks chunks)
         Process(cloc + (1, -1));
     }
 
-    private void Process(Vector2i cloc)
+    private void Process(Vec2i cloc)
     {
         if (!chunks.TryGet(cloc, out var chunk))
             return;

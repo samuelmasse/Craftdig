@@ -8,7 +8,7 @@ public class DimensionChunkStreamer(
     private readonly ChunkUpdateBlockEntry[] buffer = new ChunkUpdateBlockEntry[ChunkVolume];
     private readonly byte[] data = new byte[ChunkVolume * Marshal.SizeOf<ChunkUpdateBlockEntry>()];
 
-    public void Stream(NetSocket ns, Vector2i cloc)
+    public void Stream(NetSocket ns, Vec2i cloc)
     {
         if (!blocksRaw.TryGetChunkBlocks(cloc, out var blocks))
             return;

@@ -27,7 +27,7 @@ public class WorldEntRegionWriter(
         RemoveFromRegion(ent);
     }
 
-    private void AddToRegion(EntMutIdx ent, Vector2i rloc)
+    private void AddToRegion(EntMutIdx ent, Vec2i rloc)
     {
         var region = entRegionStates[rloc];
         int size = Unsafe.SizeOf<Guid>();
@@ -82,7 +82,7 @@ public class WorldEntRegionWriter(
         ent.Ploc = new(rloc, (byte)bucket, offset, size);
     }
 
-    private void UpdateInRegion(EntMutIdx ent, Vector2i rloc, EntPloc ploc)
+    private void UpdateInRegion(EntMutIdx ent, Vec2i rloc, EntPloc ploc)
     {
         var dirty = ent.DirtyComponents;
         if (dirty == null)
@@ -92,7 +92,7 @@ public class WorldEntRegionWriter(
             MoveToRegion(ent, rloc);
     }
 
-    private bool TryUpdateComponentsInPlace(EntMutIdx ent, Vector2i rloc, EntPloc ploc, ulong[] dirty)
+    private bool TryUpdateComponentsInPlace(EntMutIdx ent, Vec2i rloc, EntPloc ploc, ulong[] dirty)
     {
         for (int i = 0; i < dirty.Length; i++)
         {
@@ -113,7 +113,7 @@ public class WorldEntRegionWriter(
         return true;
     }
 
-    private bool TryUpdateComponentInPlace(EntMutIdx ent, Vector2i rloc, EntPloc ploc, int index)
+    private bool TryUpdateComponentInPlace(EntMutIdx ent, Vec2i rloc, EntPloc ploc, int index)
     {
         var region = entRegionStates[rloc];
         var handle = entRegionFileHandles[region.Files.Buckets[ploc.Bucket]];
@@ -180,11 +180,11 @@ public class WorldEntRegionWriter(
         ent.Ploc = null;
     }
 
-    private void MoveToRegion(EntMutIdx ent, Vector2i next)
+    private void MoveToRegion(EntMutIdx ent, Vec2i next)
     {
         RemoveFromRegion(ent);
         AddToRegion(ent, next);
     }
 
-    protected virtual Vector2i Rloc(EntMutIdx ent) => default;
+    protected virtual Vec2i Rloc(EntMutIdx ent) => default;
 }

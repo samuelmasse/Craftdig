@@ -59,6 +59,4 @@
         <Project Path="src/Craftdig.World.Server/Craftdig.World.Server.csproj"
             Id="02209b5e-aa61-496f-a283-70c390a40707" />
     </Folder>
-    <Project Path="src/TrogloUI/TrogloUI.csproj" />
-    <Project Path="src/TrogloUI.Generator/TrogloUI.Generator.csproj" />
 </Solution>

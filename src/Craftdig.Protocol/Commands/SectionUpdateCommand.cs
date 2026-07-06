@@ -5,5 +5,5 @@ public struct SectionUpdateCommand : ICommand
 {
     public static ushort CommandId => (ushort)Commands.SectionUpdate;
 
-    public Vector3i Sloc;
+    public Vec3i Sloc;
 }

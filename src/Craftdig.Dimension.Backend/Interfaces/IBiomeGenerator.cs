@@ -2,5 +2,5 @@ namespace Craftdig.Dimension.Backend;
 
 public interface IBiomeGenerator
 {
-    void Generate(ChunkBlocks blocks, Vector2i cloc);
+    void Generate(ChunkBlocks blocks, Vec2i cloc);
 }

@@ -9,7 +9,7 @@ public class RegionFiles
     public string Index => index;
     public ReadOnlySpan<string> Buckets => buckets;
 
-    public RegionFiles(string dir, Vector2i rloc)
+    public RegionFiles(string dir, Vec2i rloc)
     {
         root = Path.Join(dir, $"{rloc.X},{rloc.Y}");
         index = Path.Join(root, "Index.crhi");

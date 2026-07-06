@@ -6,8 +6,8 @@ public class DimensionRegionInvalidation(
     DimensionBlocksRaw blocksRaw,
     DimensionRegionThreadWorkQueue regionThreadWorkQueue)
 {
-    private readonly Dictionary<Vector3i, DateTime> dirty = [];
-    private readonly HashSet<Vector3i> scheduled = [];
+    private readonly Dictionary<Vec3i, DateTime> dirty = [];
+    private readonly HashSet<Vec3i> scheduled = [];
 
     public void Frame()
     {
@@ -42,15 +42,15 @@ public class DimensionRegionInvalidation(
         dirty.Clear();
     }
 
-    public void Drain(Vector3i sloc)
+    public void Drain(Vec3i sloc)
     {
         if (dirty.Remove(sloc))
             Write(sloc);
     }
 
-    private void Write(Vector3i sloc)
+    private void Write(Vec3i sloc)
     {
-        if (!blocksRaw.TryGetChunkBlocks(sloc.Xy, out var blocks))
+        if (!blocksRaw.TryGetChunkBlocks(sloc.XY, out var blocks))
             return;
 
         regionThreadWorkQueue.Enqeue(new(sloc, RegionThreadInputType.WriteSection, blocks, sloc.Z));

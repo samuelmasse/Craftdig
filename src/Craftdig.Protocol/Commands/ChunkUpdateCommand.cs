@@ -5,5 +5,5 @@ public struct ChunkUpdateCommand : ICommand
 {
     public static ushort CommandId => (ushort)Commands.ChunkUpdate;
 
-    public Vector2i Cloc;
+    public Vec2i Cloc;
 }

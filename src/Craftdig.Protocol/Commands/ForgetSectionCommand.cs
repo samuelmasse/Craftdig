@@ -5,5 +5,5 @@ public struct ForgetSectionCommand : ICommand
 {
     public static ushort CommandId => (ushort)Commands.ForgetSection;
 
-    public Vector3i Sloc;
+    public Vec3i Sloc;
 }

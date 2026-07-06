@@ -22,7 +22,7 @@ public class DimensionSingleplayerWorldLoadingMenu(
         int gridSize = radius * 2 + 1;
         int totalChunks = gridSize * gridSize;
 
-        var centerCloc = playerEnt.Position.ToLoc().Xy.ToCloc();
+        var centerCloc = playerEnt.Position.ToLoc().XY.ToCloc();
         float progress = 0f;
 
         Node(root, out var form)

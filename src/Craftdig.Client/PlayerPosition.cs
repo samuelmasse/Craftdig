@@ -87,7 +87,7 @@ public class PlayerPosition(
         {
             foreach (var ex in expected)
             {
-                var dist = Vector3d.Distance(command.Position, ex.Position);
+                var dist = Vec3d.Distance(command.Position, ex.Position);
                 if (dist < min)
                     min = dist;
                 if (dist > max)

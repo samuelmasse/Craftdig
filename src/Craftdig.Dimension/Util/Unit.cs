@@ -20,31 +20,31 @@ public static class Unit
     public const int RegionVolume = RegionSize * RegionSize * SectionHeight;
 
     [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
-    public static Vector3d Swizzle(this Vector3d pos) => (pos.X, pos.Z, pos.Y);
+    public static Vec3d Swizzle(this Vec3d pos) => (pos.X, pos.Z, pos.Y);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
-    public static Vector3 Swizzle(this Vector3 pos) => (pos.X, pos.Z, pos.Y);
+    public static Vec3 Swizzle(this Vec3 pos) => (pos.X, pos.Z, pos.Y);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
-    public static Vector3i Swizzle(this Vector3i loc) => (loc.X, loc.Z, loc.Y);
+    public static Vec3i Swizzle(this Vec3i loc) => (loc.X, loc.Z, loc.Y);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
-    public static Vector3i ToLoc(this Vector3d pos) =>
+    public static Vec3i ToLoc(this Vec3d pos) =>
         ((int)Math.Floor(pos.X), (int)Math.Floor(pos.Y), (int)Math.Floor(pos.Z));
 
     [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
-    public static Vector2i ToCloc(this Vector2i loc) =>
+    public static Vec2i ToCloc(this Vec2i loc) =>
         (loc.X >> SectionBits, loc.Y >> SectionBits);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
-    public static Vector3i ToSloc(this Vector3i loc) =>
+    public static Vec3i ToSloc(this Vec3i loc) =>
         (loc.X >> SectionBits, loc.Y >> SectionBits, loc.Z >> SectionBits);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
-    public static Vector2i ToRloc(this Vector2i cloc) =>
+    public static Vec2i ToRloc(this Vec2i cloc) =>
         (cloc.X >> RegionBits, cloc.Y >> RegionBits);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
-    public static int ToInnerIndex(this Vector3i loc) =>
+    public static int ToInnerIndex(this Vec3i loc) =>
         (loc.Z << (SectionBits * 2)) + ((loc.Y & SectionMask) << SectionBits) + (loc.X & SectionMask);
 }

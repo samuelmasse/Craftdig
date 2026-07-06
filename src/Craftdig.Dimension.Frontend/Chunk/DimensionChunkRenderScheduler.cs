@@ -3,7 +3,7 @@ namespace Craftdig.Dimension.Frontend;
 [Dimension]
 public class DimensionChunkRenderScheduler(DimensionChunks chunks, DimensionBlocksRaw blocksRaw)
 {
-    public void Add(Vector2i cloc)
+    public void Add(Vec2i cloc)
     {
         Process(cloc);
         Process(cloc + (1, 0));
@@ -16,7 +16,7 @@ public class DimensionChunkRenderScheduler(DimensionChunks chunks, DimensionBloc
         Process(cloc + (1, -1));
     }
 
-    private void Process(Vector2i cloc)
+    private void Process(Vec2i cloc)
     {
         if (IsNull(cloc + (1, 0)) ||
             IsNull(cloc + (0, 1)) ||
@@ -48,5 +48,5 @@ public class DimensionChunkRenderScheduler(DimensionChunks chunks, DimensionBloc
         chunk.IsReadyToRender = true;
     }
 
-    private bool IsNull(Vector2i cloc) => !chunks.TryGet(cloc, out _);
+    private bool IsNull(Vec2i cloc) => !chunks.TryGet(cloc, out _);
 }

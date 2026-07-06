@@ -5,14 +5,14 @@ public interface IDimensionComponents
 {
     // Rigid
     [Saved][ComponentToString] bool IsRigid { get; set; }
-    [Saved] Vector3d Position { get; set; }
-    [Saved] Vector3d Velocity { get; set; }
+    [Saved] Vec3d Position { get; set; }
+    [Saved] Vec3d Velocity { get; set; }
     [Saved] Box3d HitBox { get; set; }
 
     // Player
     [Saved][ComponentToString] bool IsPlayer { get; set; }
     [Saved] EntMutIdx WorldPlayer { get; set; }
-    [Saved] Vector3 LookAt { get; set; }
+    [Saved] Vec3 LookAt { get; set; }
     [Saved] Ent[]? ArmorSlotEnts { get; set; }
     [Saved] int[]? ArmorSlotCounts { get; set; }
     [Saved] Ent[]? InventorySlotEnts { get; set; }
@@ -33,13 +33,13 @@ public interface IDimensionComponents
 
     // Chunk
     [ComponentToString] bool IsChunk { get; set; }
-    [ComponentToString] Vector2i Cloc { get; set; }
+    [ComponentToString] Vec2i Cloc { get; set; }
     ChunkBlocks? ChunkBlocks { get; set; }
 
     // Rigid
-    Vector3d PrevPosition { get; set; }
-    Vector3i CollisionNormal { get; set; }
-    Vector2i? RigidCloc { get; set; }
+    Vec3d PrevPosition { get; set; }
+    Vec3i CollisionNormal { get; set; }
+    Vec2i? RigidCloc { get; set; }
 
     // Playera action state
     MovementStep Movement { get; set; }
@@ -48,7 +48,7 @@ public interface IDimensionComponents
 
     // Player selection state
     BlockSelection? BlockSelection { get; set; }
-    Vector3d BlockSelectionPosition { get; set; }
+    Vec3d BlockSelectionPosition { get; set; }
     long BlockSelectionLastComputed { get; set; }
 
     // Player movement permissions

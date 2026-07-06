@@ -8,7 +8,7 @@ public class L3Map512<T> where T : struct, IEquatable<T>
 
     private readonly L3[] map = new L3[LevelSize * LevelSize];
 
-    public T this[Vector2i index]
+    public T this[Vec2i index]
     {
         get
         {
@@ -29,9 +29,9 @@ public class L3Map512<T> where T : struct, IEquatable<T>
         }
     }
 
-    public bool ContainsKey(Vector2i index) => TryGetValue(index, out _);
+    public bool ContainsKey(Vec2i index) => TryGetValue(index, out _);
 
-    public bool TryGetValue(Vector2i index, out T value)
+    public bool TryGetValue(Vec2i index, out T value)
     {
         int x1 = (index.X >> (LevelBits * 2)) & LevelMask;
         int y1 = (index.Y >> (LevelBits * 2)) & LevelMask;
@@ -60,7 +60,7 @@ public class L3Map512<T> where T : struct, IEquatable<T>
         return !value.Equals(default);
     }
 
-    public void Add(Vector2i index, T value)
+    public void Add(Vec2i index, T value)
     {
         if (ContainsKey(index))
             throw new ArgumentException();
@@ -68,7 +68,7 @@ public class L3Map512<T> where T : struct, IEquatable<T>
         Insert(index, value);
     }
 
-    public bool Remove(Vector2i index)
+    public bool Remove(Vec2i index)
     {
         if (ContainsKey(index))
         {
@@ -78,7 +78,7 @@ public class L3Map512<T> where T : struct, IEquatable<T>
         else return false;
     }
 
-    private void Insert(Vector2i index, T value)
+    private void Insert(Vec2i index, T value)
     {
         int x1 = (index.X >> (LevelBits * 2)) & LevelMask;
         int y1 = (index.Y >> (LevelBits * 2)) & LevelMask;
@@ -103,7 +103,7 @@ public class L3Map512<T> where T : struct, IEquatable<T>
         level2.Count++;
     }
 
-    private void Set(Vector2i index, T value)
+    private void Set(Vec2i index, T value)
     {
         int x1 = (index.X >> (LevelBits * 2)) & LevelMask;
         int y1 = (index.Y >> (LevelBits * 2)) & LevelMask;
@@ -118,7 +118,7 @@ public class L3Map512<T> where T : struct, IEquatable<T>
         level2.Data![(y3 << LevelBits) + x3] = value;
     }
 
-    private void Delete(Vector2i index)
+    private void Delete(Vec2i index)
     {
         int x1 = (index.X >> (LevelBits * 2)) & LevelMask;
         int y1 = (index.Y >> (LevelBits * 2)) & LevelMask;

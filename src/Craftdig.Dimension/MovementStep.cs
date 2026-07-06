@@ -11,8 +11,8 @@ public struct MovementStep
     public bool FlyDown;
     [MarshalAs(UnmanagedType.I1)]
     public bool FlyUp;
-    public Vector3 Vector;
-    public Vector3 LookAt;
+    public Vec3 Vector;
+    public Vec3 LookAt;
 }
 
 public enum MovementAction : byte

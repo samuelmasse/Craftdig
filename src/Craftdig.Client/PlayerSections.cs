@@ -15,7 +15,7 @@ public class PlayerSections(
         {
             var (sloc, blocks) = item;
 
-            if (!blocksRaw.TryGetChunkBlocks(sloc.Xy, out var chunkBlocks))
+            if (!blocksRaw.TryGetChunkBlocks(sloc.XY, out var chunkBlocks))
                 continue;
 
             var slice = chunkBlocks.Slice(sloc.Z);
@@ -26,7 +26,7 @@ public class PlayerSections(
                 {
                     for (int x = 0; x < SectionSize; x++)
                     {
-                        var dt = new Vector3i(x, y, z);
+                        var dt = new Vec3i(x, y, z);
                         var index = dt.ToInnerIndex();
 
                         if (blocks[index] != slice[index])

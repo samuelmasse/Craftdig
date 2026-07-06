@@ -4,20 +4,20 @@ namespace Craftdig.Dimension.Frontend;
 public class DimensionBlockProgram : RenderProgram3D<BlockVertex>
 {
     private readonly int vecOffset;
-    private readonly TextureUnit samplerTexture;
+    private readonly GlTextureUnit samplerTexture;
 
-    public TextureUnit SamplerTexture => samplerTexture;
+    public GlTextureUnit SamplerTexture => samplerTexture;
 
-    public Vector3 Offset
+    public Vec3 Offset
     {
-        set => gl.Uniform3(vecOffset, value);
+        set => gl.ProgramUniform3f(Id, vecOffset, value.X, value.Y, value.Z);
     }
 
-    public DimensionBlockProgram(RootGlw gl, AppFiles files) : base(
+    public DimensionBlockProgram(RootGl gl, AppFiles files) : base(
         gl, File.ReadAllText(files["Shaders/Block.vert"]), File.ReadAllText(files["Shaders/Block.frag"]))
     {
         vecOffset = gl.GetUniformLocation(Id, nameof(vecOffset));
-        samplerTexture = TextureUnit.Texture0;
-        gl.Uniform1(gl.GetUniformLocation(Id, nameof(samplerTexture)), (int)samplerTexture);
+        samplerTexture = GlTextureUnit.Texture0;
+        gl.ProgramUniform1i(Id, gl.GetUniformLocation(Id, nameof(samplerTexture)), (int)samplerTexture);
     }
 }

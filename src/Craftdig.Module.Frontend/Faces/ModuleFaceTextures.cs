@@ -1,7 +1,7 @@
 namespace Craftdig.Module.Frontend;
 
 [Module]
-public class ModuleFaceTextures(ModuleGlw gl, ModuleImages images)
+public class ModuleFaceTextures(ModuleGl gl, ModuleImages images)
 {
     private readonly Dictionary<string, Texture2D> textures = [];
 
@@ -13,13 +13,13 @@ public class ModuleFaceTextures(ModuleGlw gl, ModuleImages images)
             {
                 var data = images[file];
 
-                value = new Texture2D(gl, data.Size)
+                value = new Texture2D(gl, (Vec2u)data.Size)
                 {
                     PixelsMipmap = data.Pixels.Span,
-                    MagFilter = TextureMagFilter.Nearest,
-                    MinFilter = TextureMinFilter.NearestMipmapLinear,
-                    WrapS = TextureWrapMode.Repeat,
-                    WrapT = TextureWrapMode.Repeat,
+                    MagFilter = GlTextureMagFilter.Nearest,
+                    MinFilter = GlTextureMinFilter.NearestMipmapLinear,
+                    WrapS = GlTextureWrapMode.Repeat,
+                    WrapT = GlTextureWrapMode.Repeat,
                 };
 
                 textures.Add(file, value);

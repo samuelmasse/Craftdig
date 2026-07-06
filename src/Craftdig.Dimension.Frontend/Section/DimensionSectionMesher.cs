@@ -3,7 +3,7 @@ namespace Craftdig.Dimension.Frontend;
 [Dimension]
 public class DimensionSectionMesher(RootCube cube, DimensionBlocks blocks)
 {
-    public void Render(List<BlockVertex> vertices, Vector3i sloc)
+    public void Render(List<BlockVertex> vertices, Vec3i sloc)
     {
         var loc = sloc * SectionSize;
 
@@ -13,13 +13,13 @@ public class DimensionSectionMesher(RootCube cube, DimensionBlocks blocks)
                     RenderBlock(vertices, loc, loc + (x, y, z));
     }
 
-    public void RenderBlock(List<BlockVertex> vertices, Vector3i origin, Vector3i loc)
+    public void RenderBlock(List<BlockVertex> vertices, Vec3i origin, Vec3i loc)
     {
         blocks.TryGet(loc, out var block);
         if (!block.IsSolid)
             return;
 
-        var rloc = new Vector3i(loc.X, loc.Z, loc.Y) - (origin.X, origin.Z, origin.Y);
+        var rloc = new Vec3i(loc.X, loc.Z, loc.Y) - (origin.X, origin.Z, origin.Y);
 
         blocks.TryGet(loc + (0, 1, 0), out var front);
         blocks.TryGet(loc - (0, 1, 0), out var back);
@@ -47,12 +47,12 @@ public class DimensionSectionMesher(RootCube cube, DimensionBlocks blocks)
         if (!bottom.IsSolid)
             AddQuad(cube.Bottom.Quad, 0.5f, faces.Bottom.FaceIndex);
 
-        void AddQuad(Quad quad, float shadow, int texture)
+        void AddQuad(Quad3 quad, float shadow, int texture)
         {
-            vertices.Add(new(quad.TopLeft + rloc, Vector3.One * shadow, (0, 1, texture)));
-            vertices.Add(new(quad.TopRight + rloc, Vector3.One * shadow, (1, 1, texture)));
-            vertices.Add(new(quad.BottomLeft + rloc, Vector3.One * shadow, (0, 0, texture)));
-            vertices.Add(new(quad.BottomRight + rloc, Vector3.One * shadow, (1, 0, texture)));
+            vertices.Add(new(quad.TopLeft + rloc, Vec3.One * shadow, (0, 1, texture)));
+            vertices.Add(new(quad.TopRight + rloc, Vec3.One * shadow, (1, 1, texture)));
+            vertices.Add(new(quad.BottomLeft + rloc, Vec3.One * shadow, (0, 0, texture)));
+            vertices.Add(new(quad.BottomRight + rloc, Vec3.One * shadow, (1, 0, texture)));
         }
     }
 }

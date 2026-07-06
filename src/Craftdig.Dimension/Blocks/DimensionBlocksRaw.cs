@@ -3,7 +3,7 @@ namespace Craftdig.Dimension;
 [Dimension]
 public class DimensionBlocksRaw(DimensionChunks chunks)
 {
-    public bool TryGet(Vector3i loc, out Ent block)
+    public bool TryGet(Vec3i loc, out Ent block)
     {
         if ((uint)loc.Z >= HeightSize)
         {
@@ -11,7 +11,7 @@ public class DimensionBlocksRaw(DimensionChunks chunks)
             return false;
         }
 
-        var cloc = loc.Xy.ToCloc();
+        var cloc = loc.XY.ToCloc();
         if (!TryGetChunkBlocks(cloc, out var blocks))
         {
             block = default;
@@ -22,12 +22,12 @@ public class DimensionBlocksRaw(DimensionChunks chunks)
         return true;
     }
 
-    public bool TrySet(Vector3i loc, Ent block)
+    public bool TrySet(Vec3i loc, Ent block)
     {
         if ((uint)loc.Z >= HeightSize)
             return false;
 
-        var cloc = loc.Xy.ToCloc();
+        var cloc = loc.XY.ToCloc();
         if (!TryGetChunkBlocks(cloc, out var blocks))
             return false;
 
@@ -35,7 +35,7 @@ public class DimensionBlocksRaw(DimensionChunks chunks)
         return true;
     }
 
-    public bool TryGetChunkBlocks(Vector2i cloc, [NotNullWhen(true)] out ChunkBlocks? blocks)
+    public bool TryGetChunkBlocks(Vec2i cloc, [NotNullWhen(true)] out ChunkBlocks? blocks)
     {
         chunks.TryGet(cloc, out var chunk);
         blocks = chunk.ChunkBlocks;

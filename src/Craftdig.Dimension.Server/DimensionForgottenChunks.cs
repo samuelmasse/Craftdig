@@ -3,7 +3,7 @@ namespace Craftdig.Dimension.Server;
 [Dimension]
 public class DimensionForgottenChunks
 {
-    private readonly ConcurrentQueue<(NetSocket, Vector2i)> queue = [];
+    private readonly ConcurrentQueue<(NetSocket, Vec2i)> queue = [];
 
     public void Tick()
     {
@@ -17,5 +17,5 @@ public class DimensionForgottenChunks
         }
     }
 
-    public void Add(NetSocket ent, Vector2i cloc) => queue.Enqueue((ent, cloc));
+    public void Add(NetSocket ent, Vec2i cloc) => queue.Enqueue((ent, cloc));
 }

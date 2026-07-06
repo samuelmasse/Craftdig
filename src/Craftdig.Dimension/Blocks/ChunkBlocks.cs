@@ -7,7 +7,7 @@ public class ChunkBlocks
     private readonly DimensionBlocksAllocator allocator;
     private readonly SectionBlocks[] sections = new SectionBlocks[SectionHeight];
 
-    public Ent this[Vector3i index]
+    public Ent this[Vec3i index]
     {
         get
         {
@@ -98,6 +98,6 @@ public class ChunkBlocks
         section.Uniform = default;
     }
 
-    private int InnerIndex(Vector3i index) =>
+    private int InnerIndex(Vec3i index) =>
         ((index.Z & SectionMask) << (SectionBits * 2)) + ((index.Y & SectionMask) << SectionBits) + (index.X & SectionMask);
 }

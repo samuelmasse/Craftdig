@@ -23,7 +23,7 @@
         <Using Include="Craftdig.World" />
         <Using Include="Craftdig.World.Backend" />
         <Using Include="Craftdig.World.Server" />
-        <Using Include="NeedlerDI" />
+        <Using Include="AlvorKit.Injection" />
     </ItemGroup>
 
     <ItemGroup>

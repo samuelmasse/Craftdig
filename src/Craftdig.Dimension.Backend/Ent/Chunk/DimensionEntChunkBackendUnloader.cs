@@ -19,7 +19,7 @@ public class DimensionEntChunkBackendUnloader(
         Process(cloc + (1, -1));
     }
 
-    private void Process(Vector2i cloc)
+    private void Process(Vec2i cloc)
     {
         if (!chunks.TryGet(cloc, out var chunk))
             return;
@@ -28,7 +28,7 @@ public class DimensionEntChunkBackendUnloader(
         {
             foreach (var ent in chunkRigids[chunk.Cloc])
             {
-                var ecloc = ent.Position.ToLoc().Xy.ToCloc();
+                var ecloc = ent.Position.ToLoc().XY.ToCloc();
                 if (ecloc == cloc)
                     ent.Mutate().IsLoaded(false);
             }

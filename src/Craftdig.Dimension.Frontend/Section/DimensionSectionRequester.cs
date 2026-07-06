@@ -22,15 +22,15 @@ public class DimensionSectionRequester(
         while (next && watch.Elapsed.TotalMilliseconds < 1);
     }
 
-    private Vector3i RandomSeerSectionLocation()
+    private Vec3i RandomSeerSectionLocation()
     {
         var seer = seerBag.Ents[rng.Next(seerBag.Ents.Length)];
-        return (Vector3i)seer.Position / SectionSize;
+        return (Vec3i)seer.Position / SectionSize;
     }
 
-    private bool LoadNearestChunk(Vector3i sloc)
+    private bool LoadNearestChunk(Vec3i sloc)
     {
-        if (!TryGetNeareastChunkWithUnloadedSections(sloc.Xy, out var cloc))
+        if (!TryGetNeareastChunkWithUnloadedSections(sloc.XY, out var cloc))
             return false;
 
         chunks.TryGet(cloc, out var chunk);
@@ -38,7 +38,7 @@ public class DimensionSectionRequester(
         for (var i = 0; i < chunk.Unrendered.Count; i++)
         {
             int sz = chunk.Unrendered.Values[i];
-            var nsloc = new Vector3i(chunk.Cloc.X, chunk.Cloc.Y, sz);
+            var nsloc = new Vec3i(chunk.Cloc.X, chunk.Cloc.Y, sz);
 
             sections.TryGet(nsloc, out var section);
             sectionLoader.Load(section);
@@ -47,7 +47,7 @@ public class DimensionSectionRequester(
         return true;
     }
 
-    private bool TryGetNeareastChunkWithUnloadedSections(Vector2i center, out Vector2i cloc)
+    private bool TryGetNeareastChunkWithUnloadedSections(Vec2i center, out Vec2i cloc)
     {
         cloc = default;
 
@@ -69,7 +69,7 @@ public class DimensionSectionRequester(
                     return true;
                 }
 
-                bool Visit(Vector2i delta) =>
+                bool Visit(Vec2i delta) =>
                     chunks.TryGet(center + delta, out var chunk) && chunk.IsReadyToRender && chunk.Unrendered.Count != 0;
             }
         }

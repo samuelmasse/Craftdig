@@ -1,7 +1,7 @@
 namespace Craftdig.Menus.Singleplayer;
 
 [Module]
-public class ModuleWorldScreenshots(RootBin bin, RootGlw gl, RootPngs pngs)
+public class ModuleWorldScreenshots(RootBin bin, RootGl gl, RootPngs pngs)
 {
     private readonly Dictionary<string, ScreenshotTexture?> cache = [];
     private int bucket;
@@ -26,11 +26,11 @@ public class ModuleWorldScreenshots(RootBin bin, RootGlw gl, RootPngs pngs)
                 if (File.Exists(file))
                 {
                     var image = pngs[file];
-                    texture = new(bin, new Texture2D(gl, image.Size)
+                    texture = new(bin, new Texture2D(gl, (Vec2u)image.Size)
                     {
                         PixelsMipmap = image.Pixels.Span,
-                        MagFilter = TextureMagFilter.Linear,
-                        MinFilter = TextureMinFilter.LinearMipmapLinear
+                        MagFilter = GlTextureMagFilter.Linear,
+                        MinFilter = GlTextureMinFilter.LinearMipmapLinear
                     });
                 }
             }

@@ -4,7 +4,7 @@ namespace Craftdig.World;
 public interface IWorldComponents
 {
     // World location
-    [Saved] Vector3d WorldPosition { get; set; }
+    [Saved] Vec3d WorldPosition { get; set; }
     [Saved] Ent WorldDimension { get; set; }
     [Saved] bool IsWorldPlayer { get; set; }
 

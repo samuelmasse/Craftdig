@@ -3,8 +3,8 @@ namespace Craftdig.Client;
 [Player]
 public class PlayerAheadSections(AppLog log, DimensionBlockChanges blockChanges, PlayerSocket socket)
 {
-    private readonly Queue<(Vector3i, DateTime)> queue = [];
-    private readonly Dictionary<Vector3i, DateTime> set = [];
+    private readonly Queue<(Vec3i, DateTime)> queue = [];
+    private readonly Dictionary<Vec3i, DateTime> set = [];
 
     public void Tick()
     {
@@ -32,5 +32,5 @@ public class PlayerAheadSections(AppLog log, DimensionBlockChanges blockChanges,
         }
     }
 
-    public void Remove(Vector3i sloc) => set.Remove(sloc);
+    public void Remove(Vec3i sloc) => set.Remove(sloc);
 }

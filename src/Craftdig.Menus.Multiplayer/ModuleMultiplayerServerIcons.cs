@@ -3,7 +3,7 @@ namespace Craftdig.Menus.Multiplayer;
 using BigGustave;
 
 [Module]
-public class ModuleMultiplayerServerIcons(RootBin bin, RootGlw gl)
+public class ModuleMultiplayerServerIcons(RootBin bin, RootGl gl)
 {
     private readonly Dictionary<byte[], IconTexture?> textures = [];
 
@@ -28,11 +28,11 @@ public class ModuleMultiplayerServerIcons(RootBin bin, RootGlw gl)
             var png = Png.Open(bytes);
             var pixels = GetPixels(png);
 
-            var texture = new Texture2D(gl, (png.Width, png.Height))
+            var texture = new Texture2D(gl, ((uint)png.Width, (uint)png.Height))
             {
                 PixelsMipmap = pixels,
-                MagFilter = TextureMagFilter.Nearest,
-                MinFilter = TextureMinFilter.NearestMipmapLinear
+                MagFilter = GlTextureMagFilter.Nearest,
+                MinFilter = GlTextureMinFilter.NearestMipmapLinear
             };
 
             return new(bin, texture);
@@ -43,9 +43,9 @@ public class ModuleMultiplayerServerIcons(RootBin bin, RootGlw gl)
         }
     }
 
-    private (byte, byte, byte, byte)[] GetPixels(Png image)
+    private Vec4u8[] GetPixels(Png image)
     {
-        (byte, byte, byte, byte)[] array = new (byte, byte, byte, byte)[image.Width * image.Height];
+        Vec4u8[] array = new Vec4u8[image.Width * image.Height];
         for (int i = 0; i < image.Height; i++)
         {
             for (int j = 0; j < image.Width; j++)

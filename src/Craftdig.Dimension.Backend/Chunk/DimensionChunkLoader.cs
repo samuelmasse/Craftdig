@@ -6,7 +6,7 @@ public class DimensionChunkLoader(
     DimensionChunkPending chunkPending,
     DimensionBlocksAllocator blocksAllocator)
 {
-    public void Load(Vector2i cloc)
+    public void Load(Vec2i cloc)
     {
         chunkPending.Add(cloc);
         regionThreadWorkQueue.Enqeue(new(new(cloc, 0), RegionThreadInputType.ReadChunk, new(blocksAllocator), default));

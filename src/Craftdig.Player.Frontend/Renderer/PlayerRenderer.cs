@@ -12,7 +12,7 @@ public class PlayerRenderer(
     DimensionSections sections,
     DimensionSectionSharedVertexArray sectionSharedVertexArray,
     PlayerMetrics metrics,
-    PlayerGlw gl,
+    PlayerGl gl,
     PlayerPerspective perspective,
     PlayerCamera camera,
     PlayerEnt ent,
@@ -21,35 +21,35 @@ public class PlayerRenderer(
     private readonly List<EntMutIdx> schunks = [];
     private readonly List<float> dists = [];
 
-    public void Render(Vector2 canvas)
+    public void Render(Vec2 canvas)
     {
-        var sky = new Vector3(84, 145, 255);
+        var sky = new Vec3(84, 145, 255);
 
-        gl.Viewport(canvas);
-        gl.ClearColor(new Vector4(sky / 0xFF, 1));
+        gl.Viewport(0, 0, (int)canvas.X, (int)canvas.Y);
+        var clear = new Vec4(sky / 0xFF, 1);
+        gl.ClearColor(clear.X, clear.Y, clear.Z, clear.W);
         gl.ClearDepth(1f);
-        gl.Clear(ClearBufferMask.DepthBufferBit | ClearBufferMask.ColorBufferBit);
+        gl.Clear(GlClearBufferMask.DepthBufferBit | GlClearBufferMask.ColorBufferBit);
         gl.ResetClearDepth();
         gl.ResetClearColor();
 
         camera.ComputeVectors();
         perspective.ComputeMatrix(canvas, camera);
 
-        var mvp = perspective.View * perspective.Projection;
-        var frustum = new Frustum(mvp);
+        var frustum = Frustum3.CreateFromClipTransform(perspective.Projection * perspective.View);
 
-        gl.Enable(EnableCap.DepthTest);
-        gl.DepthFunc(DepthFunction.Less);
-        gl.Enable(EnableCap.CullFace);
-        gl.CullFace(TriangleFace.Back);
+        gl.Enable(GlEnableCap.DepthTest);
+        gl.DepthFunc(GlDepthFunction.Less);
+        gl.Enable(GlEnableCap.CullFace);
+        gl.CullFace(GlTriangleFace.Back);
 
         gl.UseProgram(blockProgram.Id);
         blockProgram.View = perspective.View;
         blockProgram.Projection = perspective.Projection;
         blockAtlas.Bind(blockProgram.SamplerTexture);
 
-        var pos = Vector3d.Lerp(ent.PrevPosition, ent.Position, (float)tick.Alpha);
-        var cloc = pos.ToLoc().Xy.ToCloc();
+        var pos = Vec3d.Lerp(ent.PrevPosition, ent.Position, (float)tick.Alpha);
+        var cloc = pos.ToLoc().XY.ToCloc();
         pos = pos.Swizzle();
 
         metrics.RenderMetric.Start();
@@ -64,7 +64,7 @@ public class PlayerRenderer(
             {
                 var ncloc = cloc + (dx, dy);
 
-                var delta = Vector2i.Abs(cloc - ncloc);
+                var delta = Vec2i.Abs(cloc - ncloc);
                 var dist = delta.X + delta.Y;
                 if (dist > renderDistance.Far)
                     continue;
@@ -72,9 +72,9 @@ public class PlayerRenderer(
                 if (!chunks.TryGet(ncloc, out var chunk))
                     continue;
 
-                var colMin = (Vector3)(new Vector3i(ncloc.X, ncloc.Y, 0).Swizzle() * SectionSize - pos);
+                var colMin = (Vec3)(new Vec3i(ncloc.X, ncloc.Y, 0).Swizzle() * SectionSize - pos);
                 var colMax = colMin + (SectionSize, HeightSize, SectionSize);
-                if (!frustum.Intersects(new(colMin, colMax)))
+                if (!frustum.Intersects(new Box3(colMin, colMax)))
                     continue;
 
                 float colCenterX = colMin.X + (SectionSize / 2f);
@@ -133,27 +133,27 @@ public class PlayerRenderer(
                 }
 
                 var z = values[index];
-                var nsloc = new Vector3i(chunk.Cloc.X, chunk.Cloc.Y, z);
+                var nsloc = new Vec3i(chunk.Cloc.X, chunk.Cloc.Y, z);
 
                 if (!sections.TryGet(nsloc, out var section) || section.TerrainMesh.Count <= 0)
                     continue;
 
-                var center = (Vector3)(nsloc.Swizzle() * SectionSize - pos) + new Vector3(SectionSize / 2);
-                var min = center - new Vector3(SectionSize / 2);
-                var max = center + new Vector3(SectionSize / 2);
+                var center = (Vec3)(nsloc.Swizzle() * SectionSize - pos) + new Vec3(SectionSize / 2);
+                var min = center - new Vec3(SectionSize / 2);
+                var max = center + new Vec3(SectionSize / 2);
 
-                if (!frustum.Intersects(new(min, max)))
+                if (!frustum.Intersects(new Box3(min, max)))
                     continue;
 
-                blockProgram.Offset = (Vector3)(nsloc.Swizzle() * SectionSize - pos);
+                blockProgram.Offset = (Vec3)(nsloc.Swizzle() * SectionSize - pos);
 
                 var mesh = section.TerrainMesh;
                 int addr = (int)svb.Addr(mesh.Alloc);
 
                 gl.DrawElementsBaseVertex(
-                    PrimitiveType.Triangles,
+                    GlPrimitiveType.Triangles,
                     quadIndexBuffer.IndexCount(mesh.Count),
-                    DrawElementsType.UnsignedInt,
+                    GlDrawElementsType.UnsignedInt,
                     0,
                     addr / BlockVertex.Size);
             }
@@ -172,9 +172,9 @@ public class PlayerRenderer(
         gl.UnuseProgram();
 
         gl.ResetCullFace();
-        gl.Disable(EnableCap.CullFace);
+        gl.Disable(GlEnableCap.CullFace);
         gl.ResetDepthFunc();
-        gl.Disable(EnableCap.DepthTest);
+        gl.Disable(GlEnableCap.DepthTest);
         gl.ResetViewport();
     }
 }

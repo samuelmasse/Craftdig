@@ -13,13 +13,17 @@
         <PathMap>$(MSBuildProjectDirectory)=$(MSBuildProjectName)</PathMap>
     </PropertyGroup>
 
+    <PropertyGroup>
+        <AlvorKitRoot>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\..\AlvorKit\'))</AlvorKitRoot>
+    </PropertyGroup>
+
     <ItemGroup>
+        <Using Include="AlvorKit.ECS" />
+        <Using Include="AlvorKit.ECS.Generator" />
+        <Using Include="AlvorKit.Injection" />
+        <Using Include="AlvorKit.Maths" />
         <Using Include="Cysharp.Text" />
-        <Using Include="HadvarECS" />
-        <Using Include="HadvarECS.Generator" />
         <Using Include="Microsoft.Win32.SafeHandles" />
-        <Using Include="NeedlerDI" />
-        <Using Include="OpenTK.Mathematics" />
         <Using Include="System.Buffers" />
         <Using Include="System.Buffers.Binary" />
         <Using Include="System.Collections.Concurrent" />
@@ -30,6 +34,7 @@
         <Using Include="System.Net" />
         <Using Include="System.Net.Security" />
         <Using Include="System.Net.Sockets" />
+        <Using Include="System.Numerics" />
         <Using Include="System.Reflection" />
         <Using Include="System.Runtime" />
         <Using Include="System.Runtime.CompilerServices" />
@@ -45,5 +50,10 @@
         <Using Include="Tomlyn.Model" />
         <Using Include="Tomlyn.Syntax" />
     </ItemGroup>
+
+    <Target Name="EnsureAlvorKitSibling" BeforeTargets="ResolveProjectReferences">
+        <Error Condition="!Exists('$(AlvorKitRoot)AlvorKit.slnx')"
+            Text="AlvorKit sibling clone not found at '$(AlvorKitRoot)'. Clone AlvorKit next to the Craftdig repository." />
+    </Target>
 
 </Project>

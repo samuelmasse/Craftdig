@@ -19,6 +19,6 @@ public class PlayerFov(PlayerEnt ent, PlayerPerspective perspective)
             init = true;
         }
 
-        perspective.Fov = (float)Math.Clamp(MathHelper.Lerp(perspective.Fov, fov, delta * 10), 70, 90);
+        perspective.Fov = (float)Math.Clamp(double.Lerp(perspective.Fov, fov, delta * 10), 70, 90);
     }
 }

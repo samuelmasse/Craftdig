@@ -33,20 +33,20 @@ public class DimensionSelected(DimensionBlocks blocks, DimensionPlayerBag player
         }
     }
 
-    public BlockSelection? Select(Vector3d origin, Vector3d lookAt)
+    public BlockSelection? Select(Vec3d origin, Vec3d lookAt)
     {
-        Vector3i dir = (Math.Sign(lookAt.X), Math.Sign(lookAt.Y), Math.Sign(lookAt.Z));
-        Vector3d dt = Vector3d.Abs((1 / lookAt.X, 1 / lookAt.Y, 1 / lookAt.Z));
+        Vec3i dir = (Math.Sign(lookAt.X), Math.Sign(lookAt.Y), Math.Sign(lookAt.Z));
+        Vec3d dt = Vec3d.Abs((1 / lookAt.X, 1 / lookAt.Y, 1 / lookAt.Z));
 
-        Vector3i nloc = ((int)Math.Floor(origin.X), (int)Math.Floor(origin.Y), (int)Math.Floor(origin.Z));
+        Vec3i nloc = ((int)Math.Floor(origin.X), (int)Math.Floor(origin.Y), (int)Math.Floor(origin.Z));
 
-        Vector3d ni = new(
+        Vec3d ni = new(
             dir.X > 0 ? (nloc.X + 1 - origin.X) * dt.X : (origin.X - nloc.X) * dt.X,
             dir.Y > 0 ? (nloc.Y + 1 - origin.Y) * dt.Y : (origin.Y - nloc.Y) * dt.Y,
             dir.Z > 0 ? (nloc.Z + 1 - origin.Z) * dt.Z : (origin.Z - nloc.Z) * dt.Z
         );
 
-        Vector3i nnormal = default;
+        Vec3i nnormal = default;
 
         int step = 0;
         bool found = false;

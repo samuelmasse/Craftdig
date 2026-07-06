@@ -4,6 +4,7 @@ namespace Craftdig.Menus.Common;
 public class PlayerCommonState(
     RootCanvas canvas,
     RootMouse mouse,
+    RootInput input,
     RootUiFocus focus,
     RootKeyboard keyboard,
     RootSprites sprites,
@@ -67,7 +68,7 @@ public class PlayerCommonState(
 
     public override void Unload()
     {
-        mouse.Track = false;
+        input.Track = false;
         NodesRemove(ui, hand);
         NodesRemove(ui, menus);
         NodesRemove(ui, overlay);
@@ -122,7 +123,7 @@ public class PlayerCommonState(
             dark.Mutate().IsDisabledV(true);
         }
 
-        mouse.Track = !paused && !inv;
+        input.Track = !paused && !inv;
         if (mouse.Track)
             focus.Focus(default, false);
         else construction.Reject();
@@ -139,7 +140,7 @@ public class PlayerCommonState(
     {
         float cht = 4 * scale.Scale;
         float chl = cht * 9;
-        var c = canvas.Size / 2;
+        var c = (Vec2)canvas.Size / 2;
 
         sprites.Batch.Draw(c - (cht / 2, chl / 2), (cht, chl));
         sprites.Batch.Draw(c - (chl / 2, cht / 2), (chl, cht));

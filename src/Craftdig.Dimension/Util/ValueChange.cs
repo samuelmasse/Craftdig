@@ -1,3 +1,3 @@
 namespace Craftdig.Dimension;
 
-public readonly record struct ValueChange<T>(Vector3i Loc, T Prev);
+public readonly record struct ValueChange<T>(Vec3i Loc, T Prev);

@@ -10,7 +10,7 @@ public class WorldComponentWriters(WorldComponentIndices indices, WorldScope sco
         get
         {
             if (index >= writers.Length)
-                Array.Resize(ref writers, MathHelper.NextPowerOfTwo(index + 1));
+                Array.Resize(ref writers, (int)BitOperations.RoundUpToPowerOf2((uint)(index + 1)));
 
             ref var writer = ref writers[index];
             writer ??= New(indices[index]);

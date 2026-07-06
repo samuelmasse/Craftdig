@@ -5,10 +5,10 @@ public class DimensionRegionThreadChunkReader(
     DimensionRegionThreadStates states,
     DimensionRegionThreadReader reader)
 {
-    public bool TryRead(ChunkBlocks blocks, Vector2i cloc)
+    public bool TryRead(ChunkBlocks blocks, Vec2i cloc)
     {
         var state = states[cloc.ToRloc()];
-        var offset = cloc - state.Origin.Xy;
+        var offset = cloc - state.Origin.XY;
 
         if (IsFirstSectionBlank(state.Index, offset))
             return false;
@@ -19,6 +19,6 @@ public class DimensionRegionThreadChunkReader(
         return true;
     }
 
-    private bool IsFirstSectionBlank(RegionIndex index, Vector2i offset) =>
+    private bool IsFirstSectionBlank(RegionIndex index, Vec2i offset) =>
         index[new(offset, 0)].Bucket == 0;
 }

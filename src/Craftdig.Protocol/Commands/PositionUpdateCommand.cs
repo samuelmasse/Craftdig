@@ -5,8 +5,8 @@ public struct PositionUpdateCommand : ICommand
 {
     public static ushort CommandId => (ushort)Commands.PositionUpdate;
 
-    public Vector3d Position;
-    public Vector3d Velocity;
+    public Vec3d Position;
+    public Vec3d Velocity;
     [MarshalAs(UnmanagedType.I1)]
     public bool IsFlying;
     [MarshalAs(UnmanagedType.I1)]

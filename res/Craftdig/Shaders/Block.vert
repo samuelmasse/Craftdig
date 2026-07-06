@@ -14,7 +14,7 @@ uniform vec3 vecOffset;
 
 void main()
 {
-    gl_Position = vec4(inPosition + vecOffset, 1.0) * matView * matProjection;
+    gl_Position = matProjection * matView * vec4(inPosition + vecOffset, 1.0);
     fragColor = inColor;
     fragTexCoord = inTexCoord;
 }

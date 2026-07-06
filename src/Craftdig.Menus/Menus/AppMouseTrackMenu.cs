@@ -1,14 +1,14 @@
 namespace Craftdig.Menus;
 
 [App]
-public class AppMouseTrackMenu(RootMouse mouse)
+public class AppMouseTrackMenu(RootMouse mouse, RootInput input)
 {
     public void Create(EntMut root)
     {
         Node(root, out var text)
             .OnUpdateF(() =>
             {
-                mouse.CursorState = mouse.Track ? CursorState.Grabbed : CursorState.Normal;
+                input.CursorMode = mouse.Track ? CursorMode.Disabled : CursorMode.Normal;
             });
     }
 }

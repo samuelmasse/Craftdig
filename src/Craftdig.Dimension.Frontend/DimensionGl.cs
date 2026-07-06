@@ -1,4 +1,4 @@
 namespace Craftdig.Dimension.Frontend;
 
 [Dimension]
-public class DimensionGlw(WorldGlw gl) : Glw(gl);
+public class DimensionGl(WorldGl gl) : GlLayer(gl);

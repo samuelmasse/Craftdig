@@ -7,5 +7,5 @@ public class DimensionEntRegionStates(
     WorldEntRegionBuckets buckets,
     DimensionEntRegionReader regionReader) : WorldEntRegionStates(worldPaths, buckets, regionReader)
 {
-    protected override string Dir(Vector2i rloc) => Path.Join(paths.Ents, $"{rloc.X},{rloc.Y}");
+    protected override string Dir(Vec2i rloc) => Path.Join(paths.Ents, $"{rloc.X},{rloc.Y}");
 }

@@ -20,7 +20,7 @@ public class DimensionEntChunkBackendReceiver(
         Process(cloc + (1, -1));
     }
 
-    private void Process(Vector2i cloc)
+    private void Process(Vec2i cloc)
     {
         if (IsNull(cloc + (1, 0)) ||
             IsNull(cloc + (0, 1)) ||
@@ -42,7 +42,7 @@ public class DimensionEntChunkBackendReceiver(
 
             foreach (var ent in chunkRigids[chunk.Cloc])
             {
-                var ecloc = ent.Position.ToLoc().Xy.ToCloc();
+                var ecloc = ent.Position.ToLoc().XY.ToCloc();
                 if (ecloc == cloc)
                     ent.Mutate().IsLoaded(true);
             }
@@ -51,5 +51,5 @@ public class DimensionEntChunkBackendReceiver(
         }
     }
 
-    private bool IsNull(Vector2i cloc) => !chunks.TryGet(cloc, out _);
+    private bool IsNull(Vec2i cloc) => !chunks.TryGet(cloc, out _);
 }

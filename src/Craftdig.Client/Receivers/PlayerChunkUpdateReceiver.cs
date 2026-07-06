@@ -33,7 +33,7 @@ public class PlayerChunkUpdateReceiver(
                 {
                     for (int i = 0; i < entry.Count; i++)
                     {
-                        var slice = blocks.Slice(sz);
+                        _ = blocks.Slice(sz);
                         blocks.Slice(sz)[cur++] = block;
                     }
                 }

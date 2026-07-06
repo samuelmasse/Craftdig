@@ -6,7 +6,7 @@ public class DimensionSectionThreadWorker(
     DimensionSectionThreadOutputBag outputQueue,
     DimensionSectionMesher mesher)
 {
-    public void Work(Vector3i sloc)
+    public void Work(Vec3i sloc)
     {
         var buffer = bag.Take();
         mesher.Render(buffer, sloc);

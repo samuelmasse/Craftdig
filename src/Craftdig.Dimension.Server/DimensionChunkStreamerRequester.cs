@@ -45,7 +45,7 @@ public class DimensionChunkStreamerRequester(
 
     private bool StreamNearestChunk(NetSocket ns)
     {
-        var cloc = ns.SocketPlayer.Position.ToLoc().ToSloc().Xy;
+        var cloc = ns.SocketPlayer.Position.ToLoc().ToSloc().XY;
         var streamed = ns.SocketStreamedChunks ??= [];
 
         if (!TryGetNearestNotStreamedChunk(cloc, streamed, out var nearest))
@@ -57,7 +57,7 @@ public class DimensionChunkStreamerRequester(
         return true;
     }
 
-    private bool TryGetNearestNotStreamedChunk(Vector2i center, HashSet<Vector2i> streamed, out Vector2i cloc)
+    private bool TryGetNearestNotStreamedChunk(Vec2i center, HashSet<Vec2i> streamed, out Vec2i cloc)
     {
         cloc = default;
 
@@ -79,7 +79,7 @@ public class DimensionChunkStreamerRequester(
                     return true;
                 }
 
-                bool Visit(Vector2i delta) =>
+                bool Visit(Vec2i delta) =>
                     chunks.TryGet(center + delta, out var chunk) &&
                     chunk.IsLoaded &&
                     !streamed.Contains(center + delta);

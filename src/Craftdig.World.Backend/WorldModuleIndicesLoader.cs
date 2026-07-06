@@ -33,6 +33,6 @@ public class WorldModuleIndicesLoader(ModuleEnts ents, WorldPaths paths, WorldMo
         if (changed)
             File.WriteAllLines(file, [.. names]);
 
-        moduleIndices.Apply(names.ToArray());
+        moduleIndices.Apply([.. names]);
     }
 }

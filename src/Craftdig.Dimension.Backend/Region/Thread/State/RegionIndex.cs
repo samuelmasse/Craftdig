@@ -8,8 +8,8 @@ public class RegionIndex
 
     public ReadOnlySpan<RegionIndexEntry> Span => allocs;
 
-    public ref RegionIndexEntry this[Vector3i offset] => ref allocs[Index(offset)];
+    public ref RegionIndexEntry this[Vec3i offset] => ref allocs[Index(offset)];
 
-    public int Index(Vector3i offset) =>
+    public int Index(Vec3i offset) =>
         offset.Z * (RegionSize * RegionSize) + offset.Y * RegionSize + offset.X;
 }

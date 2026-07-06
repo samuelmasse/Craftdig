@@ -5,5 +5,5 @@ public struct ForgetChunkCommand : ICommand
 {
     public static ushort CommandId => (ushort)Commands.ForgetChunk;
 
-    public Vector2i Cloc;
+    public Vec2i Cloc;
 }

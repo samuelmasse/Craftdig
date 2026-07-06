@@ -12,7 +12,7 @@ public interface IDimensionFrontendComponents
 
     // Section
     [ComponentToString] bool IsSection { get; set; }
-    [ComponentToString] Vector3i Sloc { get; set; }
+    [ComponentToString] Vec3i Sloc { get; set; }
     SectionMesh TerrainMesh { get; set; }
     EntMutIdx Chunk { get; set; }
 }
