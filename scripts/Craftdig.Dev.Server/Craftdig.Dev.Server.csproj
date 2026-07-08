@@ -8,6 +8,8 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <Using Include="AlvorKit.FastNoise2" />
+        <Using Include="AlvorKit.XxHash" />
         <Using Include="Craftdig" />
         <Using Include="Craftdig.App" />
         <Using Include="Craftdig.Dimension" />
@@ -24,6 +26,11 @@
         <Using Include="Craftdig.World.Backend" />
         <Using Include="Craftdig.World.Server" />
         <Using Include="AlvorKit.Injection" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="AlvorKit.FastNoise2.Backend" Version="1.1.1.2" />
+        <PackageReference Include="AlvorKit.XxHash.Backend" Version="0.8.3.13" />
     </ItemGroup>
 
     <ItemGroup>

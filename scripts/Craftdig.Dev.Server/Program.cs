@@ -1,4 +1,7 @@
-new Injector().Scope<AppScope>()
+new Injector()
+    .Run(x => x.Add<Fn>(new FnBackend()))
+    .Run(x => x.Add<Xxh>(new XxhBackend()))
+    .Scope<AppScope>()
     .With(new AppMods([new(typeof(ModuleNativeLoader), null), new(typeof(ModuleNativeBackendLoader), null)]))
     .Run(x => x.Scope<AppLoaderScope>().Get<AppLoader>().Run())
     .Run(x => x.Scope<ModuleScope>().Scope<WorldScope>().Scope<ServerScope>()
