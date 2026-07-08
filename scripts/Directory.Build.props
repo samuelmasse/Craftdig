@@ -15,14 +15,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="SamuelMasse.SlnScripts" Version="0.*" />
-    </ItemGroup>
-
-    <ItemGroup>
-        <Using Include="SamuelMasse.SlnScripts" />
-        <Using Include="SamuelMasse.SlnScripts.Script">
-            <Static>True</Static>
-        </Using>
         <Using Include="System.Buffers.Binary" />
         <Using Include="System.Collections.Concurrent" />
         <Using Include="System.Diagnostics" />

@@ -1,22 +1,36 @@
-Info("Packaging");
+var repositoryRoot = FindRepositoryRoot(AppContext.BaseDirectory)
+    ?? FindRepositoryRoot(Environment.CurrentDirectory)
+    ?? throw new InvalidOperationException("Could not locate Craftdig repository root.");
 
-Info("Deleting dist directory");
-Delete("dist");
+Console.WriteLine("Packaging");
 
-var mods = new List<(string Name, bool IncludeServer)>()
+var distDirectory = Path.Combine(repositoryRoot, "dist");
+Console.WriteLine($"Deleting {distDirectory}");
+if (Directory.Exists(distDirectory))
+    Directory.Delete(distDirectory, recursive: true);
+
+var mods = new List<(string Name, bool IncludeInServer)>()
 {
     ("Craftdig.Native", true),
     ("Craftdig.Native.Backend", true),
     ("Craftdig.Native.Frontend", false)
 };
 
-var modDlls = mods.Select((mod) =>
+var builtMods = new List<((string Name, bool IncludeInServer) Mod, string Dll)>(mods.Count);
+foreach (var mod in mods)
 {
-    Dir("src", mod.Name, out var modDir);
-    Run($"dotnet build {modDir} -c Release", $"Building mod {mod.Name}", $"Failed to build mod {mod.Name}");
-    Dir("bin", mod.Name, "Release", $"{mod.Name}.dll", out var modDll);
-    return (Mod: mod, Dll: modDll);
-}).ToList();
+    var modProjectDirectory = Path.Combine(repositoryRoot, "src", mod.Name);
+    Console.WriteLine($"Building mod {mod.Name}");
+    RunProcess(
+        new ProcessStartInfo("dotnet")
+        {
+            WorkingDirectory = repositoryRoot,
+            ArgumentList = { "build", modProjectDirectory, "-c", "Release" }
+        },
+        $"Failed to build mod {mod.Name}");
+
+    builtMods.Add((mod, Path.Combine(repositoryRoot, "bin", mod.Name, "Release", $"{mod.Name}.dll")));
+}
 
 var runtimes = new List<(string Name, bool CompileClient, bool CompileServer)>()
 {
@@ -26,63 +40,110 @@ var runtimes = new List<(string Name, bool CompileClient, bool CompileServer)>()
     ("osx-arm64", true, true)
 };
 
-var exes = runtimes.SelectMany((runtime) =>
+var exes = new List<string>();
+foreach (var runtime in runtimes)
 {
-    var exes = new List<string>();
-
     if (runtime.CompileClient)
-        Compile("Craftdig", "Craftdig", "Craftdig", true);
+        exes.Add(Publish("Craftdig", "Craftdig", "Craftdig", runtime.Name, includeClientOnlyMods: true));
     if (runtime.CompileServer)
-        Compile("Craftdig.Server.Cli", "CraftdigServer", "CraftdigServer", false);
+        exes.Add(Publish("Craftdig.Server.Cli", "CraftdigServer", "CraftdigServer", runtime.Name, includeClientOnlyMods: false));
+}
 
-    return exes;
+Console.WriteLine("Packaged");
+foreach (var exe in exes)
+    Console.WriteLine($"-> {exe}");
 
-    string Compile(string projectName, string outputName, string exeName, bool server)
-    {
-        Dir("src", projectName, out var projectDir);
-        Dir("dist", runtime.Name, outputName, out var outDir);
+string Publish(
+    string projectName,
+    string outputName,
+    string exeName,
+    string runtime,
+    bool includeClientOnlyMods)
+{
+    var projectDirectory = Path.Combine(repositoryRoot, "src", projectName);
+    var outputDirectory = Path.Combine(repositoryRoot, "dist", runtime, outputName);
 
-        Section(() =>
+    Console.WriteLine($"Publishing {outputName} for {runtime}");
+    RunProcess(
+        new ProcessStartInfo("dotnet")
         {
-            var command = string.Join(' ',
-                "dotnet",
+            WorkingDirectory = repositoryRoot,
+            ArgumentList =
+            {
                 "publish",
-                projectDir,
-                "-c Release",
+                projectDirectory,
+                "-c",
+                "Release",
                 "--self-contained",
                 "-p:PublishSingleFile=true",
                 "-p:IncludeNativeLibrariesForSelfExtract=true",
                 "-p:DebugType=embedded",
-                $"-r {runtime.Name}",
-                $"-o {outDir}"
-            );
+                "-r",
+                runtime,
+                "-o",
+                outputDirectory
+            }
+        },
+        $"Failed to publish {outputName} for {runtime}");
 
-            Run(command, $"Publishing {outputName} for {runtime.Name}", $"Failed to publish {outputName} for {runtime.Name}");
-        });
+    var projectResourceDirectory = Path.Combine(repositoryRoot, "res", projectName);
+    if (Directory.Exists(projectResourceDirectory))
+        CopyDirectory(projectResourceDirectory, outputDirectory);
 
-        Dir("res", projectName, out var resProjectDir);
-        if (Directory.Exists(Absolute(resProjectDir)))
-            Copy(resProjectDir, outDir);
+    foreach (var (mod, dll) in builtMods)
+    {
+        if (!includeClientOnlyMods && !mod.IncludeInServer)
+            continue;
 
-        var outMods = server ? modDlls : [.. modDlls.Where(x => x.Mod.IncludeServer)];
-        foreach (var (mod, dll) in outMods)
-        {
-            Dir("res", mod.Name, out var resModDir);
-            Dir(outDir, "Mods", mod.Name, out var outModDir);
-            Dir(outModDir, $"{mod.Name}.dll", out var outModDll);
-            Copy(dll, outModDll);
+        var modOutputDirectory = Path.Combine(outputDirectory, "Mods", mod.Name);
+        Directory.CreateDirectory(modOutputDirectory);
+        File.Copy(dll, Path.Combine(modOutputDirectory, $"{mod.Name}.dll"), overwrite: true);
 
-            if (Directory.Exists(Absolute(resModDir)))
-                Copy(resModDir, outModDir);
-        }
-
-        Dir(outDir, "Load.txt", out var loadFile);
-        File.WriteAllLines(Absolute(loadFile), [.. outMods.Select(x => x.Mod.Name)]);
-
-        Dir(outDir, $"{exeName}{(runtime.Name.StartsWith("win") ? ".exe" : "")}", out var exeFile);
-        return exeFile;
+        var modResourceDirectory = Path.Combine(repositoryRoot, "res", mod.Name);
+        if (Directory.Exists(modResourceDirectory))
+            CopyDirectory(modResourceDirectory, modOutputDirectory);
     }
-}).ToList();
 
-Success($"Packaged");
-exes.ForEach(x => Success($"-> {x}"));
+    var loadedMods = includeClientOnlyMods
+        ? builtMods.Select(mod => mod.Mod.Name)
+        : builtMods.Where(mod => mod.Mod.IncludeInServer).Select(mod => mod.Mod.Name);
+    File.WriteAllLines(Path.Combine(outputDirectory, "Load.txt"), loadedMods);
+
+    var extension = runtime.StartsWith("win") ? ".exe" : "";
+    return Path.Combine(outputDirectory, $"{exeName}{extension}");
+}
+
+string? FindRepositoryRoot(string start)
+{
+    var current = new DirectoryInfo(Path.GetFullPath(start));
+    while (current is not null)
+    {
+        if (File.Exists(Path.Combine(current.FullName, "Craftdig.slnx")))
+            return current.FullName;
+
+        current = current.Parent;
+    }
+
+    return null;
+}
+
+void RunProcess(ProcessStartInfo startInfo, string failureMessage)
+{
+    using var process = Process.Start(startInfo)
+        ?? throw new InvalidOperationException($"Failed to start {startInfo.FileName}.");
+    process.WaitForExit();
+
+    if (process.ExitCode != 0)
+        throw new InvalidOperationException($"{failureMessage}. Exit code: {process.ExitCode}.");
+}
+
+void CopyDirectory(string sourceDirectory, string destinationDirectory)
+{
+    Directory.CreateDirectory(destinationDirectory);
+
+    foreach (var file in Directory.EnumerateFiles(sourceDirectory))
+        File.Copy(file, Path.Combine(destinationDirectory, Path.GetFileName(file)), overwrite: true);
+
+    foreach (var directory in Directory.EnumerateDirectories(sourceDirectory))
+        CopyDirectory(directory, Path.Combine(destinationDirectory, Path.GetFileName(directory)));
+}
