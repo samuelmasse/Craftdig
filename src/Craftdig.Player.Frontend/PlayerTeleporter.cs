@@ -20,8 +20,8 @@ public class PlayerTeleporter(
                 history.RemoveAt(history.Count - 1);
 
             player.Position = (
-                rng.Next(-500_000_000, 500_000_000),
-                rng.Next(-500_000_000, 500_000_000),
+                rng.Next(-2_000_000, 2_000_000),
+                rng.Next(-2_000_000, 2_000_000),
                 player.Position.Z);
 
             history.Add(player.Position);

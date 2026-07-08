@@ -1,7 +1,7 @@
 namespace Craftdig.Native;
 
 [Dimension]
-public class DimensionNativeTerrainGenerator(ModuleNative m, DimensionNativeNoise noise) : ITerrainGenerator
+public class DimensionNativeTerrainGenerator : ITerrainGenerator
 {
     private const float NoiseMin = -0.5f;
     private const float NoiseMax = 1.5f;
@@ -12,9 +12,23 @@ public class DimensionNativeTerrainGenerator(ModuleNative m, DimensionNativeNois
     private static readonly int StoneMaxZ = (int)MathF.Floor(BiasCenterZ + BiasScale * NoiseMin);
     private static readonly int AirMinZ = (int)MathF.Ceiling(BiasCenterZ + BiasScale * NoiseMax);
 
+    private readonly ModuleNative m;
+    private readonly DimensionNativeNoise noise;
+
+    public DimensionNativeTerrainGenerator(
+        ModuleNative m,
+        DimensionNativeNoise noise,
+        DimensionBackendUnloaderHandlers backendUnloaderHandlers)
+    {
+        this.m = m;
+        this.noise = noise;
+        backendUnloaderHandlers.Add(noise.Dispose);
+    }
+
     public void Generate(ChunkBlocks blocks, Vec2i cloc)
     {
         var loc = cloc * SectionSize;
+        Span<float> noiseValues = stackalloc float[SectionVolume];
 
         for (int sz = 0; sz < SectionHeight; sz++)
         {
@@ -27,27 +41,43 @@ public class DimensionNativeTerrainGenerator(ModuleNative m, DimensionNativeNois
                 blocks.Fill(sz, m.AirBlock);
             else
             {
-                for (int y = 0; y < SectionSize; y++)
-                    for (int x = 0; x < SectionSize; x++)
-                        for (int z = 0; z < SectionSize; z++)
-                            blocks[(x, y, z + minZ)] = Generate((loc.X + x, loc.Y + y, z + minZ));
+                noise.GenerateSection(noiseValues, loc.X, loc.Y, minZ);
+                var section = blocks.Slice(sz);
+
+                for (int z = 0; z < SectionSize; z++)
+                {
+                    int zIndex = z << (SectionBits * 2);
+                    int worldZ = z + minZ;
+
+                    for (int y = 0; y < SectionSize; y++)
+                    {
+                        int yzIndex = zIndex + (y << SectionBits);
+                        int worldY = loc.Y + y;
+
+                        for (int x = 0; x < SectionSize; x++)
+                        {
+                            int index = yzIndex + x;
+                            section[index] = Generate(loc.X + x, worldY, worldZ, noiseValues[index]);
+                        }
+                    }
+                }
             }
         }
     }
 
-    private Ent Generate(Vec3i loc)
+    private Ent Generate(int x, int y, int z, float noiseValue)
     {
-        if (loc.X == 0 && loc.Y == 0)
+        if (x == 0 && y == 0)
             return m.StoneBlock;
 
-        if (loc.Z <= StoneMaxZ)
+        if (z <= StoneMaxZ)
             return m.StoneBlock;
 
-        if (loc.Z >= AirMinZ)
+        if (z >= AirMinZ)
             return m.AirBlock;
 
-        float bias = (loc.Z - BiasCenterZ) / BiasScale;
-        float n = noise.Generator.GetNoise(loc.X, loc.Y, loc.Z) + 0.5f;
+        float bias = (z - BiasCenterZ) / BiasScale;
+        float n = noiseValue + 0.5f;
 
         if (n - bias >= 0)
             return m.StoneBlock;

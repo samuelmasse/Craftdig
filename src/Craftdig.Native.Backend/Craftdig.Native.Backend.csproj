@@ -8,10 +8,15 @@
         <Using Include="Craftdig.Dimension.Unit">
             <Static>true</Static>
         </Using>
+        <Using Include="AlvorKit.FastNoise2" />
         <Using Include="Craftdig.Module" />
         <Using Include="Craftdig.Native" />
         <Using Include="Craftdig.World" />
         <Using Include="Craftdig.World.Backend" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="AlvorKit.FastNoise2" Version="1.1.1.2" />
     </ItemGroup>
 
     <ItemGroup>
