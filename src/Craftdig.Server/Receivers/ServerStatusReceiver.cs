@@ -1,7 +1,7 @@
 namespace Craftdig.Server;
 
 [Server]
-public class ServerStatusReceiver(AppLog log, ServerConfig config, ServerSockets sockets)
+public class ServerStatusReceiver(ServerConfig config, ServerSockets sockets)
 {
     private byte[]? iconCache;
     private bool iconLoaded;
