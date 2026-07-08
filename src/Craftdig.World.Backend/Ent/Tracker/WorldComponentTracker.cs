@@ -7,11 +7,13 @@ public abstract class WorldComponentTracker
 
 [World]
 public class WorldComponentTracker<T, N>(WorldEntDirty dirty, WorldComponentIndex<T, N> index) :
-    WorldComponentTracker where T : IEquatable<T>
+    WorldComponentTracker
+    where T : IEquatable<T>
+    where N : IComponent
 {
     public override void AddTo(EntIdxContextBuilder context) => context.AddPre<T, N>(Intercept);
 
-    private void Intercept(EntMutIdx ent, T value)
+    private void Intercept(EntMutIdx ent, in T value)
     {
         var old = ent.Get<T, N>();
         if (value.Equals(old))
@@ -23,11 +25,13 @@ public class WorldComponentTracker<T, N>(WorldEntDirty dirty, WorldComponentInde
 
 [World]
 public class WorldComponentArrayTracker<T, N>(WorldEntDirty dirty, WorldComponentIndex<T[], N> index) :
-    WorldComponentTracker where T : IEquatable<T>
+    WorldComponentTracker
+    where T : IEquatable<T>
+    where N : IComponent
 {
     public override void AddTo(EntIdxContextBuilder context) => context.AddPre<T[], N>(Intercept);
 
-    private void Intercept(EntMutIdx ent, T[] value)
+    private void Intercept(EntMutIdx ent, in T[] value)
     {
         dirty.Mark(ent, index.Index);
     }

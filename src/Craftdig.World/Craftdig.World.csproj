@@ -1,6 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <ItemGroup>
+        <Using Include="AlvorKit.ECS.Indexed" />
         <Using Include="Craftdig" />
         <Using Include="Craftdig.App" />
         <Using Include="Craftdig.Module" />
@@ -10,6 +11,7 @@
     <ItemGroup>
         <ProjectReference Include="$(AlvorKitRoot)src/AlvorKit.ECS.Generator/AlvorKit.ECS.Generator.csproj"
             OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
+        <ProjectReference Include="$(AlvorKitRoot)src/AlvorKit.ECS.Indexed/AlvorKit.ECS.Indexed.csproj" />
         <ProjectReference Include="..\Craftdig.Module\Craftdig.Module.csproj" />
     </ItemGroup>
 

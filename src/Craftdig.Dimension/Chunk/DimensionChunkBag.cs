@@ -1,7 +1,8 @@
 namespace Craftdig.Dimension;
 
 [Dimension]
-public class DimensionChunkBagMut : EntIdxBagMut<DimensionComponents.IsChunk>;
+public class DimensionChunkBagMut : EntIdxGatedBagMut<DimensionComponents.IsChunk, WorldComponents.IsLoaded>;
 
 [Dimension]
-public class DimensionChunkBag(DimensionChunkBagMut bag) : EntIdxBag<DimensionComponents.IsChunk>(bag);
+public class DimensionChunkBag(DimensionChunkBagMut bag) :
+    EntIdxGatedBag<DimensionComponents.IsChunk, WorldComponents.IsLoaded>(bag);

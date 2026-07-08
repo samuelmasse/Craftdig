@@ -5,6 +5,6 @@ public class WorldServerLoader(WorldEntIdxContextBuilder context, WorldScratched
 {
     public void Run()
     {
-        context.AddBagUnloaded(scratchedBag);
+        context.AddBag(scratchedBag);
     }
 }

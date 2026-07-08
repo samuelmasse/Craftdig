@@ -7,7 +7,7 @@ public class WorldEntIndex
 
     public EntMutIdx this[Guid id] => dict[id];
 
-    public void Intercept(EntMutIdx ent, Guid value)
+    public void Intercept(EntMutIdx ent, in Guid value)
     {
         if (ent.Id == value)
             return;

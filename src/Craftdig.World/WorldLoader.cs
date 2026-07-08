@@ -7,6 +7,6 @@ public class WorldLoader(
 {
     public void Run()
     {
-        context.AddBag(dimensionBag);
+        context.AddGatedBag(dimensionBag);
     }
 }

@@ -1,6 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <ItemGroup>
+        <Using Include="AlvorKit.ECS.Indexed" />
         <Using Include="AlvorKit.Engine" />
         <Using Include="Craftdig" />
         <Using Include="Craftdig.App" />

@@ -12,11 +12,11 @@ public class DimensionLoader(
 {
     public void Run()
     {
-        context.AddBagUnloaded(seerBag);
-        context.AddBag(playerBag);
-        context.AddBag(rigidBag);
+        context.AddBag(seerBag);
+        context.AddGatedBag(playerBag);
+        context.AddGatedBag(rigidBag);
         context.AddPost<Vec3d, DimensionComponents.Position>(chunkRigids.Intercept);
         context.AddPost<bool, DimensionComponents.IsRigid>(chunkRigids.Intercept);
-        chunkContext.AddBag(chunkBag);
+        chunkContext.AddGatedBag(chunkBag);
     }
 }

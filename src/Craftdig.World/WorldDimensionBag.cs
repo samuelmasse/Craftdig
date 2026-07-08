@@ -1,7 +1,8 @@
 namespace Craftdig.World;
 
 [World]
-public class WorldDimensionBagMut : EntIdxBagMut<WorldComponents.IsDimensionScope>;
+public class WorldDimensionBagMut : EntIdxGatedBagMut<WorldComponents.IsDimensionScope, WorldComponents.IsLoaded>;
 
 [World]
-public class WorldDimensionBag(WorldDimensionBagMut bag) : EntIdxBag<WorldComponents.IsDimensionScope>(bag);
+public class WorldDimensionBag(WorldDimensionBagMut bag) :
+    EntIdxGatedBag<WorldComponents.IsDimensionScope, WorldComponents.IsLoaded>(bag);
