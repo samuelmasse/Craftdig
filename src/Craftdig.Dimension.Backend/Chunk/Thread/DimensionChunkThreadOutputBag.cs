@@ -3,10 +3,10 @@ namespace Craftdig.Dimension.Backend;
 [Dimension]
 public class DimensionChunkThreadOutputBag
 {
-    private readonly ConcurrentBag<ChunkThreadInput> bag = [];
+    private readonly ConcurrentQueue<ChunkThreadOutput> queue = [];
 
-    public int Count => bag.Count;
+    public int Count => queue.Count;
 
-    public void Add(ChunkThreadInput output) => bag.Add(output);
-    public bool TryTake([MaybeNullWhen(false)] out ChunkThreadInput output) => bag.TryTake(out output);
+    public void Add(ChunkThreadOutput output) => queue.Enqueue(output);
+    public bool TryTake(out ChunkThreadOutput output) => queue.TryDequeue(out output);
 }

@@ -30,4 +30,5 @@ public enum Commands : ushort
     ServerDescription,
     ServerIcon,
     ServerStatusDone,
+    ChunkLightUpdate,
 }

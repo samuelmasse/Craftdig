@@ -5,6 +5,8 @@ public class DimensionContext(
     DimensionRigids rigids,
     DimensionMovement movement,
     DimensionBlockChanges blockChanges,
+    DimensionLightChanges lightChanges,
+    DimensionLighting lighting,
     DimensionChunkCollector chunkCollector,
     DimensionSelected selected,
     DimensionConstruction construction)
@@ -13,6 +15,7 @@ public class DimensionContext(
     {
         selected.Tick();
         construction.Tick();
+        lighting.Tick();
         movement.Tick();
         rigids.Tick();
     }
@@ -20,6 +23,7 @@ public class DimensionContext(
     public void Frame()
     {
         blockChanges.Clear();
+        lightChanges.Clear();
         chunkCollector.Frame();
     }
 }

@@ -4,16 +4,18 @@ namespace Craftdig.Dimension.Frontend;
 public class DimensionSectionThreadWorkQueue
 {
     private readonly SemaphoreSlim semaphore = new(0);
-    private readonly ConcurrentQueue<Vec3i> q = [];
+    private readonly ConcurrentQueue<SectionThreadInput> q = [];
 
-    public void Enqeue(Vec3i sloc)
+    public int Count => q.Count;
+
+    public void Enqueue(SectionThreadInput input)
     {
-        q.Enqueue(sloc);
+        q.Enqueue(input);
         semaphore.Release();
     }
 
     public void Release(int count) => semaphore.Release(count);
 
     public void Wait() => semaphore.Wait();
-    public bool TryDequeue(out Vec3i sloc) => q.TryDequeue(out sloc);
+    public bool TryDequeue(out SectionThreadInput input) => q.TryDequeue(out input);
 }

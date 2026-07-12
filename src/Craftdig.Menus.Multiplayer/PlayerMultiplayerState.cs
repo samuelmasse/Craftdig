@@ -5,6 +5,7 @@ public class PlayerMultiplayerState(
     RootState state,
     RootKeyboard keyboard,
     WorldTick tick,
+    WorldClock clock,
     DimensionContext context,
     PlayerScope scope,
     PlayerSocket socket,
@@ -58,6 +59,7 @@ public class PlayerMultiplayerState(
 
         while (ticks > 0)
         {
+            clock.Tick();
             if (!commonState.Inv && !commonState.Paused)
                 player.Tick();
             else player.NoTick();

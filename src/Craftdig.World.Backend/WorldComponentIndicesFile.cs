@@ -36,7 +36,10 @@ public class WorldComponentIndicesFile
 
         val = lines.Count;
         lines.Add(name);
-        File.AppendAllLines(file, [name]);
+
+        if (File.Exists(file))
+            File.AppendAllLines(file, [name]);
+        else File.WriteAllLines(file, lines);
 
         return val;
     }

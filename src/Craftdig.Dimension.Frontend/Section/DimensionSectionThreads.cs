@@ -11,7 +11,8 @@ public class DimensionSectionThreads(
 
     public void Start()
     {
-        for (int i = 0; i < 16; i++)
+        int count = Math.Clamp((Environment.ProcessorCount - 2) / 2, 1, 8);
+        for (int i = 0; i < count; i++)
         {
             var t = new Thread(Loop);
             t.Start();
@@ -31,6 +32,8 @@ public class DimensionSectionThreads(
 
     private void Loop()
     {
+        var samples = new SectionThreadSamples();
+
         while (true)
         {
             queue.Wait();
@@ -38,8 +41,8 @@ public class DimensionSectionThreads(
             if (stop)
                 break;
 
-            if (queue.TryDequeue(out var sloc))
-                worker.Work(sloc);
+            if (queue.TryDequeue(out var input))
+                worker.Work(input, samples);
         }
     }
 }

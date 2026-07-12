@@ -9,7 +9,8 @@ public class DimensionSingleplayerWorldLoadingMenu(
     DimensionChunks chunks,
     DimensionChunkPending chunkPending,
     DimensionBackend dimensionBackend,
-    DimensionFrontend dimensionFrontend)
+    DimensionFrontend dimensionFrontend,
+    DimensionContext dimension)
 {
     public void Create(EntMut root)
     {
@@ -34,6 +35,7 @@ public class DimensionSingleplayerWorldLoadingMenu(
             {
                 dimensionBackend.Frame();
                 dimensionFrontend.Frame();
+                dimension.Frame();
 
                 int loaded = 0;
                 for (int dx = -radius; dx <= radius; dx++)

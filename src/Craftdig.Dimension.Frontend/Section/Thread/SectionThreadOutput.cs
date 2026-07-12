@@ -1,3 +1,3 @@
 namespace Craftdig.Dimension.Frontend;
 
-public record struct SectionThreadOutput(List<BlockVertex> Buffer, Vec3i Sloc);
+public readonly record struct SectionThreadOutput(List<BlockVertex> Buffer, Vec3i Sloc, int Revision);

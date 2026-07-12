@@ -4,6 +4,7 @@ namespace Craftdig.Dimension.Backend;
 public class DimensionChunkThreadWorker(
     DimensionTerrainGenerator chunkGenerator,
     DimensionBiomeGenerator biomeGenerator,
+    DimensionChunkLightBuilder lightBuilder,
     DimensionChunkThreadOutputBag output)
 {
     public void Work(ChunkThreadInput input)
@@ -17,6 +18,7 @@ public class DimensionChunkThreadWorker(
                 input.Blocks.Pack(sz);
         }
 
-        output.Add(input);
+        var light = lightBuilder.Build(input.Blocks, input.Cloc);
+        output.Add(new(input.Blocks, input.Cloc, input.Noop, light));
     }
 }

@@ -9,6 +9,8 @@ public class WorldBackendLoader(
     WorldEntIdxContextBuilder context,
     WorldEntIndex entIndex,
     WorldIndexedComponentsMut indexedComponents,
+    WorldUniverseLoader universeLoader,
+    WorldTimeLoader timeLoader,
     WorldEntTracker entTracker,
     WorldEntRegionThread entRegionThread,
     WorldModuleIndicesLoader moduleIndicesLoader,
@@ -27,6 +29,8 @@ public class WorldBackendLoader(
         entRegionThread.Start();
 
         var region = entRegionStates[default];
+        universeLoader.Run(region);
+        timeLoader.Run();
         log.Info("Loaded {0} world ents", region.Ents.Count);
     }
 }

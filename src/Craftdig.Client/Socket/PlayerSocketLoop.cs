@@ -9,6 +9,7 @@ public class PlayerSocketLoop(
     PlayerPositionUpdateReceiver positionUpdateReceiver,
     PlayerSectionUpdateReceiver sectionUpdateReceiver,
     PlayerChunkUpdateReceiver chunkUpdateReceiver,
+    PlayerChunkLightUpdateReceiver chunkLightUpdateReceiver,
     PlayerWorldIndicesUpdateReceiver worldIndicesUpdateReceiver,
     PlayerSlowTickReceiver slowTickReceiver)
 {
@@ -21,6 +22,7 @@ public class PlayerSocketLoop(
         loop.Register<PongCommand>(pongReceiver.Receive);
         loop.Register<PositionUpdateCommand>(positionUpdateReceiver.Receive);
         loop.Register<ChunkUpdateCommand, byte>(chunkUpdateReceiver.Receive);
+        loop.Register<ChunkLightUpdateCommand, byte>(chunkLightUpdateReceiver.Receive);
         loop.Register<SectionUpdateCommand, byte>(sectionUpdateReceiver.Receive);
         loop.Register<WorldIndicesUpdateCommand, byte>(worldIndicesUpdateReceiver.Receive);
         loop.Register<SlowTickCommand>(slowTickReceiver.Receive);

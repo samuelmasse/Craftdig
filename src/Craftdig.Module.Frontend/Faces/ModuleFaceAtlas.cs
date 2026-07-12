@@ -3,7 +3,7 @@ namespace Craftdig.Module.Frontend;
 [Module]
 public class ModuleFaceAtlas(ModuleGl gl, ModuleImages imgs)
 {
-    private readonly Texture texture = new(gl, (0xF, 0xF), GlTextureTarget.Texture2DArray)
+    private readonly Texture texture = new(gl, (0x10, 0x10), GlTextureTarget.Texture2DArray)
     {
         MagFilter = GlTextureMagFilter.Nearest,
         MinFilter = GlTextureMinFilter.NearestMipmapLinear,
@@ -11,7 +11,7 @@ public class ModuleFaceAtlas(ModuleGl gl, ModuleImages imgs)
         WrapT = GlTextureWrapMode.Repeat
     };
     private readonly Dictionary<string, int> indices = [];
-    private readonly List<ImageData> images = [new((0xF, 0xF), new Vec4u8[0xFF])];
+    private readonly List<ImageData> images = [new((0x10, 0x10), new Vec4u8[0x100])];
     private int lastCount;
     private int textureDepth;
 

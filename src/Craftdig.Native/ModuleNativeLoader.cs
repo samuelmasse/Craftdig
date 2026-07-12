@@ -8,6 +8,7 @@ public class ModuleNativeLoader(ModuleNative m) : ModLoader
         m.OverworldDimension.Mutate()
             .IsDimension(true)
             .Name("Overworld")
+            .HasSkyLight(true)
             .Air(m.AirBlock);
 
         LoadGameModes();
@@ -68,6 +69,7 @@ public class ModuleNativeLoader(ModuleNative m) : ModLoader
             .MaxStack(64)
             .IsBlock(true)
             .IsSolid(true)
+            .LightOpacity(LightLevel.Max)
             .IsBuildable(true);
 
         m.DirtBlock.Mutate()
@@ -75,6 +77,7 @@ public class ModuleNativeLoader(ModuleNative m) : ModLoader
             .MaxStack(64)
             .IsBlock(true)
             .IsSolid(true)
+            .LightOpacity(LightLevel.Max)
             .IsBuildable(true);
 
         m.StoneBlock.Mutate()
@@ -82,6 +85,16 @@ public class ModuleNativeLoader(ModuleNative m) : ModLoader
             .MaxStack(64)
             .IsBlock(true)
             .IsSolid(true)
+            .LightOpacity(LightLevel.Max)
+            .IsBuildable(true);
+
+        m.GlowstoneBlock.Mutate()
+            .Name("Glowstone")
+            .MaxStack(64)
+            .IsBlock(true)
+            .IsSolid(true)
+            .LightEmission(LightLevel.Max)
+            .LightOpacity(LightLevel.Max)
             .IsBuildable(true);
     }
 }

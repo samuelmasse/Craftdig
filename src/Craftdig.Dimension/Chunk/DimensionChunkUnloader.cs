@@ -11,6 +11,8 @@ public class DimensionChunkUnloader(
             return;
 
         chunkUnloaderHandlers.Run(chunk);
+        chunk.ChunkLight?.Clear();
+        chunk.ChunkLight = null;
         chunks.Free(cloc);
     }
 }

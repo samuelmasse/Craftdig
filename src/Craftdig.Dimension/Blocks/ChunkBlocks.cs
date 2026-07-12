@@ -45,6 +45,13 @@ public class ChunkBlocks
 
     public Ent Uniform(int sz) => sections[sz].Uniform;
 
+    public ReadOnlySpan<Ent> ReadSection(int sz, out Ent uniform)
+    {
+        var section = sections[sz];
+        uniform = section.Uniform;
+        return section.Data.Span;
+    }
+
     public void Fill(Ent uniform)
     {
         for (int i = 0; i < sections.Length; i++)

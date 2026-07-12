@@ -8,6 +8,7 @@ public class PlayerDebugMenu(
     RootKeyboard keyboard,
     AppStyle s,
     WorldEntArena worldEntArena,
+    WorldUniverse universe,
     DimensionSharedVertexBuffer svb,
     DimensionSelected selected,
     DimensionEntArena dimensionEntArena,
@@ -17,13 +18,14 @@ public class PlayerDebugMenu(
 {
     public void Create(EntMut root)
     {
-        var gpu = gl.GetString(GlStringName.Renderer);
+        gl.GetString(GlStringName.Renderer, out var gpu);
 
         List<Func<ReadOnlySpan<char>>> lines =
         [
             () => text.Format("Frame: {0}. {1:F3} ms ({2} FPS)",
                 metrics.Frame.Ticks, metrics.FrameWindow.Average, metrics.FrameWindow.Ticks),
             () => text.Format("GPU: {0}", gpu),
+            () => text.Format("Time : {0}", universe.Time),
             () => text.Format("Position: {0:F3}", ent.Position),
             () => text.Format("Velocity: {0:F3}", ent.Velocity),
             () => text.Format("Collision: {0}", ent.CollisionNormal),

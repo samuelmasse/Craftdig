@@ -13,6 +13,9 @@ public interface IDimensionFrontendComponents
     // Section
     [ComponentToString] bool IsSection { get; set; }
     [ComponentToString] Vec3i Sloc { get; set; }
+    int MeshRevision { get; set; }
+    bool IsMeshPending { get; set; }
+    bool IsMeshDirty { get; set; }
     SectionMesh TerrainMesh { get; set; }
     EntMutIdx Chunk { get; set; }
 }

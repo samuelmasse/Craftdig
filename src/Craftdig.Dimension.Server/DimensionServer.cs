@@ -11,6 +11,7 @@ public class DimensionServer(
     DimensionForgottenChunks forgottenChunks,
     DimensionForgottenSections forgottenSections,
     DimensionSectionUpdateStreamer sectionUpdateStreamer,
+    DimensionLightUpdateStreamer lightUpdateStreamer,
     DimensionSectionReminder sectionReminder,
     DimensionRigidBag rigidBag,
     DimensionPlayerSpawner playerSpawner,
@@ -29,12 +30,13 @@ public class DimensionServer(
         context.Tick();
         backend.Tick();
 
+        backend.Frame();
+
         chunkStreamerRequester.Tick();
         sectionUpdateStreamer.Tick();
+        lightUpdateStreamer.Tick();
         sectionReminder.Tick();
         positionStreamer.Tick();
-
-        backend.Frame();
 
         log.Trace("{0} rigids", rigidBag.Ents.Length);
     }

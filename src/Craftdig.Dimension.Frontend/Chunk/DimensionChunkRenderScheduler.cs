@@ -18,17 +18,20 @@ public class DimensionChunkRenderScheduler(DimensionChunks chunks, DimensionBloc
 
     private void Process(Vec2i cloc)
     {
-        if (IsNull(cloc + (1, 0)) ||
-            IsNull(cloc + (0, 1)) ||
-            IsNull(cloc + (-1, 0)) ||
-            IsNull(cloc + (0, -1)) ||
-            IsNull(cloc + (1, 1)) ||
-            IsNull(cloc + (-1, 1)) ||
-            IsNull(cloc + (-1, -1)) ||
-            IsNull(cloc + (1, -1)))
+        if (IsUnavailable(cloc + (1, 0)) ||
+            IsUnavailable(cloc + (0, 1)) ||
+            IsUnavailable(cloc + (-1, 0)) ||
+            IsUnavailable(cloc + (0, -1)) ||
+            IsUnavailable(cloc + (1, 1)) ||
+            IsUnavailable(cloc + (-1, 1)) ||
+            IsUnavailable(cloc + (-1, -1)) ||
+            IsUnavailable(cloc + (1, -1)))
             return;
 
         if (!chunks.TryGet(cloc, out var chunk))
+            return;
+
+        if (!chunk.IsLightReady)
             return;
 
         if (!blocksRaw.TryGetChunkBlocks(cloc, out var blocks))
@@ -38,7 +41,7 @@ public class DimensionChunkRenderScheduler(DimensionChunks chunks, DimensionBloc
         {
             for (int sz = 0; sz < SectionHeight; sz++)
             {
-                if (blocks.Uniform(sz) == default || blocks.Uniform(sz).IsSolid)
+                if (ShouldMesh(cloc, blocks, sz))
                     chunk.Unrendered.Add(sz, sz);
             }
 
@@ -48,5 +51,35 @@ public class DimensionChunkRenderScheduler(DimensionChunks chunks, DimensionBloc
         chunk.IsReadyToRender = true;
     }
 
-    private bool IsNull(Vec2i cloc) => !chunks.TryGet(cloc, out _);
+    private bool ShouldMesh(Vec2i cloc, ChunkBlocks blocks, int sz)
+    {
+        var uniform = blocks.Uniform(sz);
+        if (uniform == default)
+            return true;
+
+        if (!uniform.IsSolid)
+            return false;
+
+        if (sz == 0 || sz == SectionHeight - 1 ||
+            !IsUniformSolid(blocks, sz - 1) ||
+            !IsUniformSolid(blocks, sz + 1))
+            return true;
+
+        return !IsUniformSolid(cloc + (1, 0), sz) ||
+               !IsUniformSolid(cloc + (-1, 0), sz) ||
+               !IsUniformSolid(cloc + (0, 1), sz) ||
+               !IsUniformSolid(cloc + (0, -1), sz);
+    }
+
+    private bool IsUniformSolid(Vec2i cloc, int sz) =>
+        blocksRaw.TryGetChunkBlocks(cloc, out var blocks) && IsUniformSolid(blocks, sz);
+
+    private bool IsUniformSolid(ChunkBlocks blocks, int sz)
+    {
+        var uniform = blocks.Uniform(sz);
+        return uniform != default && uniform.IsSolid;
+    }
+
+    private bool IsUnavailable(Vec2i cloc) =>
+        !chunks.TryGet(cloc, out var chunk) || !chunk.IsLightReady;
 }

@@ -6,6 +6,7 @@ public class PlayerRenderer(
     AppRenderDistance renderDistance,
     ModuleFaceAtlas blockAtlas,
     WorldTick tick,
+    WorldSky sky,
     DimensionSharedVertexBuffer svb,
     DimensionBlockProgram blockProgram,
     DimensionChunks chunks,
@@ -23,10 +24,11 @@ public class PlayerRenderer(
 
     public void Render(Vec2 canvas)
     {
-        var sky = new Vec3(84, 145, 255);
+        float skyStrength = sky.Strength;
+        var skyColor = new Vec3(84, 145, 255) * (0.15f + 0.85f * skyStrength);
 
         gl.Viewport(0, 0, (int)canvas.X, (int)canvas.Y);
-        var clear = new Vec4(sky / 0xFF, 1);
+        var clear = new Vec4(skyColor / 0xFF, 1);
         gl.ClearColor(clear.X, clear.Y, clear.Z, clear.W);
         gl.ClearDepth(1f);
         gl.Clear(GlClearBufferMask.DepthBufferBit | GlClearBufferMask.ColorBufferBit);
@@ -46,6 +48,7 @@ public class PlayerRenderer(
         gl.UseProgram(blockProgram.Id);
         blockProgram.View = perspective.View;
         blockProgram.Projection = perspective.Projection;
+        blockProgram.SkyStrength = skyStrength;
         blockAtlas.Bind(blockProgram.SamplerTexture);
 
         var pos = Vec3d.Lerp(ent.PrevPosition, ent.Position, (float)tick.Alpha);

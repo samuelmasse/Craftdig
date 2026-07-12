@@ -3,81 +3,80 @@ namespace Craftdig.Dimension.Server;
 [Dimension]
 public class DimensionChunkStreamer(
     WorldModuleIndices moduleIndices,
-    DimensionBlocksRaw blocksRaw)
+    DimensionBlocksRaw blocksRaw,
+    DimensionLightStreamer lightStreamer,
+    DimensionChunkLightFormat lightFormat)
 {
     private readonly ChunkUpdateBlockEntry[] buffer = new ChunkUpdateBlockEntry[ChunkVolume];
-    private readonly byte[] data = new byte[ChunkVolume * Marshal.SizeOf<ChunkUpdateBlockEntry>()];
+    private readonly byte[] data = new byte[
+        BrotliEncoder.GetMaxCompressedLength(ChunkVolume * Marshal.SizeOf<ChunkUpdateBlockEntry>())];
 
     public void Stream(NetSocket ns, Vec2i cloc)
     {
         if (!blocksRaw.TryGetChunkBlocks(cloc, out var blocks))
             return;
 
-        var compressed = Compress(blocks);
+        if (!TryCompress(blocks, out var compressed))
+            return;
+
         ns.Send(new ChunkUpdateCommand() { Cloc = cloc }, compressed);
+
+        if (lightStreamer.TryEncode(
+                cloc,
+                lightFormat.AllSectionsMask,
+                true,
+                out var lightCommand,
+                out var lightData))
+            ns.Send(lightCommand, lightData);
     }
 
-    private Span<byte> Compress(ChunkBlocks blocks)
+    private bool TryCompress(ChunkBlocks blocks, out ReadOnlySpan<byte> compressed)
     {
         int count = 0;
 
         for (int sz = 0; sz < SectionHeight; sz++)
         {
-            Ent prev = default;
-            int run = 0;
-
-            if (blocks.Uniform(sz) == default)
+            var section = blocks.ReadSection(sz, out var uniform);
+            if (section.IsEmpty)
             {
-                foreach (var block in blocks.Slice(sz))
+                buffer[count++] = new() { Value = moduleIndices[uniform], Count = SectionVolume };
+                continue;
+            }
+
+            Ent previous = section[0];
+            int run = 1;
+            for (int i = 1; i < section.Length; i++)
+            {
+                var block = section[i];
+                if (block == previous)
                 {
-                    if (block != prev)
-                    {
-                        Flush();
-                        prev = block;
-                        run = 1;
-                    }
-                    else run++;
+                    run++;
+                    continue;
                 }
 
                 Flush();
-
-                void Flush()
-                {
-                    if (run > 0)
-                    {
-                        buffer[count++] = new() { Value = moduleIndices[prev], Count = run };
-                        if (buffer[count - 1].Value == 0)
-                        {
-
-                        }
-                    }
-                }
+                previous = block;
+                run = 1;
             }
-            else
+
+            Flush();
+
+            void Flush()
             {
-                var uni = blocks.Uniform(sz);
-                buffer[count++] = new() { Value = moduleIndices[uni], Count = SectionVolume };
-                if (buffer[count - 1].Value == 0)
-                {
-                    blocks.Uniform(sz);
-                }
+                buffer[count++] = new() { Value = moduleIndices[previous], Count = run };
             }
         }
 
-        var span = buffer.AsSpan()[..count];
-        foreach (var item in span)
+        if (!BrotliEncoder.TryCompress(
+                MemoryMarshal.AsBytes(buffer.AsSpan(0, count)),
+                data,
+                out int compressedBytes))
         {
-            if (item.Value == 0)
-            {
-
-            }
+            compressed = default;
+            return false;
         }
 
-        BrotliEncoder.TryCompress(
-            MemoryMarshal.AsBytes(buffer.AsSpan()[..count]),
-            data,
-            out var compressedBytes);
-
-        return data.AsSpan()[..compressedBytes];
+        compressed = data.AsSpan(0, compressedBytes);
+        return true;
     }
 }

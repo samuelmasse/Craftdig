@@ -1,7 +1,7 @@
 namespace Craftdig.Dimension.Frontend;
 
 [StructLayout(LayoutKind.Sequential)]
-public readonly record struct BlockVertex(Vec3 Position, Vec3 Color, Vec3 TexCoord) : IVertex
+public readonly record struct BlockVertex(Vec3 Position, Vec3 Lighting, Vec3 TexCoord) : IVertex
 {
     public static readonly int Size = Marshal.SizeOf<BlockVertex>();
 

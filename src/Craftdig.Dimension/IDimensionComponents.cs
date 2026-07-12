@@ -35,6 +35,8 @@ public interface IDimensionComponents
     [ComponentToString] bool IsChunk { get; set; }
     [ComponentToString] Vec2i Cloc { get; set; }
     ChunkBlocks? ChunkBlocks { get; set; }
+    ChunkLight? ChunkLight { get; set; }
+    bool IsLightReady { get; set; }
 
     // Rigid
     Vec3d PrevPosition { get; set; }

@@ -5,7 +5,6 @@ public class DimensionChunkRequester(
     AppRenderDistance renderDistance,
     DimensionSeerBag seerBag,
     DimensionChunks chunks,
-    DimensionChunkThreadWorkQueue chunkThreadWorkQueue,
     DimensionChunkPending chunkPending,
     DimensionChunkLoader chunkLoader)
 {
@@ -17,7 +16,7 @@ public class DimensionChunkRequester(
         if (seerBag.Ents.IsEmpty)
             return;
 
-        int credits = 32 - chunkThreadWorkQueue.Count;
+        int credits = 32 - chunkPending.Count;
         bool next = true;
 
         watch.Restart();

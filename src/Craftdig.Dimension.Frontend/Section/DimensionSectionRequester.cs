@@ -18,7 +18,7 @@ public class DimensionSectionRequester(
 
         watch.Restart();
         bool next;
-        do next = LoadNearestChunk(RandomSeerSectionLocation());
+        do next = LoadNearestSection(RandomSeerSectionLocation());
         while (next && watch.Elapsed.TotalMilliseconds < 1);
     }
 
@@ -28,26 +28,36 @@ public class DimensionSectionRequester(
         return (Vec3i)seer.Position / SectionSize;
     }
 
-    private bool LoadNearestChunk(Vec3i sloc)
+    private bool LoadNearestSection(Vec3i sloc)
     {
-        if (!TryGetNeareastChunkWithUnloadedSections(sloc.XY, out var cloc))
+        if (!TryGetNearestChunkWithUnloadedSections(sloc.XY, out var cloc))
             return false;
 
         chunks.TryGet(cloc, out var chunk);
 
-        for (var i = 0; i < chunk.Unrendered.Count; i++)
-        {
-            int sz = chunk.Unrendered.Values[i];
-            var nsloc = new Vec3i(chunk.Cloc.X, chunk.Cloc.Y, sz);
+        int closestIndex = 0;
+        int closestDistance = int.MaxValue;
 
-            sections.TryGet(nsloc, out var section);
-            sectionLoader.Load(section);
+        for (int i = 0; i < chunk.Unrendered.Count; i++)
+        {
+            int distance = Math.Abs(chunk.Unrendered.Keys[i] - sloc.Z);
+            if (distance >= closestDistance)
+                continue;
+
+            closestIndex = i;
+            closestDistance = distance;
         }
+
+        int sz = chunk.Unrendered.Values[closestIndex];
+        var nsloc = new Vec3i(chunk.Cloc.X, chunk.Cloc.Y, sz);
+
+        sections.TryGet(nsloc, out var section);
+        sectionLoader.Load(section);
 
         return true;
     }
 
-    private bool TryGetNeareastChunkWithUnloadedSections(Vec2i center, out Vec2i cloc)
+    private bool TryGetNearestChunkWithUnloadedSections(Vec2i center, out Vec2i cloc)
     {
         cloc = default;
 

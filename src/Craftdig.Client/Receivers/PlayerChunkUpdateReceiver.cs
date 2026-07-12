@@ -6,45 +6,36 @@ public class PlayerChunkUpdateReceiver(
     DimensionBlocksAllocator blocksAllocator,
     PlayerChunkUpdateQueue chunkUpdateQueue)
 {
+    private readonly int entrySize = Marshal.SizeOf<ChunkUpdateBlockEntry>();
     private readonly ChunkUpdateBlockEntry[] buffer = new ChunkUpdateBlockEntry[ChunkVolume];
 
     public void Receive(ChunkUpdateCommand cmd, ReadOnlySpan<byte> data)
     {
+        BrotliDecoder.TryDecompress(data, MemoryMarshal.AsBytes(buffer.AsSpan()), out int bytes);
+
+        var entries = buffer.AsSpan(0, bytes / entrySize);
+
         var blocks = new ChunkBlocks(blocksAllocator);
-
-        BrotliDecoder.TryDecompress(
-            data,
-            MemoryMarshal.AsBytes(buffer.AsSpan()),
-            out var bytes);
-
-        int count = bytes / Marshal.SizeOf<ChunkUpdateBlockEntry>();
-        var entries = buffer.AsSpan()[..count];
-        int cur = 0;
         int index = 0;
 
         for (int sz = 0; sz < SectionHeight; sz++)
         {
-            while (cur < SectionVolume)
+            var first = entries[index];
+            if (first.Count == SectionVolume)
             {
-                var entry = entries[index++];
-                var block = moduleIndices[entry.Value];
-
-                if (entry.Count != SectionVolume)
-                {
-                    for (int i = 0; i < entry.Count; i++)
-                    {
-                        _ = blocks.Slice(sz);
-                        blocks.Slice(sz)[cur++] = block;
-                    }
-                }
-                else
-                {
-                    blocks.Fill(sz, block);
-                    cur += SectionVolume;
-                }
+                blocks.Fill(sz, moduleIndices[first.Value]);
+                index++;
+                continue;
             }
 
-            cur = 0;
+            var destination = blocks.Slice(sz);
+            int offset = 0;
+            while (offset < SectionVolume)
+            {
+                var entry = entries[index++];
+                destination.Slice(offset, entry.Count).Fill(moduleIndices[entry.Value]);
+                offset += entry.Count;
+            }
         }
 
         chunkUpdateQueue.Enqueue((cmd.Cloc, blocks));

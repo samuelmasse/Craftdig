@@ -9,7 +9,8 @@ public class DimensionBackendLoader(
     DimensionRegionThread regionThread,
     DimensionEntRegionThread entRegionThread,
     DimensionEntTracker entTracker,
-    DimensionEntDisposeTracker entDisposeTracker)
+    DimensionEntDisposeTracker entDisposeTracker,
+    DimensionLighting lighting)
 {
     public void Run()
     {
@@ -17,6 +18,8 @@ public class DimensionBackendLoader(
         context.AddPost<Vec3d, DimensionComponents.Position>(playerSync.Intercept);
         context.AddPost<bool, DimensionComponents.IsPlayer>(playerSync.Intercept);
         indexedComponents.AddSaved<DimensionComponents>();
+
+        lighting.Start();
 
         chunkThreads.Start();
         regionThread.Start();

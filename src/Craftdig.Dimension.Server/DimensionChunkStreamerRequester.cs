@@ -82,6 +82,7 @@ public class DimensionChunkStreamerRequester(
                 bool Visit(Vec2i delta) =>
                     chunks.TryGet(center + delta, out var chunk) &&
                     chunk.IsLoaded &&
+                    chunk.IsLightReady &&
                     !streamed.Contains(center + delta);
             }
         }

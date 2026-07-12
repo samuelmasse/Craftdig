@@ -26,6 +26,10 @@ public class ModuleNativeFrontendLoader(ModuleNative m) : ModLoader
         m.DirtFace.Mutate()
             .IsFace(true)
             .FaceFile("Dirt");
+
+        m.GlowstoneFace.Mutate()
+            .IsFace(true)
+            .FaceFile("Glowstone");
     }
 
     private void LoadBlocks()
@@ -46,5 +50,8 @@ public class ModuleNativeFrontendLoader(ModuleNative m) : ModLoader
 
         m.StoneBlock.Mutate()
             .Faces(new(m.StoneFace));
+
+        m.GlowstoneBlock.Mutate()
+            .Faces(new(m.GlowstoneFace));
     }
 }

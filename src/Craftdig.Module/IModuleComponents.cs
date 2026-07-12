@@ -19,6 +19,7 @@ public interface IModuleComponents
     // Dimension
     [ComponentToString] bool IsDimension { get; set; }
     Ent Air { get; set; }
+    bool HasSkyLight { get; set; }
     Type TerrainGeneratorType { get; set; }
     Type BiomeGeneraetorType { get; set; }
 
@@ -26,5 +27,7 @@ public interface IModuleComponents
     [ComponentToString] bool IsBlock { get; set; }
     bool IsBuildable { get; set; }
     bool IsSolid { get; set; }
+    byte LightEmission { get; set; }
+    byte LightOpacity { get; set; }
     int MaxStack { get; set; }
 }

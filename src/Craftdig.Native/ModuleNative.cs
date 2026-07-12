@@ -17,8 +17,10 @@ public record class ModuleNative(
     EntMut GrassSideFace,
     EntMut StoneFace,
     EntMut DirtFace,
+    EntMut GlowstoneFace,
 
     EntMut AirBlock,
     EntMut GrassBlock,
     EntMut DirtBlock,
-    EntMut StoneBlock) : EntMutList;
+    EntMut StoneBlock,
+    EntMut GlowstoneBlock) : EntMutList;

@@ -3,6 +3,7 @@ namespace Craftdig.Dimension.Backend;
 [Dimension]
 public class DimensionChunkThreads(
     DimensionChunkThreadWorkQueue queue,
+    DimensionChunkThreadOutputBag output,
     DimensionChunkThreadWorker worker)
 {
     private readonly List<Thread> threads = [];
@@ -10,7 +11,8 @@ public class DimensionChunkThreads(
 
     public void Start()
     {
-        for (int i = 0; i < 16; i++)
+        int count = Math.Clamp((Environment.ProcessorCount - 1) / 2, 1, 8);
+        for (int i = 0; i < count; i++)
         {
             var t = new Thread(Loop);
             t.Start();
@@ -25,6 +27,9 @@ public class DimensionChunkThreads(
 
         foreach (var t in threads)
             t.Join();
+
+        while (output.TryTake(out var item))
+            item.Light.Clear();
     }
 
     private void Loop()
