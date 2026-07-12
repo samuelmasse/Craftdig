@@ -5,7 +5,6 @@ public class DimensionLighting(
     DimensionEnt dimension,
     DimensionBlocksRaw blocks,
     DimensionBlockChanges blockChanges,
-    DimensionChunkLightBuilder lightBuilder,
     DimensionLightsRaw lights,
     DimensionLightChanges lightChanges,
     DimensionLightPropagation propagation,
@@ -15,47 +14,16 @@ public class DimensionLighting(
     private readonly Queue<LightNode> skyDecrease = new(SectionVolume);
     private readonly Queue<LightNode> blockIncrease = new(SectionVolume);
     private readonly Queue<LightNode> blockDecrease = new(SectionVolume);
-    private Vec2i loadingCloc;
-    private bool loading;
-    private bool running;
 
-    public void Start() => running = true;
-    public void Stop() => running = false;
-
-    public void Load(EntMutIdx chunk, ChunkLight? prepared = null)
+    public void ConnectChunk(Vec2i cloc)
     {
-        var chunkBlocks = chunk.ChunkBlocks;
-        if (!running || chunkBlocks == null)
-        {
-            prepared?.Clear();
-            return;
-        }
-
-        chunk.ChunkLight?.Clear();
-        var light = prepared ?? lightBuilder.Build(chunkBlocks, chunk.Cloc);
-        chunk.ChunkLight = light;
-
-        loadingCloc = chunk.Cloc;
-        loading = true;
-        try
-        {
-            SeedLoadedBorders(chunk.Cloc);
-            RunIncrease(LightChannel.Block);
-            RunIncrease(LightChannel.Sky);
-        }
-        finally
-        {
-            loading = false;
-        }
-
-        chunk.IsLightReady = true;
+        SeedLoadedBorders(cloc);
+        RunIncrease(LightChannel.Block, cloc);
+        RunIncrease(LightChannel.Sky, cloc);
     }
 
     public void Tick()
     {
-        if (!running)
-            return;
-
         foreach (var change in blockChanges.Span)
             ProcessBlockChange(change.Loc, change.Prev);
 
@@ -234,7 +202,9 @@ public class DimensionLighting(
         }
     }
 
-    private void RunIncrease(LightChannel channel)
+    private void RunIncrease(LightChannel channel) => RunIncrease(channel, null);
+
+    private void RunIncrease(LightChannel channel, Vec2i? untrackedCloc)
     {
         var queue = IncreaseQueue(channel);
         while (queue.TryDequeue(out var node))
@@ -247,7 +217,7 @@ public class DimensionLighting(
                 continue;
 
             if (level > current)
-                SetLevel(channel, node.Loc, level);
+                SetLevel(channel, node.Loc, level, untrackedCloc);
 
             foreach (var direction in propagation.Directions)
             {
@@ -259,7 +229,7 @@ public class DimensionLighting(
                 if (contribution <= neighborLevel)
                     continue;
 
-                if (SetLevel(channel, neighbor, contribution))
+                if (SetLevel(channel, neighbor, contribution, untrackedCloc))
                     queue.Enqueue(new(neighbor, contribution));
             }
         }
@@ -319,7 +289,10 @@ public class DimensionLighting(
         return true;
     }
 
-    private bool SetLevel(LightChannel channel, Vec3i loc, byte value)
+    private bool SetLevel(LightChannel channel, Vec3i loc, byte value) =>
+        SetLevel(channel, loc, value, null);
+
+    private bool SetLevel(LightChannel channel, Vec3i loc, byte value, Vec2i? untrackedCloc)
     {
         if ((uint)loc.Z >= HeightSize || !lights.TryGetChunkLight(loc.XY.ToCloc(), out var light))
             return false;
@@ -330,7 +303,9 @@ public class DimensionLighting(
         if (!light.SetStored(channel, loc, value))
             return false;
 
-        TrackChange(loc);
+        if (loc.XY.ToCloc() != untrackedCloc)
+            lightChanges.Add(loc);
+
         return true;
     }
 
@@ -357,9 +332,4 @@ public class DimensionLighting(
     private Queue<LightNode> DecreaseQueue(LightChannel channel) =>
         channel == LightChannel.Sky ? skyDecrease : blockDecrease;
 
-    private void TrackChange(Vec3i loc)
-    {
-        if (!loading || loc.XY.ToCloc() != loadingCloc)
-            lightChanges.Add(loc);
-    }
 }

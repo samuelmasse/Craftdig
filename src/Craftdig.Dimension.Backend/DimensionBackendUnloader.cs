@@ -6,12 +6,10 @@ public class DimensionBackendUnloader(
     DimensionBackendUnloaderHandlers backendUnloaderHandlers,
     DimensionRegionThread regionThread,
     DimensionEntRegionThread entRegionThread,
-    DimensionRegionInvalidation regionInvalidation,
-    DimensionLighting lighting)
+    DimensionRegionInvalidation regionInvalidation)
 {
     public void Run()
     {
-        lighting.Stop();
         chunkThreads.Stop();
         backendUnloaderHandlers.Run();
         regionInvalidation.Drain();

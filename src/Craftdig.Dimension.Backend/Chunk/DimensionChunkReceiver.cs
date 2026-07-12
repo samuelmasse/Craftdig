@@ -46,8 +46,12 @@ public class DimensionChunkReceiver(
         chunks.Alloc(cloc);
         var chunk = chunks[cloc];
         chunk.ChunkBlocks = output.Blocks;
+        chunk.IsLightReady = false;
+        chunk.ChunkLight?.Clear();
+        chunk.ChunkLight = output.Light;
         chunk.IsLoaded = true;
-        lighting.Load(chunk, output.Light);
+        lighting.ConnectChunk(cloc);
+        chunk.IsLightReady = true;
         chunkPending.Remove(cloc);
         chunkReceiverHandlers.Run(chunk);
     }
