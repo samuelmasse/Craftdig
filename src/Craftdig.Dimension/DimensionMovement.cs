@@ -6,7 +6,10 @@ public class DimensionMovement(DimensionPlayerBag bag)
     public void Tick()
     {
         foreach (var ent in bag.Ents)
-            Tick(ent);
+        {
+            if (!ent.IsRemote)
+                Tick(ent);
+        }
     }
 
     private void Tick(EntMutIdx ent)

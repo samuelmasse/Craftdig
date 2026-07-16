@@ -7,6 +7,7 @@ public class PlayerFrontend(
     PlayerCamera camera,
     PlayerEnt ent,
     PlayerMovement movement,
+    PlayerInventoryActions inventoryActions,
     PlayerTeleporter teleporter,
     PlayerFov fov,
     PlayerConstruction construction)
@@ -31,17 +32,25 @@ public class PlayerFrontend(
     {
         movement.Input();
         construction.Input();
-        camera.Rotate(-mouse.Delta / 300);
-        camera.PreventBackFlipsAndFrontFlips();
+        if (mouse.Delta != default)
+        {
+            camera.Rotate(-mouse.Delta / 300);
+            camera.PreventBackFlipsAndFrontFlips();
+            camera.ComputeVectors();
+
+            var lookAt = camera.LookAt.Swizzle();
+            if (ent.LookAt != lookAt)
+                ent.LookAt = lookAt;
+        }
+
+        var index = ent.HotBarIndex;
 
         for (int i = 0; i < 9; i++)
         {
             var key = Keys.D1 + i;
             if (keyboard.IsKeyPressed(key))
-                ent.HotBarIndex = i;
+                index = i;
         }
-
-        var index = ent.HotBarIndex;
 
         if (mouse.Wheel.Y < 0)
             index++;
@@ -53,7 +62,11 @@ public class PlayerFrontend(
         if (index >= Slots.HotBarCount)
             index = 0;
 
-        ent.HotBarIndex = index;
+        if (ent.HotBarIndex != index)
+        {
+            ent.HotBarIndex = index;
+            inventoryActions.Submit(InventoryOperation.SelectHotBar(index));
+        }
         teleporter.Update();
     }
 }

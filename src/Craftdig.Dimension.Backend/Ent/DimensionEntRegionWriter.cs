@@ -9,5 +9,5 @@ public class DimensionEntRegionWriter(
     DimensionEntRegionStates entRegionStates) :
     WorldEntRegionWriter(indexedComponents, componentWriters, entRegionBuckets, entRegionFileHandles, entRegionStates)
 {
-    protected override Vec2i Rloc(EntMutIdx ent) => ent.Position.ToLoc().XY.ToCloc().ToRloc();
+    protected override Vec2i Rloc(EntMutIdx ent) => ent.Position.ToLoc().Xy.ToCloc().ToRloc();
 }

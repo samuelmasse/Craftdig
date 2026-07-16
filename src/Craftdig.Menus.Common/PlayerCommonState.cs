@@ -31,7 +31,11 @@ public class PlayerCommonState(
     };
     private readonly EntMut menus = Node(ui).OrderValueV(1).InnerAlignmentSnapV(s.ItemSpacingXS);
     private readonly EntMut overlay = Node(ui).InnerAlignmentSnapV(s.ItemSpacingXS).Mutate(playerOverlayMenu.Create);
-    private readonly EntMut hand = Node(ui).OrderValueV(1.5f).InnerAlignmentSnapV(s.ItemSpacingXS).Mutate(playerHandMenu.Create);
+    private readonly EntMut hand = Node(ui)
+        .OrderValueV(1.5f)
+        .InnerAlignmentSnapV(s.ItemSpacingXS)
+        .IsDisabledV(true)
+        .Mutate(playerHandMenu.Create);
     private readonly EntMut dark = Node(ui).ColorV((0.3f, 0.3f, 0.3f, 0.3f)).IsDisabledV(true);
 
     private Action<EntMut>? currentKeyMenu;
@@ -100,11 +104,13 @@ public class PlayerCommonState(
                             PopMenu(menus);
 
                         inv = false;
+                        hand.Mutate().IsDisabledV(true);
                     }
                 }
                 else
                 {
                     inv = true;
+                    hand.Mutate().IsDisabledV(false);
                     currentKeyMenu = keyMenus[key];
                     PushMenu(menus, keyMenus[key]);
                 }
@@ -118,8 +124,8 @@ public class PlayerCommonState(
         {
             paused = false;
             inv = false;
+            hand.Mutate().IsDisabledV(true);
             currentKeyMenu = null;
-            ent.Offhand = default;
             dark.Mutate().IsDisabledV(true);
         }
 

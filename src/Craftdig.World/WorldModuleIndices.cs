@@ -42,4 +42,5 @@ public class WorldModuleIndices(WorldModuleIndicesMut indices)
 {
     public int this[Ent block] => indices[block];
     public Ent this[int index] => indices[index];
+    public bool Contains(int index) => (uint)index < (uint)indices.Names.Length;
 }

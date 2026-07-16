@@ -22,6 +22,7 @@ public class WorldBackendLoader(
         moduleIndicesLoader.Run();
 
         context.AddPreDispose(entDisposeTracker.InterceptDispose);
+        context.AddPreDispose(entIndex.InterceptDispose);
         context.AddPre<Guid, WorldComponents.Id>(entIndex.Intercept);
         indexedComponents.AddSaved<WorldComponents>();
 

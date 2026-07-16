@@ -28,8 +28,8 @@ public class DimensionEntChunkBackendUnloader(
         {
             foreach (var ent in chunkRigids[chunk.Cloc])
             {
-                var ecloc = ent.Position.ToLoc().XY.ToCloc();
-                if (ecloc == cloc)
+                var ecloc = ent.Position.ToLoc().Xy.ToCloc();
+                if (!ent.IsPlayer && ecloc == cloc)
                     ent.Mutate().IsLoaded(false);
             }
 

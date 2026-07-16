@@ -2,19 +2,14 @@ namespace Craftdig.World.Server;
 
 [World]
 public partial class WorldServerEntTracker(
-    WorldIndexedComponents indexedComponents,
+    WorldEntSyncCatalog catalog,
     WorldEntIdxContextBuilder context,
     WorldScope scope)
 {
-    private int index;
-
-    public void Tick()
+    public void Run()
     {
-        while (index < indexedComponents.Components.Length)
-        {
-            StartTracking(indexedComponents.Components[index]);
-            index++;
-        }
+        foreach (var component in catalog.Components)
+            StartTracking(component.Component);
     }
 
     private void StartTracking(EntComponent component)

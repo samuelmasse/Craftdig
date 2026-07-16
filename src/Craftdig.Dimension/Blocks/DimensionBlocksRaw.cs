@@ -11,7 +11,7 @@ public class DimensionBlocksRaw(DimensionChunks chunks)
             return false;
         }
 
-        var cloc = loc.XY.ToCloc();
+        var cloc = loc.Xy.ToCloc();
         if (!TryGetChunkBlocks(cloc, out var blocks))
         {
             block = default;
@@ -27,7 +27,7 @@ public class DimensionBlocksRaw(DimensionChunks chunks)
         if ((uint)loc.Z >= HeightSize)
             return false;
 
-        var cloc = loc.XY.ToCloc();
+        var cloc = loc.Xy.ToCloc();
         if (!TryGetChunkBlocks(cloc, out var blocks))
             return false;
 

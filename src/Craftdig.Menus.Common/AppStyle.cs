@@ -383,90 +383,64 @@ public partial class AppStyle(RootText text, RootUiMouse mouse, RootKeyboard key
             var val = ent.SlotFV.Resolve().GetSlotValueFV.Resolve()?.Invoke() ?? default;
             var offhand = ent.SlotFV.Resolve().PlayerFV.Resolve().Offhand;
 
-            if (ent.SlotFV.Resolve().PlayerFV.Resolve().Offhand == default)
+            if (offhand == default)
             {
                 ent.SlotFV.Resolve().PlayerFV.Resolve().Mutate().Offhand(val);
                 ent.SlotFV.Resolve().SetSlotValueFV.Resolve()?.Invoke(default);
-                ent.SlotAddedR = true;
             }
+            else if (val.Item == offhand.Item)
+            {
+                int give = Math.Min(offhand.Count, val.Item.MaxStack - val.Count);
+                if (give > 0)
+                {
+                    offhand = offhand.Count == give
+                        ? default
+                        : new(offhand.Item, offhand.Count - give);
+                    ent.SlotFV.Resolve().PlayerFV.Resolve().Mutate().Offhand(offhand);
+                    ent.SlotFV.Resolve().SetSlotValueFV.Resolve()?.Invoke(new(val.Item, val.Count + give));
+                }
+            }
+            else
+            {
+                ent.SlotFV.Resolve().SetSlotValueFV.Resolve()?.Invoke(offhand);
+                ent.SlotFV.Resolve().PlayerFV.Resolve().Mutate().Offhand(val);
+            }
+
+            ent.SlotFV.Resolve().InventoryClickFV.Resolve()?.Invoke(InventoryClick.Primary);
         })
         .OnSecondaryPressF(() =>
         {
             var val = ent.SlotFV.Resolve().GetSlotValueFV.Resolve()?.Invoke() ?? default;
             var offhand = ent.SlotFV.Resolve().PlayerFV.Resolve().Offhand;
 
-            if (offhand == default && val.Count > 0)
+            if (offhand == default)
             {
-                int give = (int)Math.Ceiling(val.Count / 2f);
-                ent.SlotFV.Resolve().PlayerFV.Resolve().Mutate().Offhand(new(val.Item, give));
-
-                if (val.Count - give > 0)
-                    ent.SlotFV.Resolve().SetSlotValueFV.Resolve()?.Invoke(new(val.Item, val.Count - give));
-                else ent.SlotFV.Resolve().SetSlotValueFV.Resolve()?.Invoke(default);
-
-                ent.SlotAddedR = true;
-            }
-        })
-        .OnClickF(() =>
-        {
-            if (!ent.SlotAddedR)
-            {
-                var val = ent.SlotFV.Resolve().GetSlotValueFV.Resolve()?.Invoke() ?? default;
-                var offhand = ent.SlotFV.Resolve().PlayerFV.Resolve().Offhand;
-
-                if (val.Item == offhand.Item)
-                {
-                    int give = Math.Min(offhand.Count, val.Item.MaxStack - val.Count);
-                    if (give > 0)
-                    {
-                        if (offhand.Count - give > 0)
-                            offhand = new(offhand.Item, offhand.Count - give);
-                        else offhand = default;
-
-                        ent.SlotFV.Resolve().PlayerFV.Resolve().Mutate().Offhand(offhand);
-                        ent.SlotFV.Resolve().SetSlotValueFV.Resolve()?.Invoke(new(val.Item, val.Count + give));
-                    }
-                }
-                else
-                {
-                    ent.SlotFV.Resolve().SetSlotValueFV.Resolve()?.Invoke(offhand);
-                    ent.SlotFV.Resolve().PlayerFV.Resolve().Mutate().Offhand(val);
-                }
-            }
-
-            ent.SlotAddedR = false;
-        })
-        .OnSecondaryClickF(() =>
-        {
-            if (!ent.SlotAddedR)
-            {
-                var val = ent.SlotFV.Resolve().GetSlotValueFV.Resolve()?.Invoke() ?? default;
-                var offhand = ent.SlotFV.Resolve().PlayerFV.Resolve().Offhand;
-
-                if (offhand.Count == 0)
+                int give = (val.Count + 1) / 2;
+                if (give == 0)
                     return;
 
-                if (val.Item == default || val.Item == offhand.Item)
+                ent.SlotFV.Resolve().PlayerFV.Resolve().Mutate().Offhand(new(val.Item, give));
+                ent.SlotFV.Resolve().SetSlotValueFV.Resolve()?.Invoke(
+                    val.Count == give ? default : new(val.Item, val.Count - give));
+            }
+            else if (val.Item == default || val.Item == offhand.Item)
+            {
+                if (val.Count < offhand.Item.MaxStack)
                 {
-                    if (val.Count < offhand.Item.MaxStack)
-                    {
-                        ent.SlotFV.Resolve().SetSlotValueFV.Resolve()?.Invoke(new(offhand.Item, val.Count + 1));
-
-                        if (offhand.Count == 1)
-                            offhand = default;
-                        else offhand = new(offhand.Item, offhand.Count - 1);
-
-                        ent.SlotFV.Resolve().PlayerFV.Resolve().Mutate().Offhand(offhand);
-                    }
-                }
-                else if (val.Item != offhand.Item)
-                {
-                    ent.SlotFV.Resolve().SetSlotValueFV.Resolve()?.Invoke(offhand);
-                    ent.SlotFV.Resolve().PlayerFV.Resolve().Mutate().Offhand(val);
+                    ent.SlotFV.Resolve().SetSlotValueFV.Resolve()?.Invoke(new(offhand.Item, val.Count + 1));
+                    offhand = offhand.Count == 1
+                        ? default
+                        : new(offhand.Item, offhand.Count - 1);
+                    ent.SlotFV.Resolve().PlayerFV.Resolve().Mutate().Offhand(offhand);
                 }
             }
+            else
+            {
+                ent.SlotFV.Resolve().SetSlotValueFV.Resolve()?.Invoke(offhand);
+                ent.SlotFV.Resolve().PlayerFV.Resolve().Mutate().Offhand(val);
+            }
 
-            ent.SlotAddedR = false;
+            ent.SlotFV.Resolve().InventoryClickFV.Resolve()?.Invoke(InventoryClick.Secondary);
         });
 
     public void SlotButtonInfinity(EntMut ent) => ent.Mutate()
@@ -474,51 +448,32 @@ public partial class AppStyle(RootText text, RootUiMouse mouse, RootKeyboard key
         .OnPressF(() =>
         {
             var val = ent.SlotFV.Resolve().GetSlotValueFV.Resolve()?.Invoke() ?? default;
+            var offhand = ent.SlotFV.Resolve().PlayerFV.Resolve().Offhand;
 
-            if (ent.SlotFV.Resolve().PlayerFV.Resolve().Offhand == default)
-            {
+            if (offhand == default)
                 ent.SlotFV.Resolve().PlayerFV.Resolve().Mutate().Offhand(val);
-                ent.SlotAddedR = true;
-            }
-        })
-        .OnSecondaryPressF(ent.OnPressFV.Resolve())
-        .OnClickF(() =>
-        {
-            if (!ent.SlotAddedR)
+            else if (val.Item == offhand.Item)
             {
-                var val = ent.SlotFV.Resolve().GetSlotValueFV.Resolve()?.Invoke() ?? default;
-                var offhand = ent.SlotFV.Resolve().PlayerFV.Resolve().Offhand;
-
-                if (val.Item == offhand.Item)
-                {
-                    if (offhand.Count < val.Item.MaxStack)
-                        ent.SlotFV.Resolve().PlayerFV.Resolve().Mutate().Offhand(new(offhand.Item, offhand.Count + 1));
-                }
-                else ent.SlotFV.Resolve().PlayerFV.Resolve().Mutate().Offhand(val);
+                if (offhand.Count < val.Item.MaxStack)
+                    ent.SlotFV.Resolve().PlayerFV.Resolve().Mutate().Offhand(new(offhand.Item, offhand.Count + 1));
             }
+            else ent.SlotFV.Resolve().PlayerFV.Resolve().Mutate().Offhand(val);
 
-            ent.SlotAddedR = false;
+            ent.SlotFV.Resolve().InventoryClickFV.Resolve()?.Invoke(InventoryClick.Primary);
         })
-        .OnSecondaryClickF(() =>
+        .OnSecondaryPressF(() =>
         {
-            if (!ent.SlotAddedR)
-            {
-                var val = ent.SlotFV.Resolve().GetSlotValueFV.Resolve()?.Invoke() ?? default;
-                var offhand = ent.SlotFV.Resolve().PlayerFV.Resolve().Offhand;
+            var val = ent.SlotFV.Resolve().GetSlotValueFV.Resolve()?.Invoke() ?? default;
+            var offhand = ent.SlotFV.Resolve().PlayerFV.Resolve().Offhand;
 
-                if (offhand.Count == 0)
-                    offhand = val;
-                else
-                {
-                    if (offhand.Count == 1)
-                        offhand = default;
-                    else offhand = new(offhand.Item, offhand.Count - 1);
-                }
+            if (offhand.Count == 0)
+                offhand = val;
+            else if (offhand.Count == 1)
+                offhand = default;
+            else offhand = new(offhand.Item, offhand.Count - 1);
 
-                ent.SlotFV.Resolve().PlayerFV.Resolve().Mutate().Offhand(offhand);
-            }
-
-            ent.SlotAddedR = false;
+            ent.SlotFV.Resolve().PlayerFV.Resolve().Mutate().Offhand(offhand);
+            ent.SlotFV.Resolve().InventoryClickFV.Resolve()?.Invoke(InventoryClick.Secondary);
         });
 
 }

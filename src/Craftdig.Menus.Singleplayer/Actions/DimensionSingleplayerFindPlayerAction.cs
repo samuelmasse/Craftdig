@@ -2,8 +2,10 @@ namespace Craftdig.Menus.Singleplayer;
 
 [Dimension]
 public class DimensionSingleplayerFindPlayerAction(
+    WorldEntArena worldEntArena,
     WorldEntRegionStates worldEntRegionStates,
     DimensionEntRegionStates dimensionEntRegionStates,
+    DimensionPlayerIndex playerIndex,
     DimensionEntArena dimensionEntArena)
 {
     public EntMutIdx Run()
@@ -13,11 +15,16 @@ public class DimensionSingleplayerFindPlayerAction(
 
         if (existingPlayer != default)
         {
-            var rloc = existingPlayer.WorldPosition.ToLoc().XY.ToCloc().ToRloc();
-            var dimensionEntRegion = dimensionEntRegionStates[rloc];
-            return dimensionEntRegion.Ents.First(x => x.WorldPlayer == existingPlayer);
+            var rloc = existingPlayer.WorldPosition.ToLoc().Xy.ToCloc().ToRloc();
+            dimensionEntRegionStates.EnsureLoaded(rloc);
+            return playerIndex[existingPlayer.Id];
         }
 
-        return dimensionEntArena.Alloc();
+        var worldPlayer = worldEntArena.Alloc().Mutate()
+            .IsWorldPlayer(true)
+            .Ent;
+        return dimensionEntArena.Alloc().Mutate()
+            .WorldPlayer(worldPlayer)
+            .Ent;
     }
 }

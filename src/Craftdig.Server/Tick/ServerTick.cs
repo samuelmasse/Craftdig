@@ -15,5 +15,8 @@ public class ServerTick(
             dimension.DimensionScope.Get<DimensionServer>().Tick();
 
         world.Stream();
+
+        foreach (var dimension in dimensions.Ents)
+            dimension.DimensionScope.Get<DimensionServer>().Stream();
     }
 }

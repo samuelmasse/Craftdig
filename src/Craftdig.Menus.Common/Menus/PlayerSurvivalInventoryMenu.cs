@@ -1,7 +1,10 @@
 namespace Craftdig.Menus.Common;
 
 [Player]
-public class PlayerSurvivalInventoryMenu(AppStyle s, PlayerEnt player)
+public class PlayerSurvivalInventoryMenu(
+    AppStyle s,
+    PlayerEnt player,
+    PlayerInventoryActions inventoryActions)
 {
     public void Create(EntMut root)
     {
@@ -36,7 +39,9 @@ public class PlayerSurvivalInventoryMenu(AppStyle s, PlayerEnt player)
                     .Mutate(s.Slot)
                     .PlayerV(player)
                     .GetSlotValueF(() => player.ArmorSlots[x])
-                    .SetSlotValueF((v) => player.ArmorSlots[x] = v);
+                    .SetSlotValueF((v) => player.ArmorSlots[x] = v)
+                    .InventoryClickF(click => inventoryActions.Submit(
+                        InventoryOperation.ClickSlot(InventoryContainer.Armor, x, click)));
                 {
                     Node(square)
                         .Mutate(s.SlotButton)
@@ -144,7 +149,12 @@ public class PlayerSurvivalInventoryMenu(AppStyle s, PlayerEnt player)
                     .Mutate(s.Slot)
                     .PlayerV(player)
                     .GetSlotValueF(() => player.InventorySlots[loc.Y * Slots.HotBarCount + loc.X])
-                    .SetSlotValueF((v) => player.InventorySlots[loc.Y * Slots.HotBarCount + loc.X] = v);
+                    .SetSlotValueF((v) => player.InventorySlots[loc.Y * Slots.HotBarCount + loc.X] = v)
+                    .InventoryClickF(click => inventoryActions.Submit(
+                        InventoryOperation.ClickSlot(
+                            InventoryContainer.Inventory,
+                            loc.Y * Slots.HotBarCount + loc.X,
+                            click)));
                 {
                     Node(square)
                         .Mutate(s.SlotButton)
@@ -166,6 +176,8 @@ public class PlayerSurvivalInventoryMenu(AppStyle s, PlayerEnt player)
                 .Mutate(s.Slot)
                 .GetSlotValueF(() => player.HotBarSlots[i])
                 .SetSlotValueF((v) => player.HotBarSlots[i] = v)
+                .InventoryClickF(click => inventoryActions.Submit(
+                    InventoryOperation.ClickSlot(InventoryContainer.HotBar, i, click)))
                 .PlayerV(player);
             {
                 Node(square)

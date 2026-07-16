@@ -31,7 +31,7 @@ public class DimensionChunkRequester(
     private Vec2i RandomSeerChunkLocation()
     {
         var seer = seerBag.Ents[rng.Next(seerBag.Ents.Length)];
-        return seer.Position.ToLoc().XY.ToCloc();
+        return seer.Position.ToLoc().Xy.ToCloc();
     }
 
     private bool LoadNearestChunk(Vec2i cloc)

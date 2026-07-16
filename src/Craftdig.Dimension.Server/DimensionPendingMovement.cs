@@ -6,7 +6,10 @@ public class DimensionPendingMovement(AppLog log, DimensionSockets sockets)
     public void Tick()
     {
         foreach (var ns in sockets.Span)
-            ProcessMovement(ns);
+        {
+            if (ns.PlayerSpawnPhase == PlayerSpawnPhase.Active)
+                ProcessMovement(ns);
+        }
     }
 
     private void ProcessMovement(NetSocket ns)
@@ -55,7 +58,12 @@ public class DimensionPendingMovement(AppLog log, DimensionSockets sockets)
             mov.FlyUp = cmov.FlyUp;
             mov.FlyDown = cmov.FlyDown;
             mov.Vector = cmov.Vector;
-            mov.LookAt = cmov.LookAt;
+            if (cmov.LookAt != default)
+            {
+                mov.LookAt = cmov.LookAt;
+                if (ent.LookAt != cmov.LookAt)
+                    ent.LookAt = cmov.LookAt;
+            }
 
             constr = cmd.Construction;
             drop = cmd.Drop;
@@ -63,7 +71,6 @@ public class DimensionPendingMovement(AppLog log, DimensionSockets sockets)
 
         ent.Movement = mov;
         ent.Drop = drop;
-        ent.LookAt = ent.Movement.LookAt;
         ent.Construction = constr;
     }
 

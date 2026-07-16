@@ -22,6 +22,17 @@ public class PlayerPosition(
     public int Listen => listen;
     public int Debounce => debounce;
 
+    public bool Prepare()
+    {
+        if (positionUpdateReceiver.Count == 0)
+            return false;
+
+        var server = positionUpdateReceiver.Latest;
+        ApplyServerPosition(server);
+        ent.LookAt = server.LookAt;
+        return true;
+    }
+
     public void Tick()
     {
         expected.Add(new()
@@ -52,8 +63,12 @@ public class PlayerPosition(
             matching = 1;
 
             // Intentionally add some latency
-            socket.Send<MovePlayerCommand>();
-            socket.Send<MovePlayerCommand>();
+            var command = new MovePlayerCommand
+            {
+                Movement = new() { LookAt = ent.LookAt }
+            };
+            socket.Send(command);
+            socket.Send(command);
         }
 
         if (listen > 0 && received.Count > 0)
@@ -69,7 +84,7 @@ public class PlayerPosition(
     {
         if (listen > 0)
         {
-            ent.Movement = default;
+            ent.Movement = new() { LookAt = ent.LookAt };
             ent.Construction = default;
             listen--;
         }

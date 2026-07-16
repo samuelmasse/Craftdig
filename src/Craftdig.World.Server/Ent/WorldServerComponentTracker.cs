@@ -5,34 +5,62 @@ public abstract class WorldServerComponentTracker
     public abstract void AddTo(EntIdxContextBuilder context);
 }
 
-[World]
-public class WorldServerComponentTracker<T, N>(WorldEntScratched scratched, WorldComponentIndex<T, N> index) :
+public abstract class EntServerComponentTracker<T, N>(EntScratched scratched, EntSyncCatalog catalog) :
     WorldServerComponentTracker
     where T : IEquatable<T>
     where N : IComponent
 {
-    public override void AddTo(EntIdxContextBuilder context) => context.AddPre<T, N>(Intercept);
+    private readonly int index = catalog[N.Component].Ordinal;
+
+    public override void AddTo(EntIdxContextBuilder context)
+    {
+        context.AddPre<T, N>(Intercept);
+        context.AddPost<T, N>(Intercept);
+    }
 
     private void Intercept(EntMutIdx ent, in T value)
     {
-        var old = ent.Get<T, N>();
-        if (value.Equals(old))
-            return;
+        if (!ent.Has<T, N>() || !value.Equals(ent.Get<T, N>()))
+            scratched.Mark(ent, index);
+    }
 
-        scratched.Mark(ent, index.Index);
+    private void Intercept(EntMutIdx ent)
+    {
+        if (!ent.Has<T, N>())
+            scratched.Mark(ent, index);
     }
 }
 
 [World]
-public class WorldServerComponentArrayTracker<T, N>(WorldEntScratched scratched, WorldComponentIndex<T[], N> index) :
+public class WorldServerComponentTracker<T, N>(WorldEntScratched scratched, WorldEntSyncCatalog catalog) :
+    EntServerComponentTracker<T, N>(scratched, catalog)
+    where T : IEquatable<T>
+    where N : IComponent;
+
+public abstract class EntServerComponentArrayTracker<T, N>(EntScratched scratched, EntSyncCatalog catalog) :
     WorldServerComponentTracker
     where T : IEquatable<T>
     where N : IComponent
 {
-    public override void AddTo(EntIdxContextBuilder context) => context.AddPre<T[], N>(Intercept);
+    private readonly int index = catalog[N.Component].Ordinal;
 
-    private void Intercept(EntMutIdx ent, in T[] value)
+    public override void AddTo(EntIdxContextBuilder context)
     {
-        scratched.Mark(ent, index.Index);
+        context.AddPre<T[], N>(Intercept);
+        context.AddPost<T[], N>(Intercept);
+    }
+
+    private void Intercept(EntMutIdx ent, in T[] value) => scratched.Mark(ent, index);
+
+    private void Intercept(EntMutIdx ent)
+    {
+        if (!ent.Has<T[], N>())
+            scratched.Mark(ent, index);
     }
 }
+
+[World]
+public class WorldServerComponentArrayTracker<T, N>(WorldEntScratched scratched, WorldEntSyncCatalog catalog) :
+    EntServerComponentArrayTracker<T, N>(scratched, catalog)
+    where T : IEquatable<T>
+    where N : IComponent;

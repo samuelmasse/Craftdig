@@ -3,6 +3,10 @@ namespace Craftdig.Dimension.Frontend;
 [Components]
 public interface IDimensionFrontendComponents
 {
+    // Remote rigid presentation
+    RemotePositionInterpolation RemotePosition { get; set; }
+    RemoteLookAtInterpolation RemoteLookAt { get; set; }
+
     // Chunk
     Memory<EntPtrIdx> Sections { get; set; }
     SortedList<int, int> Unrendered { get; set; }

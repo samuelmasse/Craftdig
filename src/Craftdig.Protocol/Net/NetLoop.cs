@@ -24,14 +24,19 @@ public class NetLoop(AppLog log)
     public void Register<C, D>(Action<NetSocket, C, ReadOnlySpan<D>> handler)
         where C : unmanaged, ICommand where D : unmanaged
     {
-        int header = Marshal.SizeOf<C>();
+        int header = Unsafe.SizeOf<C>();
 
         Register(C.CommandId, (ns, msg) =>
         {
+            if (msg.Data.Length < header)
+                throw new InvalidDataException($"Message {C.CommandId} is shorter than its command header.");
+
             log.Trace("Socket {0} <- {1} ({2}) {3} bytes", ns.Tag, typeof(C).Name, C.CommandId, msg.Data.Length);
 
             var cmd = MemoryMarshal.AsRef<C>(msg.Data[..header]);
             var data = msg.Data[header..];
+            if (data.Length % Unsafe.SizeOf<D>() != 0)
+                throw new InvalidDataException($"Message {C.CommandId} has an incomplete payload element.");
             var items = MemoryMarshal.Cast<byte, D>(data);
             handler(ns, cmd, items);
         });

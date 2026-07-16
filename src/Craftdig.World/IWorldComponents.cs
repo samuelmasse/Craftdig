@@ -4,8 +4,8 @@ namespace Craftdig.World;
 public interface IWorldComponents
 {
     // Universe
-    [Saved] bool IsUniverse { get; set; }
-    [Saved] long Time { get; set; }
+    [Saved][Synced] bool IsUniverse { get; set; }
+    [Saved][Synced] long Time { get; set; }
 
     // World location
     [Saved] Vec3d WorldPosition { get; set; }

@@ -20,14 +20,26 @@ public class DimensionPlayerSocketsCleaner(
         foreach (var ns in remove)
         {
             var tag = ns.SocketWorldPlayer.Tag;
+            var player = ns.SocketPlayer;
+
+            player.IsSeer = false;
+            player.IsLoaded = false;
+            player.IsSpawnReserved = false;
+            player.PendingMovement = null;
+            player.PendingMovementWait = 0;
+            player.Movement = default;
+            player.Construction = default;
+            player.Drop = default;
+
+            ns.PlayerSpawnPhase = PlayerSpawnPhase.None;
+            ns.TerrainLoadCenter = default;
+            ns.TerrainLoadSideLength = 0;
+            ns.SocketStreamedChunks?.Clear();
 
             playerSlots.Return(ns.PlayerSlot);
 
             worldSockets.Remove(ns);
             sockets.Remove(ns);
-
-            ns.SocketPlayer.Dispose();
-            ns.SocketWorldPlayer.Dispose();
 
             log.Info("Player {0} left", tag);
         }

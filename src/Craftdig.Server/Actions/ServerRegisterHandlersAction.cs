@@ -22,6 +22,7 @@ public class ServerRegisterHandlersAction(
 
         loop.Register(Authenticated<SpawnPlayerCommand>(spawnPlayerReceiver.Receive));
         loop.Register(Authenticated(DimensionHandler<DimensionMovePlayerReceiver, MovePlayerCommand>()));
+        loop.Register(Authenticated(DimensionHandler<DimensionInventoryActionReceiver, InventoryActionCommand>()));
         loop.Register(Authenticated(DimensionHandler<DimensionForgetChunkReceiver, ForgetChunkCommand>()));
         loop.Register(Authenticated(DimensionHandler<DimensionForgetSectionReceiver, ForgetSectionCommand>()));
     }
@@ -44,9 +45,11 @@ public class ServerRegisterHandlersAction(
     private Action<NetSocket, C> DimensionHandler<T, C>()
         where T : DimensionReceiver<C> where C : unmanaged => (ns, cmd) =>
     {
-        if (ns.SocketWorldPlayer == default || ns.DimensionScope == default)
+        if (ns.SocketWorldPlayer == default ||
+            ns.DimensionScope == default ||
+            ns.PlayerSpawnPhase != PlayerSpawnPhase.Active)
         {
-            log.Warn("Socket {0} tried to perform a dimension action before spawning", ns.Tag);
+            log.Warn("Socket {0} tried to perform a dimension action before activation", ns.Tag);
             ns.Disconnect();
             return;
         }

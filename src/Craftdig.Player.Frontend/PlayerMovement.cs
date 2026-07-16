@@ -49,16 +49,16 @@ public class PlayerMovement(
             mov += camera.Right;
 
         movement.Vector += (Vec3)mov.Swizzle();
-        movement.LookAt = camera.LookAt.Swizzle();
+        movement.LookAt = ent.LookAt;
 
         ent.Movement = movement;
-        ent.LookAt = ent.Movement.LookAt;
     }
 
     public void NoTick()
     {
         var movement = ent.Movement;
         movement.Sprint = MovementAction.Stop;
+        movement.LookAt = ent.LookAt;
         ent.Movement = movement;
     }
 }

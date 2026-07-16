@@ -14,7 +14,7 @@ public class ServerClientLoop(
     {
         lock (this)
         {
-            ns.MaxMessageSize = 4096;
+            ns.MaxMessageSize = ProtocolLimits.MaxClientMessageSize;
             ns.ConnectedTime = DateTime.UtcNow;
             ns.Tag = $"s{++nextSocketId}";
 

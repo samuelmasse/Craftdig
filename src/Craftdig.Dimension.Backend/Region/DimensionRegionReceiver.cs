@@ -19,6 +19,6 @@ public class DimensionRegionReceiver(
     private void Receive(RegionThreadOutput output)
     {
         if (output.Input.Type == RegionThreadInputType.ReadChunk)
-            chunkThreadWorkQueue.Enqueue(new(output.Input.Blocks, output.Input.Sloc.XY, output.Noop));
+            chunkThreadWorkQueue.Enqueue(new(output.Input.Blocks, output.Input.Sloc.Xy, output.Noop));
     }
 }

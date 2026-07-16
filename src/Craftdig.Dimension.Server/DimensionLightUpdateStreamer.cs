@@ -12,8 +12,8 @@ public class DimensionLightUpdateStreamer(
     {
         foreach (var sloc in lightChanges)
         {
-            masks.TryGetValue(sloc.XY, out uint mask);
-            masks[sloc.XY] = mask | (1u << sloc.Z);
+            masks.TryGetValue(sloc.Xy, out uint mask);
+            masks[sloc.Xy] = mask | (1u << sloc.Z);
         }
 
         foreach (var (cloc, mask) in masks)

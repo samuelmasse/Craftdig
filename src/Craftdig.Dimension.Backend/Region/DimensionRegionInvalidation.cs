@@ -50,7 +50,7 @@ public class DimensionRegionInvalidation(
 
     private void Write(Vec3i sloc)
     {
-        if (!blocksRaw.TryGetChunkBlocks(sloc.XY, out var blocks))
+        if (!blocksRaw.TryGetChunkBlocks(sloc.Xy, out var blocks))
             return;
 
         regionThreadWorkQueue.Enqeue(new(sloc, RegionThreadInputType.WriteSection, blocks, sloc.Z));

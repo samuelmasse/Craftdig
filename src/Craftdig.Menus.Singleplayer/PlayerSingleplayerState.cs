@@ -19,13 +19,7 @@ public class PlayerSingleplayerState(
     public override void Load()
     {
         if (ent.IsPlayer)
-        {
-            var lookAt = ent.LookAt.Swizzle();
-            float pitch = -MathF.Asin(-lookAt.Y);
-            float yaw = MathF.Atan2(-lookAt.X, -lookAt.Z);
-
-            camera.Rotation = (yaw, pitch, 0);
-        }
+            camera.SetLookAt(ent.LookAt.Swizzle());
 
         commonState.Load();
     }

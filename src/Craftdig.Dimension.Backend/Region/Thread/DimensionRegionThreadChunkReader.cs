@@ -8,7 +8,7 @@ public class DimensionRegionThreadChunkReader(
     public bool TryRead(ChunkBlocks blocks, Vec2i cloc)
     {
         var state = states[cloc.ToRloc()];
-        var offset = cloc - state.Origin.XY;
+        var offset = cloc - state.Origin.Xy;
 
         if (IsFirstSectionBlank(state.Index, offset))
             return false;

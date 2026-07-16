@@ -34,7 +34,7 @@ public class DimensionSectionInvalidation(
 
     private void DirtySection(Vec3i sloc)
     {
-        if ((uint)sloc.Z >= SectionHeight || !chunks.TryGet(sloc.XY, out var chunk) || !chunk.IsReadyToRender)
+        if ((uint)sloc.Z >= SectionHeight || !chunks.TryGet(sloc.Xy, out var chunk) || !chunk.IsReadyToRender)
             return;
 
         if (!chunk.Sections.IsEmpty)

@@ -14,7 +14,7 @@ public class DimensionRegionWriter(
 
     public void Write(ChunkBlocks blocks, int sz, Vec3i sloc)
     {
-        var state = regionStates[sloc.XY.ToRloc()];
+        var state = regionStates[sloc.Xy.ToRloc()];
         var offset = sloc - state.Origin;
         ref var alloc = ref state.Index[offset];
 

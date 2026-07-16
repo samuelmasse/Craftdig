@@ -4,15 +4,15 @@ public class NetSocket(AppLog log, TcpClient tcp, Stream stream) : IEntMut
 {
     private readonly EntObj ent = new();
     private byte[] buffer = [];
-    private long maxMessageSize = long.MaxValue;
+    private long maxMessageSize = ProtocolLimits.MaxMessageSize;
 
     private readonly SemaphoreSlim outSemaphore = new(0);
     private readonly byte[][] outSegments =
     [
-        new byte[short.MaxValue],
-        new byte[short.MaxValue],
-        new byte[short.MaxValue],
-        new byte[short.MaxValue]
+        new byte[ProtocolLimits.SegmentSize],
+        new byte[ProtocolLimits.SegmentSize],
+        new byte[ProtocolLimits.SegmentSize],
+        new byte[ProtocolLimits.SegmentSize]
     ];
     private readonly int[] outSegmentCommitIndex = [0, 0, 0, 0];
     private readonly int[] outSegmentSendCommitIndex = [0, 0, 0, 0];

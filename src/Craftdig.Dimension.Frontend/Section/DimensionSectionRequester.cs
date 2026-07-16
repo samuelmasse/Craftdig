@@ -30,7 +30,7 @@ public class DimensionSectionRequester(
 
     private bool LoadNearestSection(Vec3i sloc)
     {
-        if (!TryGetNearestChunkWithUnloadedSections(sloc.XY, out var cloc))
+        if (!TryGetNearestChunkWithUnloadedSections(sloc.Xy, out var cloc))
             return false;
 
         chunks.TryGet(cloc, out var chunk);

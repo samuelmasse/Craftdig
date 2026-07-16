@@ -105,7 +105,7 @@ public class WorldEntRegionWriter(
                 int index = offset + bit;
                 bits &= bits - 1;
 
-                if (!TryUpdateComponentInPlace(ent, rloc, ploc, index))
+                if (!TryUpdateComponentInPlace(ent, rloc, ref ploc, index))
                     return false;
             }
         }
@@ -113,7 +113,7 @@ public class WorldEntRegionWriter(
         return true;
     }
 
-    private bool TryUpdateComponentInPlace(EntMutIdx ent, Vec2i rloc, EntPloc ploc, int index)
+    private bool TryUpdateComponentInPlace(EntMutIdx ent, Vec2i rloc, ref EntPloc ploc, int index)
     {
         var region = entRegionStates[rloc];
         var handle = entRegionFileHandles[region.Files.Buckets[ploc.Bucket]];
@@ -141,8 +141,9 @@ public class WorldEntRegionWriter(
 
                 RandomAccess.Write(handle, span, ploc.Index * bucketSize + ploc.Size);
 
-                writer.WritePloc(ent, new(ploc.Size, size));
-                ent.Ploc = ploc with { Size = ploc.Size + size };
+                writer.WritePloc(ent, new(ploc.Size + sizeof(int) + sizeof(int), size));
+                ploc = ploc with { Size = ploc.Size + totalSize };
+                ent.Ploc = ploc;
             }
             else return false; // cannot add new component in place due to insufficient free space
         }

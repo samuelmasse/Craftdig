@@ -28,8 +28,9 @@ public class ModuleMultiplayerJoinAction(RootState state, ModuleEnts ents, Modul
             .With(new PlayerEnt(dimensionScope.Get<DimensionEntArena>().Alloc()))
             .With(socket)
             .Run(x => dimensionScope.Get<DimensionChunkUnloaderHandlers>().Add(x.Get<PlayerChunkClientUnloader>().Unload))
+            .Run(x => x.Get<PlayerInventoryActions>().Enable())
             .Run(x => x.Get<PlayerSocketLoop>().Start())
             .Run(x => x.Get<PlayerMultiplayerSpawnAction>().Run())
-            .Run(x => state.Current = x.New<PlayerMultiplayerState>());
+            .Run(x => state.Current = x.New<PlayerMultiplayerLoadingState>());
     }
 }

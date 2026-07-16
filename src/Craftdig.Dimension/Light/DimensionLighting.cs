@@ -36,7 +36,7 @@ public class DimensionLighting(
     private void ProcessBlockChange(Vec3i loc, Ent previous)
     {
         if (!blocks.TryGet(loc, out var current) ||
-            !lights.TryGetChunkLight(loc.XY.ToCloc(), out var chunkLight))
+            !lights.TryGetChunkLight(loc.Xy.ToCloc(), out var chunkLight))
             return;
 
         byte oldBlock = chunkLight.Block(loc);
@@ -259,7 +259,7 @@ public class DimensionLighting(
     {
         if (channel == LightChannel.Sky)
         {
-            if (lights.TryGetChunkLight(loc.XY.ToCloc(), out var light) && light.IsDirectSky(loc))
+            if (lights.TryGetChunkLight(loc.Xy.ToCloc(), out var light) && light.IsDirectSky(loc))
                 QueueIncrease(channel, loc, LightLevel.Max);
             return;
         }
@@ -279,7 +279,7 @@ public class DimensionLighting(
 
     private bool TryGetLevel(LightChannel channel, Vec3i loc, out byte value)
     {
-        if ((uint)loc.Z >= HeightSize || !lights.TryGetChunkLight(loc.XY.ToCloc(), out var light))
+        if ((uint)loc.Z >= HeightSize || !lights.TryGetChunkLight(loc.Xy.ToCloc(), out var light))
         {
             value = 0;
             return false;
@@ -294,7 +294,7 @@ public class DimensionLighting(
 
     private bool SetLevel(LightChannel channel, Vec3i loc, byte value, Vec2i? untrackedCloc)
     {
-        if ((uint)loc.Z >= HeightSize || !lights.TryGetChunkLight(loc.XY.ToCloc(), out var light))
+        if ((uint)loc.Z >= HeightSize || !lights.TryGetChunkLight(loc.Xy.ToCloc(), out var light))
             return false;
 
         if (channel == LightChannel.Sky && light.IsDirectSky(loc))
@@ -303,7 +303,7 @@ public class DimensionLighting(
         if (!light.SetStored(channel, loc, value))
             return false;
 
-        if (loc.XY.ToCloc() != untrackedCloc)
+        if (loc.Xy.ToCloc() != untrackedCloc)
             lightChanges.Add(loc);
 
         return true;
@@ -311,7 +311,7 @@ public class DimensionLighting(
 
     private bool ForceClear(LightChannel channel, Vec3i loc)
     {
-        if ((uint)loc.Z >= HeightSize || !lights.TryGetChunkLight(loc.XY.ToCloc(), out var light))
+        if ((uint)loc.Z >= HeightSize || !lights.TryGetChunkLight(loc.Xy.ToCloc(), out var light))
             return false;
 
         if (channel == LightChannel.Sky && light.IsDirectSky(loc))

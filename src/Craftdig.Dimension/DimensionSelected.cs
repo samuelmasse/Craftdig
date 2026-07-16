@@ -8,7 +8,8 @@ public class DimensionSelected(DimensionBlocks blocks, DimensionPlayerBag player
     public void Tick()
     {
         foreach (var player in playerBag.Ents)
-            Tick(player);
+            if (!player.IsRemote)
+                Tick(player);
 
         time++;
     }

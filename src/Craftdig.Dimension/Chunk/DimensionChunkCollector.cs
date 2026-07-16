@@ -34,7 +34,7 @@ public class DimensionChunkCollector(
 
         foreach (var seer in seerBag.Ents)
         {
-            var pcloc = seer.Position.ToLoc().XY.ToCloc();
+            var pcloc = seer.Position.ToLoc().Xy.ToCloc();
 
             var delta = Vec2i.Abs(chunk.Cloc - pcloc);
             var dist = delta.X + delta.Y;

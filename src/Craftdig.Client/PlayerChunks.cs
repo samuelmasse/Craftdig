@@ -6,12 +6,21 @@ public class PlayerChunks(
     DimensionChunkFrontendReceiver chunkReceiverHandler,
     DimensionLightChanges lightChanges,
     PlayerChunkUpdateQueue chunkUpdateQueue,
-    PlayerChunkLightUpdateQueue lightUpdateQueue)
+    PlayerChunkLightUpdateQueue lightUpdateQueue,
+    PlayerEntSync entSync)
 {
     private readonly int maxChunkCompletionsPerFrame = 2;
     private readonly Dictionary<Vec2i, ChunkBlocks> pendingBlocks = [];
     private readonly Dictionary<Vec2i, PlayerChunkLightUpdate> pendingLights = [];
     private readonly Stopwatch watch = new();
+
+    public bool IsReady(Vec2i cloc) =>
+        chunks.TryGet(cloc, out var chunk) &&
+        chunk.IsLoaded &&
+        chunk.IsLightReady;
+
+    public bool IsPending(Vec2i cloc) =>
+        pendingBlocks.ContainsKey(cloc) || pendingLights.ContainsKey(cloc);
 
     public void Frame()
     {
@@ -77,6 +86,7 @@ public class PlayerChunks(
         chunk.IsLoaded = true;
         chunk.IsLightReady = true;
         chunkReceiverHandler.Receive(chunk);
+        entSync.ChunkLoaded(cloc);
         return true;
     }
 

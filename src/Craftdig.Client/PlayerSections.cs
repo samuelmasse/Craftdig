@@ -15,7 +15,7 @@ public class PlayerSections(
         {
             var (sloc, blocks) = item;
 
-            if (!blocksRaw.TryGetChunkBlocks(sloc.XY, out var chunkBlocks))
+            if (!blocksRaw.TryGetChunkBlocks(sloc.Xy, out var chunkBlocks))
                 continue;
 
             var slice = chunkBlocks.Slice(sloc.Z);

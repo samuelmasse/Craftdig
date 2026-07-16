@@ -10,6 +10,7 @@ public class PlayerMultiplayerState(
     PlayerScope scope,
     PlayerSocket socket,
     PlayerEnt ent,
+    PlayerCamera camera,
     PlayerFrontend player,
     PlayerCommonState commonState,
     PlayerMultiplayerDisconnectAction multiplayerDisconnectAction,
@@ -22,6 +23,11 @@ public class PlayerMultiplayerState(
     public override void Load()
     {
         commonState.Load();
+
+        camera.SetLookAt(ent.LookAt.Swizzle());
+        var movement = ent.Movement;
+        movement.LookAt = ent.LookAt;
+        ent.Movement = movement;
         ent.IsLoaded = true;
         Node(commonState.Overlay).Mutate(multiplayerDebugMenu.Create);
     }
@@ -42,6 +48,8 @@ public class PlayerMultiplayerState(
 
     public override void Frame(double time)
     {
+        client.Sync();
+
         int ticks = Math.Min(tick.Update(time), 8);
         if (keyboard.IsKeyPressed(Keys.L))
             ticks++;

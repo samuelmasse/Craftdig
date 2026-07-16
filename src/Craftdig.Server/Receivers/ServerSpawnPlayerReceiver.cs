@@ -1,23 +1,10 @@
 namespace Craftdig.Server;
 
 [Server]
-public class ServerSpawnPlayerReceiver(AppLog log, WorldEntArena entArena, WorldDimensionBag dimensionBag)
+public class ServerSpawnPlayerReceiver(
+    WorldDimensionBag dimensionBag,
+    ServerPlayerProfileIds profileIds)
 {
-    public void Receive(NetSocket ns)
-    {
-        if (ns.SocketWorldPlayer != default)
-        {
-            log.Warn("Player {0} tried to spawn again", ns.Tag);
-            ns.Disconnect();
-            return;
-        }
-
-        log.Info("Player {0} requested to spawn", ns.Tag);
-
-        var worldPlayer = entArena.Alloc();
-        worldPlayer.Tag = ns.Tag;
-        ns.SocketWorldPlayer = worldPlayer;
-
-        dimensionBag.Ents[0].DimensionScope.Get<DimensionPlayerSpawner>().Add(ns);
-    }
+    public void Receive(NetSocket ns) =>
+        dimensionBag.Ents[0].DimensionScope.Get<DimensionPlayerSpawner>().Add(ns, profileIds.Get(ns.AuthenticatedUid!));
 }

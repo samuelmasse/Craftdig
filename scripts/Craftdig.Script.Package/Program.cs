@@ -41,12 +41,12 @@ var runtimes = new List<(string Name, bool CompileClient, bool CompileServer)>()
 };
 
 var exes = new List<string>();
-foreach (var runtime in runtimes)
+foreach (var (name, compileClient, compileServer) in runtimes)
 {
-    if (runtime.CompileClient)
-        exes.Add(Publish("Craftdig", "Craftdig", "Craftdig", runtime.Name, includeClientOnlyMods: true));
-    if (runtime.CompileServer)
-        exes.Add(Publish("Craftdig.Server.Cli", "CraftdigServer", "CraftdigServer", runtime.Name, includeClientOnlyMods: false));
+    if (compileClient)
+        exes.Add(Publish("Craftdig", "Craftdig", "Craftdig", name, includeClientOnlyMods: true));
+    if (compileServer)
+        exes.Add(Publish("Craftdig.Server.Cli", "CraftdigServer", "CraftdigServer", name, includeClientOnlyMods: false));
 }
 
 Console.WriteLine("Packaged");
@@ -76,6 +76,7 @@ string Publish(
                 "Release",
                 "--self-contained",
                 "-p:PublishSingleFile=true",
+                "-p:PublishDocumentationFiles=false",
                 "-p:IncludeNativeLibrariesForSelfExtract=true",
                 "-p:DebugType=embedded",
                 "-r",

@@ -55,10 +55,40 @@ Game-specific overrides:
 - Use AlvorKit shapes directly: scopes, controls, vectors, maths types,
   `GlLayer`, UI menus, and engine lifecycle APIs.
 
+## Game Ents And ECS
+
+Game Ents must use AlvorKit ECS. Use `Ent` in every context. The word `Entity`
+is banned; use `Ents` for the plural. This applies to prose, code identifiers,
+type and member names, parameters and locals, filenames, directories, labels,
+and compound names.
+
+Model players, enemies, projectiles, items, chunks, and other mutable simulated
+objects with generated `[Components]`, ECS handles and arenas, and
+`AlvorKit.ECS.Indexed` when their component writes maintain bags, hooks, or
+indexes. Do not introduce a parallel game Ent hierarchy, bespoke component
+store, or alternate ECS.
+
+Keep behavior in injected services and systems and keep Ent state in
+components. Services, commands, configuration, assets, protocol records, and
+ordinary value objects are not game Ents and should remain normal C# types.
+
+Before creating or significantly changing game Ents, component declarations,
+Ent handles or arenas, Indexed contexts, hooks, bags, indexes, or Ent lifetime,
+read `../AlvorKit/docs/ECS.md`. Follow its ownership, registration, mutation,
+iteration, and teardown contracts.
+
 ## Code Design Style
 
 These are prescriptive defaults, not merely instructions to copy nearby code.
 Apply them in new projects and packages even when no local precedent exists.
+
+### Accessibility
+
+- Prefer `public` over `internal` for game-code types and collaborating members.
+  Game projects are not curated library API surfaces; assembly boundaries should
+  not hide ordinary game systems, state, commands, or helpers.
+- Keep details `private` when they are owned by one type. Use `internal` only
+  when a deliberately small, curated assembly API is a real design requirement.
 
 ### Services And Composition
 
@@ -157,6 +187,8 @@ rules:
 
 - `AlvorSense.md`: hidden, engine-native visual harness for AlvorKit games.
 - `AlvorEye.md`: OS-level visual automation for real desktop windows.
+- `ECS.md`: required game Ent components, handles, arenas, Indexed hooks and
+  bags, iteration, ownership, and teardown.
 - `ProjectSplitModel.md`: pure, frontend, menu, backend, server, protocol, and executable package split.
 - `GameScopeOrganization.md`: DI scopes, scope prefixes, loader scopes, states,
   controls, seeding, and constructor ordering.

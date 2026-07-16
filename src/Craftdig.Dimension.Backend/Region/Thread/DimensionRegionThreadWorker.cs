@@ -19,7 +19,7 @@ public class DimensionRegionThreadWorker(
             writer.Write(input.Blocks, input.SectionZ, input.Sloc);
         else if (input.Type == RegionThreadInputType.ReadChunk)
         {
-            bool noop = reader.TryRead(input.Blocks, input.Sloc.XY);
+            bool noop = reader.TryRead(input.Blocks, input.Sloc.Xy);
             output.Add(new(input, noop));
         }
         else if (input.Type == RegionThreadInputType.DisposeChunk)

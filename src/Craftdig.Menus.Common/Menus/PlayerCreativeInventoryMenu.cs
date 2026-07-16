@@ -1,7 +1,12 @@
 namespace Craftdig.Menus.Common;
 
 [Player]
-public class PlayerCreativeInventoryMenu(ModuleEnts ents, AppStyle s, PlayerEnt player)
+public class PlayerCreativeInventoryMenu(
+    AppStyle s,
+    ModuleEnts ents,
+    WorldModuleIndices moduleIndices,
+    PlayerEnt player,
+    PlayerInventoryActions inventoryActions)
 {
     public void Create(EntMut root)
     {
@@ -40,12 +45,19 @@ public class PlayerCreativeInventoryMenu(ModuleEnts ents, AppStyle s, PlayerEnt 
             for (int x = 0; x < Slots.HotBarCount; x++)
             {
                 Vec2i loc = (x, y);
+                int index = loc.Y * Slots.HotBarCount + loc.X;
 
                 Node(blocksHor, out var square)
                     .Mutate(s.Button)
                     .Mutate(s.Slot)
                     .PlayerV(player)
-                    .GetSlotValueF(() => blocks[loc.Y * Slots.HotBarCount + loc.X]);
+                    .GetSlotValueF(() => blocks[index])
+                    .InventoryClickF(click =>
+                    {
+                        var item = blocks[index].Item;
+                        if (item != default)
+                            inventoryActions.Submit(InventoryOperation.ClickCreative(moduleIndices[item], click));
+                    });
                 {
                     Node(square)
                         .Mutate(s.SlotButtonInfinity)
@@ -67,6 +79,8 @@ public class PlayerCreativeInventoryMenu(ModuleEnts ents, AppStyle s, PlayerEnt 
                 .Mutate(s.Slot)
                 .GetSlotValueF(() => player.HotBarSlots[i])
                 .SetSlotValueF((v) => player.HotBarSlots[i] = v)
+                .InventoryClickF(click => inventoryActions.Submit(
+                    InventoryOperation.ClickSlot(InventoryContainer.HotBar, i, click)))
                 .PlayerV(player);
             {
                 Node(square)

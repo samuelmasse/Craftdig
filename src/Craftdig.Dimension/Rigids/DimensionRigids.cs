@@ -6,7 +6,8 @@ public class DimensionRigids(DimensionBlocks blocks, DimensionRigidBag rigidBag)
     public void Tick()
     {
         foreach (var ent in rigidBag.Ents)
-            Tick(ent);
+            if (!ent.IsRemote)
+                Tick(ent);
     }
 
     private void Tick(EntMutIdx ent)
@@ -42,8 +43,8 @@ public class DimensionRigids(DimensionBlocks blocks, DimensionRigidBag rigidBag)
             velocity -= (0, 0, 0.08);
         }
 
-        if (velocity.XY.Length < 0.0001)
-            velocity.XY = default;
+        if (velocity.Xy.Length < 0.0001)
+            velocity.Xy = default;
         if (Math.Abs(velocity.Z) < 0.0001)
             velocity.Z = 0;
 

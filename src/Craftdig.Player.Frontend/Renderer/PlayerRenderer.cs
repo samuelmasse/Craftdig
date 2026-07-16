@@ -17,7 +17,7 @@ public class PlayerRenderer(
     PlayerPerspective perspective,
     PlayerCamera camera,
     PlayerEnt ent,
-    PlayerTestCubeRenderer testCubeRenderer)
+    PlayerRigidRenderer rigidRenderer)
 {
     private readonly List<EntMutIdx> schunks = [];
     private readonly List<float> dists = [];
@@ -52,7 +52,7 @@ public class PlayerRenderer(
         blockAtlas.Bind(blockProgram.SamplerTexture);
 
         var pos = Vec3d.Lerp(ent.PrevPosition, ent.Position, (float)tick.Alpha);
-        var cloc = pos.ToLoc().XY.ToCloc();
+        var cloc = pos.ToLoc().Xy.ToCloc();
         pos = pos.Swizzle();
 
         metrics.RenderMetric.Start();
@@ -163,11 +163,11 @@ public class PlayerRenderer(
         }
 
         foreach (var chunk in schunksSpan)
-            testCubeRenderer.Mesh(chunk, pos);
+            rigidRenderer.Mesh(chunk, pos);
 
         gl.UnbindVertexArray();
         blockProgram.Offset = default;
-        testCubeRenderer.Render();
+        rigidRenderer.Render();
 
         metrics.RenderMetric.End();
 

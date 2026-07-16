@@ -13,15 +13,14 @@ public interface IAppUiComponents
     UiCallback<Action<EntMut>?> CompanionOriginFV { get; set; }
     /// <summary>Whether this menu stack entry blocks Escape from popping it.</summary>
     UiProp<bool> IsModalFV { get; set; }
-    /// <summary>Player entity associated with this node.</summary>
+    /// <summary>Player Ent associated with this node.</summary>
     UiProp<EntMutIdx> PlayerFV { get; set; }
     /// <summary>Callback that returns the item slot value.</summary>
     UiCallback<Func<ItemSlot>?> GetSlotValueFV { get; set; }
     /// <summary>Callback that sets the item slot value.</summary>
     UiCallback<Action<ItemSlot>?> SetSlotValueFV { get; set; }
-    /// <summary>Slot entity this node is associated with.</summary>
+    /// <summary>Callback that reports a completed inventory click.</summary>
+    UiCallback<Action<InventoryClick>?> InventoryClickFV { get; set; }
+    /// <summary>Slot Ent this node is associated with.</summary>
     UiProp<EntMut> SlotFV { get; set; }
-
-    /// <summary>Whether a slot item was added this frame.</summary>
-    bool SlotAddedR { get; set; }
 }

@@ -15,6 +15,7 @@ public enum Commands : ushort
     MovePlayer,
     ForgetChunk,
     ForgetSection,
+    InventoryAction,
     ServerStatus,
 
     ClientStart = 30000,
@@ -31,4 +32,7 @@ public enum Commands : ushort
     ServerIcon,
     ServerStatusDone,
     ChunkLightUpdate,
+    EntSyncSchema,
+    InventoryActionResult,
+    BeginTerrainLoad,
 }

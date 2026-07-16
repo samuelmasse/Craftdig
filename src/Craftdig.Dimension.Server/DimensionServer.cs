@@ -5,7 +5,9 @@ public class DimensionServer(
     AppLog log,
     DimensionContext context,
     DimensionBackend backend,
+    DimensionInventoryActions inventoryActions,
     DimensionPendingMovement pendingMovement,
+    DimensionEntStreamer entStreamer,
     DimensionPositionStreamer positionStreamer,
     DimensionChunkStreamerRequester chunkStreamerRequester,
     DimensionForgottenChunks forgottenChunks,
@@ -22,9 +24,10 @@ public class DimensionServer(
         context.Frame();
 
         playerSpawner.Tick();
-        playerSocketsCleaner.Tick();
         forgottenSections.Tick();
         forgottenChunks.Tick();
+        playerSocketsCleaner.Tick();
+        inventoryActions.Tick();
         pendingMovement.Tick();
 
         context.Tick();
@@ -32,12 +35,16 @@ public class DimensionServer(
 
         backend.Frame();
 
+        log.Trace("{0} rigids", rigidBag.Ents.Length);
+    }
+
+    public void Stream()
+    {
+        entStreamer.Stream();
         chunkStreamerRequester.Tick();
         sectionUpdateStreamer.Tick();
         lightUpdateStreamer.Tick();
         sectionReminder.Tick();
         positionStreamer.Tick();
-
-        log.Trace("{0} rigids", rigidBag.Ents.Length);
     }
 }

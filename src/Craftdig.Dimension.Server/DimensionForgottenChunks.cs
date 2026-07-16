@@ -1,7 +1,7 @@
 namespace Craftdig.Dimension.Server;
 
 [Dimension]
-public class DimensionForgottenChunks
+public class DimensionForgottenChunks(DimensionEntStreamer entStreamer)
 {
     private readonly ConcurrentQueue<(NetSocket, Vec2i)> queue = [];
 
@@ -12,7 +12,12 @@ public class DimensionForgottenChunks
         while (count > 0 && queue.TryDequeue(out var entry))
         {
             var (ent, cloc) = entry;
-            ent.SocketStreamedChunks?.Remove(cloc);
+            var streamed = ent.SocketStreamedChunks;
+            if (streamed != null && streamed.Contains(cloc))
+            {
+                entStreamer.LeaveChunk(ent, cloc);
+                streamed.Remove(cloc);
+            }
             count--;
         }
     }

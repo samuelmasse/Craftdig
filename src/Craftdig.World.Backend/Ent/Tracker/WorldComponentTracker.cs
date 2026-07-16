@@ -11,15 +11,22 @@ public class WorldComponentTracker<T, N>(WorldEntDirty dirty, WorldComponentInde
     where T : IEquatable<T>
     where N : IComponent
 {
-    public override void AddTo(EntIdxContextBuilder context) => context.AddPre<T, N>(Intercept);
+    public override void AddTo(EntIdxContextBuilder context)
+    {
+        context.AddPre<T, N>(Intercept);
+        context.AddPost<T, N>(Intercept);
+    }
 
     private void Intercept(EntMutIdx ent, in T value)
     {
-        var old = ent.Get<T, N>();
-        if (value.Equals(old))
-            return;
+        if (!ent.Has<T, N>() || !value.Equals(ent.Get<T, N>()))
+            dirty.Mark(ent, index.Index);
+    }
 
-        dirty.Mark(ent, index.Index);
+    private void Intercept(EntMutIdx ent)
+    {
+        if (!ent.Has<T, N>())
+            dirty.Mark(ent, index.Index);
     }
 }
 
@@ -29,10 +36,17 @@ public class WorldComponentArrayTracker<T, N>(WorldEntDirty dirty, WorldComponen
     where T : IEquatable<T>
     where N : IComponent
 {
-    public override void AddTo(EntIdxContextBuilder context) => context.AddPre<T[], N>(Intercept);
-
-    private void Intercept(EntMutIdx ent, in T[] value)
+    public override void AddTo(EntIdxContextBuilder context)
     {
-        dirty.Mark(ent, index.Index);
+        context.AddPre<T[], N>(Intercept);
+        context.AddPost<T[], N>(Intercept);
+    }
+
+    private void Intercept(EntMutIdx ent, in T[] value) => dirty.Mark(ent, index.Index);
+
+    private void Intercept(EntMutIdx ent)
+    {
+        if (!ent.Has<T[], N>())
+            dirty.Mark(ent, index.Index);
     }
 }

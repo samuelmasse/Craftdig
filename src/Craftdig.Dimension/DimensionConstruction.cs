@@ -11,7 +11,8 @@ public class DimensionConstruction(
     public void Tick()
     {
         foreach (var ent in playerBag.Ents)
-            Tick(ent);
+            if (!ent.IsRemote)
+                Tick(ent);
     }
 
     private void Tick(EntMutIdx ent)

@@ -6,7 +6,7 @@ public static class Slots
     public const int HotBarCount = 9;
 
     public const int InventoryRows = 3;
-    public const int IntentoyCount = HotBarCount * InventoryRows;
+    public const int InventoryCount = HotBarCount * InventoryRows;
 
     extension<T>(T ent) where T : IEntMut
     {
@@ -34,7 +34,7 @@ public static class Slots
         public SlotArray InventorySlots => From<
             DimensionComponents.InventorySlotCounts,
             DimensionComponents.InventorySlotEnts,
-            T>(ent, IntentoyCount);
+            T>(ent, InventoryCount);
     }
 
     public static SlotArray<C, E> From<C, E, T>(T ent, int length) where T : IEntMut

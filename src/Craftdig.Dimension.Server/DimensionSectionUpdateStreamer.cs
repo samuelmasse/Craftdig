@@ -16,7 +16,7 @@ public class DimensionSectionUpdateStreamer(
 
         foreach (var sloc in slocs)
         {
-            if (!blocksRaw.TryGetChunkBlocks(sloc.XY, out var blocks))
+            if (!blocksRaw.TryGetChunkBlocks(sloc.Xy, out var blocks))
                 continue;
 
             var compressed = sectionStreamer.Command(sloc, blocks, out var cmd);
@@ -24,7 +24,7 @@ public class DimensionSectionUpdateStreamer(
             foreach (var ns in sockets.Span)
             {
                 var streamedChunks = ns.SocketStreamedChunks;
-                if (streamedChunks == null || !streamedChunks.Contains(sloc.XY))
+                if (streamedChunks == null || !streamedChunks.Contains(sloc.Xy))
                     continue;
 
                 ns.Send(cmd, compressed);

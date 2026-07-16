@@ -12,7 +12,7 @@ public class DimensionRegionThreadReader(
 
     public void Read(ChunkBlocks blocks, int sz, Vec3i sloc)
     {
-        var state = states[sloc.XY.ToRloc()];
+        var state = states[sloc.Xy.ToRloc()];
         var alloc = state.Index[sloc - state.Origin];
 
         RandomAccess.Read(fileHandles[state.Files.Buckets[alloc.Bucket]],

@@ -1,7 +1,7 @@
 namespace Craftdig.Dimension.Backend;
 
 [Dimension]
-public class DimensionPlayerSync(WorldEntArena worldEntArena, DimensionEnt dimension)
+public class DimensionPlayerSync(DimensionEnt dimension)
 {
     public void Intercept(EntMutIdx ent)
     {
@@ -10,9 +10,6 @@ public class DimensionPlayerSync(WorldEntArena worldEntArena, DimensionEnt dimen
 
         if (!ent.IsPlayer)
             return;
-
-        if (ent.WorldPlayer == default)
-            ent.WorldPlayer = worldEntArena.Alloc().Mutate().IsWorldPlayer(true).Ent;
 
         ent.WorldPlayer.Mutate()
             .WorldPosition(ent.Position)

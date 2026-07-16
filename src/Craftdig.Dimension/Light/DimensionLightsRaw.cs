@@ -5,7 +5,7 @@ public class DimensionLightsRaw(DimensionEnt dimension, DimensionChunks chunks)
 {
     public bool TryGet(Vec3i loc, out LightLevels levels)
     {
-        if (!TryGetChunkLight(loc.XY.ToCloc(), out var light))
+        if (!TryGetChunkLight(loc.Xy.ToCloc(), out var light))
         {
             levels = default;
             return false;

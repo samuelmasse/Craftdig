@@ -56,7 +56,7 @@ public class DimensionSectionReminder(
         var sloc = queue.Dequeue();
         sections.Remove(sloc);
 
-        if (!blocksRaw.TryGetChunkBlocks(sloc.XY, out var blocks))
+        if (!blocksRaw.TryGetChunkBlocks(sloc.Xy, out var blocks))
             return false;
 
         var compressed = sectionStreamer.Command(sloc, blocks, out var cmd);

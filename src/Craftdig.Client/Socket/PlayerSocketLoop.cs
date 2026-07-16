@@ -11,6 +11,9 @@ public class PlayerSocketLoop(
     PlayerChunkUpdateReceiver chunkUpdateReceiver,
     PlayerChunkLightUpdateReceiver chunkLightUpdateReceiver,
     PlayerWorldIndicesUpdateReceiver worldIndicesUpdateReceiver,
+    PlayerEntUpdateReceiver entUpdateReceiver,
+    PlayerTerrainLoading terrainLoading,
+    PlayerInventoryClient inventory,
     PlayerSlowTickReceiver slowTickReceiver)
 {
     private Thread? thread;
@@ -25,6 +28,10 @@ public class PlayerSocketLoop(
         loop.Register<ChunkLightUpdateCommand, byte>(chunkLightUpdateReceiver.Receive);
         loop.Register<SectionUpdateCommand, byte>(sectionUpdateReceiver.Receive);
         loop.Register<WorldIndicesUpdateCommand, byte>(worldIndicesUpdateReceiver.Receive);
+        loop.Register<EntSyncSchemaCommand>(entUpdateReceiver.Receive);
+        loop.Register<EntUpdateCommand, byte>(entUpdateReceiver.Receive);
+        loop.Register<BeginTerrainLoadCommand>(terrainLoading.Receive);
+        loop.Register<InventoryActionResultCommand>(inventory.Receive);
         loop.Register<SlowTickCommand>(slowTickReceiver.Receive);
 
         thread = new Thread(Loop);

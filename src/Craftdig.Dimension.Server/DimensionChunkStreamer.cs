@@ -11,23 +11,25 @@ public class DimensionChunkStreamer(
     private readonly byte[] data = new byte[
         BrotliEncoder.GetMaxCompressedLength(ChunkVolume * Marshal.SizeOf<ChunkUpdateBlockEntry>())];
 
-    public void Stream(NetSocket ns, Vec2i cloc)
+    public bool Stream(NetSocket ns, Vec2i cloc)
     {
         if (!blocksRaw.TryGetChunkBlocks(cloc, out var blocks))
-            return;
+            return false;
 
         if (!TryCompress(blocks, out var compressed))
-            return;
+            return false;
+
+        if (!lightStreamer.TryEncode(
+            cloc,
+            lightFormat.AllSectionsMask,
+            true,
+            out var lightCommand,
+            out var lightData))
+            return false;
 
         ns.Send(new ChunkUpdateCommand() { Cloc = cloc }, compressed);
-
-        if (lightStreamer.TryEncode(
-                cloc,
-                lightFormat.AllSectionsMask,
-                true,
-                out var lightCommand,
-                out var lightData))
-            ns.Send(lightCommand, lightData);
+        ns.Send(lightCommand, lightData);
+        return ns.Connected;
     }
 
     private bool TryCompress(ChunkBlocks blocks, out ReadOnlySpan<byte> compressed)

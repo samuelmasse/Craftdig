@@ -22,7 +22,7 @@ public class DimensionBlocksAllocator
         {
             lock (this)
             {
-                if (PageIndex(index) >= pages.Count)
+                while (PageIndex(index) >= pages.Count)
                     pages.Add(new Ent[PageSize * SectionVolume]);
             }
         }

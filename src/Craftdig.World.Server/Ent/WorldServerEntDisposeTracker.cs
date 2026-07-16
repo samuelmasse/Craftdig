@@ -1,11 +1,10 @@
-namespace Craftdig.Server.Backend;
+namespace Craftdig.World.Server;
 
 [World]
-public class WorldServerEntDisposeTracker()
+public class WorldServerEntDisposeTracker(WorldEntDisposals disposals)
 {
     public void InterceptDispose(EntMutIdx ent)
     {
-        _ = ent;
-        // TODO: do something when ent is disposed
+        disposals.Add(ent);
     }
 }

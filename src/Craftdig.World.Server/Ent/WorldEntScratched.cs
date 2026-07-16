@@ -1,15 +1,20 @@
 namespace Craftdig.World.Server;
 
-[World]
-public class WorldEntScratched
+public abstract class EntScratched(EntDisposals disposals)
 {
+    public void Mark(EntMutIdx ent)
+    {
+        if (!ent.IsLoading && !disposals.Contains(ent))
+            ent.IsScratched = true;
+    }
+
     public void Mark(EntMutIdx ent, int index)
     {
-        if (ent.IsLoading)
+        if (ent.IsLoading || disposals.Contains(ent))
             return;
 
-        int page = index / 64;
-        int sub = index % 64;
+        int page = index / EntSyncCatalog.ComponentsPerMask;
+        int sub = index % EntSyncCatalog.ComponentsPerMask;
 
         var scratched = ent.ScratchedComponents ??= new ulong[1];
         if (page >= scratched.Length)
@@ -24,3 +29,6 @@ public class WorldEntScratched
         ent.IsScratched = true;
     }
 }
+
+[World]
+public class WorldEntScratched(WorldEntDisposals disposals) : EntScratched(disposals);
