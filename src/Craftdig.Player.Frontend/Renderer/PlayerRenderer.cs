@@ -29,7 +29,7 @@ public class PlayerRenderer(
 
         gl.Viewport(0, 0, (int)canvas.X, (int)canvas.Y);
         var clear = new Vec4(skyColor / 0xFF, 1);
-        gl.ClearColor(clear.X, clear.Y, clear.Z, clear.W);
+        gl.ClearColor(clear);
         gl.ClearDepth(1f);
         gl.Clear(GlClearBufferMask.DepthBufferBit | GlClearBufferMask.ColorBufferBit);
         gl.ResetClearDepth();

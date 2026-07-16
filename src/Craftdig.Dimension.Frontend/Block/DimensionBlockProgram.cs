@@ -11,7 +11,7 @@ public class DimensionBlockProgram : RenderProgram3D<BlockVertex>
 
     public Vec3 Offset
     {
-        set => gl.ProgramUniform3f(Id, vecOffset, value.X, value.Y, value.Z);
+        set => gl.ProgramUniform3f(Id, vecOffset, value);
     }
 
     public float SkyStrength

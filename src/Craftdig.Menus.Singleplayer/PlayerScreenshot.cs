@@ -26,7 +26,7 @@ public class PlayerScreenshot(WorldPaths paths, PlayerGl gl, PlayerRenderer rend
 
         var depth = gl.GenRenderbuffer();
         gl.BindRenderbuffer(GlRenderbufferTarget.Renderbuffer, depth);
-        gl.RenderbufferStorage(GlRenderbufferTarget.Renderbuffer, GlInternalFormat.DepthComponent24, width, height);
+        gl.RenderbufferStorage(GlRenderbufferTarget.Renderbuffer, GlInternalFormat.DepthComponent24, size);
         gl.FramebufferRenderbuffer(GlFramebufferTarget.Framebuffer, GlFramebufferAttachment.DepthAttachment, GlRenderbufferTarget.Renderbuffer, depth);
         gl.UnbindRenderbuffer(GlRenderbufferTarget.Renderbuffer);
 
@@ -36,7 +36,7 @@ public class PlayerScreenshot(WorldPaths paths, PlayerGl gl, PlayerRenderer rend
 
         gl.PixelStorei(GlPixelStoreParameter.PackAlignment, 1);
         gl.ReadBuffer(GlReadBufferMode.ColorAttachment0);
-        gl.ReadPixels(0, 0, width, height, GlPixelFormat.Rgba, GlPixelType.UnsignedByte, pixels.AsSpan());
+        gl.ReadPixels(size, GlPixelFormat.Rgba, GlPixelType.UnsignedByte, pixels.AsSpan());
         gl.ResetReadBuffer();
         gl.ResetPixelStore(GlPixelStoreParameter.PackAlignment);
 
