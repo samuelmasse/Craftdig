@@ -7,7 +7,7 @@ public interface IDimensionComponents
     [Saved][Synced][ComponentToString] bool IsRigid { get; set; }
     [Saved][Synced(EntSyncAudience.Observers)] Vec3d Position { get; set; }
     [Saved] Vec3d Velocity { get; set; }
-    [Saved][Synced(EntSyncAudience.Owner)] Box3d HitBox { get; set; }
+    [Saved][Synced] Box3d HitBox { get; set; }
 
     // Player
     [Saved][Synced][ComponentToString] bool IsPlayer { get; set; }

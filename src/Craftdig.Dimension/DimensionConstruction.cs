@@ -6,6 +6,7 @@ public class DimensionConstruction(
     DimensionEnt dimension,
     DimensionBlocks blocks,
     DimensionPlayerBag playerBag,
+    DimensionRigidBag rigidBag,
     DimensionSelected selected)
 {
     public void Tick()
@@ -30,6 +31,24 @@ public class DimensionConstruction(
         if (constr.Action == ConstructionAction.Remove)
             blocks.TrySet(selection.Value.Loc, dimension.Air);
         else if (constr.Action == ConstructionAction.Place)
-            blocks.TrySet(selection.Value.Loc + selection.Value.Normal, moduleIndices[constr.Arg]);
+        {
+            var loc = selection.Value.Loc + selection.Value.Normal;
+            var block = moduleIndices[constr.Arg];
+            if (!block.IsSolid || !CollidesWithRigid(loc))
+                blocks.TrySet(loc, block);
+        }
+    }
+
+    private bool CollidesWithRigid(Vec3i loc)
+    {
+        var blockBox = new Box3d(loc, loc + Vec3i.One);
+
+        foreach (var rigid in rigidBag.Ents)
+        {
+            if (blockBox.IntersectsExclusive(rigid.HitBox.Translated(rigid.Position)))
+                return true;
+        }
+
+        return false;
     }
 }
