@@ -8,6 +8,8 @@ public struct MovementStep
     [MarshalAs(UnmanagedType.I1)]
     public bool Jump;
     [MarshalAs(UnmanagedType.I1)]
+    public bool Crouch;
+    [MarshalAs(UnmanagedType.I1)]
     public bool FlyDown;
     [MarshalAs(UnmanagedType.I1)]
     public bool FlyUp;

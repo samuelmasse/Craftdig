@@ -17,6 +17,7 @@ public class PlayerRenderer(
     PlayerPerspective perspective,
     PlayerCamera camera,
     PlayerEnt ent,
+    PlayerCrouch crouch,
     PlayerRigidRenderer rigidRenderer)
 {
     private readonly List<EntMutIdx> schunks = [];
@@ -52,6 +53,7 @@ public class PlayerRenderer(
 
         var pos = Vec3d.Lerp(ent.PrevPosition, ent.Position, (float)tick.Alpha);
         var cloc = pos.ToLoc().Xy.ToCloc();
+        pos.Z += crouch.CameraOffset;
         pos = pos.Swizzle();
 
         metrics.RenderMetric.Start();

@@ -3,6 +3,9 @@ namespace Craftdig.Dimension;
 [Dimension]
 public class DimensionRigids(DimensionBlocks blocks, DimensionRigidBag rigidBag)
 {
+    private const double CrouchBackoffStep = 0.05;
+    private const double CrouchSupportDepth = 0.6;
+
     public void Tick()
     {
         foreach (var ent in rigidBag.Ents)
@@ -12,6 +15,7 @@ public class DimensionRigids(DimensionBlocks blocks, DimensionRigidBag rigidBag)
 
     private void Tick(EntMutIdx ent)
     {
+        bool wasGrounded = ent.CollisionNormal.Z == 1;
         ent.PrevPosition = ent.Position;
         ent.CollisionNormal = default;
 
@@ -19,6 +23,7 @@ public class DimensionRigids(DimensionBlocks blocks, DimensionRigidBag rigidBag)
         var velocity = ent.Velocity;
         var hitBox = ent.HitBox;
         var collisionNormal = ent.CollisionNormal;
+        PreventCrouchFall(ent, wasGrounded, position, hitBox, ref velocity);
         Collide(ref position, ref velocity, ref hitBox, ref collisionNormal);
 
         position += velocity;
@@ -52,6 +57,68 @@ public class DimensionRigids(DimensionBlocks blocks, DimensionRigidBag rigidBag)
         ent.Velocity = velocity;
         ent.HitBox = hitBox;
         ent.CollisionNormal = collisionNormal;
+    }
+
+    private void PreventCrouchFall(
+        EntMutIdx ent,
+        bool wasGrounded,
+        Vec3d position,
+        Box3d hitBox,
+        ref Vec3d velocity)
+    {
+        if (!ent.IsPlayer || !ent.IsCrouching || ent.IsFlying || !wasGrounded || velocity.Z > 0)
+            return;
+
+        double x = velocity.X;
+        double y = velocity.Y;
+
+        while (x != 0 && !HasCrouchSupport(position, hitBox, x, 0))
+            x = BackOff(x);
+
+        while (y != 0 && !HasCrouchSupport(position, hitBox, 0, y))
+            y = BackOff(y);
+
+        while (x != 0 && y != 0 && !HasCrouchSupport(position, hitBox, x, y))
+        {
+            x = BackOff(x);
+            y = BackOff(y);
+        }
+
+        velocity.X = x;
+        velocity.Y = y;
+    }
+
+    private bool HasCrouchSupport(Vec3d position, Box3d hitBox, double x, double y)
+    {
+        var box = hitBox.Translated(position + (x, y, -CrouchSupportDepth));
+        var smin = box.Min.ToLoc();
+        var smax = box.Max.ToLoc();
+
+        for (int z = smin.Z; z <= smax.Z; z++)
+        {
+            for (int xLoc = smin.X; xLoc <= smax.X; xLoc++)
+            {
+                for (int yLoc = smin.Y; yLoc <= smax.Y; yLoc++)
+                {
+                    var loc = new Vec3i(xLoc, yLoc, z);
+                    if (!blocks.TryGet(loc, out var block) || !block.IsSolid)
+                        continue;
+
+                    if (box.IntersectsExclusive(new Box3d(loc, loc + Vec3i.One)))
+                        return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    private static double BackOff(double value)
+    {
+        if (value < CrouchBackoffStep && value >= -CrouchBackoffStep)
+            return 0;
+
+        return value > 0 ? value - CrouchBackoffStep : value + CrouchBackoffStep;
     }
 
     private void Collide(ref Vec3d position, ref Vec3d velocity, ref Box3d hitBox, ref Vec3i collisionNormal)

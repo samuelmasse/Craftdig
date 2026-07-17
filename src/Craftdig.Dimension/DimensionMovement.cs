@@ -32,6 +32,7 @@ public class DimensionMovement(DimensionPlayerBag bag)
     {
         Fly(ent);
         Sprint(ent);
+        Crouch(ent);
         Jump(ent);
         Vector(ent);
     }
@@ -99,6 +100,22 @@ public class DimensionMovement(DimensionPlayerBag bag)
         }
     }
 
+    private void Crouch(EntMutIdx ent)
+    {
+        if (!ent.Movement.Crouch)
+        {
+            if (ent.IsCrouching)
+                ent.IsCrouching = false;
+            return;
+        }
+
+        if (!ent.IsCrouching && ent.CollisionNormal.Z == 1)
+            ent.IsCrouching = true;
+
+        if (ent.IsCrouching)
+            ent.IsSprinting = false;
+    }
+
     private void Jump(EntMutIdx ent)
     {
         if (!ent.CanJump)
@@ -119,6 +136,8 @@ public class DimensionMovement(DimensionPlayerBag bag)
         float speed = ent.IsFlying ? 0.05f : 0.1f;
         if (ent.IsSprinting)
             speed = ent.IsFlying ? 0.1f : 0.13f;
+        if (ent.IsCrouching)
+            speed *= 0.3f;
 
         var vec = ent.Movement.Vector;
         if (vec != default)

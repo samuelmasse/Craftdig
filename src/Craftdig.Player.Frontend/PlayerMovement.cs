@@ -23,6 +23,7 @@ public class PlayerMovement(
     public void Tick()
     {
         var movement = ent.Movement;
+        movement.Crouch = controls.CameraCrouch.Run();
 
         if (controls.CameraUp.Run())
             movement.FlyUp = true;
@@ -58,6 +59,7 @@ public class PlayerMovement(
     {
         var movement = ent.Movement;
         movement.Sprint = MovementAction.Stop;
+        movement.Crouch = false;
         movement.LookAt = ent.LookAt;
         ent.Movement = movement;
     }

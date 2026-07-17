@@ -57,6 +57,7 @@ public class DimensionPendingMovement(AppLog log, DimensionSockets sockets)
 
             mov.FlyUp = cmov.FlyUp;
             mov.FlyDown = cmov.FlyDown;
+            mov.Crouch = cmov.Crouch;
             mov.Vector = cmov.Vector;
             if (cmov.LookAt != default)
             {

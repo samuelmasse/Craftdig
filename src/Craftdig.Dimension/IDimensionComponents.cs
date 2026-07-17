@@ -25,6 +25,7 @@ public interface IDimensionComponents
     [Saved][Synced(EntSyncAudience.Owner)] long InventoryRevision { get; set; }
     [Saved] bool IsFlying { get; set; }
     [Saved] bool IsSprinting { get; set; }
+    [Synced(EntSyncAudience.Observers)] bool IsCrouching { get; set; }
 
     // Test cube
     [Saved][Synced][ComponentToString] bool IsTestCube { get; set; }

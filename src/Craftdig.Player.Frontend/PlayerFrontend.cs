@@ -10,6 +10,7 @@ public class PlayerFrontend(
     PlayerInventoryActions inventoryActions,
     PlayerTeleporter teleporter,
     PlayerFov fov,
+    PlayerCrouch crouch,
     PlayerConstruction construction)
 {
     public void Tick()
@@ -26,6 +27,7 @@ public class PlayerFrontend(
     public void Update(double delta)
     {
         fov.Update(delta);
+        crouch.Update(delta);
     }
 
     public void Input()
