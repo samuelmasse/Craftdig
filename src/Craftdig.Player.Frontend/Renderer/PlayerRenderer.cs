@@ -27,9 +27,8 @@ public class PlayerRenderer(
         float skyStrength = sky.Strength;
         var skyColor = new Vec3(84, 145, 255) * (0.15f + 0.85f * skyStrength);
 
-        gl.Viewport(0, 0, (int)canvas.X, (int)canvas.Y);
-        var clear = new Vec4(skyColor / 0xFF, 1);
-        gl.ClearColor(clear);
+        gl.Viewport((Vec2u)canvas);
+        gl.ClearColor(new Vec4(skyColor / 0xFF, 1));
         gl.ClearDepth(1f);
         gl.Clear(GlClearBufferMask.DepthBufferBit | GlClearBufferMask.ColorBufferBit);
         gl.ResetClearDepth();
