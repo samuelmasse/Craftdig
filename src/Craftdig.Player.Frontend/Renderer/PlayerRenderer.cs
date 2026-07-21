@@ -18,6 +18,7 @@ public class PlayerRenderer(
     PlayerCamera camera,
     PlayerEnt ent,
     PlayerCrouch crouch,
+    PlayerViewBob viewBob,
     PlayerRigidRenderer rigidRenderer)
 {
     private readonly List<EntMutIdx> schunks = [];
@@ -37,6 +38,7 @@ public class PlayerRenderer(
 
         camera.ComputeVectors();
         perspective.ComputeMatrix(canvas, camera);
+        viewBob.Apply(ref perspective.View);
 
         var frustum = Frustum3.CreateFromClipTransform(perspective.Projection * perspective.View);
 

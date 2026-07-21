@@ -11,6 +11,7 @@ public class PlayerFrontend(
     PlayerTeleporter teleporter,
     PlayerFov fov,
     PlayerCrouch crouch,
+    PlayerViewModelAnimation viewModelAnimation,
     PlayerConstruction construction)
 {
     public void Tick()
@@ -28,6 +29,7 @@ public class PlayerFrontend(
     {
         fov.Update(delta);
         crouch.Update(delta);
+        viewModelAnimation.Update(delta);
     }
 
     public void Input()
@@ -36,6 +38,7 @@ public class PlayerFrontend(
         construction.Input();
         if (mouse.Delta != default)
         {
+            viewModelAnimation.Look(mouse.Delta);
             camera.Rotate(-mouse.Delta / 300);
             camera.PreventBackFlipsAndFrontFlips();
             camera.ComputeVectors();

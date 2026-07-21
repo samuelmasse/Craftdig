@@ -15,6 +15,7 @@ public class PlayerCommonState(
     DimensionSharedVertexBufferMenu dimensionSharedVertexBufferMenu,
     PlayerEnt ent,
     PlayerRenderer playerRenderer,
+    PlayerViewModelRenderer playerViewModelRenderer,
     PlayerConstruction construction,
     PlayerDebugMenu debugMenu,
     PlayerEscapeMenu escapeMenu,
@@ -140,6 +141,7 @@ public class PlayerCommonState(
         dimensionFrontend.Frame();
         dimension.Frame();
         playerRenderer.Render(canvas.Size);
+        playerViewModelRenderer.Render(canvas.Size);
     }
 
     public override void Draw()
