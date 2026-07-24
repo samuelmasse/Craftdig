@@ -50,7 +50,12 @@ public class ModuleMultiplayerServerPinger(AppLog log, AppClientOptions clientOp
             tcp = new TcpClient() { NoDelay = true };
             tcp.Connect(task.Address.Host, task.Address.Port);
 
-            socket = new(log, tcp, clientOptions.UseRawTcp ? tcp.GetStream() : ClientTls.Connect(tcp, task.Address.Host));
+            socket = new(
+                log,
+                tcp,
+                clientOptions.UseRawTcp
+                    ? tcp.GetStream()
+                    : ClientTls.Connect(log, tcp, task.Address.Host));
 
             var loop = new NetLoop(log);
             var done = new ManualResetEventSlim(false);

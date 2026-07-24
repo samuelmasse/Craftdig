@@ -28,14 +28,15 @@ public class ModuleMultiplayerConnectingMenu(
                     if (multiplayerConnectAction.Connecting)
                         return;
 
-                    if (multiplayerConnectAction.Exception == null &&
-                        multiplayerConnectAction.Tcp != null &&
-                        multiplayerConnectAction.Stream != null)
+                    if (multiplayerConnectAction.TryTakeConnection(
+                            out var tcp,
+                            out var stream,
+                            out var identitySession))
                     {
                         multiplayerJoinAction.Run(new(
                             log,
-                            multiplayerConnectAction.Tcp,
-                            multiplayerConnectAction.Stream));
+                            tcp,
+                            stream), identitySession);
                     }
                 });
 

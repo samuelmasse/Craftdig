@@ -9,6 +9,7 @@ public class DimensionPlayerSpawner(
     WorldPlayerSlots playerSlots,
     DimensionScope scope,
     DimensionEntArena entArena,
+    DimensionEntIndex entIndex,
     DimensionPlayerIndex playerIndex,
     DimensionEntRegionStates entRegionStates,
     DimensionSockets sockets)
@@ -37,45 +38,86 @@ public class DimensionPlayerSpawner(
             return;
         }
 
-        var worldPlayer = profiles.GetOrCreate(profileId, out bool created);
-        EntMutIdx player;
-
-        if (created)
-            player = Create(worldPlayer);
-        else
+        if (ResolvePlayer(profileId, out var worldPlayer, out var player) is { } conflict)
         {
-            player = Find(profileId, worldPlayer);
-            if (player.IsLoaded || player.IsSpawnReserved)
+            log.Error("Refusing to spawn player {0}: {1}", ns.Tag, conflict);
+            ns.Disconnect();
+            return;
+        }
+
+        if (player.IsLoaded || player.IsSpawnReserved)
+        {
+            if (HasConnectedSession(worldPlayer))
             {
-                queue.Enqueue((ns, profileId));
+                log.Warn("Player ID {0} tried to connect more than once", profileId);
+                ns.Disconnect();
                 return;
             }
+
+            queue.Enqueue((ns, profileId));
+            return;
         }
 
         Prepare(ns, worldPlayer, player);
     }
 
-    private EntMutIdx Find(Guid profileId, EntMutIdx worldPlayer)
+    private bool HasConnectedSession(EntMutIdx worldPlayer)
     {
-        if (playerIndex.TryGet(profileId, out var player))
-            return player;
+        foreach (var socket in playerSockets.Span)
+        {
+            if (socket.Connected && socket.SocketWorldPlayer == worldPlayer)
+                return true;
+        }
+
+        return false;
+    }
+
+    private string? ResolvePlayer(Guid profileId, out EntMutIdx worldPlayer, out EntMutIdx player)
+    {
+        player = default;
+        if (profiles.GetOrCreate(profileId, out worldPlayer, out bool created) is { } conflict)
+            return conflict;
+
+        return created ? Create(worldPlayer, out player) : Find(profileId, worldPlayer, out player);
+    }
+
+    private string? Find(Guid profileId, EntMutIdx worldPlayer, out EntMutIdx player)
+    {
+        if (playerIndex.TryGet(profileId, out player))
+            return RequirePlayerId(profileId, player);
+
+        if (playerIndex.IsDuplicated(profileId))
+            return $"player ID {profileId} has multiple saved player Ents";
 
         var rloc = worldPlayer.WorldPosition.ToLoc().Xy.ToCloc().ToRloc();
         entRegionStates.EnsureLoaded(rloc);
-        return playerIndex[profileId];
+
+        if (entIndex.IsDuplicated(profileId))
+            return $"player ID {profileId} collides with multiple dimension Ents";
+        if (!playerIndex.TryGet(profileId, out player))
+            return $"player ID {profileId} has no dimension player Ent after loading its region";
+        return RequirePlayerId(profileId, player);
     }
 
-    private EntMutIdx Create(EntMutIdx worldPlayer)
+    private static string? RequirePlayerId(Guid profileId, EntMutIdx player) =>
+        player.Id == profileId
+            ? null
+            : $"player {profileId} uses a pre-Identity dimension Ent ID; start this protocol with a clean world";
+
+    private string? Create(EntMutIdx worldPlayer, out EntMutIdx player)
     {
-        var player = entArena.Alloc();
+        player = default;
+        if (entIndex.Contains(worldPlayer.Id))
+            return $"player ID {worldPlayer.Id} is already used by a dimension Ent";
+
+        player = entArena.Alloc(worldPlayer.Id);
         player.HitBox = new Box3d((-0.3, -0.3, -1.62), (0.3, 0.3, 0.18));
         player.Position = (15, 0, 120);
         player.LookAt = (0, -1, 0);
-        player.WorldPlayer = worldPlayer;
         player.IsRigid = true;
         player.IsFlying = true;
         player.IsPlayer = true;
-        return player;
+        return null;
     }
 
     private void Prepare(NetSocket ns, EntMutIdx worldPlayer, EntMutIdx player)

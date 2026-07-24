@@ -11,6 +11,7 @@
         <Using Include="Craftdig.App" />
         <Using Include="Craftdig.App.Frontend" />
         <Using Include="Craftdig.Client" />
+        <Using Include="Craftdig.Identity" />
         <Using Include="Craftdig.Dimension" />
         <Using Include="Craftdig.Dimension.Frontend" />
         <Using Include="Craftdig.Dimension.Unit">

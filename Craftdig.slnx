@@ -22,6 +22,7 @@
     <Folder Name="/Common/">
         <Project Path="src/Craftdig.App/Craftdig.App.csproj" />
         <Project Path="src/Craftdig.Dimension/Craftdig.Dimension.csproj" />
+        <Project Path="src/Craftdig.Identity/Craftdig.Identity.csproj" />
         <Project Path="src/Craftdig.Module/Craftdig.Module.csproj" />
         <Project Path="src/Craftdig.Native/Craftdig.Native.csproj" />
         <Project Path="src/Craftdig.Protocol/Craftdig.Protocol.csproj"

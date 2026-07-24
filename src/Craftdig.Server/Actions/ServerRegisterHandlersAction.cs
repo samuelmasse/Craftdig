@@ -5,7 +5,9 @@ public class ServerRegisterHandlersAction(
     AppLog log,
     ServerNetLoop loop,
     ServerDefaults defaults,
+    ServerAuth auth,
     ServerAuthReceiver authReceiver,
+    ServerPresenceReceiver presenceReceiver,
     ServerPingReceiver pingReceiver,
     ServerStatusReceiver statusReceiver,
     ServerSpawnPlayerReceiver spawnPlayerReceiver)
@@ -15,10 +17,13 @@ public class ServerRegisterHandlersAction(
         loop.Register<PingCommand>(pingReceiver.Receive);
         loop.Register<ServerStatusCommand>(statusReceiver.Receive);
 
-        loop.Register<BeginAuthCommand>(authReceiver.BeginAuth);
-        loop.Register<CompleteAuthCommand, byte>(authReceiver.CompleteAuth);
+        loop.RegisterRaw<BeginAuthCommand>(authReceiver.BeginAuth);
+        loop.RegisterRaw<CompleteAuthCommand>(authReceiver.CompleteAuth);
         if (defaults.NoAuth)
             loop.Register<NoAuthCommand, byte>(authReceiver.NoAuth);
+
+        loop.RegisterRaw<PresenceChallengeCommand>(presenceReceiver.Challenge);
+        loop.RegisterRaw<PresenceProofCommand>(presenceReceiver.Proof);
 
         loop.Register(Authenticated<SpawnPlayerCommand>(spawnPlayerReceiver.Receive));
         loop.Register(Authenticated(DimensionHandler<DimensionMovePlayerReceiver, MovePlayerCommand>()));
@@ -29,10 +34,13 @@ public class ServerRegisterHandlersAction(
 
     private Action<NetSocket, C> Authenticated<C>(Action<NetSocket, C> handler) where C : unmanaged => (ns, cmd) =>
     {
-        if (!ns.IsAuthenticated)
+        if (!auth.AuthorizeGameplay(ns))
         {
-            log.Warn("Socket {0} tried to perform an authenticated action before authenticating", ns.Tag);
-            ns.Disconnect();
+            if (ns.Connected)
+            {
+                log.Warn("Socket {0} tried to perform an authenticated action before authenticating", ns.Tag);
+                ns.Disconnect();
+            }
             return;
         }
 

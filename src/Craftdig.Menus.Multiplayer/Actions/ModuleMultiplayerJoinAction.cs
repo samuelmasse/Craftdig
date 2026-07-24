@@ -3,7 +3,7 @@ namespace Craftdig.Menus.Multiplayer;
 [Module]
 public class ModuleMultiplayerJoinAction(RootState state, ModuleEnts ents, ModuleScope scope)
 {
-    public void Run(PlayerSocket socket)
+    public void Run(PlayerSocket socket, PlayerIdentitySession identitySession)
     {
         socket.Tag = "sc";
 
@@ -27,8 +27,11 @@ public class ModuleMultiplayerJoinAction(RootState state, ModuleEnts ents, Modul
         dimensionScope.Scope<PlayerScope>()
             .With(new PlayerEnt(dimensionScope.Get<DimensionEntArena>().Alloc()))
             .With(socket)
+            .With(identitySession)
             .Run(x => dimensionScope.Get<DimensionChunkUnloaderHandlers>().Add(x.Get<PlayerChunkClientUnloader>().Unload))
             .Run(x => x.Get<PlayerInventoryActions>().Enable())
+            .Run(x => x.Get<PlayerIdentityRefresh>().Start())
+            .Run(x => x.Get<PlayerPresenceClient>().Start())
             .Run(x => x.Get<PlayerSocketLoop>().Start())
             .Run(x => x.Get<PlayerMultiplayerSpawnAction>().Run())
             .Run(x => state.Current = x.New<PlayerMultiplayerLoadingState>());

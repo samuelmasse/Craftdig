@@ -16,11 +16,18 @@
         <Using Include="Craftdig.Protocol" />
         <Using Include="Craftdig.World" />
         <Using Include="Craftdig.World.Frontend" />
+        <Using Include="Craftdig.Identity" />
+        <Using Include="System.Collections.Frozen" />
     </ItemGroup>
 
     <ItemGroup>
+        <ProjectReference Include="..\Craftdig.Identity\Craftdig.Identity.csproj" />
         <ProjectReference Include="..\Craftdig.Player.Frontend\Craftdig.Player.Frontend.csproj" />
         <ProjectReference Include="..\Craftdig.Protocol\Craftdig.Protocol.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <InternalsVisibleTo Include="Craftdig.Client.Security.Test" />
     </ItemGroup>
 
 </Project>

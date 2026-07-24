@@ -17,6 +17,7 @@ public class DimensionBackendLoader(
         context.AddPreDispose(entDisposeTracker.InterceptDispose);
         context.AddPreDispose(playerIndex.InterceptDispose);
         context.AddPost<EntMutIdx, DimensionComponents.WorldPlayer>(playerIndex.Intercept);
+        context.AddPost<bool, DimensionComponents.IsPlayer>(playerIndex.Intercept);
         context.AddPost<Vec3d, DimensionComponents.Position>(playerSync.Intercept);
         context.AddPost<bool, DimensionComponents.IsPlayer>(playerSync.Intercept);
         indexedComponents.AddSaved<DimensionComponents>();

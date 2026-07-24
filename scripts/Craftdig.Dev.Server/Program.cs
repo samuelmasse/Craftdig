@@ -3,6 +3,9 @@ new Injector()
     .Run(x => x.Add<Xxh>(new XxhBackend()))
     .Scope<AppScope>()
     .With(new AppMods([new(typeof(ModuleNativeLoader), null), new(typeof(ModuleNativeBackendLoader), null)]))
+    // Trust the local dev issuer key so clients launched with CRAFTDIG_DEV_IDENTITY connect as verified
+    // accounts without Google. Dev-only; a production server never sets this and trusts craftdig.io.
+    .With(new DevIdentityConfig() { Enabled = true })
     .Run(x => x.Scope<AppLoaderScope>().Get<AppLoader>().Run())
     .Run(x => x.Scope<ModuleScope>().Scope<WorldScope>().Scope<ServerScope>()
         .With(new ServerDefaults()
@@ -14,6 +17,7 @@ new Injector()
         .Run(x => x.Get<ServerBoot>().Run([
             $"--RootPath", Path.Join(AppContext.BaseDirectory, "Data"),
             "--LogLevel", "Trace",
-            "--PublicServer", "true"]))
+            "--PublicServer", "true",
+            "--PublicServerContexts:0", "127.0.0.1:36676"]))
         .Run(x => x.Get<Server>().Run()))
     .Run(x => x.Scope<AppLoaderScope>().Get<AppUnloader>().Run());

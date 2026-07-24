@@ -17,6 +17,7 @@
         <Using Include="Craftdig.Dimension" />
         <Using Include="Craftdig.Dimension.Backend" />
         <Using Include="Craftdig.Dimension.Frontend" />
+        <Using Include="Craftdig.Identity" />
         <Using Include="Craftdig.Dimension.Unit">
             <Static>true</Static>
         </Using>

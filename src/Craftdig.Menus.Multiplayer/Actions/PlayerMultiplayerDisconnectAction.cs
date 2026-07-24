@@ -4,12 +4,18 @@ namespace Craftdig.Menus.Multiplayer;
 public class PlayerMultiplayerDisconnectAction(
     WorldScope worldScope,
     WorldDimensionBag dimensionBag,
+    PlayerPresenceClient presenceClient,
+    PlayerIdentityRefresh identityRefresh,
+    PlayerIdentitySession identitySession,
     PlayerSocketLoop socketLoop,
     PlayerEntUpdateQueue entUpdates)
 {
     public void Run()
     {
+        presenceClient.Stop();
+        identityRefresh.Stop();
         socketLoop.Stop();
+        identitySession.Dispose();
         entUpdates.Clear();
 
         foreach (var dimension in dimensionBag.Ents)

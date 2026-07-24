@@ -20,6 +20,7 @@ public class NetSocket(AppLog log, TcpClient tcp, Stream stream) : IEntMut
     private long outSegmentSendIndex;
 
     public bool Connected => tcp.Connected;
+    public bool IsTransportSecure;
     public EndPoint? Ip => tcp.Client.RemoteEndPoint;
     public ref long MaxMessageSize => ref maxMessageSize;
 
@@ -91,7 +92,7 @@ public class NetSocket(AppLog log, TcpClient tcp, Stream stream) : IEntMut
         }
     }
 
-    public void Send(ushort type, ReadOnlySpan<byte> cmd, ReadOnlySpan<byte> data)
+    public bool TrySend(ushort type, ReadOnlySpan<byte> cmd, ReadOnlySpan<byte> data)
     {
         lock (this)
         {
@@ -109,17 +110,17 @@ public class NetSocket(AppLog log, TcpClient tcp, Stream stream) : IEntMut
 
             if (available < needed)
             {
-                outSegmentIndex++;
+                long nextSegmentIndex = outSegmentIndex + 1;
+                segment = outSegments[nextSegmentIndex % outSegments.Length];
+                commitIndex = outSegmentCommitIndex[nextSegmentIndex % outSegments.Length];
 
-                segment = outSegments[outSegmentIndex % outSegments.Length];
-                commitIndex = outSegmentCommitIndex[outSegmentIndex % outSegments.Length];
-
-                if (commitIndex != 0)
+                if (needed > segment.Length || commitIndex != 0)
                 {
                     log.Trace("Socket {0} unable to send ({1}) {2} bytes", ent.Tag, type, needed);
-                    Disconnect();
-                    return;
+                    return false;
                 }
+
+                outSegmentIndex = nextSegmentIndex;
             }
 
             Write(tb);
@@ -128,6 +129,7 @@ public class NetSocket(AppLog log, TcpClient tcp, Stream stream) : IEntMut
             Write(data);
             outSegmentCommitIndex[outSegmentIndex % outSegments.Length] += needed;
             outSemaphore.Release();
+            return true;
 
             void Write(ReadOnlySpan<byte> bytes)
             {
@@ -135,6 +137,12 @@ public class NetSocket(AppLog log, TcpClient tcp, Stream stream) : IEntMut
                 commitIndex += bytes.Length;
             }
         }
+    }
+
+    public void Send(ushort type, ReadOnlySpan<byte> cmd, ReadOnlySpan<byte> data)
+    {
+        if (!TrySend(type, cmd, data))
+            Disconnect();
     }
 
     public void Send<C, D>(C cmd, ReadOnlySpan<D> data)
@@ -146,6 +154,36 @@ public class NetSocket(AppLog log, TcpClient tcp, Stream stream) : IEntMut
         log.Trace("Socket {0} -> {1} ({2}) {3} bytes", ent.Tag, typeof(C).Name, C.CommandId, bytes);
 
         Send(C.CommandId, cmdBytes, dataBytes);
+    }
+
+    public void SendRaw<C>(ReadOnlySpan<byte> body)
+        where C : ICommand
+    {
+        if (body.Length > ProtocolLimits.MaxMessageSize)
+            throw new ArgumentOutOfRangeException(nameof(body), body.Length, "The raw command body exceeds the protocol message limit.");
+
+        var bytes = body.Length + sizeof(ushort) + sizeof(int);
+        log.Trace("Socket {0} -> {1} ({2}) {3} bytes", ent.Tag, typeof(C).Name, C.CommandId, bytes);
+        Send(C.CommandId, body, []);
+    }
+
+    public bool TrySendRaw<C>(ReadOnlySpan<byte> body)
+        where C : ICommand
+    {
+        if (body.Length > ProtocolLimits.MaxMessageSize)
+            throw new ArgumentOutOfRangeException(nameof(body), body.Length, "The raw command body exceeds the protocol message limit.");
+
+        var bytes = body.Length + sizeof(ushort) + sizeof(int);
+        log.Trace("Socket {0} -> {1} ({2}) {3} bytes", ent.Tag, typeof(C).Name, C.CommandId, bytes);
+        return TrySend(C.CommandId, body, []);
+    }
+
+    public bool TrySend<C>()
+        where C : unmanaged, ICommand
+    {
+        C command = default;
+        var commandBytes = MemoryMarshal.AsBytes(MemoryMarshal.CreateReadOnlySpan(ref command, 1));
+        return TrySend(C.CommandId, commandBytes, []);
     }
 
     public void Send<C, D>(in C cmd, Span<D> data)

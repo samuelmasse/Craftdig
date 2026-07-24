@@ -31,8 +31,16 @@ public class ServerListenerTls(
             };
 
             ssl.AuthenticateAsServer(opt);
+            log.Info(
+                "TLS server handshake succeeded for socket {0}; protocol: {1}, cipher: {2}",
+                tcp.Client.RemoteEndPoint,
+                ssl.SslProtocol,
+                ssl.NegotiatedCipherSuite);
 
-            return new(log, tcp, ssl);
+            return new(log, tcp, ssl)
+            {
+                IsTransportSecure = true,
+            };
         });
         thread.Start();
 

@@ -1,7 +1,9 @@
 namespace Craftdig.Dimension.Backend;
 
 [Dimension]
-public class DimensionPlayerSync(DimensionEnt dimension)
+public class DimensionPlayerSync(
+    WorldEntIndex worldEntIndex,
+    DimensionEnt dimension)
 {
     public void Intercept(EntMutIdx ent)
     {
@@ -11,8 +13,22 @@ public class DimensionPlayerSync(DimensionEnt dimension)
         if (!ent.IsPlayer)
             return;
 
-        ent.WorldPlayer.Mutate()
+        if (!TryGetProfile(ent, out var profile))
+            return;
+
+        profile.Mutate()
             .WorldPosition(ent.Position)
             .WorldDimension(dimension);
+    }
+
+    private bool TryGetProfile(EntMutIdx player, out EntMutIdx profile)
+    {
+        if (player.Id != default &&
+            worldEntIndex.TryGet(player.Id, out profile) &&
+            profile.IsWorldPlayer)
+            return true;
+
+        profile = player.WorldPlayer;
+        return profile != default && profile.IsWorldPlayer;
     }
 }

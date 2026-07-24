@@ -1,16 +1,18 @@
 namespace Craftdig.Menus.Multiplayer;
 
-using System.Net.Http.Headers;
-using System.Net.Http.Json;
-
 [Module]
-public class ModuleMultiplayerConnectAction(AppLog log, AppClientOptions clientOptions, ModuleMultiplayerCredentials credentials)
+public class ModuleMultiplayerConnectAction(
+    AppLog log,
+    AppClientOptions clientOptions,
+    ModuleMultiplayerAuthenticator authenticator)
 {
     private ServerAddress? address;
-    private Thread? thread;
+    private volatile Thread? thread;
     private TcpClient? tcp;
     private Stream? stream;
     private NetSocket? socket;
+    private PlayerIdentitySession? identitySession;
+    private CancellationTokenSource? cancellation;
     private Exception? exception;
 
     public ServerAddress? Address => address;
@@ -21,24 +23,29 @@ public class ModuleMultiplayerConnectAction(AppLog log, AppClientOptions clientO
 
     public void Start(ServerAddress address)
     {
+        log.Info("Starting multiplayer connection to {0}:{1}", address.Host, address.Port);
         while (thread != null)
+        {
             Thread.Sleep(10);
+        }
 
+        ClearUnclaimedConnection();
+        cancellation?.Dispose();
         this.address = address;
-
-        tcp = null;
-        stream = null;
         exception = null;
+        cancellation = new();
 
         thread = new Thread(() =>
         {
             try
             {
                 EstablishConnection();
-                AuthenticateConnection();
+                socket = new NetSocket(log, tcp!, stream!);
+                authenticator.Authenticate(socket, identitySession!, cancellation.Token);
             }
             catch (Exception e)
             {
+                log.Warn("Multiplayer connection failed during setup or authentication with {0}", e.GetType().Name);
                 Cancel();
                 exception = e;
             }
@@ -46,123 +53,91 @@ public class ModuleMultiplayerConnectAction(AppLog log, AppClientOptions clientO
             {
                 thread = null;
             }
-        });
+        })
+        {
+            IsBackground = true,
+            Name = "Craftdig multiplayer connect",
+        };
 
         thread.Start();
     }
 
     public void Cancel()
     {
-        if (thread == null)
-            return;
+        cancellation?.Cancel();
+        ClearUnclaimedConnection();
+    }
 
-        try { socket?.Disconnect(); } catch { }
-        try { stream?.Dispose(); } catch { }
-        try { tcp?.Dispose(); } catch { }
+    public bool TryTakeConnection(
+        [NotNullWhen(true)] out TcpClient? connectedTcp,
+        [NotNullWhen(true)] out Stream? connectedStream,
+        [NotNullWhen(true)] out PlayerIdentitySession? connectedIdentity)
+    {
+        if (thread != null || exception != null || tcp == null || stream == null || identitySession == null)
+        {
+            connectedTcp = null;
+            connectedStream = null;
+            connectedIdentity = null;
+            return false;
+        }
+
+        connectedTcp = tcp;
+        connectedStream = stream;
+        connectedIdentity = identitySession;
+        tcp = null;
+        stream = null;
+        socket = null;
+        identitySession = null;
+        cancellation?.Dispose();
+        cancellation = null;
+        return true;
     }
 
     private void EstablishConnection()
     {
-        tcp = new TcpClient() { NoDelay = true };
-        tcp.Connect(address!.Host, address.Port);
+        var target = address ?? throw new InvalidOperationException("No multiplayer server address was selected.");
+        tcp = new TcpClient { NoDelay = true };
+        tcp.Connect(target.Host, target.Port);
 
         if (clientOptions.UseRawTcp)
+        {
+            log.Warn("Using raw TCP development transport; server identity and player Identity are unverified");
             stream = tcp.GetStream();
-        else stream = ClientTls.Connect(tcp, address.Host);
-    }
-
-    private void AuthenticateConnection()
-    {
-        var loop = new NetLoop(log);
-        socket = new NetSocket(log, tcp!, stream!);
-
-        var ct = new CancellationTokenSource();
-        var loopThread = new Thread(() => { try { loop.Run(socket); } catch { } finally { ct.Cancel(); } });
-        var pushThread = new Thread(() => { try { socket.Push(ct.Token); } catch { } });
-        var resultEvent = ListenForResult(loop);
-
-        loopThread.Start();
-        pushThread.Start();
-
-        var sw = Stopwatch.StartNew();
-        var timeout = TimeSpan.FromSeconds(10);
-
-        if (clientOptions.NoAuthUser == null)
-        {
-            var nonce = AcquireNonce(sw, timeout, loop, loopThread);
-            var jwt = AcquireJwt(sw, timeout, loopThread, nonce);
-
-            socket.Send<CompleteAuthCommand, byte>(Encoding.UTF8.GetBytes(jwt));
-        }
-        else socket.Send<NoAuthCommand, byte>(Encoding.UTF8.GetBytes(clientOptions.NoAuthUser));
-
-        while (loopThread.IsAlive && sw.Elapsed < timeout) { Wait(); }
-
-        if (!resultEvent.IsSet)
-        {
-            if (sw.Elapsed >= timeout)
-                throw new Exception("Timed out");
-            else throw new Exception("Failed to authenticate");
+            identitySession = PlayerIdentitySession.CreateUnverified();
+            if (clientOptions.NoAuthUser == null)
+            {
+                log.Warn("Rejecting raw TCP connection because no development no-auth username is configured");
+                throw new InvalidOperationException("Raw TCP is unverified and requires a development no-auth username.");
+            }
+            return;
         }
 
-        loopThread.Join();
-        pushThread.Join();
-    }
-
-    private string AcquireNonce(Stopwatch sw, TimeSpan timeout, NetLoop loop, Thread loopThread)
-    {
-        string? nonce = null;
-
-        loop.Register<ReadyAuthCommand, byte>(data =>
+        stream = ClientTls.Connect(log, tcp, target.Host);
+        if (!ServerContext.TryCreate(target.Host, target.Port, out var serverContext))
         {
-            nonce = Encoding.UTF8.GetString(data);
-        });
+            log.Warn("Rejecting multiplayer address because its server context is not canonical");
+            throw new InvalidDataException("The selected multiplayer server address is not canonicalizable.");
+        }
 
-        socket!.Send<BeginAuthCommand>();
-        while (loopThread.IsAlive && nonce == null && sw.Elapsed < timeout) { Wait(); }
-
-        if (nonce == null)
-            throw new Exception("Failed to acquire nonce");
-
-        return nonce;
-    }
-
-    private string AcquireJwt(Stopwatch sw, TimeSpan timeout, Thread loopThread, string nonce)
-    {
-        using var http = new HttpClient();
-        http.DefaultRequestHeaders.Authorization =
-            new AuthenticationHeaderValue("Bearer", credentials.GetFreshToken());
-
-        var postTask = http.PostAsJsonAsync($"https://craftdig.io/api/GetToken", new { host = address!.Host, nonce });
-        while (loopThread.IsAlive && !postTask.IsCompleted && sw.Elapsed < timeout) { Wait(); }
-
-        var bodyTask = postTask.Result.Content.ReadFromJsonAsync<GetTokenResponse>();
-        while (loopThread.IsAlive && !bodyTask.IsCompleted && sw.Elapsed < timeout) { Wait(); }
-
-        var body = bodyTask.Result;
-
-        if (body == null || body?.Jwt == null)
-            throw new Exception("Failed to obtain JWT");
-
-        return body!.Jwt;
-    }
-
-    private ManualResetEventSlim ListenForResult(NetLoop loop)
-    {
-        var resultEvent = new ManualResetEventSlim(false);
-
-        loop.Register<ResultAuthCommand>(() =>
+        if (clientOptions.NoAuthUser != null)
         {
-            resultEvent.Set();
+            log.Warn("Using TLS development no-auth mode; player Identity is unverified");
+            identitySession = PlayerIdentitySession.CreateUnverified(serverContext);
+            return;
+        }
 
-            // Force terminate the net loop
-            throw new Exception();
-        });
-
-        return resultEvent;
+        identitySession = PlayerIdentitySession.CreateAuthenticated(serverContext);
     }
 
-    private void Wait() => Thread.Sleep(10);
-
-    private record GetTokenResponse(string Jwt);
+    private void ClearUnclaimedConnection()
+    {
+        try { socket?.Disconnect(); } catch { }
+        try { stream?.Dispose(); } catch { }
+        try { tcp?.Dispose(); } catch { }
+        identitySession?.Dispose();
+        socket = null;
+        stream = null;
+        tcp = null;
+        identitySession = null;
+    }
 }

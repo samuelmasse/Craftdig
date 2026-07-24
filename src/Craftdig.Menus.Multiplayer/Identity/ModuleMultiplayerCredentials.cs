@@ -47,12 +47,12 @@ public class ModuleMultiplayerCredentials
         thread = null;
     }
 
-    public string GetFreshToken()
+    public string GetFreshToken(CancellationToken cancellationToken = default)
     {
         if (creds == null)
             throw new Exception();
 
-        GoogleAuth.RefreshToken(creds);
+        GoogleAuth.RefreshToken(creds, cancellationToken);
         return creds.Token.IdToken;
     }
 

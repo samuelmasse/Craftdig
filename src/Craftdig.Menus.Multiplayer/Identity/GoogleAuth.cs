@@ -54,9 +54,9 @@ public static class GoogleAuth
         clear.Wait();
     }
 
-    public static void RefreshToken(UserCredential cred)
+    public static void RefreshToken(UserCredential cred, CancellationToken cancellationToken)
     {
-        var refresh = cred.RefreshTokenAsync(default);
-        refresh.Wait();
+        var refresh = cred.RefreshTokenAsync(cancellationToken);
+        refresh.Wait(cancellationToken);
     }
 }

@@ -24,10 +24,13 @@ public class ServerListenerLoop(AppLog log, ServerClientLoop clientLoop, ServerC
                     tcp.NoDelay = true;
                     clientLoop.Start(handler(tcp));
                 }
-                catch (AuthenticationException)
+                catch (AuthenticationException e)
                 {
-                    log.Warn("Listener on port {0} failed to authenticate socket {1}",
-                        port, tcp?.Client.RemoteEndPoint);
+                    log.Warn(
+                        "Listener on port {0} failed the TLS handshake for socket {1}: {2}",
+                        port,
+                        tcp?.Client.RemoteEndPoint,
+                        e.Message);
                     tcp?.Dispose();
                 }
                 catch (Exception e)

@@ -27,7 +27,7 @@ public class PlayerCommonState(
 {
     private readonly Dictionary<Keys, Action<EntMut>> keyMenus = new()
     {
-        [Keys.Tab] = creativeInventoryMenu.Create,
+        [Keys.G] = creativeInventoryMenu.Create,
         [Keys.E] = survivalInventoryMenu.Create,
     };
     private readonly EntMut menus = Node(ui).OrderValueV(1).InnerAlignmentSnapV(s.ItemSpacingXS);

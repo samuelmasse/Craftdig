@@ -3,6 +3,7 @@ namespace Craftdig.Dimension;
 [DimensionLoader]
 public class DimensionLoader(
     DimensionEntIdxContextBuilder context,
+    DimensionEntIndex entIndex,
     DimensionChunkEntIdxContextBuilder chunkContext,
     DimensionChunkBagMut chunkBag,
     DimensionPlayerBagMut playerBag,
@@ -12,6 +13,8 @@ public class DimensionLoader(
 {
     public void Run()
     {
+        context.AddPreDispose(entIndex.InterceptDispose);
+        context.AddPre<Guid, WorldComponents.Id>(entIndex.Intercept);
         context.AddBag(seerBag);
         context.AddGatedBag(playerBag);
         context.AddGatedBag(rigidBag);

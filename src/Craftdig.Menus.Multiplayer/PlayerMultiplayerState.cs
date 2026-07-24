@@ -13,10 +13,13 @@ public class PlayerMultiplayerState(
     PlayerCamera camera,
     PlayerFrontend player,
     PlayerCommonState commonState,
+    PlayerIdentityCache identityCache,
     PlayerMultiplayerDisconnectAction multiplayerDisconnectAction,
     PlayerSlowTickReceiver slowTickReceiver,
     PlayerClient client,
-    PlayerMultiplayerDebugMenu multiplayerDebugMenu) : State
+    PlayerMultiplayerDebugMenu multiplayerDebugMenu,
+    PlayerMultiplayerNameplatesMenu multiplayerNameplatesMenu,
+    PlayerMultiplayerRosterMenu multiplayerRosterMenu) : State
 {
     private int delay;
 
@@ -30,17 +33,24 @@ public class PlayerMultiplayerState(
         ent.Movement = movement;
         ent.IsLoaded = true;
         Node(commonState.Overlay).Mutate(multiplayerDebugMenu.Create);
+        Node(commonState.Overlay).Mutate(multiplayerNameplatesMenu.Create);
+        Node(commonState.Overlay).Mutate(multiplayerRosterMenu.Create);
     }
 
     public override void Unload()
     {
+        identityCache.SetPlayerListOpen(false);
         commonState.Unload();
         multiplayerDisconnectAction.Run();
     }
 
     public override void Update(double time)
     {
-        commonState.Update(time);
+        bool playerListOpen = keyboard.IsKeyDown(Keys.Tab);
+        identityCache.SetPlayerListOpen(playerListOpen);
+
+        if (!keyboard.IsKeyPressed(Keys.Tab))
+            commonState.Update(time);
 
         if (!commonState.Inv && !commonState.Paused)
             player.Input();

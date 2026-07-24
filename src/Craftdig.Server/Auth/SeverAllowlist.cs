@@ -6,7 +6,7 @@ public class SeverAllowlist(ServerDefaults defaults, ServerConfig config)
     private readonly string file = Path.Join(config.RootPath, "Allowlist.txt");
     private HashSet<string>? set;
 
-    public bool Allow(string id)
+    public bool Allow(Guid playerId)
     {
         if (config.PublicServer)
             return true;
@@ -16,7 +16,7 @@ public class SeverAllowlist(ServerDefaults defaults, ServerConfig config)
             if (set == null)
                 Read();
 
-            return set!.Contains(id);
+            return set!.Contains(playerId.ToString("D"));
         }
     }
 

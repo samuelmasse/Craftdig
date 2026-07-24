@@ -7,6 +7,7 @@ public class PlayerEntUpdateApplier(
     WorldUniverse universe,
     DimensionEntSyncCatalog dimensionCatalog,
     DimensionRemoteInterpolation remoteInterpolation,
+    PlayerIdentityCache identityCache,
     PlayerEntReplicas replicas,
     PlayerInventoryActions inventory) : IEntSyncReadResolver
 {
@@ -198,6 +199,10 @@ public class PlayerEntUpdateApplier(
                 universe.Bind(replica.Ent);
             return;
         }
+
+        if (replica.Ent.IsPlayer)
+            identityCache.ObservePlayerEnt(id);
+        else identityCache.ForgetPlayerEnt(id);
 
         if (replica.IsOwner)
         {

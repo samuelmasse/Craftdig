@@ -1,0 +1,7 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\src\Craftdig.Protocol\Craftdig.Protocol.csproj" />
+    </ItemGroup>
+
+</Project>

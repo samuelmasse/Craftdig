@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\src\Craftdig.Identity\Craftdig.Identity.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <Using Include="Craftdig.App" />
+        <Using Include="Craftdig.Identity" />
+        <Using Include="Microsoft.IdentityModel.Tokens" />
+        <Using Include="System.IO" />
+        <Using Include="System.Linq" />
+        <Using Include="System.Text.Json" />
+    </ItemGroup>
+
+</Project>

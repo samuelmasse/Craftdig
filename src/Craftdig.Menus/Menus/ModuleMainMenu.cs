@@ -2,6 +2,7 @@ namespace Craftdig.Menus;
 
 [Module]
 public class ModuleMainMenu(
+    AppLog log,
     RootScreen screen,
     RootKeyboard keyboard,
     RootText text,
@@ -79,15 +80,21 @@ public class ModuleMainMenu(
         {
             Node(root)
                 .Mutate(s.Label)
-                .TextF(() => text.Format("UseRawTcp = {0}, NoAuthUser = {1}", clientOptions.UseRawTcp, clientOptions.NoAuthUser))
+                .TextF(() => text.Format(
+                    "F3: UseRawTcp = {0}, F4: NoAuthUser = {1}",
+                    clientOptions.UseRawTcp,
+                    clientOptions.NoAuthUser))
                 .AlignmentV(Alignment.Right | Alignment.Bottom)
                 .OffsetV((-s.ItemSpacingS, -s.ItemSpacingXS))
-                .OnFrameF(() =>
+                .OnUpdateF(() =>
                 {
                     if (clientOptions.AllowRawTcp)
                     {
                         if (keyboard.IsKeyPressed(Keys.F3))
+                        {
                             clientOptions.UseRawTcp = !clientOptions.UseRawTcp;
+                            log.Info("Development raw TCP mode changed to {0}", clientOptions.UseRawTcp);
+                        }
                     }
 
                     if (clientOptions.AllowNoAuth)
@@ -97,6 +104,10 @@ public class ModuleMainMenu(
                             if (clientOptions.NoAuthUser == null)
                                 clientOptions.NoAuthUser = clientOptions.DefaultNoAuthUser;
                             else clientOptions.NoAuthUser = null;
+
+                            log.Info(
+                                "Development no-auth mode changed to {0}",
+                                clientOptions.NoAuthUser != null);
                         }
                     }
                 });

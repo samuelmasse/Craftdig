@@ -5,12 +5,13 @@ public class PlayerEntReplicas(
     WorldEntArena worldArena,
     DimensionEntArena dimensionArena,
     DimensionChunks chunks,
+    PlayerIdentityCache identityCache,
     PlayerEnt player)
 {
     private readonly Dictionary<Guid, PlayerEntReplica> replicasById = [];
     private readonly Dictionary<Vec2i, HashSet<Guid>> replicaIdsByChunk = [];
 
-    public bool OwnerReady { get; private set; }
+    public bool OwnerReady;
 
     public PlayerEntReplica this[Guid id] => replicasById[id];
 
@@ -36,6 +37,9 @@ public class PlayerEntReplicas(
     {
         var replica = replicasById[id];
         replicasById.Remove(id);
+
+        if (replica.Ent.IsPlayer)
+            identityCache.ForgetPlayerEnt(id);
 
         if (replica.Chunk != null)
             RemoveFromChunk(replica.Chunk.Value, id);

@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <ItemGroup>
+        <ProjectReference Include="..\Craftdig.Protocol\Craftdig.Protocol.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <Using Include="Craftdig.App" />
+        <Using Include="Craftdig.Protocol" />
+        <Using Include="Microsoft.IdentityModel.Tokens" />
+        <Using Include="System.IdentityModel.Tokens.Jwt" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <InternalsVisibleTo Include="Craftdig.Identity.Test" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.17.0" />
+    </ItemGroup>
+
+</Project>

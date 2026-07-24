@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\src\Craftdig.Server\Craftdig.Server.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <Using Include="Craftdig.App" />
+        <Using Include="Craftdig.Server" />
+        <Using Include="System.Diagnostics" />
+        <Using Include="System.Net" />
+        <Using Include="System.Net.Sockets" />
+    </ItemGroup>
+
+</Project>

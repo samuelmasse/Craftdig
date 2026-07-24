@@ -9,6 +9,7 @@ public class Server(
     ServerRegisterShutdownHandlersAction registerShutdownHandlersAction,
     ServerTickTimer tickTimer,
     ServerTicks ticks,
+    ServerPresenceLoop presenceLoop,
     ServerListener listener,
     ServerListenerTls listenerTls,
     ServerDrainSocketsAction drainSocketsAction,
@@ -21,6 +22,7 @@ public class Server(
         loadDimensionsAction.Run();
         registerHandlersAction.Run();
 
+        presenceLoop.Start();
         listener.Start();
         listenerTls.Start();
         tickTimer.Start();
@@ -33,6 +35,8 @@ public class Server(
         listenerTls.Join();
 
         drainSocketsAction.Run();
+        presenceLoop.Stop();
+        presenceLoop.Join();
         unloadDimensionsAction.Run();
     }
 }

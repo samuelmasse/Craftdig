@@ -6,7 +6,8 @@ public class ServerClientLoop(
     ServerNetLoop loop,
     ServerSockets sockets,
     ServerClientThreadPool clientThreadPool,
-    ServerClientLimits clientLimits)
+    ServerClientLimits clientLimits,
+    ServerIdentitySessionEvents identitySessionEvents)
 {
     private long nextSocketId;
 
@@ -16,7 +17,8 @@ public class ServerClientLoop(
         {
             ns.MaxMessageSize = ProtocolLimits.MaxClientMessageSize;
             ns.ConnectedTime = DateTime.UtcNow;
-            ns.Tag = $"s{++nextSocketId}";
+            ns.ConnectionGeneration = ++nextSocketId;
+            ns.Tag = $"s{ns.ConnectionGeneration}";
 
             clientThreadPool.Start((execution) => Loop(execution, ns));
             clientThreadPool.Start((execution) => Push(execution, ns));
@@ -45,6 +47,7 @@ public class ServerClientLoop(
             ns.Disconnect();
             log.Info("Socket {0} disconnected", ns.Tag);
 
+            identitySessionEvents.PublishDisconnected(ns);
             sockets.Remove(ns);
             clientLimits.Pulse();
         }
