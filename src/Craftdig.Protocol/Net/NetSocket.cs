@@ -1,6 +1,6 @@
 namespace Craftdig.Protocol;
 
-public class NetSocket(AppLog log, TcpClient tcp, Stream stream) : IEntMut
+public class NetSocket(Log log, TcpClient tcp, Stream stream) : IEntMut
 {
     private readonly EntObj ent = new();
     private byte[] buffer = [];

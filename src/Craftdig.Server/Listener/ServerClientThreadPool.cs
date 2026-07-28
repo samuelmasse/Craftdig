@@ -1,7 +1,7 @@
 namespace Craftdig.Server;
 
 [Server]
-public class ServerClientThreadPool(AppLog log)
+public class ServerClientThreadPool(Log log)
 {
     private readonly ConcurrentBag<ClientThread> pool = [];
     private volatile bool stop;

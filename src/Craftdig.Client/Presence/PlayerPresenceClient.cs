@@ -7,7 +7,7 @@ public class PlayerPresenceClient
     private const int MaxInboundBytes = 8 * 1024 * 1024;
     private static readonly TimeSpan WorkerPollInterval = TimeSpan.FromMilliseconds(100);
 
-    private readonly AppLog log;
+    private readonly Log log;
     private readonly ModuleIdentityTrust identityTrust;
     private readonly PlayerIdentitySession identitySession;
     private readonly PlayerNetLoop loop;
@@ -24,7 +24,7 @@ public class PlayerPresenceClient
     private Thread? challengeThread;
 
     public PlayerPresenceClient(
-        AppLog log,
+        Log log,
         ModuleIdentityTrust identityTrust,
         PlayerIdentitySession identitySession,
         PlayerIdentityCache identityCache,

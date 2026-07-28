@@ -30,7 +30,7 @@ public sealed class ServerAuthTransportTest
     [TestMethod]
     public void BeginAuthentication_RequiresAnExactlyEmptyBody()
     {
-        var log = new AppLog(new AppLogStream());
+        var log = new LogRuntime(TextWriter.Null).Log;
         var receiver = new ServerAuthReceiver(log, CreateAuth(), CreateNoAuth());
 
         using var malformed = ConnectedPair.Create();
@@ -158,7 +158,7 @@ public sealed class ServerAuthTransportTest
 
     private static ServerAuth CreateAuth()
     {
-        var log = new AppLog(new AppLogStream());
+        var log = new LogRuntime(TextWriter.Null).Log;
         var config = new ServerConfig
         {
             PublicServer = true,
@@ -176,7 +176,7 @@ public sealed class ServerAuthTransportTest
 
     private static ServerNoAuth CreateNoAuth()
     {
-        var log = new AppLog(new AppLogStream());
+        var log = new LogRuntime(TextWriter.Null).Log;
         var config = new ServerConfig { PublicServer = true };
         var sockets = new ServerSockets();
         var limits = new ServerClientLimits(log, sockets);

@@ -1,7 +1,7 @@
 namespace Craftdig.Server;
 
 internal sealed class ServerPresenceSessions(
-    AppLog log,
+    Log log,
     ServerPresenceMetrics metrics,
     int sessionCapacity,
     int identityQueueCapacity)

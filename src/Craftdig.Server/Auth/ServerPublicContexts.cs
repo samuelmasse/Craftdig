@@ -3,10 +3,10 @@ namespace Craftdig.Server;
 [Server]
 public class ServerPublicContexts
 {
-    private readonly AppLog log;
+    private readonly Log log;
     private readonly ServerContext[] contexts;
 
-    public ServerPublicContexts(AppLog log, ServerConfig config)
+    public ServerPublicContexts(Log log, ServerConfig config)
     {
         this.log = log;
         contexts = new ServerContext[config.PublicServerContexts.Length];

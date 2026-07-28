@@ -1,7 +1,7 @@
 namespace Craftdig.Server;
 
 [Server]
-public class ServerBoot(AppLog log, ModuleScope moduleScope, WorldScope worldScope, ServerScope serverScope)
+public class ServerBoot(Log log, ModuleScope moduleScope, WorldScope worldScope, ServerScope serverScope)
 {
     public void Run(string[] args)
     {

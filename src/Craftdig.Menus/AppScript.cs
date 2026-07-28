@@ -1,8 +1,7 @@
 namespace Craftdig.Menus;
 
 [App]
-public class AppScript(AppScope scope) : Script
+public class AppScript(Log log) : Script
 {
-    public override void Unload() =>
-        scope.Scope<AppLoaderScope>().Get<AppUnloader>().Run();
+    public override void Unload() => log.Info("Unloading app");
 }

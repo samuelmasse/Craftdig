@@ -1,7 +1,7 @@
 namespace Craftdig.Dimension.Server;
 
 [Dimension]
-public class DimensionPendingMovement(AppLog log, DimensionSockets sockets)
+public class DimensionPendingMovement(Log log, DimensionSockets sockets)
 {
     public void Tick()
     {

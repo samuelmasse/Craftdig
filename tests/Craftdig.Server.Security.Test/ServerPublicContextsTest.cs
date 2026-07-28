@@ -6,18 +6,20 @@ public sealed class ServerPublicContextsTest
     [TestMethod]
     public void EmptyConfiguration_FailsClosedAndLogsAWarning()
     {
-        var logs = new AppLogStream();
-        var contexts = new ServerPublicContexts(new(logs), new() { PublicServerContexts = [] });
+        using var output = new StringWriter();
+        using var logging = new LogRuntime(output) { UseColor = false };
+        var contexts = new ServerPublicContexts(logging.Log, new() { PublicServerContexts = [] });
 
         Assert.IsTrue(ServerContext.TryParseCanonical("localhost", 36676, out var context));
         Assert.IsFalse(contexts.Allows(context));
-        StringAssert.Contains(Collect(logs), "No public Identity server contexts are configured");
+        logging.Flush();
+        StringAssert.Contains(output.ToString(), "No public Identity server contexts are configured");
     }
 
     [TestMethod]
     public void ConfiguredContexts_AllowExactMatchesOnlyAndRejectDuplicates()
     {
-        var log = new AppLog(new AppLogStream());
+        var log = new LogRuntime(TextWriter.Null).Log;
         var contexts = new ServerPublicContexts(log, new() { PublicServerContexts = ["localhost:36676"] });
 
         Assert.IsTrue(ServerContext.TryParseCanonical("localhost", 36676, out var matching));
@@ -29,18 +31,5 @@ public sealed class ServerPublicContextsTest
 
         Assert.ThrowsExactly<InvalidDataException>(() =>
             new ServerPublicContexts(log, new() { PublicServerContexts = ["localhost:36676", "localhost:36676"] }));
-    }
-
-    private static string Collect(AppLogStream logs)
-    {
-        logs.Collect(-1);
-        var output = new StringBuilder();
-        foreach (var segment in logs.Segments)
-        {
-            foreach (var entry in segment.Entries)
-                output.Append(entry.Chars.Span);
-        }
-
-        return output.ToString();
     }
 }

@@ -2,7 +2,7 @@ namespace Craftdig.Menus;
 
 [Module]
 public class ModuleMainMenu(
-    AppLog log,
+    Log log,
     RootScreen screen,
     RootKeyboard keyboard,
     RootText text,

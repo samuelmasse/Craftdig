@@ -2,7 +2,7 @@ namespace Craftdig.Server;
 
 [Server]
 public class ServerUnloadDimensionsAction(
-    AppLog log,
+    Log log,
     WorldScope worldScope,
     WorldDimensionBag dimensionBag)
 {

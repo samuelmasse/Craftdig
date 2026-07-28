@@ -2,7 +2,7 @@ namespace Craftdig.Server;
 
 [Server]
 public class ServerAuth(
-    AppLog log,
+    Log log,
     ServerClientLimits clientLimits,
     ServerAuthGuards guards,
     ServerIdentityTrust ticketValidator,

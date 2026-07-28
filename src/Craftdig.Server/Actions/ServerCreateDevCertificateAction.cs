@@ -1,7 +1,7 @@
 namespace Craftdig.Server;
 
 [Server]
-public class ServerCreateDevCertificateAction(AppLog log)
+public class ServerCreateDevCertificateAction(Log log)
 {
     public X509Certificate2 Run()
     {

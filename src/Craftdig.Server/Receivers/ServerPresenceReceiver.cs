@@ -2,7 +2,7 @@ namespace Craftdig.Server;
 
 [Server]
 public class ServerPresenceReceiver(
-    AppLog log,
+    Log log,
     ServerIdentitySessionEvents inbox,
     ServerPresenceMetrics metrics)
 {

@@ -2,7 +2,7 @@ namespace Craftdig.Server;
 
 [Server]
 public class ServerRegisterHandlersAction(
-    AppLog log,
+    Log log,
     ServerNetLoop loop,
     ServerDefaults defaults,
     ServerAuth auth,

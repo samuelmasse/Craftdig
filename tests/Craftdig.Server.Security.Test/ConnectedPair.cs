@@ -25,7 +25,7 @@ internal sealed class ConnectedPair : IDisposable
         var client = new TcpClient();
         client.Connect(endpoint);
         var server = listener.AcceptTcpClient();
-        var log = new AppLog(new AppLogStream());
+        var log = new LogRuntime(TextWriter.Null).Log;
         return new(listener, client, server, new(log, server, server.GetStream()));
     }
 

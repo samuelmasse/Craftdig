@@ -2,7 +2,7 @@ namespace Craftdig.Menus.Multiplayer;
 
 [Module]
 public class ModuleMultiplayerConnectAction(
-    AppLog log,
+    Log log,
     AppClientOptions clientOptions,
     ModuleMultiplayerAuthenticator authenticator)
 {

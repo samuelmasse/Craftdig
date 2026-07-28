@@ -2,7 +2,7 @@ namespace Craftdig.World.Backend;
 
 [WorldLoader]
 public class WorldBackendLoader(
-    AppLog log,
+    Log log,
     ModuleWriteWorldStateAction writeWorldStateAction,
     WorldPaths paths,
     WorldEntRegionStates entRegionStates,

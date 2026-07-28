@@ -2,7 +2,7 @@ namespace Craftdig.Server;
 
 [Server]
 public class ServerTicks(
-    AppLog log,
+    Log log,
     WorldTick tick,
     ServerTickCheck tickCheck,
     ServerTick serverTick)

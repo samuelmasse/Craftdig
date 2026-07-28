@@ -1,7 +1,7 @@
 namespace Craftdig.Server;
 
 [Server]
-public class ServerListenerLoop(AppLog log, ServerClientLoop clientLoop, ServerClientLimits clientLimits)
+public class ServerListenerLoop(Log log, ServerClientLoop clientLoop, ServerClientLimits clientLimits)
 {
     public (Thread, Action) Run(int port, Func<TcpClient, NetSocket> handler)
     {

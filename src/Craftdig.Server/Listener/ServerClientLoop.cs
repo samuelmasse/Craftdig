@@ -2,7 +2,7 @@ namespace Craftdig.Server;
 
 [Server]
 public class ServerClientLoop(
-    AppLog log,
+    Log log,
     ServerNetLoop loop,
     ServerSockets sockets,
     ServerClientThreadPool clientThreadPool,

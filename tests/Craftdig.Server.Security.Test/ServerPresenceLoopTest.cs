@@ -6,7 +6,7 @@ public sealed class ServerPresenceLoopTest
     [TestMethod]
     public void Stop_CancelsRegistrationPendingActivation()
     {
-        var log = new AppLog(new AppLogStream());
+        var log = new LogRuntime(TextWriter.Null).Log;
         var config = new ServerConfig { MaxPlayers = 1 };
         var events = new ServerIdentitySessionEvents(config);
         var metrics = new ServerPresenceMetrics();
@@ -33,7 +33,7 @@ public sealed class ServerPresenceLoopTest
     [TestMethod]
     public void FullOutputRing_DisconnectsPresenceSessionAfterThreeBackpressureStrikes()
     {
-        var log = new AppLog(new AppLogStream());
+        var log = new LogRuntime(TextWriter.Null).Log;
         var config = new ServerConfig { MaxPlayers = 1 };
         var events = new ServerIdentitySessionEvents(config);
         var metrics = new ServerPresenceMetrics();

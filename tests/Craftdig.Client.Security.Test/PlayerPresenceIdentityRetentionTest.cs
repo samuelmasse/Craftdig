@@ -8,7 +8,7 @@ public sealed class PlayerPresenceIdentityRetentionTest
     {
         Assert.IsTrue(ServerContext.TryParseCanonical("play.example.com", 36676, out var context));
         using var session = PlayerIdentitySession.CreateAuthenticated(context);
-        var log = new Craftdig.App.AppLog(new Craftdig.App.AppLogStream());
+        var log = new AlvorKit.Logging.LogRuntime(TextWriter.Null).Log;
         var client = new PlayerPresenceClient(log, null!, session, new PlayerIdentityCache(), null!, null!);
         DateTimeOffset issuedAt = DateTimeOffset.UtcNow;
         const long activityTimestamp = 100;

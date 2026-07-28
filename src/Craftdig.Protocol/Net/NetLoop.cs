@@ -1,6 +1,6 @@
 namespace Craftdig.Protocol;
 
-public class NetLoop(AppLog log)
+public class NetLoop(Log log)
 {
     private readonly Action<NetSocket, NetMessage>[] handlers = new Action<NetSocket, NetMessage>[0xFFFF];
 

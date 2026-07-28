@@ -1,7 +1,7 @@
 namespace Craftdig.Server;
 
 [Server]
-public class ServerKicker(AppLog log, ServerSockets sockets, ServerAuth auth)
+public class ServerKicker(Log log, ServerSockets sockets, ServerAuth auth)
 {
     private readonly List<(NetSocket Socket, ServerIdentitySessionSnapshot Identity)> expiryCandidates = [];
 

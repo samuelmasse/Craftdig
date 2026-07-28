@@ -21,8 +21,8 @@
         <Using Include="AlvorKit.ECS" />
         <Using Include="AlvorKit.ECS.Generator" />
         <Using Include="AlvorKit.Injection" />
+        <Using Include="AlvorKit.Logging" />
         <Using Include="AlvorKit.Maths" />
-        <Using Include="Cysharp.Text" />
         <Using Include="Microsoft.Win32.SafeHandles" />
         <Using Include="System.Buffers" />
         <Using Include="System.Buffers.Binary" />

@@ -2,7 +2,7 @@ namespace Craftdig.Menus.Multiplayer;
 
 [Module]
 public class ModuleMultiplayerAuthenticator(
-    AppLog log,
+    Log log,
     AppClientOptions clientOptions,
     ModuleIdentityTicketClient identityTickets)
 {
@@ -137,7 +137,7 @@ public class ModuleMultiplayerAuthenticator(
         return nonce.Value;
     }
 
-    private sealed class NonceListener(AppLog log)
+    private sealed class NonceListener(Log log)
     {
         private readonly Lock gate = new();
         private Nonce256? nonce;

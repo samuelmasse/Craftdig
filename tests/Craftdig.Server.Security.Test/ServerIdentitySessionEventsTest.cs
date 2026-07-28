@@ -86,7 +86,7 @@ public sealed class ServerIdentitySessionEventsTest
 
     private static NetSocket CreateSocket(long generation)
     {
-        var socket = new NetSocket(new(new AppLogStream()), new TcpClient(), Stream.Null);
+        var socket = new NetSocket(new LogRuntime(TextWriter.Null).Log, new TcpClient(), Stream.Null);
         socket.ConnectionGeneration = generation;
         return socket;
     }

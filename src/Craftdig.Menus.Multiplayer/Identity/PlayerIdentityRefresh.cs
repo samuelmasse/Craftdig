@@ -2,7 +2,7 @@ namespace Craftdig.Menus.Multiplayer;
 
 [Player]
 public class PlayerIdentityRefresh(
-    AppLog log,
+    Log log,
     ModuleIdentityTicketClient identityTickets,
     PlayerIdentitySession identitySession,
     PlayerNetLoop loop,

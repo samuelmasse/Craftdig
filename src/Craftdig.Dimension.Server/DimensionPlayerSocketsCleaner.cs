@@ -2,7 +2,7 @@ namespace Craftdig.Dimension.Server;
 
 [Dimension]
 public class DimensionPlayerSocketsCleaner(
-    AppLog log,
+    Log log,
     WorldPlayerSockets worldSockets,
     WorldPlayerSlots playerSlots,
     DimensionSockets sockets)

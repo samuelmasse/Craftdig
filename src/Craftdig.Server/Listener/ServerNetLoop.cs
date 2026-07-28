@@ -1,4 +1,4 @@
 namespace Craftdig.Server;
 
 [Server]
-public class ServerNetLoop(AppLog log) : NetLoop(log);
+public class ServerNetLoop(Log log) : NetLoop(log);

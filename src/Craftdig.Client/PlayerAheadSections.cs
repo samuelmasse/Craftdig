@@ -1,7 +1,7 @@
 namespace Craftdig.Client;
 
 [Player]
-public class PlayerAheadSections(AppLog log, DimensionBlockChanges blockChanges, PlayerSocket socket)
+public class PlayerAheadSections(Log log, DimensionBlockChanges blockChanges, PlayerSocket socket)
 {
     private readonly Queue<(Vec3i, DateTime)> queue = [];
     private readonly Dictionary<Vec3i, DateTime> set = [];

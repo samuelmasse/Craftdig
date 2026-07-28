@@ -2,7 +2,7 @@ namespace Craftdig.Dimension.Server;
 
 [Dimension]
 public class DimensionServer(
-    AppLog log,
+    Log log,
     DimensionContext context,
     DimensionBackend backend,
     DimensionInventoryActions inventoryActions,

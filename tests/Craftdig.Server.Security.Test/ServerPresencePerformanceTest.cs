@@ -85,7 +85,7 @@ public sealed class ServerPresencePerformanceTest
     {
         const int playerCount = ProtocolLimits.MaxPresencePlayers;
         var events = new ServerIdentitySessionEvents(new() { MaxPlayers = playerCount });
-        var socket = new NetSocket(new(new AppLogStream()), new TcpClient(), Stream.Null);
+        var socket = new NetSocket(new LogRuntime(TextWriter.Null).Log, new TcpClient(), Stream.Null);
         var records = Challenges(playerCount);
         var connections = records
             .Select(record => new ServerPresenceConnection(socket, 1, record.SessionId))

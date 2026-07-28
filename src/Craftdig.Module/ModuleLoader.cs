@@ -1,7 +1,7 @@
 namespace Craftdig.Module;
 
 [ModuleLoader]
-public class ModuleLoader(AppLog log, AppMods mods, ModuleEnts ents, ModuleLoaderScope scope)
+public class ModuleLoader(Log log, AppMods mods, ModuleEnts ents, ModuleLoaderScope scope)
 {
     public void Run()
     {

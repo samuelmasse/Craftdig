@@ -1,7 +1,7 @@
 namespace Craftdig.Server;
 
 [Server]
-public class ServerLoadConfigAction(AppLog log)
+public class ServerLoadConfigAction(Log log)
 {
     public ServerConfig Run(string[] args)
     {

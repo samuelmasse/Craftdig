@@ -26,7 +26,7 @@ public sealed class DevIdentityTicketIssuerTest
                 DateTimeOffset.UtcNow.AddSeconds(-1),
                 TimeSpan.FromMinutes(10));
 
-            var log = new AppLog(new AppLogStream());
+            var log = new LogRuntime(TextWriter.Null).Log;
             var jwks = IdentityJwksCache.Seeded(log, key.PublicKey);
             var validator = new IdentityTicketValidator(jwks, ctx => ctx == context);
 

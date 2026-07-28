@@ -1,7 +1,7 @@
 namespace Craftdig.Server;
 
 [Server]
-public class ServerRegisterShutdownHandlersAction(AppLog log, ServerShutdownAction shutdownAction)
+public class ServerRegisterShutdownHandlersAction(Log log, ServerShutdownAction shutdownAction)
 {
     private bool shuttingDown = false;
 

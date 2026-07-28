@@ -1,7 +1,7 @@
 namespace Craftdig.Server;
 
 [Server]
-public class ServerAuthReceiver(AppLog log, ServerAuth auth, ServerNoAuth noAuth)
+public class ServerAuthReceiver(Log log, ServerAuth auth, ServerNoAuth noAuth)
 {
     public void BeginAuth(NetSocket ns, ReadOnlySpan<byte> body)
     {

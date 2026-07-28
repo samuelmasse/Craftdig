@@ -2,7 +2,7 @@ namespace Craftdig.Menus.Multiplayer;
 
 public static class ClientTls
 {
-    public static SslStream Connect(AppLog log, TcpClient tcp, string host)
+    public static SslStream Connect(Log log, TcpClient tcp, string host)
     {
         bool connectingToIp = IPAddress.TryParse(host, out _);
         var ssl = new SslStream(tcp.GetStream(), false, (sender, certificate, chain, errors) =>

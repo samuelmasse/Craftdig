@@ -1,7 +1,7 @@
 namespace Craftdig.Server;
 
 [Server]
-public class ServerListener(AppLog log, ServerDefaults defaults, ServerConfig config, ServerListenerLoop listenerLoop)
+public class ServerListener(Log log, ServerDefaults defaults, ServerConfig config, ServerListenerLoop listenerLoop)
 {
     private Thread? thread;
     private Action? stop;

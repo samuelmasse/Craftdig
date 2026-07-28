@@ -1,7 +1,7 @@
 namespace Craftdig.Client;
 
 [Player]
-public class PlayerPongReceiver(AppLog log)
+public class PlayerPongReceiver(Log log)
 {
     private double latency;
 

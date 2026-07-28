@@ -108,7 +108,7 @@ public sealed class IdentityTicketValidatorTest
         RSA signingKey,
         (string Host, int Port)[] allowedContexts)
     {
-        var log = new AppLog(new AppLogStream());
+        var log = new LogRuntime(TextWriter.Null).Log;
         var securityKey = new RsaSecurityKey(signingKey.ExportParameters(false)) { KeyId = "test-key" };
         var jwks = new IdentityJwksCache(
             log,

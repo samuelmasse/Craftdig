@@ -27,6 +27,7 @@
         <Using Include="Craftdig.World.Backend" />
         <Using Include="Craftdig.World.Server" />
         <Using Include="AlvorKit.Injection" />
+        <Using Include="AlvorKit.Logging" />
     </ItemGroup>
 
     <ItemGroup>

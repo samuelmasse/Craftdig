@@ -2,7 +2,7 @@ namespace Craftdig.Dimension.Server;
 
 [Dimension]
 public class DimensionPlayerSpawner(
-    AppLog log,
+    Log log,
     WorldPlayerProfiles profiles,
     WorldIndicesWrapper indicesWrapper,
     WorldPlayerSockets playerSockets,

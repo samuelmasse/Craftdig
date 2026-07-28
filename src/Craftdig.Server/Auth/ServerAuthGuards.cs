@@ -1,7 +1,7 @@
 namespace Craftdig.Server;
 
 [Server]
-public class ServerAuthGuards(AppLog log, ServerConfig config, ServerSockets sockets, SeverAllowlist allowlist)
+public class ServerAuthGuards(Log log, ServerConfig config, ServerSockets sockets, SeverAllowlist allowlist)
 {
     public readonly object AdmissionGate = new();
 

@@ -2,7 +2,7 @@ namespace Craftdig.Server;
 
 [Server]
 public class ServerNoAuth(
-    AppLog log,
+    Log log,
     ServerClientLimits clientLimits,
     ServerAuthGuards guards,
     ServerIdentitySessionEvents identitySessionEvents)

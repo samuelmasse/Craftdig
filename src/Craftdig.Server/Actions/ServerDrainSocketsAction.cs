@@ -1,7 +1,7 @@
 namespace Craftdig.Server;
 
 [Server]
-public class ServerDrainSocketsAction(AppLog log, ServerSockets sockets, ServerClientThreadPool clientThreadPool)
+public class ServerDrainSocketsAction(Log log, ServerSockets sockets, ServerClientThreadPool clientThreadPool)
 {
     public void Run()
     {

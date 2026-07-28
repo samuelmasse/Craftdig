@@ -8,7 +8,7 @@ public class ServerPresenceLoop
     private static readonly long ProofBatchDelay = MonotonicTime.DurationTicks(TimeSpan.FromMilliseconds(100));
     private static readonly long MetricsInterval = MonotonicTime.DurationTicks(TimeSpan.FromMinutes(1));
 
-    private readonly AppLog log;
+    private readonly Log log;
     private readonly ServerIdentitySessionEvents inbox;
     private readonly ServerPresenceMetrics metrics;
     private readonly ServerPresenceSessions sessions;
@@ -23,7 +23,7 @@ public class ServerPresenceLoop
     private ServerPresenceRound? previousRound;
 
     public ServerPresenceLoop(
-        AppLog log,
+        Log log,
         ServerConfig config,
         ServerIdentitySessionEvents inbox,
         ServerPresenceMetrics metrics)

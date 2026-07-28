@@ -1,6 +1,6 @@
 namespace Craftdig.Identity;
 
-public class IdentityJwksCache(AppLog log, string endpointUrl)
+public class IdentityJwksCache(Log log, string endpointUrl)
 {
     private const int MaxJwksBytes = 64 * 1024;
     private const int RequiredKeyCount = 1;
@@ -10,7 +10,7 @@ public class IdentityJwksCache(AppLog log, string endpointUrl)
     private static readonly TimeSpan MaximumStalePeriod = TimeSpan.FromHours(1);
     private static readonly TimeSpan MinimumRefreshInterval = TimeSpan.FromSeconds(30);
 
-    private readonly AppLog log = log;
+    private readonly Log log = log;
     private readonly HttpClient http = new();
     private readonly SemaphoreSlim refreshGate = new(1, 1);
     private readonly Uri endpoint = ParseEndpoint(endpointUrl);
@@ -22,7 +22,7 @@ public class IdentityJwksCache(AppLog log, string endpointUrl)
     private Task? earlyRefreshTask;
 
     internal IdentityJwksCache(
-        AppLog log,
+        Log log,
         string endpointUrl,
         IReadOnlyDictionary<string, SecurityKey> initialKeys) : this(log, endpointUrl)
     {
@@ -32,7 +32,7 @@ public class IdentityJwksCache(AppLog log, string endpointUrl)
     }
 
     // Dev-only: a cache permanently seeded with a locally trusted key and no network endpoint.
-    public static IdentityJwksCache Seeded(AppLog log, SecurityKey key) =>
+    public static IdentityJwksCache Seeded(Log log, SecurityKey key) =>
         new(log, "https://craftdig.io/.well-known/jwks.json",
             new Dictionary<string, SecurityKey>(StringComparer.Ordinal) { [key.KeyId] = key });
 

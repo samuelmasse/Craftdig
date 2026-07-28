@@ -6,7 +6,7 @@ using Microsoft.IdentityModel.Tokens;
 
 [Module]
 public class ModuleIdentityTicketClient(
-    AppLog log,
+    Log log,
     ModuleMultiplayerCredentials credentials,
     ModuleIdentityTrust identityTrust,
     DevIdentityConfig dev)

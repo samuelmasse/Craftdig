@@ -1,7 +1,7 @@
 namespace Craftdig.Client;
 
 internal sealed class PlayerChallengeScheduler(
-    AppLog log,
+    Log log,
     PlayerIdentitySession identitySession,
     PlayerPresenceInbox inbox,
     PlayerSocket socket)

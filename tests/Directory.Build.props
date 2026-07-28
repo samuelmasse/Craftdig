@@ -15,9 +15,12 @@
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.13.0" />
         <PackageReference Include="MSTest" Version="3.8.2" />
         <PackageReference Include="coverlet.msbuild" Version="10.0.1" PrivateAssets="all" />
+        <ProjectReference
+            Include="$(MSBuildThisFileDirectory)..\..\AlvorKit\src\AlvorKit.Logging\AlvorKit.Logging.csproj" />
     </ItemGroup>
 
     <ItemGroup>
+        <Using Include="AlvorKit.Logging" />
         <Using Include="Craftdig.Protocol" />
         <Using Include="Microsoft.VisualStudio.TestTools.UnitTesting" />
         <Using Include="System.Buffers.Binary" />

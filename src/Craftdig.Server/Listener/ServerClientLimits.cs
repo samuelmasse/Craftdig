@@ -1,7 +1,7 @@
 namespace Craftdig.Server;
 
 [Server]
-public class ServerClientLimits(AppLog log, ServerSockets sockets)
+public class ServerClientLimits(Log log, ServerSockets sockets)
 {
     private readonly ManualResetEventSlim gate = new(true);
     private readonly List<NetSocket> buffer = [];

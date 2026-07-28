@@ -1,4 +1,4 @@
 namespace Craftdig.Client;
 
 [Player]
-public class PlayerNetLoop(AppLog log) : NetLoop(log);
+public class PlayerNetLoop(Log log) : NetLoop(log);

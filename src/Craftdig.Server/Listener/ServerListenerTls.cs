@@ -2,7 +2,7 @@ namespace Craftdig.Server;
 
 [Server]
 public class ServerListenerTls(
-    AppLog log,
+    Log log,
     ServerDefaults defaults,
     ServerConfig config,
     ServerListenerLoop listenerLoop,
