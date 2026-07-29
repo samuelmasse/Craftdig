@@ -10,7 +10,8 @@ public class PlayerRigidRenderer(
     DimensionSectionSharedVertexArray sectionSharedVertexArray,
     DimensionChunkRigids chunkRigids,
     PlayerTestCubeMesher testCubeMesher,
-    PlayerBodyMesher playerBodyMesher)
+    PlayerBodyMesher playerBodyMesher,
+    PlayerBlockParticleMesher blockParticleMesher)
 {
     private readonly List<BlockVertex> vertices = [];
     private int alloc;
@@ -49,6 +50,9 @@ public class PlayerRigidRenderer(
             }
         }
     }
+
+    public void MeshBlockParticles(Vec3d origin) =>
+        blockParticleMesher.Mesh(vertices, origin);
 
     public void Render()
     {

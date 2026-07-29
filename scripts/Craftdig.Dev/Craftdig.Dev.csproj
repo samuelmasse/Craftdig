@@ -16,6 +16,7 @@
         <Using Include="Craftdig" />
         <Using Include="Craftdig.App" />
         <Using Include="Craftdig.App.Frontend" />
+        <Using Include="Craftdig.Client" />
         <Using Include="Craftdig.Dimension" />
         <Using Include="Craftdig.Dimension.Backend" />
         <Using Include="Craftdig.Dimension.Frontend" />
@@ -24,7 +25,9 @@
             <Static>true</Static>
         </Using>
         <Using Include="Craftdig.Menus" />
+        <Using Include="Craftdig.Menus.Common" />
         <Using Include="Craftdig.Menus.Multiplayer" />
+        <Using Include="Craftdig.Menus.Singleplayer" />
         <Using Include="Craftdig.Module" />
         <Using Include="Craftdig.Module.Frontend" />
         <Using Include="Craftdig.Native" />
@@ -48,6 +51,9 @@
             Include="$(AlvorKitRoot)src\AlvorKit.Engine.LiveCode\AlvorKit.Engine.LiveCode.csproj" />
         <ProjectReference
             Include="$(AlvorKitRoot)src\AlvorKit.Engine.LivePatch\AlvorKit.Engine.LivePatch.csproj" />
+        <ProjectReference
+            Include="$(AlvorKitRoot)src\AlvorKit.LiveCode.Generator\AlvorKit.LiveCode.Generator.csproj"
+            OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
         <ProjectReference Include="$(AlvorKitRoot)src\AlvorKit.Logging\AlvorKit.Logging.csproj" />
     </ItemGroup>
 

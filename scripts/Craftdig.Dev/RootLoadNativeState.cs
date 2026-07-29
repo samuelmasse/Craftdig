@@ -22,31 +22,7 @@ public class RootLoadNativeState(
             scripts,
             new("Craftdig.Dev")
             {
-                GlobalUsings =
-                [
-                    "System",
-                    "AlvorKit.LiveCode",
-                    "Craftdig.App",
-                    "Craftdig.App.Frontend",
-                    "Craftdig.Client",
-                    "Craftdig.Dimension",
-                    "Craftdig.Dimension.Backend",
-                    "Craftdig.Dimension.Frontend",
-                    "Craftdig.Menus",
-                    "Craftdig.Menus.Common",
-                    "Craftdig.Menus.Multiplayer",
-                    "Craftdig.Menus.Singleplayer",
-                    "Craftdig.Module",
-                    "Craftdig.Player.Frontend",
-                    "Craftdig.World",
-                    "Craftdig.World.Backend",
-                    "Craftdig.World.Frontend",
-                ],
-                FrozenInspection = new()
-                {
-                    FreezeThreshold =
-                        TimeSpan.FromSeconds(2),
-                },
+                FrozenInspection = new(),
             });
         var graph = liveCode.Enable();
         if (RootLivePatch.IsProfilerConfigured)

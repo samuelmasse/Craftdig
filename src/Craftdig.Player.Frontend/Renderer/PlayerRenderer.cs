@@ -168,6 +168,8 @@ public class PlayerRenderer(
         foreach (var chunk in schunksSpan)
             rigidRenderer.Mesh(chunk, pos);
 
+        rigidRenderer.MeshBlockParticles(pos);
+
         gl.UnbindVertexArray();
         blockProgram.Offset = default;
         rigidRenderer.Render();

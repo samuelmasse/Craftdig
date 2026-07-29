@@ -9,6 +9,7 @@ public class PlayerFrontend(
     PlayerMovement movement,
     PlayerInventoryActions inventoryActions,
     PlayerTeleporter teleporter,
+    DimensionBlockParticles blockParticles,
     PlayerFov fov,
     PlayerCrouch crouch,
     PlayerViewModelAnimation viewModelAnimation,
@@ -27,6 +28,7 @@ public class PlayerFrontend(
 
     public void Update(double delta)
     {
+        blockParticles.Update(delta);
         fov.Update(delta);
         crouch.Update(delta);
         viewModelAnimation.Update(delta);

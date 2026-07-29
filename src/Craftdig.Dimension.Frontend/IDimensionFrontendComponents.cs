@@ -3,6 +3,20 @@ namespace Craftdig.Dimension.Frontend;
 [Components]
 public interface IDimensionFrontendComponents
 {
+    // Block particle
+    [ComponentToString] bool IsBlockParticle { get; set; }
+    EntPtrIdx BlockParticleAllocation { get; set; }
+    [ComponentToString] Ent BlockParticleMaterial { get; set; }
+    Vec3d BlockParticlePosition { get; set; }
+    Vec3d BlockParticlePrevPosition { get; set; }
+    Vec3d BlockParticleVelocity { get; set; }
+    float BlockParticleSize { get; set; }
+    float BlockParticleBrightness { get; set; }
+    int BlockParticleAge { get; set; }
+    int BlockParticleMaxAge { get; set; }
+    Vec2 BlockParticleUvMin { get; set; }
+    Vec2 BlockParticleUvMax { get; set; }
+
     // Remote rigid presentation
     RemotePositionInterpolation RemotePosition { get; set; }
     RemoteLookAtInterpolation RemoteLookAt { get; set; }
