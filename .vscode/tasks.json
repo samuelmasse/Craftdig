@@ -5,7 +5,13 @@
       "label": "build Craftdig",
       "type": "process",
       "command": "dotnet",
-      "args": ["build", "${workspaceFolder}/scripts/Craftdig.Dev/Craftdig.Dev.csproj", "--configuration", "Release", "--nologo"],
+      "args": [
+        "build",
+        "${workspaceFolder}/scripts/Craftdig.Dev/Craftdig.Dev.csproj",
+        "--configuration",
+        "Release",
+        "--nologo"
+      ],
       "problemMatcher": "$msCompile",
       "group": "build"
     },
@@ -13,7 +19,13 @@
       "label": "build Craftdig Server",
       "type": "process",
       "command": "dotnet",
-      "args": ["build", "${workspaceFolder}/scripts/Craftdig.Dev.Server/Craftdig.Dev.Server.csproj", "--configuration", "Release", "--nologo"],
+      "args": [
+        "build",
+        "${workspaceFolder}/scripts/Craftdig.Dev.Server/Craftdig.Dev.Server.csproj",
+        "--configuration",
+        "Release",
+        "--nologo"
+      ],
       "problemMatcher": "$msCompile",
       "group": "build"
     }
