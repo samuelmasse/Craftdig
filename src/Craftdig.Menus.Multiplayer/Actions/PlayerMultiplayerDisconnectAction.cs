@@ -3,12 +3,14 @@ namespace Craftdig.Menus.Multiplayer;
 [Player]
 public class PlayerMultiplayerDisconnectAction(
     WorldScope worldScope,
+    PlayerScope playerScope,
     WorldDimensionBag dimensionBag,
     PlayerPresenceClient presenceClient,
     PlayerIdentityRefresh identityRefresh,
     PlayerIdentitySession identitySession,
     PlayerSocketLoop socketLoop,
-    PlayerEntUpdateQueue entUpdates)
+    PlayerEntUpdateQueue entUpdates,
+    InjectorScopeGraph graph)
 {
     public void Run()
     {
@@ -17,15 +19,29 @@ public class PlayerMultiplayerDisconnectAction(
         socketLoop.Stop();
         identitySession.Dispose();
         entUpdates.Clear();
+        graph.End(playerScope);
 
         foreach (var dimension in dimensionBag.Ents)
         {
-            var dimensionLoaderScope = dimension.DimensionScope.Scope<DimensionLoaderScope>();
-            dimensionLoaderScope.Get<DimensionFrontendUnloader>().Run();
-            dimensionLoaderScope.Get<DimensionUnloader>().Run();
+            graph.End(
+                dimension.DimensionScope,
+                ending =>
+                {
+                    var loader =
+                        ending.Scope<DimensionLoaderScope>();
+                    loader.Get<DimensionFrontendUnloader>().Run();
+                    loader.Get<DimensionUnloader>().Run();
+                });
         }
 
-        worldScope.Scope<WorldLoaderScope>().Get<WorldFrontendUnloader>().Run();
-        worldScope.Scope<WorldLoaderScope>().Get<WorldUnloader>().Run();
+        graph.End(
+            worldScope,
+            ending =>
+            {
+                var loader =
+                    ending.Scope<WorldLoaderScope>();
+                loader.Get<WorldFrontendUnloader>().Run();
+                loader.Get<WorldUnloader>().Run();
+            });
     }
 }

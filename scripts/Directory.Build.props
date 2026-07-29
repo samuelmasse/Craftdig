@@ -12,6 +12,7 @@
         <BaseIntermediateOutputPath>..\..\obj\$(MSBuildProjectName)</BaseIntermediateOutputPath>
         <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
         <PathMap>$(MSBuildProjectDirectory)=$(MSBuildProjectName)</PathMap>
+        <AlvorKitRoot>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\..\AlvorKit\'))</AlvorKitRoot>
     </PropertyGroup>
 
     <ItemGroup>

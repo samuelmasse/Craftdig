@@ -11,6 +11,8 @@
         <Using Include="AlvorKit.Engine" />
         <Using Include="AlvorKit.Engine.Loop" />
         <Using Include="AlvorKit.Injection" />
+        <Using Include="AlvorKit.LiveCode" />
+        <Using Include="AlvorKit.Logging" />
         <Using Include="Craftdig" />
         <Using Include="Craftdig.App" />
         <Using Include="Craftdig.App.Frontend" />
@@ -42,6 +44,11 @@
         <ProjectReference Include="..\..\src\Craftdig.Native.Backend\Craftdig.Native.Backend.csproj" />
         <ProjectReference
             Include="..\..\src\Craftdig.Native.Frontend\Craftdig.Native.Frontend.csproj" />
+        <ProjectReference
+            Include="$(AlvorKitRoot)src\AlvorKit.Engine.LiveCode\AlvorKit.Engine.LiveCode.csproj" />
+        <ProjectReference
+            Include="$(AlvorKitRoot)src\AlvorKit.Engine.LivePatch\AlvorKit.Engine.LivePatch.csproj" />
+        <ProjectReference Include="$(AlvorKitRoot)src\AlvorKit.Logging\AlvorKit.Logging.csproj" />
     </ItemGroup>
 
 </Project>

@@ -1,7 +1,12 @@
 namespace Craftdig.Dev;
 
 [Root]
-public class RootLoadNativeState(RootState state, RootScope scope, RootScripts scripts) : State
+public class RootLoadNativeState(
+    Log log,
+    Injector injector,
+    RootState state,
+    RootScope scope,
+    RootScripts scripts) : State
 {
     public override void Load()
     {
@@ -11,37 +16,85 @@ public class RootLoadNativeState(RootState state, RootScope scope, RootScripts s
         // usual raw-TCP no-auth development transport.
         string? devIdentity = Environment.GetEnvironmentVariable("CRAFTDIG_DEV_IDENTITY");
 
-        scope.Scope<AppScope>()
-        .With(new AppMods([
-            new(typeof(ModuleNativeLoader), null),
-            new(typeof(ModuleNativeBackendLoader), null),
-            new(typeof(ModuleNativeFrontendLoader), null)]))
-        .With(new DevIdentityConfig
+        var liveCode = new RootLiveCode(
+            injector,
+            scope,
+            scripts,
+            new("Craftdig.Dev")
+            {
+                GlobalUsings =
+                [
+                    "System",
+                    "AlvorKit.LiveCode",
+                    "Craftdig.App",
+                    "Craftdig.App.Frontend",
+                    "Craftdig.Client",
+                    "Craftdig.Dimension",
+                    "Craftdig.Dimension.Backend",
+                    "Craftdig.Dimension.Frontend",
+                    "Craftdig.Menus",
+                    "Craftdig.Menus.Common",
+                    "Craftdig.Menus.Multiplayer",
+                    "Craftdig.Menus.Singleplayer",
+                    "Craftdig.Module",
+                    "Craftdig.Player.Frontend",
+                    "Craftdig.World",
+                    "Craftdig.World.Backend",
+                    "Craftdig.World.Frontend",
+                ],
+                FrozenInspection = new()
+                {
+                    FreezeThreshold =
+                        TimeSpan.FromSeconds(2),
+                },
+            });
+        var graph = liveCode.Enable();
+        if (RootLivePatch.IsProfilerConfigured)
         {
-            Enabled = devIdentity != null,
-            Name = devIdentity,
-        })
-        .With(new AppClientOptions()
-        {
-            AllowRawTcp = true,
-            AllowNoAuth = true,
-            UseRawTcp = devIdentity == null,
-            DefaultNoAuthUser = "testuser",
-            NoAuthUser = devIdentity == null ? "testuser" : null,
-        })
-        .Run(x =>
-        {
-            var files = x.Get<AppFiles>();
-            var res = Path.Join(
-                Path.GetDirectoryName(
+            _ = new RootLivePatch(
+                injector,
+                scope,
+                scripts,
+                graph,
+                liveCode.Bridges).Enable();
+        }
+
+        log.Info(
+            $"Craftdig LiveCode {liveCode.Session.Name}"
+            + $" {liveCode.Session.SessionId}");
+        graph.Scope<AppScope>(
+                scope,
+                "Craftdig app")
+            .With(new AppMods([
+                new(typeof(ModuleNativeLoader), null),
+                new(typeof(ModuleNativeBackendLoader), null),
+                new(typeof(ModuleNativeFrontendLoader), null)]))
+            .With(new DevIdentityConfig
+            {
+                Enabled = devIdentity != null,
+                Name = devIdentity,
+            })
+            .With(new AppClientOptions()
+            {
+                AllowRawTcp = true,
+                AllowNoAuth = true,
+                UseRawTcp = devIdentity == null,
+                DefaultNoAuthUser = "testuser",
+                NoAuthUser = devIdentity == null ? "testuser" : null,
+            })
+            .Run(x =>
+            {
+                var files = x.Get<AppFiles>();
+                var res = Path.Join(
                     Path.GetDirectoryName(
                         Path.GetDirectoryName(
-                            Path.GetDirectoryName(files.Root))))!, "res");
+                            Path.GetDirectoryName(
+                                Path.GetDirectoryName(files.Root))))!, "res");
 
-            foreach (var dir in Directory.GetDirectories(res))
-                files.AddRoot(dir);
-        })
-        .Run(x => scripts.Add(x.Get<AppScript>()))
-        .Run(x => state.Current = x.New<AppInitializeState>());
+                foreach (var dir in Directory.GetDirectories(res))
+                    files.AddRoot(dir);
+            })
+            .Run(x => scripts.Add(x.Get<AppScript>()))
+            .Run(x => state.Current = x.New<AppInitializeState>());
     }
 }

@@ -36,6 +36,8 @@
 
     <ItemGroup>
         <ProjectReference Include="..\Craftdig.Menus\Craftdig.Menus.csproj" />
+        <ProjectReference
+            Include="$(AlvorKitRoot)src\AlvorKit.Injection.Graph\AlvorKit.Injection.Graph.csproj" />
     </ItemGroup>
 
 </Project>

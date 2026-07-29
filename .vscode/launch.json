@@ -1,0 +1,32 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Craftdig",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "build Craftdig",
+      "program": "${workspaceFolder}/bin/Craftdig.Dev/Release/Craftdig.Dev.dll",
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "stopAtEntry": false,
+      "env": {
+        "CORECLR_ENABLE_PROFILING": "1",
+        "CORECLR_PROFILER": "{3840ACF7-5AF1-49EA-BF94-5F7086C57F57}",
+        "CORECLR_PROFILER_PATH_64": "${workspaceFolder}/bin/Craftdig.Dev/Release/runtimes/win-x64/native/AlvorKit.Interception.Profiler.Native.dll",
+        "ALVORKIT_INTERCEPTION_PROFILER_PATH": "${workspaceFolder}/bin/Craftdig.Dev/Release/runtimes/win-x64/native/AlvorKit.Interception.Profiler.Native.dll",
+        "ALVORKIT_INTERCEPTION_MODULES": "Craftdig.App;Craftdig.App.Frontend;Craftdig.Client;Craftdig.Dimension;Craftdig.Dimension.Backend;Craftdig.Dimension.Frontend;Craftdig.Identity;Craftdig.Menus;Craftdig.Menus.Common;Craftdig.Menus.Multiplayer;Craftdig.Menus.Singleplayer;Craftdig.Module;Craftdig.Module.Frontend;Craftdig.Native;Craftdig.Native.Backend;Craftdig.Native.Frontend;Craftdig.Player.Frontend;Craftdig.Protocol;Craftdig.World;Craftdig.World.Backend;Craftdig.World.Frontend;Craftdig.Dev"
+      }
+    },
+    {
+      "name": "Craftdig Server",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "build Craftdig Server",
+      "program": "${workspaceFolder}/bin/Craftdig.Dev.Server/Release/Craftdig.Dev.Server.dll",
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "stopAtEntry": false
+    }
+  ]
+}

@@ -9,6 +9,7 @@ public class AppInitializeState(
     RootScripts scripts,
     RootUi ui,
     AppScope scope,
+    InjectorScopeGraph graph,
     AppFiles files,
     AppLoadIconAction loadIconAction,
     AppMouseTrackMenu mouseTrackMenu,
@@ -30,12 +31,21 @@ public class AppInitializeState(
         Node(ui).OrderValueV(5).Mutate(zoomMenu.Create);
         Node(ui).OrderValueV(5).Mutate(fpsMenu.Create);
 
-        scope.Scope<ModuleScope>()
-            .Run(x => x.Handler(x.Get<ModuleEntMutInjector>()))
-            .Run(x => x.Scope<ModuleLoaderScope>()
-                .Run(x => x.Get<ModuleLoader>().Run())
-                .Run(x => x.Get<ModuleFrontendLoader>().Run()))
-            .Run(x => reset.Register(() => state.Current = x.New<ModuleMenuState>()));
+        var module = graph.Scope<ModuleScope>(
+            scope,
+            "Craftdig module");
+        module.Handler(module.Get<ModuleEntMutInjector>());
+        graph.Run<ModuleLoaderScope>(
+            module,
+            loader =>
+            {
+                loader.Get<ModuleLoader>().Run();
+                loader.Get<ModuleFrontendLoader>().Run();
+            },
+            "Module load");
+        reset.Register(
+            () => state.Current =
+                module.New<ModuleMenuState>());
 
         reset.Run();
     }

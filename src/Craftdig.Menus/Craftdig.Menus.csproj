@@ -38,6 +38,8 @@
         <ProjectReference Include="..\Craftdig.Menus.Multiplayer\Craftdig.Menus.Multiplayer.csproj" />
         <ProjectReference
             Include="..\Craftdig.Menus.Singleplayer\Craftdig.Menus.Singleplayer.csproj" />
+        <ProjectReference
+            Include="$(AlvorKitRoot)src\AlvorKit.Injection.Graph\AlvorKit.Injection.Graph.csproj" />
     </ItemGroup>
 
 </Project>

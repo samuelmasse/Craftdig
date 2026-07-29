@@ -1,23 +1,41 @@
 namespace Craftdig.Menus.Singleplayer;
 
 [Player]
-public class PlayerSingleplayerUnloadWorldAction(WorldScope worldScope, WorldDimensionBag dimensionBag, PlayerMetrics metrics)
+public class PlayerSingleplayerUnloadWorldAction(
+    WorldScope worldScope,
+    PlayerScope playerScope,
+    WorldDimensionBag dimensionBag,
+    PlayerMetrics metrics,
+    InjectorScopeGraph graph)
 {
     public void Run()
     {
         metrics.Stop();
+        graph.End(playerScope);
 
         foreach (var dimension in dimensionBag.Ents)
         {
-            var dimensionLoaderScope = dimension.DimensionScope.Scope<DimensionLoaderScope>();
-            dimensionLoaderScope.Get<DimensionFrontendUnloader>().Run();
-            dimensionLoaderScope.Get<DimensionBackendUnloader>().Run();
-            dimensionLoaderScope.Get<DimensionUnloader>().Run();
+            graph.End(
+                dimension.DimensionScope,
+                ending =>
+                {
+                    var loader =
+                        ending.Scope<DimensionLoaderScope>();
+                    loader.Get<DimensionFrontendUnloader>().Run();
+                    loader.Get<DimensionBackendUnloader>().Run();
+                    loader.Get<DimensionUnloader>().Run();
+                });
         }
 
-        var worldLoaderScope = worldScope.Scope<WorldLoaderScope>();
-        worldLoaderScope.Get<WorldFrontendUnloader>().Run();
-        worldLoaderScope.Get<WorldBackendUnloader>().Run();
-        worldLoaderScope.Get<WorldUnloader>().Run();
+        graph.End(
+            worldScope,
+            ending =>
+            {
+                var loader =
+                    ending.Scope<WorldLoaderScope>();
+                loader.Get<WorldFrontendUnloader>().Run();
+                loader.Get<WorldBackendUnloader>().Run();
+                loader.Get<WorldUnloader>().Run();
+            });
     }
 }

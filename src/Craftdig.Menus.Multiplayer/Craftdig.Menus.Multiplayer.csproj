@@ -38,6 +38,8 @@
     <ItemGroup>
         <ProjectReference Include="..\Craftdig.Client\Craftdig.Client.csproj" />
         <ProjectReference Include="..\Craftdig.Menus.Common\Craftdig.Menus.Common.csproj" />
+        <ProjectReference
+            Include="$(AlvorKitRoot)src\AlvorKit.Injection.Graph\AlvorKit.Injection.Graph.csproj" />
     </ItemGroup>
 
     <ItemGroup>

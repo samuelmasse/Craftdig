@@ -1,30 +1,47 @@
 namespace Craftdig.Menus.Multiplayer;
 
 [Module]
-public class ModuleMultiplayerJoinAction(RootState state, ModuleEnts ents, ModuleScope scope)
+public class ModuleMultiplayerJoinAction(
+    RootState state,
+    ModuleEnts ents,
+    ModuleScope scope,
+    InjectorScopeGraph graph)
 {
     public void Run(PlayerSocket socket, PlayerIdentitySession identitySession)
     {
         socket.Tag = "sc";
 
-        var worldScope = scope.Scope<WorldScope>()
-            .Run(x => x.Scope<WorldLoaderScope>()
-                .Run(x => x.Get<WorldLoader>().Run()));
+        var worldScope = graph.Scope<WorldScope>(
+            scope,
+            "Remote world");
+        graph.Run<WorldLoaderScope>(
+            worldScope,
+            loader => loader.Get<WorldLoader>().Run(),
+            "World load");
 
         // For now just find the first dimension
         var dimension = ents.Set.First(x => x.IsDimension);
-        var dimensionScope = worldScope.Scope<DimensionScope>()
+        var dimensionScope = graph.Scope<DimensionScope>(
+                worldScope,
+                dimension.Name)
             .With(new DimensionEnt(dimension))
-            .Run(x => x.Get<DimensionChunkUnloaderHandlers>().Add(x.Get<DimensionChunkFrontendUnloader>().Unload))
-            .Run(x => x.Scope<DimensionLoaderScope>()
-                .Run(x => x.Get<DimensionLoader>().Run())
-                .Run(x => x.Get<DimensionFrontendLoader>().Run()))
-            .Run(x => worldScope.Get<WorldEntArena>().Alloc().Mutate()
-                .DimensionScope(x)
-                .IsDimensionScope(true)
-                .IsLoaded(true));
+            .Run(x => x.Get<DimensionChunkUnloaderHandlers>().Add(x.Get<DimensionChunkFrontendUnloader>().Unload));
+        graph.Run<DimensionLoaderScope>(
+            dimensionScope,
+            loader =>
+            {
+                loader.Get<DimensionLoader>().Run();
+                loader.Get<DimensionFrontendLoader>().Run();
+            },
+            "Dimension load");
+        worldScope.Get<WorldEntArena>().Alloc().Mutate()
+            .DimensionScope(dimensionScope)
+            .IsDimensionScope(true)
+            .IsLoaded(true);
 
-        dimensionScope.Scope<PlayerScope>()
+        graph.Scope<PlayerScope>(
+                dimensionScope,
+                "Multiplayer player")
             .With(new PlayerEnt(dimensionScope.Get<DimensionEntArena>().Alloc()))
             .With(socket)
             .With(identitySession)

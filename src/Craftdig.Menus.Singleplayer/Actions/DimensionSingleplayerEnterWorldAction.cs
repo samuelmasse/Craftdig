@@ -3,11 +3,14 @@ namespace Craftdig.Menus.Singleplayer;
 [Dimension]
 public class DimensionSingleplayerEnterWorldAction(
     RootState state,
-    DimensionScope scope)
+    DimensionScope scope,
+    InjectorScopeGraph graph)
 {
     public void Run(EntMutIdx playerEnt)
     {
-        scope.Scope<PlayerScope>()
+        graph.Scope<PlayerScope>(
+                scope,
+                "Singleplayer player")
             .With(new PlayerEnt(playerEnt))
             .Run(x => x.Get<PlayerMetrics>().Start())
             .Run(x => state.Current = x.New<PlayerSingleplayerState>());
