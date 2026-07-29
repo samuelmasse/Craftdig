@@ -20,10 +20,7 @@ public class RootLoadNativeState(
             injector,
             scope,
             scripts,
-            new("Craftdig.Dev")
-            {
-                FrozenInspection = new(),
-            });
+            new("Craftdig.Dev"));
         var graph = liveCode.Enable();
         if (RootLivePatch.IsProfilerConfigured)
         {
