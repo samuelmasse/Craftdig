@@ -4,7 +4,6 @@ logging.Start();
 new Injector()
     .With(logging.Log)
     .Run(x => x.Add<Fn>(new FnBackend()))
-    .Run(x => x.Add<Xxh>(new XxhBackend()))
     .Scope<AppScope>()
     .With(new AppMods([new(typeof(ModuleNativeLoader), null), new(typeof(ModuleNativeBackendLoader), null)]))
     // Trust the local dev issuer key so clients launched with CRAFTDIG_DEV_IDENTITY connect as verified

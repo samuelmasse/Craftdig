@@ -8,7 +8,6 @@ logging.Start();
 new Injector()
     .With(logging.Log)
     .Run(x => x.Add<Fn>(new FnBackend()))
-    .Run(x => x.Add<Xxh>(new XxhBackend()))
     .Scope<AppScope>()
     .With(x => new AppMods(x.Get<AppModFinder>().Find()))
     .Run(x => x.Scope<ModuleScope>().Scope<WorldScope>().Scope<ServerScope>()
