@@ -22,14 +22,11 @@ public class RootLoadNativeState(
             scripts,
             new("Craftdig.Dev"));
         var graph = liveCode.Enable();
-        if (RootLivePatch.IsProfilerConfigured)
+        if (Environment.GetEnvironmentVariable(SourceUpdateHostOptions.LaunchManifestVariable) != null)
         {
-            _ = new RootLivePatch(
-                injector,
-                scope,
-                scripts,
-                graph,
-                liveCode.Bridges).Enable();
+            new RootSourceUpdate(
+                liveCode.Bridges,
+                SourceUpdateHostOptions.FromEnvironment(typeof(RootLoadNativeState).Assembly)).Enable();
         }
 
         log.Info(

@@ -10,6 +10,7 @@
     <ItemGroup>
         <Using Include="AlvorKit.Engine" />
         <Using Include="AlvorKit.Engine.Loop" />
+        <Using Include="AlvorKit.Engine.SourceUpdate" />
         <Using Include="AlvorKit.Injection" />
         <Using Include="AlvorKit.LiveCode" />
         <Using Include="AlvorKit.Logging" />
@@ -50,7 +51,7 @@
         <ProjectReference
             Include="$(AlvorKitRoot)src\AlvorKit.Engine.LiveCode\AlvorKit.Engine.LiveCode.csproj" />
         <ProjectReference
-            Include="$(AlvorKitRoot)src\AlvorKit.Engine.LivePatch\AlvorKit.Engine.LivePatch.csproj" />
+            Include="$(AlvorKitRoot)src\AlvorKit.Engine.SourceUpdate\AlvorKit.Engine.SourceUpdate.csproj" />
         <ProjectReference
             Include="$(AlvorKitRoot)src\AlvorKit.LiveCode.Generator\AlvorKit.LiveCode.Generator.csproj"
             OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
