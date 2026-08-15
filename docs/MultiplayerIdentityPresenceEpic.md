@@ -106,7 +106,7 @@ Bob may not conclude that Alice authored the avatar's movement or that the malic
 10. Bob's maximum presence-proof age is 15 seconds, measured from Bob's local challenge creation time.
 11. Presence uses a flat sorted challenge list and ordinary message chunks. There are no Merkle trees, roster roots, or inclusion paths in v1.
 12. Every client signs once per round and verifies at most one proof per advertised ticket.
-13. Bob's verification result is private local state. There is no verification-result command or acknowledgement.
+13. Bob's verification result is private local state. There is no verification-result command or acknowledgment.
 14. Usernames may be nonunique. UI disambiguation uses `playerId`; server duplicate-session logic uses only `playerId`.
 15. Exposing the stable Craftdig `playerId` to other players is accepted for v1. Per-server pseudonymous IDs require a later privacy design.
 

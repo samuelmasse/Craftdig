@@ -17,7 +17,7 @@ internal sealed class ServerPresenceIntake(
     {
         while (inbox.TryTakeChallenge(out var input))
         {
-            if (!sessions.TryGet(input.Connection, out var session) || input.Connection.IsCancelled)
+            if (!sessions.TryGet(input.Connection, out var session) || input.Connection.IsCanceled)
             {
                 metrics.RecordChallengeRejected();
                 continue;
@@ -64,7 +64,7 @@ internal sealed class ServerPresenceIntake(
         ServerPresenceRound? currentRound,
         ServerPresenceRound? previousRound)
     {
-        if (!sessions.TryGet(input.Connection, out var session) || input.Connection.IsCancelled)
+        if (!sessions.TryGet(input.Connection, out var session) || input.Connection.IsCanceled)
         {
             metrics.RecordProofRejected();
             return;

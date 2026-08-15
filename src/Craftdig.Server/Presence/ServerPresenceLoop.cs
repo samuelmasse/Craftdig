@@ -157,7 +157,7 @@ public class ServerPresenceLoop
         var records = new List<PresenceChallengeRecord>(sessions.All.Count);
         foreach (var session in sessions.All)
         {
-            if (session.Connection.IsCancelled ||
+            if (session.Connection.IsCanceled ||
                 session.LatestChallenge is not { } challenge ||
                 now - session.LatestChallengeTimestamp > ChallengeLifetime)
                 continue;

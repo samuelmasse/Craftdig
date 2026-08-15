@@ -26,7 +26,7 @@ public class ServerIdentitySessionEvents(ServerConfig config)
         if (refresh)
         {
             connection = socket.PresenceConnection!;
-            if (connection == null || connection.IsCancelled ||
+            if (connection == null || connection.IsCanceled ||
                 connection.Generation != socket.ConnectionGeneration ||
                 connection.SessionId != identity.Ticket.SessionId)
                 return false;
@@ -110,7 +110,7 @@ public class ServerIdentitySessionEvents(ServerConfig config)
     {
         lock (gate)
         {
-            if (!accepting || connection.IsCancelled)
+            if (!accepting || connection.IsCanceled)
                 return false;
 
             if (challenges.TryGetValue(connection, out var pending))
@@ -134,7 +134,7 @@ public class ServerIdentitySessionEvents(ServerConfig config)
     {
         lock (gate)
         {
-            if (!accepting || connection.IsCancelled)
+            if (!accepting || connection.IsCanceled)
                 return false;
 
             var key = (connection, proof.RoundHash);

@@ -25,7 +25,7 @@ public sealed class ServerPresenceLoopTest
         loop.Stop();
         loop.Join();
 
-        Assert.IsTrue(registration.Connection.IsCancelled);
+        Assert.IsTrue(registration.Connection.IsCanceled);
         Assert.IsFalse(pair.Server.Connected);
         Assert.AreEqual(0, metrics.Snapshot().ActiveSessions);
     }
@@ -56,7 +56,7 @@ public sealed class ServerPresenceLoopTest
         {
             Assert.IsTrue(
                 SpinWait.SpinUntil(
-                    () => registration.Connection.IsCancelled &&
+                    () => registration.Connection.IsCanceled &&
                         metrics.Snapshot().SlowSocketDisconnects == 1,
                     TimeSpan.FromSeconds(2)),
                 $"Presence loop did not disconnect the backpressured socket: {metrics.Snapshot()}");
@@ -64,7 +64,7 @@ public sealed class ServerPresenceLoopTest
             var snapshot = metrics.Snapshot();
             Assert.AreEqual(3, snapshot.BackpressureEvents);
             Assert.AreEqual(1, snapshot.SlowSocketDisconnects);
-            Assert.IsTrue(registration.Connection.IsCancelled);
+            Assert.IsTrue(registration.Connection.IsCanceled);
             Assert.IsFalse(pair.Server.Connected);
         }
         finally

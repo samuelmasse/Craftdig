@@ -53,7 +53,7 @@ public class ServerPresenceReceiver(
         [NotNullWhen(true)] out ServerPresenceConnection? connection)
     {
         connection = socket.PresenceConnection;
-        return socket.IsAuthenticated && connection is { IsCancelled: false } &&
+        return socket.IsAuthenticated && connection is { IsCanceled: false } &&
             connection.Generation == socket.ConnectionGeneration;
     }
 

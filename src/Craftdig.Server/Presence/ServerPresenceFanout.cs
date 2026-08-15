@@ -59,7 +59,7 @@ internal sealed class ServerPresenceFanout(
         ServerPresenceRound? currentRound,
         ServerPresenceRound? previousRound)
     {
-        if (session.Connection.IsCancelled || !session.Connection.Socket.Connected ||
+        if (session.Connection.IsCanceled || !session.Connection.Socket.Connected ||
             now < session.NextSendAttemptTimestamp)
             return SendAttempt.None;
 

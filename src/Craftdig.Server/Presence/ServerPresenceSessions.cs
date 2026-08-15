@@ -27,14 +27,14 @@ internal sealed class ServerPresenceSessions(
         for (int i = 0; i < pendingRegistrations.Count;)
         {
             var registration = pendingRegistrations[i];
-            if (!registration.Connection.IsCancelled && !registration.IsActivated)
+            if (!registration.Connection.IsCanceled && !registration.IsActivated)
             {
                 i++;
                 continue;
             }
 
             pendingRegistrations.RemoveAt(i);
-            if (!registration.Connection.IsCancelled)
+            if (!registration.Connection.IsCanceled)
                 Apply(registration);
         }
     }
@@ -46,14 +46,14 @@ internal sealed class ServerPresenceSessions(
 
         for (int i = sessions.Count - 1; i >= 0; i--)
         {
-            if (sessions[i].Connection.IsCancelled)
+            if (sessions[i].Connection.IsCanceled)
                 Remove(sessions[i].Connection);
         }
     }
 
     public void Reject(ServerPresenceConnection connection, string reason)
     {
-        if (connection.IsCancelled)
+        if (connection.IsCanceled)
             return;
 
         log.Warn("Socket {0} presence session {1} {2}", connection.Socket.Tag, connection.SessionId, reason);
@@ -183,7 +183,7 @@ internal sealed class ServerPresenceSessions(
 
     private static void Close(ServerPresenceConnection connection)
     {
-        if (connection.IsCancelled)
+        if (connection.IsCanceled)
             return;
 
         connection.Cancel();

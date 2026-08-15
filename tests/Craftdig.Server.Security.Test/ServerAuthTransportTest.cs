@@ -110,7 +110,7 @@ public sealed class ServerAuthTransportTest
 
         Assert.IsFalse(pair.Server.IsAuthenticated);
         Assert.IsNull(pair.Server.AuthenticatedUid);
-        Assert.IsTrue(pair.Server.PresenceConnection?.IsCancelled);
+        Assert.IsTrue(pair.Server.PresenceConnection?.IsCanceled);
     }
 
     [TestMethod]
