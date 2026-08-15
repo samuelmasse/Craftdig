@@ -1,4 +1,4 @@
-namespace Craftdig.Protocol;
+namespace Craftdig;
 
 public abstract class EntSyncCatalog
 {

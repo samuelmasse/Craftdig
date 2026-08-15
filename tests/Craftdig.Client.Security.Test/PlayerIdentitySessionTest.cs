@@ -1,4 +1,4 @@
-namespace Craftdig.Client.Security.Test;
+namespace Craftdig;
 
 [TestClass]
 public sealed class PlayerIdentitySessionTest

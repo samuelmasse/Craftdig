@@ -1,4 +1,4 @@
-namespace Craftdig.Dimension;
+namespace Craftdig;
 
 public readonly record struct LightLevels(byte Sky, byte Block)
 {

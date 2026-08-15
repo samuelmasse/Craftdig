@@ -1,4 +1,4 @@
-namespace Craftdig.Menus.Common;
+namespace Craftdig;
 
 public enum TerrainChunkLoadingState
 {

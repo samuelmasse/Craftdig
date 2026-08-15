@@ -1,4 +1,4 @@
-namespace Craftdig.Identity.Test;
+namespace Craftdig;
 
 [TestClass]
 public sealed class IdentityJwksParserTest

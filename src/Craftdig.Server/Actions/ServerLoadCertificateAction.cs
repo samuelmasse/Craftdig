@@ -1,4 +1,4 @@
-namespace Craftdig.Server;
+namespace Craftdig;
 
 [Server]
 public class ServerLoadCertificateAction(ServerConfig config, ServerCreateDevCertificateAction createDevCertificateAction)

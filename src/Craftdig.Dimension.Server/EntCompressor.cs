@@ -1,4 +1,4 @@
-namespace Craftdig.Dimension.Server;
+namespace Craftdig;
 
 public class EntCompressor(WorldModuleIndices moduleIndices, int size)
 {

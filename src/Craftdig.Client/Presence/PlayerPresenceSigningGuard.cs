@@ -1,4 +1,4 @@
-namespace Craftdig.Client;
+namespace Craftdig;
 
 internal sealed class PlayerPresenceSigningGuard(int capacity)
 {

@@ -1,4 +1,4 @@
-namespace Craftdig.Server;
+namespace Craftdig;
 
 [Server]
 public class ServerRegisterShutdownHandlersAction(Log log, ServerShutdownAction shutdownAction)

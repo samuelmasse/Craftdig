@@ -1,4 +1,4 @@
-namespace Craftdig.Server;
+namespace Craftdig;
 
 [Server]
 public class ServerKicker(Log log, ServerSockets sockets, ServerAuth auth)

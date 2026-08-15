@@ -1,4 +1,4 @@
-namespace Craftdig.World.Server;
+namespace Craftdig;
 
 [WorldLoader]
 public class WorldServerLoader(

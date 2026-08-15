@@ -1,4 +1,4 @@
-namespace Craftdig.Server;
+namespace Craftdig;
 
 [Dimension]
 public class DimensionForgetChunkReceiver(DimensionForgottenChunks forgottenChunks) : DimensionReceiver<ForgetChunkCommand>

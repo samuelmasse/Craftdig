@@ -1,4 +1,4 @@
-namespace Craftdig.Player.Frontend;
+namespace Craftdig;
 
 public struct PendingInventoryAction(uint sequence, InventoryOperation operation)
 {

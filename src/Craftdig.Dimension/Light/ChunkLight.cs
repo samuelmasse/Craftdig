@@ -1,4 +1,4 @@
-namespace Craftdig.Dimension;
+namespace Craftdig;
 
 public sealed class ChunkLight(DimensionLightAllocator allocator)
 {

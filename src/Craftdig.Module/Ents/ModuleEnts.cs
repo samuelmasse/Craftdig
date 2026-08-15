@@ -1,4 +1,4 @@
-namespace Craftdig.Module;
+namespace Craftdig;
 
 [Module]
 public class ModuleEnts(ModuleEntsMut entsMut)

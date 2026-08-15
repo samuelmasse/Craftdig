@@ -1,4 +1,4 @@
-namespace Craftdig.World.Frontend;
+namespace Craftdig;
 
 [WorldLoader]
 public class WorldFrontendUnloader(WorldGl gl)

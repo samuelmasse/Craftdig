@@ -1,4 +1,4 @@
-namespace Craftdig.Dimension.Frontend;
+namespace Craftdig;
 
 [Dimension]
 public class DimensionBlockProgram : RenderProgram3D<BlockVertex>

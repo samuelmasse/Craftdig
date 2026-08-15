@@ -1,4 +1,4 @@
-namespace Craftdig.Menus.Common;
+namespace Craftdig;
 
 [Module]
 public class ModuleMainBackgroundMenu(AppStyle s)

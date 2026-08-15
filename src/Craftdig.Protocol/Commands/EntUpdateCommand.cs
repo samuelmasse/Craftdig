@@ -1,4 +1,4 @@
-namespace Craftdig.Protocol;
+namespace Craftdig;
 
 [StructLayout(LayoutKind.Sequential, Pack = 1)]
 public readonly struct EntUpdateCommand(uint scopeId, ushort createCount, ushort stateCount, ushort deleteCount) : ICommand

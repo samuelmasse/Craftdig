@@ -1,4 +1,4 @@
-namespace Craftdig.Client;
+namespace Craftdig;
 
 [Module]
 public class ModuleIdentityTrust(Log log, DevIdentityConfig dev) : IdentityTicketValidator(BuildCache(log, dev))

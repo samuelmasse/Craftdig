@@ -1,4 +1,4 @@
-namespace Craftdig.App;
+namespace Craftdig;
 
 public abstract class ModLoader
 {

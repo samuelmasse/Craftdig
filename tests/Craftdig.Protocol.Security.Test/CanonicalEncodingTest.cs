@@ -1,4 +1,4 @@
-namespace Craftdig.Protocol.Security.Test;
+namespace Craftdig;
 
 [TestClass]
 public sealed class CanonicalEncodingTest

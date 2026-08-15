@@ -1,4 +1,4 @@
-namespace Craftdig.Module;
+namespace Craftdig;
 
 [Components]
 public interface IModuleComponents

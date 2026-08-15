@@ -1,20 +1,9 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <ItemGroup>
-        <Using Include="AlvorKit.ECS.Indexed" />
-        <Using Include="Craftdig" />
-        <Using Include="Craftdig.App" />
-        <Using Include="Craftdig.Dimension" />
-        <Using Include="Craftdig.Dimension.Backend" />
-        <Using Include="Craftdig.Dimension.Server" />
-        <Using Include="Craftdig.Dimension.Unit">
+        <Using Include="Craftdig.Unit">
             <Static>true</Static>
         </Using>
-        <Using Include="Craftdig.Module" />
-        <Using Include="Craftdig.Protocol" />
-        <Using Include="Craftdig.World" />
-        <Using Include="Craftdig.World.Backend" />
-        <Using Include="Craftdig.World.Server" />
     </ItemGroup>
 
     <ItemGroup>

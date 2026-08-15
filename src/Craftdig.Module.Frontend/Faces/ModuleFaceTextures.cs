@@ -1,4 +1,4 @@
-namespace Craftdig.Module.Frontend;
+namespace Craftdig;
 
 [Module]
 public class ModuleFaceTextures(ModuleGl gl, ModuleImages images)

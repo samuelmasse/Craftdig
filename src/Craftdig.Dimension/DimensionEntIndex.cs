@@ -1,4 +1,4 @@
-namespace Craftdig.Dimension;
+namespace Craftdig;
 
 [Dimension]
 public class DimensionEntIndex

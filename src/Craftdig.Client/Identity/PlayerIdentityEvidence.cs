@@ -1,4 +1,4 @@
-namespace Craftdig.Client;
+namespace Craftdig;
 
 internal readonly record struct PlayerIdentityEvidence
 {

@@ -1,4 +1,4 @@
-namespace Craftdig.Dimension.Server;
+namespace Craftdig;
 
 [Dimension]
 public class DimensionForgottenChunks(DimensionEntStreamer entStreamer)

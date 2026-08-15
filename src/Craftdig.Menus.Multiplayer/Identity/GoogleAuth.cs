@@ -1,4 +1,4 @@
-namespace Craftdig.Menus.Multiplayer;
+namespace Craftdig;
 
 using Google.Apis.Auth.OAuth2;
 using Google.Apis.Auth.OAuth2.Flows;

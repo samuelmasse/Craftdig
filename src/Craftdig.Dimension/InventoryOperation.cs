@@ -1,4 +1,4 @@
-namespace Craftdig.Dimension;
+namespace Craftdig;
 
 [StructLayout(LayoutKind.Sequential, Pack = 1)]
 public readonly record struct InventoryOperation(

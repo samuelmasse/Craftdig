@@ -1,4 +1,4 @@
-namespace Craftdig.Menus;
+namespace Craftdig;
 
 [App]
 public class AppScript(Log log) : Script

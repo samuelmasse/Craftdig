@@ -1,4 +1,4 @@
-namespace Craftdig.Server;
+namespace Craftdig;
 
 [Dimension]
 public class DimensionInventoryActionReceiver(DimensionInventoryActionQueue queue) :

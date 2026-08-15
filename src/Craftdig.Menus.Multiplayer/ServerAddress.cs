@@ -1,4 +1,4 @@
-namespace Craftdig.Menus.Multiplayer;
+namespace Craftdig;
 
 public record ServerAddress(string Host, int Port)
 {

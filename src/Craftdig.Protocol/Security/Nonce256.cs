@@ -1,4 +1,4 @@
-namespace Craftdig.Protocol;
+namespace Craftdig;
 
 public readonly struct Nonce256 : IEquatable<Nonce256>, IComparable<Nonce256>, IWireValue<Nonce256>
 {

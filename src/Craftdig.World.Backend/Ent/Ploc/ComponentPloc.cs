@@ -1,3 +1,3 @@
-namespace Craftdig.World.Backend;
+namespace Craftdig;
 
 public readonly record struct ComponentPloc(int Offset, int Size);

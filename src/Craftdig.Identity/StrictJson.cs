@@ -1,4 +1,4 @@
-namespace Craftdig.Identity;
+namespace Craftdig;
 
 public static class StrictJson
 {

@@ -1,4 +1,4 @@
-namespace Craftdig.Menus.Multiplayer;
+namespace Craftdig;
 
 using System.IdentityModel.Tokens.Jwt;
 using Google.Apis.Auth.OAuth2;

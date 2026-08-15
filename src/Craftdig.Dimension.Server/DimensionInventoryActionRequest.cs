@@ -1,3 +1,3 @@
-namespace Craftdig.Dimension.Server;
+namespace Craftdig;
 
 public readonly record struct DimensionInventoryActionRequest(NetSocket Socket, InventoryActionCommand Command);

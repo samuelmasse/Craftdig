@@ -1,4 +1,4 @@
-namespace Craftdig.Protocol;
+namespace Craftdig;
 
 public readonly ref struct NetMessage(ushort type, ReadOnlySpan<byte> data)
 {

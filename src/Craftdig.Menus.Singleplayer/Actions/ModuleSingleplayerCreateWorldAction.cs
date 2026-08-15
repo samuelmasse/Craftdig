@@ -1,4 +1,4 @@
-namespace Craftdig.Menus.Singleplayer;
+namespace Craftdig;
 
 [Module]
 public class ModuleSingleplayerCreateWorldAction(AppPaths paths, ModuleWriteWorldMetaAction writeWorldMetaAction)

@@ -1,4 +1,4 @@
-namespace Craftdig.Menus;
+namespace Craftdig;
 
 [Module]
 public class ModuleMainMenu(

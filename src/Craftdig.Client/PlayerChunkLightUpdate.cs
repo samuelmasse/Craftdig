@@ -1,4 +1,4 @@
-namespace Craftdig.Client;
+namespace Craftdig;
 
 public readonly record struct PlayerChunkLightUpdate(
     Vec2i Cloc,

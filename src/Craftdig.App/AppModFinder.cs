@@ -1,4 +1,4 @@
-namespace Craftdig.App;
+namespace Craftdig;
 
 [App]
 public class AppModFinder

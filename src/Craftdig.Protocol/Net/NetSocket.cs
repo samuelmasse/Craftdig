@@ -1,4 +1,4 @@
-namespace Craftdig.Protocol;
+namespace Craftdig;
 
 public class NetSocket(Log log, TcpClient tcp, Stream stream) : IEntMut
 {

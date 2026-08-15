@@ -1,4 +1,4 @@
-namespace Craftdig.Server.Cli;
+namespace Craftdig;
 
 public class Cli(string[] args)
 {

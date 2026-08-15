@@ -1,4 +1,4 @@
-namespace Craftdig.Protocol;
+namespace Craftdig;
 
 public readonly struct SessionId : IEquatable<SessionId>, IComparable<SessionId>, IWireValue<SessionId>
 {

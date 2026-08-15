@@ -1,4 +1,4 @@
-namespace Craftdig.World.Server;
+namespace Craftdig;
 
 [World]
 public class WorldScratchedBagMut : EntIdxBagMut<WorldServerComponents.IsScratched>;

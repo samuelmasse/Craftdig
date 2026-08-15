@@ -1,4 +1,4 @@
-namespace Craftdig.Client;
+namespace Craftdig;
 
 [Player]
 public class PlayerTerrainLoading(

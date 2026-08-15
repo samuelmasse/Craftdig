@@ -1,4 +1,4 @@
-namespace Craftdig.Menus.Common;
+namespace Craftdig;
 
 [App]
 public partial class AppStyle(RootText text, RootUiMouse mouse, RootKeyboard keyboard, RootInput input, RootUiScale scale, AppMenuTextures menuTextures, AppMonocraft monocraft)

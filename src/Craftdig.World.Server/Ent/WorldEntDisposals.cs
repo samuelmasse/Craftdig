@@ -1,4 +1,4 @@
-namespace Craftdig.World.Server;
+namespace Craftdig;
 
 public abstract class EntDisposals
 {

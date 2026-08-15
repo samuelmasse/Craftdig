@@ -1,4 +1,4 @@
-namespace Craftdig.Protocol;
+namespace Craftdig;
 
 public readonly record struct PresenceProofRecord(Hash256 TicketHash, P256Signature Signature) : IWireValue<PresenceProofRecord>
 {

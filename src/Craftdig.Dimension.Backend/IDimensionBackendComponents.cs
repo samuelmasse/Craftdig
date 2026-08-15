@@ -1,4 +1,4 @@
-namespace Craftdig.Dimension.Backend;
+namespace Craftdig;
 
 [Components]
 public interface IDimensionBackendComponents

@@ -1,4 +1,4 @@
-namespace Craftdig.Player.Frontend;
+namespace Craftdig;
 
 [Player]
 public class PlayerViewModelAnimation(WorldTick tick, PlayerEnt ent)

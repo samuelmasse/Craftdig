@@ -1,4 +1,4 @@
-namespace Craftdig.Dimension.Server;
+namespace Craftdig;
 
 public abstract class DimensionReceiver<C>
 {

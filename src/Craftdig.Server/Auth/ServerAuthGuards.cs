@@ -1,4 +1,4 @@
-namespace Craftdig.Server;
+namespace Craftdig;
 
 [Server]
 public class ServerAuthGuards(Log log, ServerConfig config, ServerSockets sockets, SeverAllowlist allowlist)

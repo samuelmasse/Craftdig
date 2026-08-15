@@ -1,4 +1,4 @@
-namespace Craftdig.Server;
+namespace Craftdig;
 
 [Server]
 public class ServerLoadDimensionsAction(ModuleEnts ents, WorldScope worldScope, WorldEntArena arena)

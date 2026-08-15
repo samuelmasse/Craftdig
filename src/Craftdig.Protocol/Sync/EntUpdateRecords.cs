@@ -1,4 +1,4 @@
-namespace Craftdig.Protocol;
+namespace Craftdig;
 
 [Flags]
 public enum EntCreateFlags : byte

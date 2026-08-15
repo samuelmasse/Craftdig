@@ -1,4 +1,4 @@
-namespace Craftdig.Player.Frontend;
+namespace Craftdig;
 
 public record PlayerControls(
     Control CameraFast,

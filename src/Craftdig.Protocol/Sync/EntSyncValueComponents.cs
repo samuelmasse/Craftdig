@@ -1,4 +1,4 @@
-namespace Craftdig.Protocol;
+namespace Craftdig;
 
 public class EntSyncUnmanagedComponent<T, N>(EntComponent component, ushort ordinal, EntSyncAudience audience, int maximumCount) :
     EntSyncComponent(component, ordinal, audience, maximumCount)

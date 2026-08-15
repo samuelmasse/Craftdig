@@ -1,4 +1,4 @@
-namespace Craftdig.Identity;
+namespace Craftdig;
 
 public class IdentityTicketValidator(IdentityJwksCache jwks, Func<ServerContext, bool>? allowedContexts = null)
 {

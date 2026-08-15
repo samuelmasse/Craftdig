@@ -1,4 +1,4 @@
-namespace Craftdig.World.Backend;
+namespace Craftdig;
 
 public class EntRegionState(string dir, Vec2i rloc, int levels)
 {

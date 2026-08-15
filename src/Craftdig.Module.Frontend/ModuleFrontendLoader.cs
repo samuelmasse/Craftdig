@@ -1,4 +1,4 @@
-namespace Craftdig.Module.Frontend;
+namespace Craftdig;
 
 [ModuleLoader]
 public class ModuleFrontendLoader(AppFiles files, AppMods mods, ModuleFaceLoader faceLoader)

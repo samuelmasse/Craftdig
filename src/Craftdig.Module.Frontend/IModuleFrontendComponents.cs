@@ -1,4 +1,4 @@
-namespace Craftdig.Module.Frontend;
+namespace Craftdig;
 
 [Components]
 public interface IModuleFrontendComponents

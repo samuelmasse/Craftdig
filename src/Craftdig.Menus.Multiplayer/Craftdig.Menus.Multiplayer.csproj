@@ -1,36 +1,13 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <ItemGroup>
-        <Using Include="AlvorKit.Engine" />
-        <Using Include="AlvorKit.Engine.Loop" />
-        <Using Include="AlvorKit.OpenGL" />
-        <Using Include="AlvorKit.OpenGL.Layer" />
-        <Using Include="AlvorKit.Graphics2D" />
-        <Using Include="AlvorKit.Graphics2D.Fonts" />
-        <Using Include="Craftdig" />
-        <Using Include="Craftdig.App" />
-        <Using Include="Craftdig.App.Frontend" />
-        <Using Include="Craftdig.Client" />
-        <Using Include="Craftdig.Identity" />
-        <Using Include="Craftdig.Dimension" />
-        <Using Include="Craftdig.Dimension.Frontend" />
-        <Using Include="Craftdig.Dimension.Unit">
+        <Using Include="Craftdig.Unit">
             <Static>true</Static>
         </Using>
-        <Using Include="Craftdig.Menus" />
-        <Using Include="Craftdig.Menus.Common" />
-        <Using Include="Craftdig.Menus.Common.AppUiSyntax">
+        <Using Include="Craftdig.AppUiSyntax">
             <Static>true</Static>
         </Using>
-        <Using Include="Craftdig.Module" />
-        <Using Include="Craftdig.Module.Frontend" />
-        <Using Include="Craftdig.Player.Frontend" />
-        <Using Include="Craftdig.Protocol" />
-        <Using Include="Craftdig.World" />
-        <Using Include="Craftdig.World.Frontend" />
-        <Using Include="AlvorKit.Windowing" />
-        <Using Include="AlvorKit.UI" />
-        <Using Include="AlvorKit.UI.UiSyntax">
+        <Using Include="AlvorKit.UiSyntax">
             <Static>true</Static>
         </Using>
     </ItemGroup>

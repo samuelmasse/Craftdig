@@ -1,4 +1,4 @@
-namespace Craftdig.Identity;
+namespace Craftdig;
 
 using System.Text.Json;
 

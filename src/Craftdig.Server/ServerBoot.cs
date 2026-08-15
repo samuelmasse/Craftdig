@@ -1,4 +1,4 @@
-namespace Craftdig.Server;
+namespace Craftdig;
 
 [Server]
 public class ServerBoot(Log log, ModuleScope moduleScope, WorldScope worldScope, ServerScope serverScope)

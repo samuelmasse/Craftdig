@@ -1,4 +1,4 @@
-namespace Craftdig.World;
+namespace Craftdig;
 
 [AttributeUsage(AttributeTargets.Property)]
 public class SavedAttribute : Attribute;

@@ -1,4 +1,4 @@
-namespace Craftdig.Dimension.Backend;
+namespace Craftdig;
 
 [Dimension]
 public class DimensionRegionReceiver(

@@ -1,4 +1,4 @@
-namespace Craftdig.Server;
+namespace Craftdig;
 
 public readonly record struct ServerPresenceMetricsSnapshot(
     long ActiveSessions,

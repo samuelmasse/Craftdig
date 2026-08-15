@@ -5,9 +5,6 @@
     </ItemGroup>
 
     <ItemGroup>
-        <Using Include="AlvorKit.Injection" />
-        <Using Include="Craftdig.Client" />
-        <Using Include="Craftdig.Player.Frontend" />
         <Using Include="Microsoft.IdentityModel.Tokens" />
         <Using Include="System.Text.Json" />
     </ItemGroup>

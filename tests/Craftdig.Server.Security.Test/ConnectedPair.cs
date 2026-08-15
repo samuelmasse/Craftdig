@@ -1,4 +1,4 @@
-namespace Craftdig.Server.Security.Test;
+namespace Craftdig;
 
 internal sealed class ConnectedPair : IDisposable
 {

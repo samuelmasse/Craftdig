@@ -1,4 +1,4 @@
-namespace Craftdig.Server;
+namespace Craftdig;
 
 [Server]
 public class ServerDrainSocketsAction(Log log, ServerSockets sockets, ServerClientThreadPool clientThreadPool)

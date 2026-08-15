@@ -1,4 +1,4 @@
-namespace Craftdig.World.Backend;
+namespace Craftdig;
 
 [Components]
 public interface IWorldBackendComponents

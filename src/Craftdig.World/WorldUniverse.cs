@@ -1,4 +1,4 @@
-namespace Craftdig.World;
+namespace Craftdig;
 
 [World]
 [DebuggerTypeProxy(typeof(EntDebugView))]

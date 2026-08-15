@@ -1,4 +1,4 @@
-namespace Craftdig.Dimension.Frontend;
+namespace Craftdig;
 
 [Dimension]
 public class DimensionSectionMeshTransferer(RootQuadIndexBuffer quadIndexBuffer, DimensionSharedVertexBuffer svb, DimensionGl gl)

@@ -1,4 +1,4 @@
-namespace Craftdig.Protocol;
+namespace Craftdig;
 
 [StructLayout(LayoutKind.Sequential, Pack = 1)]
 public struct PositionUpdateCommand : ICommand

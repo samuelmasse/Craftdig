@@ -15,14 +15,12 @@
 
     <PropertyGroup>
         <AlvorKitRoot>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\..\AlvorKit\'))</AlvorKitRoot>
+        <BindingsRoot>$([System.IO.Path]::GetFullPath('$(AlvorKitRoot)out\bindgen\'))</BindingsRoot>
     </PropertyGroup>
 
     <ItemGroup>
-        <Using Include="AlvorKit.ECS" />
-        <Using Include="AlvorKit.ECS.Generator" />
-        <Using Include="AlvorKit.Injection" />
-        <Using Include="AlvorKit.Logging" />
-        <Using Include="AlvorKit.Maths" />
+        <Using Include="Craftdig" />
+        <Using Include="AlvorKit" />
         <Using Include="Microsoft.Win32.SafeHandles" />
         <Using Include="System.Buffers" />
         <Using Include="System.Buffers.Binary" />

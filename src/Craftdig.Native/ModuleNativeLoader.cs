@@ -1,4 +1,4 @@
-namespace Craftdig.Native;
+namespace Craftdig;
 
 [ModuleLoader]
 public class ModuleNativeLoader(ModuleNative m) : ModLoader

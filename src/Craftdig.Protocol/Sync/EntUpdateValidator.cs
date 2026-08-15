@@ -1,4 +1,4 @@
-namespace Craftdig.Protocol;
+namespace Craftdig;
 
 public ref struct EntUpdateValidator(ReadOnlySpan<byte> data)
 {

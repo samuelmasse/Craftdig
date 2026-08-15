@@ -1,4 +1,4 @@
-namespace Craftdig.Dimension.Server;
+namespace Craftdig;
 
 public readonly record struct DimensionEntDisposal(
     EntMutIdx Ent,

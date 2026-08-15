@@ -1,4 +1,4 @@
-namespace Craftdig.Protocol;
+namespace Craftdig;
 
 public static class PresenceRoundChunkCommandCodec
 {

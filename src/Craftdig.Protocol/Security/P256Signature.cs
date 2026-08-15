@@ -1,4 +1,4 @@
-namespace Craftdig.Protocol;
+namespace Craftdig;
 
 public readonly struct P256Signature : IEquatable<P256Signature>, IWireValue<P256Signature>
 {

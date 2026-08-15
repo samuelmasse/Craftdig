@@ -1,4 +1,4 @@
-namespace Craftdig.Client.Security.Test;
+namespace Craftdig;
 
 internal static class IdentityTicketTestData
 {

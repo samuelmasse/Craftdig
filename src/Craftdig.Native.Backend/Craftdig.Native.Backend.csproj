@@ -1,22 +1,16 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <ItemGroup>
-        <Using Include="Craftdig" />
-        <Using Include="Craftdig.App" />
-        <Using Include="Craftdig.Dimension" />
-        <Using Include="Craftdig.Dimension.Backend" />
-        <Using Include="Craftdig.Dimension.Unit">
+        <Using Include="Craftdig.Unit">
             <Static>true</Static>
         </Using>
-        <Using Include="AlvorKit.FastNoise2" />
-        <Using Include="Craftdig.Module" />
-        <Using Include="Craftdig.Native" />
-        <Using Include="Craftdig.World" />
-        <Using Include="Craftdig.World.Backend" />
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="AlvorKit.FastNoise2" Version="1.1.1.2" />
+        <PackageReference Condition="!Exists('$(BindingsRoot)\AlvorKit.FastNoise2\AlvorKit.FastNoise2.csproj')"
+            Include="AlvorKit.FastNoise2" Version="1.1.1.3" />
+        <ProjectReference Condition="Exists('$(BindingsRoot)\AlvorKit.FastNoise2\AlvorKit.FastNoise2.csproj')"
+            Include="$(BindingsRoot)\AlvorKit.FastNoise2\AlvorKit.FastNoise2.csproj" />
     </ItemGroup>
 
     <ItemGroup>

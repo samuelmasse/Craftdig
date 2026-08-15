@@ -1,4 +1,4 @@
-namespace Craftdig.Menus.Multiplayer;
+namespace Craftdig;
 
 using System.Net.Http.Headers;
 using System.Net.Http.Json;

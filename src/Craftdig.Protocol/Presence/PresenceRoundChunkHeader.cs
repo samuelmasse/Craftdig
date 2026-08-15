@@ -1,4 +1,4 @@
-namespace Craftdig.Protocol;
+namespace Craftdig;
 
 public readonly record struct PresenceRoundChunkHeader(
     Hash256 RoundHash,

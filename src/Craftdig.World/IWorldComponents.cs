@@ -1,4 +1,4 @@
-namespace Craftdig.World;
+namespace Craftdig;
 
 [Components]
 public interface IWorldComponents

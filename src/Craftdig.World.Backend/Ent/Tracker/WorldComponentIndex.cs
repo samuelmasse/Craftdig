@@ -1,4 +1,4 @@
-namespace Craftdig.World.Backend;
+namespace Craftdig;
 
 [World]
 public class WorldComponentIndex<T, N>(WorldComponentIndices indices)

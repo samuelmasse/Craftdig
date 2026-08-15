@@ -1,4 +1,4 @@
-namespace Craftdig.Protocol.Security.Test;
+namespace Craftdig;
 
 internal static class ProtocolTestData
 {

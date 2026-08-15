@@ -1,4 +1,4 @@
-namespace Craftdig.App;
+namespace Craftdig;
 
 [Components]
 public interface IAppComponents

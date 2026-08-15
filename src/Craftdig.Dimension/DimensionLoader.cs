@@ -1,4 +1,4 @@
-namespace Craftdig.Dimension;
+namespace Craftdig;
 
 [DimensionLoader]
 public class DimensionLoader(

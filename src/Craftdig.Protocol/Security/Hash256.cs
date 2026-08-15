@@ -1,4 +1,4 @@
-namespace Craftdig.Protocol;
+namespace Craftdig;
 
 public readonly struct Hash256 : IEquatable<Hash256>, IComparable<Hash256>, IWireValue<Hash256>
 {

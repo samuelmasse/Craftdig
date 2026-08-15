@@ -1,4 +1,4 @@
-namespace Craftdig.Menus.Common;
+namespace Craftdig;
 
 [Dimension]
 public class DimensionSharedVertexBufferMenu(

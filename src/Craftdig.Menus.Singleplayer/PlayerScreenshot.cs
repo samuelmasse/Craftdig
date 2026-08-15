@@ -1,4 +1,4 @@
-namespace Craftdig.Menus.Singleplayer;
+namespace Craftdig;
 
 [Player]
 public class PlayerScreenshot(WorldPaths paths, PlayerGl gl, PlayerRenderer renderer)

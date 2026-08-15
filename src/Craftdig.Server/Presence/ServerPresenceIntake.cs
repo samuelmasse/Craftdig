@@ -1,4 +1,4 @@
-namespace Craftdig.Server;
+namespace Craftdig;
 
 internal sealed class ServerPresenceIntake(
     ServerIdentitySessionEvents inbox,

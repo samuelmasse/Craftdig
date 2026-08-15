@@ -1,4 +1,4 @@
-namespace Craftdig.Dimension.Frontend;
+namespace Craftdig;
 
 [StructLayout(LayoutKind.Sequential)]
 public readonly record struct BlockVertex(Vec3 Position, Vec3 Lighting, Vec3 TexCoord) : IVertex

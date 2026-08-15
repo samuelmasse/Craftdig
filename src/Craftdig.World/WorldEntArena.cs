@@ -1,4 +1,4 @@
-namespace Craftdig.World;
+namespace Craftdig;
 
 [World]
 public class WorldEntArena(WorldEntIdxContextBuilder context) : EntIdxArena(context.Ent)

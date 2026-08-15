@@ -1,4 +1,4 @@
-namespace Craftdig.Menus.Common;
+namespace Craftdig;
 
 [App]
 public class AppMenuTextures(RootPngs pngs, AppFiles files, AppGl gl)

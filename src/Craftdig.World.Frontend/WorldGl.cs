@@ -1,4 +1,4 @@
-namespace Craftdig.World.Frontend;
+namespace Craftdig;
 
 [World]
 public class WorldGl(ModuleGl gl) : GlLayer(gl);

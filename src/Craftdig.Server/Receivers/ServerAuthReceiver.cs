@@ -1,4 +1,4 @@
-namespace Craftdig.Server;
+namespace Craftdig;
 
 [Server]
 public class ServerAuthReceiver(Log log, ServerAuth auth, ServerNoAuth noAuth)

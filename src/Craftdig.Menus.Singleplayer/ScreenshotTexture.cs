@@ -1,4 +1,4 @@
-namespace Craftdig.Menus.Singleplayer;
+namespace Craftdig;
 
 public class ScreenshotTexture(GlBin bin, Texture texture)
 {

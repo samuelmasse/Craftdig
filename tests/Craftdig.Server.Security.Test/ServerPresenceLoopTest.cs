@@ -1,4 +1,4 @@
-namespace Craftdig.Server.Security.Test;
+namespace Craftdig;
 
 [TestClass]
 public sealed class ServerPresenceLoopTest

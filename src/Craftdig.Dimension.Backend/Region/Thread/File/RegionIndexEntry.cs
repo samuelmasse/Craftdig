@@ -1,4 +1,4 @@
-namespace Craftdig.Dimension.Backend;
+namespace Craftdig;
 
 [StructLayout(LayoutKind.Sequential)]
 public struct RegionIndexEntry

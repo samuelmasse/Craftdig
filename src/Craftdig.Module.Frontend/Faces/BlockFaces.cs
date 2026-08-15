@@ -1,4 +1,4 @@
-namespace Craftdig.Module.Frontend;
+namespace Craftdig;
 
 public readonly record struct BlockFaces(Ent Front, Ent Back, Ent Top, Ent Bottom, Ent Left, Ent Right)
 {

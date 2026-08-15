@@ -4,13 +4,4 @@
         <ProjectReference Include="..\Craftdig.Dimension\Craftdig.Dimension.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-        <Using Include="AlvorKit.ECS.Indexed" />
-        <Using Include="Craftdig" />
-        <Using Include="Craftdig.App" />
-        <Using Include="Craftdig.Dimension" />
-        <Using Include="Craftdig.Protocol" />
-        <Using Include="Craftdig.World" />
-    </ItemGroup>
-
 </Project>

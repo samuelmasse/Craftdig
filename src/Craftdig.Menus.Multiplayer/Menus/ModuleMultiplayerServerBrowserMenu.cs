@@ -1,4 +1,4 @@
-namespace Craftdig.Menus.Multiplayer;
+namespace Craftdig;
 
 [Module]
 public class ModuleMultiplayerServerBrowserMenu(

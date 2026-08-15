@@ -1,4 +1,4 @@
-namespace Craftdig.Module.Frontend;
+namespace Craftdig;
 
 [ModuleLoader]
 public class ModuleFaceLoader(ModuleEntsMut entsMut, ModuleFaceAtlas faceAtlas, ModuleFaceTextures faceTextures)

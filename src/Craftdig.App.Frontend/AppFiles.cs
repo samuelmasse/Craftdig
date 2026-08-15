@@ -1,4 +1,4 @@
-namespace Craftdig.App.Frontend;
+namespace Craftdig;
 
 [App]
 public class AppFiles

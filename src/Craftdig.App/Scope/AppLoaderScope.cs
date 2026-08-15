@@ -1,4 +1,4 @@
-namespace Craftdig.App;
+namespace Craftdig;
 
 [AppLoader]
 public class AppLoaderScope : InjectorScope<AppLoaderAttribute>;

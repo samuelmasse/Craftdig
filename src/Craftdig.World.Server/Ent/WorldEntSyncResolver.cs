@@ -1,4 +1,4 @@
-namespace Craftdig.World.Server;
+namespace Craftdig;
 
 [World]
 public class WorldEntSyncResolver(WorldModuleIndices moduleIndices) : IEntSyncWriteResolver

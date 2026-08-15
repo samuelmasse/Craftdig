@@ -1,4 +1,4 @@
-namespace Craftdig.Dimension.Backend;
+namespace Craftdig;
 
 public class RegionState(string dir, Vec2i rloc, int levels)
 {

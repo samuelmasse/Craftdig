@@ -5,8 +5,6 @@
     </ItemGroup>
 
     <ItemGroup>
-        <Using Include="Craftdig.App" />
-        <Using Include="Craftdig.Identity" />
         <Using Include="Microsoft.IdentityModel.Tokens" />
         <Using Include="System.IO" />
         <Using Include="System.Linq" />

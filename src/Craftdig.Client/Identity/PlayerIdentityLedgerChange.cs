@@ -1,4 +1,4 @@
-namespace Craftdig.Client;
+namespace Craftdig;
 
 internal readonly record struct PlayerIdentityLedgerChange(bool Stored, Hash256? EvictedTicket, IReadOnlyList<Guid> InvalidPlayers)
 {

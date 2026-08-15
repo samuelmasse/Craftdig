@@ -1,4 +1,4 @@
-namespace Craftdig.Dev;
+namespace Craftdig;
 
 [Root]
 public class RootLoadNativeState(

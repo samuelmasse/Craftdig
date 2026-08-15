@@ -1,4 +1,4 @@
-namespace Craftdig.Client;
+namespace Craftdig;
 
 public sealed record PlayerIdentitySnapshot(
     Guid PlayerId,

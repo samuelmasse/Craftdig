@@ -1,4 +1,4 @@
-namespace Craftdig.World.Backend;
+namespace Craftdig;
 
 [Module]
 public class ModuleReadWorldMetaAction(ModuleEnts ents)

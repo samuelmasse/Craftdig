@@ -1,4 +1,4 @@
-namespace Craftdig.Menus.Singleplayer;
+namespace Craftdig;
 
 [Dimension]
 public class DimensionSingleplayerFindPlayerAction(

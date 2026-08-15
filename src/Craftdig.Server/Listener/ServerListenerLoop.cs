@@ -1,4 +1,4 @@
-namespace Craftdig.Server;
+namespace Craftdig;
 
 [Server]
 public class ServerListenerLoop(Log log, ServerClientLoop clientLoop, ServerClientLimits clientLimits)

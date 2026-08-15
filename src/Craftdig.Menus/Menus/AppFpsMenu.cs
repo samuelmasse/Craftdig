@@ -1,4 +1,4 @@
-namespace Craftdig.Menus;
+namespace Craftdig;
 
 [App]
 public class AppFpsMenu(RootKeyboard keyboard, RootText text, RootMetrics metrics, AppStyle s)

@@ -1,3 +1,3 @@
-namespace Craftdig.Dimension.Backend;
+namespace Craftdig;
 
 public record struct RegionThreadOutput(RegionThreadInput Input, bool Noop);

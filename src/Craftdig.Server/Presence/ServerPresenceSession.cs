@@ -1,4 +1,4 @@
-namespace Craftdig.Server;
+namespace Craftdig;
 
 public sealed class ServerPresenceSession(ServerPresenceConnection connection, int identityQueueCapacity) : IDisposable
 {

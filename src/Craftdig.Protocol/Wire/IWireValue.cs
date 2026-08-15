@@ -1,4 +1,4 @@
-namespace Craftdig.Protocol;
+namespace Craftdig;
 
 public interface IWireValue<TSelf> where TSelf : struct, IWireValue<TSelf>
 {

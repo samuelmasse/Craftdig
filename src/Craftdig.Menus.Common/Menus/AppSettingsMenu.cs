@@ -1,4 +1,4 @@
-namespace Craftdig.Menus.Common;
+namespace Craftdig;
 
 [App]
 public class AppSettingsMenu(RootText text, AppSettings settings, AppStyle s)

@@ -1,4 +1,4 @@
-namespace Craftdig.Client;
+namespace Craftdig;
 
 internal sealed class PlayerPresenceInbox(int maxMessages, int maxBytes)
 {

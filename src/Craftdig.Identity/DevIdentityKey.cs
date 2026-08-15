@@ -1,4 +1,4 @@
-namespace Craftdig.Identity;
+namespace Craftdig;
 
 // Development-only issuer key shared between a local dev client (signs) and a local dev server (verifies).
 // This is a throwaway key generated on the dev machine; it is never craftdig.io's production signing key,

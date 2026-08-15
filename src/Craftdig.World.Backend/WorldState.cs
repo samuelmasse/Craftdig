@@ -1,3 +1,3 @@
-namespace Craftdig.World.Backend;
+namespace Craftdig;
 
 public record class WorldState(DateTimeOffset LastPlayed);

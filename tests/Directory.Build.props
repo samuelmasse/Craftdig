@@ -20,8 +20,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <Using Include="AlvorKit.Logging" />
-        <Using Include="Craftdig.Protocol" />
+        <Using Include="AlvorKit" />
         <Using Include="Microsoft.VisualStudio.TestTools.UnitTesting" />
         <Using Include="System.Buffers.Binary" />
         <Using Include="System.Security.Cryptography" />

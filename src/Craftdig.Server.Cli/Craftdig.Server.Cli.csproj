@@ -9,17 +9,10 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <Using Include="AlvorKit.FastNoise2" />
-        <Using Include="Craftdig" />
-        <Using Include="Craftdig.App" />
-        <Using Include="Craftdig.Module" />
-        <Using Include="Craftdig.Server" />
-        <Using Include="Craftdig.Server.Cli" />
-        <Using Include="Craftdig.World" />
-    </ItemGroup>
-
-    <ItemGroup>
-        <PackageReference Include="AlvorKit.FastNoise2.Backend" Version="1.1.1.2" />
+        <PackageReference Condition="!Exists('$(BindingsRoot)\AlvorKit.FastNoise2.Backend\AlvorKit.FastNoise2.Backend.csproj')"
+            Include="AlvorKit.FastNoise2.Backend" Version="1.1.1.3" />
+        <ProjectReference Condition="Exists('$(BindingsRoot)\AlvorKit.FastNoise2.Backend\AlvorKit.FastNoise2.Backend.csproj')"
+            Include="$(BindingsRoot)\AlvorKit.FastNoise2.Backend\AlvorKit.FastNoise2.Backend.csproj" />
     </ItemGroup>
 
     <ItemGroup>

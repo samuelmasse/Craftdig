@@ -1,4 +1,4 @@
-namespace Craftdig.Protocol;
+namespace Craftdig;
 
 public readonly record struct PresenceChallengeRecord(SessionId SessionId, ulong Sequence, Nonce256 Nonce) :
     IComparable<PresenceChallengeRecord>, IWireValue<PresenceChallengeRecord>

@@ -1,4 +1,4 @@
-namespace Craftdig.Server;
+namespace Craftdig;
 
 [Server]
 public class ServerListener(Log log, ServerDefaults defaults, ServerConfig config, ServerListenerLoop listenerLoop)

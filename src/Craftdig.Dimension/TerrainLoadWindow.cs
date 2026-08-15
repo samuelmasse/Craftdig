@@ -1,4 +1,4 @@
-namespace Craftdig.Dimension;
+namespace Craftdig;
 
 public readonly record struct TerrainLoadWindow(Vec2i Center, int SideLength)
 {

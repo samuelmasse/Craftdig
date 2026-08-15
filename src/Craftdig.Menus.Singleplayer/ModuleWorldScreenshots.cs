@@ -1,4 +1,4 @@
-namespace Craftdig.Menus.Singleplayer;
+namespace Craftdig;
 
 [Module]
 public class ModuleWorldScreenshots(RootBin bin, RootGl gl, RootPngs pngs)

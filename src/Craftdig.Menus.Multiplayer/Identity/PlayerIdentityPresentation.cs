@@ -1,4 +1,4 @@
-namespace Craftdig.Menus.Multiplayer;
+namespace Craftdig;
 
 [Player]
 public class PlayerIdentityPresentation(AppClientOptions clientOptions, AppStyle s)

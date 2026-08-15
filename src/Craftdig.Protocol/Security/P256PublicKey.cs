@@ -1,4 +1,4 @@
-namespace Craftdig.Protocol;
+namespace Craftdig;
 
 public readonly struct P256PublicKey : IEquatable<P256PublicKey>
 {
