@@ -1,7 +1,7 @@
 namespace Craftdig;
 
 [Dimension]
-public class DimensionNativeTerrainGenerator : ITerrainGenerator
+public class DimensionNativeTerrainGenerator(ModuleNative m, DimensionNativeNoise noise) : ITerrainGenerator
 {
     private const float NoiseMin = -0.5f;
     private const float NoiseMax = 1.5f;
@@ -11,19 +11,6 @@ public class DimensionNativeTerrainGenerator : ITerrainGenerator
 
     private static readonly int StoneMaxZ = (int)MathF.Floor(BiasCenterZ + BiasScale * NoiseMin);
     private static readonly int AirMinZ = (int)MathF.Ceiling(BiasCenterZ + BiasScale * NoiseMax);
-
-    private readonly ModuleNative m;
-    private readonly DimensionNativeNoise noise;
-
-    public DimensionNativeTerrainGenerator(
-        ModuleNative m,
-        DimensionNativeNoise noise,
-        DimensionBackendUnloaderHandlers backendUnloaderHandlers)
-    {
-        this.m = m;
-        this.noise = noise;
-        backendUnloaderHandlers.Add(noise.Dispose);
-    }
 
     public void Generate(ChunkBlocks blocks, Vec2i cloc)
     {

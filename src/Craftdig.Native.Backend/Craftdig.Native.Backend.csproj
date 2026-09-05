@@ -7,10 +7,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Condition="!Exists('$(BindingsRoot)\AlvorKit.FastNoise2\AlvorKit.FastNoise2.csproj')"
-            Include="AlvorKit.FastNoise2" Version="1.1.1.3" />
-        <ProjectReference Condition="Exists('$(BindingsRoot)\AlvorKit.FastNoise2\AlvorKit.FastNoise2.csproj')"
-            Include="$(BindingsRoot)\AlvorKit.FastNoise2\AlvorKit.FastNoise2.csproj" />
+        <ProjectReference Include="$(AlvorKitRoot)src\AlvorKit.FastNoise2.Graph\AlvorKit.FastNoise2.Graph.csproj" />
     </ItemGroup>
 
     <ItemGroup>
