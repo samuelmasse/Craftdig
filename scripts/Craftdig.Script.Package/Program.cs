@@ -119,7 +119,7 @@ string? FindRepositoryRoot(string start)
     var current = new DirectoryInfo(Path.GetFullPath(start));
     while (current is not null)
     {
-        if (File.Exists(Path.Combine(current.FullName, "Craftdig.slnx")))
+        if (Directory.Exists(Path.Combine(current.FullName, ".git")) || File.Exists(Path.Combine(current.FullName, ".git")))
             return current.FullName;
 
         current = current.Parent;

@@ -1,6 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
+        <WorkspaceStartup>true</WorkspaceStartup>
         <ServerGarbageCollection>true</ServerGarbageCollection>
         <ApplicationIcon>..\..\res\Icons\Client.ico</ApplicationIcon>
         <AssemblyTitle>Craftdig</AssemblyTitle>

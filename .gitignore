@@ -4,4 +4,4 @@ obj
 out
 dist
 tmp
-*.Dev.slnx
+/*.slnx
