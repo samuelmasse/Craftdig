@@ -38,4 +38,6 @@ jobs:
           dotnet build Craftdig/Craftdig.slnx --no-restore
       - name: Lint
         working-directory: AlvorKit
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
         run: dotnet run --project scripts/AlvorKit.Script.Lint -- --repo-root ../Craftdig
