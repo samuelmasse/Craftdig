@@ -20,17 +20,15 @@ public class ServerClientLoop(
             ns.ConnectionGeneration = ++nextSocketId;
             ns.Tag = $"s{ns.ConnectionGeneration}";
 
-            clientThreadPool.Start((execution) => Loop(execution, ns));
-            clientThreadPool.Start((execution) => Push(execution, ns));
+            var receive = clientThreadPool.Start(execution => Loop(execution, ns));
+            var send = clientThreadPool.Start(execution => Push(execution, ns));
+            sockets.Add(new(ns, receive, send));
+            clientLimits.Pulse();
         }
     }
 
     private void Loop(ClientThreadExecution execution, NetSocket ns)
     {
-        sockets.Add(ns);
-        clientLimits.Pulse();
-        ns.SocketThread = execution;
-
         try
         {
             log.Debug("Socket {0} loop running on thread {1}", ns.Tag, execution.ClientThread.Id);
@@ -48,7 +46,6 @@ public class ServerClientLoop(
             log.Info("Socket {0} disconnected", ns.Tag);
 
             identitySessionEvents.PublishDisconnected(ns);
-            sockets.Remove(ns);
             clientLimits.Pulse();
         }
     }

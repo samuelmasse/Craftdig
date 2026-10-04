@@ -1,6 +1,6 @@
 namespace Craftdig;
 
-internal sealed class ServerPresenceSessions(
+public class ServerPresenceSessions(
     Log log,
     ServerPresenceMetrics metrics,
     int sessionCapacity,
@@ -36,6 +36,9 @@ internal sealed class ServerPresenceSessions(
             pendingRegistrations.RemoveAt(i);
             if (!registration.Connection.IsCanceled)
                 Apply(registration);
+
+            if (registration.Connection.IsCanceled)
+                registration.Connection.Release();
         }
     }
 
@@ -63,17 +66,22 @@ internal sealed class ServerPresenceSessions(
     public void Shutdown(ServerIdentitySessionEvents inbox)
     {
         inbox.StopAccepting();
+        RemoveDisconnected(inbox);
         while (inbox.TryTakeRegistration(out var registration))
             pendingRegistrations.Add(registration);
 
         foreach (var registration in pendingRegistrations)
+        {
             Close(registration.Connection);
+            registration.Connection.Release();
+        }
         pendingRegistrations.Clear();
 
         foreach (var session in sessions)
         {
             Close(session.Connection);
             session.Dispose();
+            session.Connection.Release();
         }
         sessions.Clear();
         byConnection.Clear();
@@ -172,13 +180,17 @@ internal sealed class ServerPresenceSessions(
     private void Remove(ServerPresenceConnection connection)
     {
         if (!byConnection.Remove(connection, out var session))
+        {
+            connection.Release();
             return;
+        }
 
         if (bySessionId.TryGetValue(connection.SessionId, out var indexed) && ReferenceEquals(indexed, session))
             bySessionId.Remove(connection.SessionId);
         sessions.Remove(session);
         session.Dispose();
         metrics.SetActiveSessions(sessions.Count);
+        connection.Release();
     }
 
     private static void Close(ServerPresenceConnection connection)

@@ -5,6 +5,7 @@ public class ModuleMultiplayerJoinAction(
     RootState state,
     ModuleEnts ents,
     ModuleScope scope,
+    ModuleWorldSession session,
     InjectorScopeGraph graph)
 {
     public void Run(PlayerSocket socket, PlayerIdentitySession identitySession)
@@ -16,8 +17,8 @@ public class ModuleMultiplayerJoinAction(
             "Remote world");
         graph.Run<WorldLoaderScope>(
             worldScope,
-            loader => loader.Get<WorldLoader>().Run(),
-            "World load");
+            "World load",
+            loader => loader.Get<WorldLoader>().Run());
 
         // For now just find the first dimension
         var dimension = ents.Set.First(x => x.IsDimension);
@@ -28,12 +29,12 @@ public class ModuleMultiplayerJoinAction(
             .Run(x => x.Get<DimensionChunkUnloaderHandlers>().Add(x.Get<DimensionChunkFrontendUnloader>().Unload));
         graph.Run<DimensionLoaderScope>(
             dimensionScope,
+            "Dimension load",
             loader =>
             {
                 loader.Get<DimensionLoader>().Run();
                 loader.Get<DimensionFrontendLoader>().Run();
-            },
-            "Dimension load");
+            });
         worldScope.Get<WorldEntArena>().Alloc().Mutate()
             .DimensionScope(dimensionScope)
             .IsDimensionScope(true)
@@ -45,6 +46,7 @@ public class ModuleMultiplayerJoinAction(
             .With(new PlayerEnt(dimensionScope.Get<DimensionEntArena>().Alloc()))
             .With(socket)
             .With(identitySession)
+            .Run(x => session.Load(x.Get<PlayerMultiplayerDisconnectAction>().Run))
             .Run(x => dimensionScope.Get<DimensionChunkUnloaderHandlers>().Add(x.Get<PlayerChunkClientUnloader>().Unload))
             .Run(x => x.Get<PlayerInventoryActions>().Enable())
             .Run(x => x.Get<PlayerIdentityRefresh>().Start())

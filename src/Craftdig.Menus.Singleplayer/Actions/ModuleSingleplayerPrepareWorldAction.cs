@@ -4,6 +4,7 @@ namespace Craftdig;
 public class ModuleSingleplayerPrepareWorldAction(
     ModuleEnts ents,
     ModuleScope scope,
+    ModuleWorldSession session,
     InjectorScopeGraph graph,
     ModuleReadWorldMetaAction readWorldMetaAction)
 {
@@ -16,12 +17,12 @@ public class ModuleSingleplayerPrepareWorldAction(
             .With(readWorldMetaAction.Read(paths));
         graph.Run<WorldLoaderScope>(
             worldScope,
+            "World load",
             loader =>
             {
                 loader.Get<WorldLoader>().Run();
                 loader.Get<WorldBackendLoader>().Run();
-            },
-            "World load");
+            });
 
         // For now just find the first dimension
         var dimension = ents.Set.First(x => x.IsDimension);
@@ -38,17 +39,18 @@ public class ModuleSingleplayerPrepareWorldAction(
             .Run(x => x.Get<DimensionChunkUnloaderHandlers>().Add(x.Get<DimensionEntChunkBackendUnloader>().Unload));
         graph.Run<DimensionLoaderScope>(
             dimensionScope,
+            "Dimension load",
             loader =>
             {
                 loader.Get<DimensionLoader>().Run();
                 loader.Get<DimensionBackendLoader>().Run();
                 loader.Get<DimensionFrontendLoader>().Run();
-            },
-            "Dimension load");
+            });
         worldScope.Get<WorldEntArena>().Alloc().Mutate()
             .DimensionScope(dimensionScope)
             .IsDimensionScope(true)
             .IsLoaded(true);
+        session.Load(worldScope.Get<WorldSingleplayerUnloadAction>().Run);
         return dimensionScope;
     }
 }

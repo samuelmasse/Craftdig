@@ -3,7 +3,8 @@ namespace Craftdig;
 [Module]
 public class ModuleEntsMut
 {
-    private readonly Dictionary<string, EntObj> ents = [];
+    private readonly EntArena arena = new();
+    private readonly Dictionary<string, EntMut> ents = [];
     private readonly List<EntMut> list = [];
     private readonly HashSet<EntMut> set = [];
 
@@ -15,20 +16,29 @@ public class ModuleEntsMut
         get
         {
             if (ents.TryGetValue(name, out var val))
-                return (EntMut)val;
+                return val;
 
-            var ent = new EntObj() { ModuleName = name };
+            EntMut ent = arena.Alloc();
+            ent.ModuleName = name;
             ents.Add(name, ent);
-            set.Add((EntMut)ent);
-            list.Add((EntMut)ent);
+            set.Add(ent);
+            list.Add(ent);
             ent.RuntimeIndex = list.Count;
 
-            return (EntMut)ent;
+            return ent;
         }
     }
 
     public EntMut this[int runtimeIndex] => list[runtimeIndex - 1];
 
     public bool Contains(string name) => ents.ContainsKey(name);
-    internal EntMut Get(string name) => (EntMut)ents[name];
+    internal EntMut Get(string name) => ents[name];
+
+    public void Unload()
+    {
+        ents.Clear();
+        set.Clear();
+        list.Clear();
+        arena.Dispose();
+    }
 }

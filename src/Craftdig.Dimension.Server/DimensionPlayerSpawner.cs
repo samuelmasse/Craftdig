@@ -31,6 +31,9 @@ public class DimensionPlayerSpawner(
 
     private void Spawn(NetSocket ns, Guid profileId)
     {
+        if (!ns.Connected)
+            return;
+
         if (ns.SocketWorldPlayer != default)
         {
             log.Warn("Player {0} tried to spawn again", ns.Tag);

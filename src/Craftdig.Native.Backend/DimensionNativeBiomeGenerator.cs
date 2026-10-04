@@ -33,7 +33,7 @@ public class DimensionNativeBiomeGenerator(ModuleNative m) : IBiomeGenerator
     {
         for (int sz = SectionHeight - 1; sz >= 0; sz--)
         {
-            if (blocks.Uniform(sz) == default || blocks.Uniform(sz).IsSolid)
+            if (!blocks.TryGetUniform(sz, out var uniform) || uniform.IsSolid)
                 return (sz + 1) * SectionSize - 1;
         }
 

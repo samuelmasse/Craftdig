@@ -1,10 +1,7 @@
 namespace Craftdig;
 
-public class ChunkBlocks
+public class ChunkBlocks(DimensionBlocksAllocator allocator)
 {
-    private readonly static EntObj Empty = new();
-
-    private readonly DimensionBlocksAllocator allocator;
     private readonly SectionBlocks[] sections = new SectionBlocks[SectionHeight];
 
     public Ent this[Vec3i index]
@@ -29,21 +26,18 @@ public class ChunkBlocks
         }
     }
 
-    public ChunkBlocks(DimensionBlocksAllocator allocator)
-    {
-        this.allocator = allocator;
-
-        for (int i = 0; i < sections.Length; i++)
-            Fill(i, (Ent)Empty);
-    }
-
     public Span<Ent> Slice(int sz)
     {
         Unpack(sz);
         return sections[sz].Data.Span;
     }
 
-    public Ent Uniform(int sz) => sections[sz].Uniform;
+    public bool TryGetUniform(int sz, out Ent uniform)
+    {
+        ref var section = ref sections[sz];
+        uniform = section.Uniform;
+        return section.Data.IsEmpty;
+    }
 
     public ReadOnlySpan<Ent> ReadSection(int sz, out Ent uniform)
     {
@@ -74,7 +68,7 @@ public class ChunkBlocks
     public bool Pack(int sz)
     {
         ref var section = ref sections[sz];
-        if (section.Uniform != default)
+        if (section.Data.IsEmpty)
             return false;
 
         var span = section.Data.Span;
@@ -92,7 +86,7 @@ public class ChunkBlocks
     public void Unpack(int sz)
     {
         ref var section = ref sections[sz];
-        if (section.Uniform == default)
+        if (!section.Data.IsEmpty)
             return;
 
         var alloc = allocator.Alloc();

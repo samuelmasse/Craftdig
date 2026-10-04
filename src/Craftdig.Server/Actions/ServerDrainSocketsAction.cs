@@ -9,7 +9,7 @@ public class ServerDrainSocketsAction(Log log, ServerSockets sockets, ServerClie
         sockets.ForEach(list.Add);
 
         list.ForEach(ns => ns.Disconnect());
-        clientThreadPool.Stop();
+        clientThreadPool.StopAndJoin();
 
         log.Info("Sockets drained");
     }

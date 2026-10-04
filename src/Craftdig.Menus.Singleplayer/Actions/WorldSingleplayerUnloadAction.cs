@@ -1,17 +1,23 @@
 namespace Craftdig;
 
-[Player]
-public class PlayerSingleplayerUnloadWorldAction(
+[World]
+public class WorldSingleplayerUnloadAction(
     WorldScope worldScope,
-    PlayerScope playerScope,
     WorldDimensionBag dimensionBag,
-    PlayerMetrics metrics,
     InjectorScopeGraph graph)
 {
+    private PlayerScope? playerScope;
+
+    public void Attach(PlayerScope player) => playerScope = player;
+
     public void Run()
     {
-        metrics.Stop();
-        graph.End(playerScope);
+        if (playerScope != null)
+        {
+            playerScope.Get<PlayerMetrics>().Stop();
+            graph.End(playerScope);
+            playerScope = null;
+        }
 
         foreach (var dimension in dimensionBag.Ents)
         {

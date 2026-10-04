@@ -3,92 +3,76 @@ namespace Craftdig;
 [Server]
 public class ServerClientThreadPool(Log log)
 {
-    private readonly ConcurrentBag<ClientThread> pool = [];
-    private volatile bool stop;
+    private readonly Lock gate = new();
+    private readonly Stack<ClientThread> pool = [];
+    private readonly List<ClientThread> workers = [];
+    private bool stop;
 
-    public void Start(Action<ClientThreadExecution> action)
+    public ClientThreadExecution Start(Action<ClientThreadExecution> action)
     {
-        if (!pool.TryTake(out var thread))
-            thread = Create();
-
-        thread.Action = action;
-        thread.Semaphore.Release();
+        lock (gate)
+        {
+            var worker = pool.Count == 0 ? Create() : pool.Pop();
+            var execution = new ClientThreadExecution(worker, worker.CurrentExecutionId);
+            worker.Action = action;
+            worker.Semaphore.Release();
+            return execution;
+        }
     }
 
-    public void Stop()
+    public void StopAndJoin()
     {
-        log.Debug("Stopping {0} client threads", pool.Count);
+        ClientThread[] active;
 
-        stop = true;
-        int stopped = 0;
-
-        while (!pool.IsEmpty)
+        lock (gate)
         {
-            if (pool.TryTake(out var thread))
-            {
-                thread.Semaphore.Release();
-                stopped++;
-            }
+            stop = true;
+            active = workers.ToArray();
+
+            while (pool.TryPop(out var worker))
+                worker.Semaphore.Release();
         }
 
-        log.Debug("Stopped {0} client threads", stopped);
+        foreach (var worker in active)
+            worker.Worker.Join();
+
+        log.Info("Client threads stopped");
     }
 
     private ClientThread Create()
     {
-        var clientThread = new ClientThread();
-        var thread = new Thread(() => Loop(clientThread));
-        thread.Start();
-        return clientThread;
+        var worker = new ClientThread();
+        worker.Worker = new Thread(() => Loop(worker));
+        workers.Add(worker);
+        worker.Worker.Start();
+        return worker;
     }
 
-    private void Loop(ClientThread thread)
+    private void Loop(ClientThread worker)
     {
-        log.Debug("Client thread {0} started", thread.Id);
-
         while (true)
         {
-            log.Debug("Client thread {0} waiting", thread.Id);
-            if (stop)
-            {
-                log.Debug("Client thread {0} stopped", thread.Id);
-                break;
-            }
-            thread.Semaphore.Wait();
-            if (stop)
-            {
-                log.Debug("Client thread {0} stopped", thread.Id);
-                break;
-            }
+            worker.Semaphore.Wait();
 
-            log.Debug("Client thread {0} running execution {1}", thread.Id, thread.CurrentExecutionId);
-            thread.Action?.Invoke(new(thread, thread.CurrentExecutionId));
-            thread.Action = null;
-            thread.CurrentExecutionId++;
-
-            if (!stop && pool.Count < 32)
-            {
-                log.Debug("Client thread {0} returning to pool", thread.Id);
-                pool.Add(thread);
-            }
-            else
-            {
-                log.Debug("Client thread {0} dropped", thread.Id);
+            if (worker.Action == null)
                 break;
+
+            worker.Action(new(worker, worker.CurrentExecutionId));
+            worker.Action = null;
+            worker.Complete();
+
+            lock (gate)
+            {
+                if (stop || pool.Count >= 32)
+                    break;
+
+                pool.Push(worker);
             }
         }
+
+        worker.Semaphore.Dispose();
+
+        lock (gate)
+            workers.Remove(worker);
     }
 }
-
-public class ClientThread
-{
-    private static long MaxId;
-
-    public long Id { get; } = ++MaxId;
-    public SemaphoreSlim Semaphore { get; } = new(0);
-    public bool Stop { get; set; }
-    public long CurrentExecutionId { get; set; } = 1;
-    public Action<ClientThreadExecution>? Action { get; set; }
-}
-
-public readonly record struct ClientThreadExecution(ClientThread ClientThread, long ExecutionId);

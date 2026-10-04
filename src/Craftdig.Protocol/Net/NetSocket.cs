@@ -2,27 +2,30 @@ namespace Craftdig;
 
 public class NetSocket(Log log, TcpClient tcp, Stream stream) : IEntMut
 {
-    private readonly EntObj ent = new();
+    private readonly EntPtr ent = new();
     private byte[] buffer = [];
     private long maxMessageSize = ProtocolLimits.MaxMessageSize;
+    private TransportState transport;
+    private OutputState output = new()
+    {
+        Semaphore = new(0),
+        Segments =
+        [
+            new byte[ProtocolLimits.SegmentSize],
+            new byte[ProtocolLimits.SegmentSize],
+            new byte[ProtocolLimits.SegmentSize],
+            new byte[ProtocolLimits.SegmentSize],
+        ],
+        CommitIndex = [0, 0, 0, 0],
+        SendCommitIndex = [0, 0, 0, 0],
+    };
 
-    private readonly SemaphoreSlim outSemaphore = new(0);
-    private readonly byte[][] outSegments =
-    [
-        new byte[ProtocolLimits.SegmentSize],
-        new byte[ProtocolLimits.SegmentSize],
-        new byte[ProtocolLimits.SegmentSize],
-        new byte[ProtocolLimits.SegmentSize]
-    ];
-    private readonly int[] outSegmentCommitIndex = [0, 0, 0, 0];
-    private readonly int[] outSegmentSendCommitIndex = [0, 0, 0, 0];
-    private long outSegmentIndex;
-    private long outSegmentSendIndex;
-
-    public bool Connected => tcp.Connected;
-    public bool IsTransportSecure;
+    public bool Connected => Volatile.Read(ref transport.Disconnected) == 0 && tcp.Connected;
     public EndPoint? Ip => tcp.Client.RemoteEndPoint;
+    public EntHandle Handle => ent.Handle;
+    public bool IsAlive => ent.IsAlive;
     public ref long MaxMessageSize => ref maxMessageSize;
+    public ref bool IsTransportSecure => ref transport.IsSecure;
 
     public bool TryGet(out NetMessage msg)
     {
@@ -61,7 +64,7 @@ public class NetSocket(Log log, TcpClient tcp, Stream stream) : IEntMut
         {
             try
             {
-                outSemaphore.Wait(ct);
+                output.Semaphore.Wait(ct);
             }
             catch (OperationCanceledException)
             {
@@ -70,22 +73,22 @@ public class NetSocket(Log log, TcpClient tcp, Stream stream) : IEntMut
 
             while (Connected)
             {
-                long rindex = outSegmentSendIndex % outSegments.Length;
-                var segment = outSegments[rindex];
-                var commitIndex = outSegmentCommitIndex[rindex];
-                var sendCommitIndex = outSegmentSendCommitIndex[rindex];
+                long rindex = output.SendIndex % output.Segments.Length;
+                var segment = output.Segments[rindex];
+                var commitIndex = output.CommitIndex[rindex];
+                var sendCommitIndex = output.SendCommitIndex[rindex];
 
                 if (sendCommitIndex < commitIndex)
                 {
                     var data = segment.AsSpan()[sendCommitIndex..commitIndex];
                     stream.Write(data);
-                    outSegmentSendCommitIndex[rindex] = commitIndex;
+                    output.SendCommitIndex[rindex] = commitIndex;
                 }
-                else if (outSegmentIndex > outSegmentSendIndex)
+                else if (output.SegmentIndex > output.SendIndex)
                 {
-                    outSegmentCommitIndex[rindex] = 0;
-                    outSegmentSendCommitIndex[rindex] = 0;
-                    outSegmentSendIndex++;
+                    output.CommitIndex[rindex] = 0;
+                    output.SendCommitIndex[rindex] = 0;
+                    output.SendIndex++;
                 }
                 else break;
             }
@@ -104,15 +107,15 @@ public class NetSocket(Log log, TcpClient tcp, Stream stream) : IEntMut
 
             int needed = tb.Length + sb.Length + cmd.Length + data.Length;
 
-            var segment = outSegments[outSegmentIndex % outSegments.Length];
-            var commitIndex = outSegmentCommitIndex[outSegmentIndex % outSegments.Length];
+            var segment = output.Segments[output.SegmentIndex % output.Segments.Length];
+            var commitIndex = output.CommitIndex[output.SegmentIndex % output.Segments.Length];
             int available = segment.Length - commitIndex;
 
             if (available < needed)
             {
-                long nextSegmentIndex = outSegmentIndex + 1;
-                segment = outSegments[nextSegmentIndex % outSegments.Length];
-                commitIndex = outSegmentCommitIndex[nextSegmentIndex % outSegments.Length];
+                long nextSegmentIndex = output.SegmentIndex + 1;
+                segment = output.Segments[nextSegmentIndex % output.Segments.Length];
+                commitIndex = output.CommitIndex[nextSegmentIndex % output.Segments.Length];
 
                 if (needed > segment.Length || commitIndex != 0)
                 {
@@ -120,15 +123,15 @@ public class NetSocket(Log log, TcpClient tcp, Stream stream) : IEntMut
                     return false;
                 }
 
-                outSegmentIndex = nextSegmentIndex;
+                output.SegmentIndex = nextSegmentIndex;
             }
 
             Write(tb);
             Write(sb);
             Write(cmd);
             Write(data);
-            outSegmentCommitIndex[outSegmentIndex % outSegments.Length] += needed;
-            outSemaphore.Release();
+            output.CommitIndex[output.SegmentIndex % output.Segments.Length] += needed;
+            output.Semaphore.Release();
             return true;
 
             void Write(ReadOnlySpan<byte> bytes)
@@ -221,15 +224,46 @@ public class NetSocket(Log log, TcpClient tcp, Stream stream) : IEntMut
 
     public void Disconnect()
     {
-        try { stream.Dispose(); } catch { }
-        try { tcp.Dispose(); } catch { }
-        outSemaphore.Release(ushort.MaxValue);
+        lock (this)
+        {
+            if (transport.Disconnected != 0)
+                return;
+
+            Volatile.Write(ref transport.Disconnected, 1);
+            stream.Dispose();
+            tcp.Dispose();
+            output.Semaphore.Release();
+        }
     }
 
-    public EntHandle Handle => ent.Handle;
-    public bool IsAlive => ent.IsAlive;
     public bool Has<T, N>() => ent.Has<T, N>();
     public T? Get<T, N>() => ent.Get<T, N>();
     public void Set<T, N>(in T value) => ent.Set<T, N>(value);
     public bool Unset<T, N>() => ent.Unset<T, N>();
+
+    // The owner calls this only after I/O and every metadata consumer have finished.
+    public void ReleaseState()
+    {
+        lock (this)
+        {
+            ent.Dispose();
+            output.Semaphore.Dispose();
+        }
+    }
+
+    private struct TransportState
+    {
+        public int Disconnected;
+        public bool IsSecure;
+    }
+
+    private struct OutputState
+    {
+        public SemaphoreSlim Semaphore;
+        public byte[][] Segments;
+        public int[] CommitIndex;
+        public int[] SendCommitIndex;
+        public long SegmentIndex;
+        public long SendIndex;
+    }
 }

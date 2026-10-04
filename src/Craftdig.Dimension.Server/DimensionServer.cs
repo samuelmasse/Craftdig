@@ -47,4 +47,13 @@ public class DimensionServer(
         sectionReminder.Tick();
         positionStreamer.Tick();
     }
+
+    public void DrainSockets()
+    {
+        playerSpawner.Tick();
+        forgottenSections.Tick();
+        forgottenChunks.Tick();
+        playerSocketsCleaner.Tick();
+        inventoryActions.Tick();
+    }
 }

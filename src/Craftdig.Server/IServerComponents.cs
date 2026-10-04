@@ -4,7 +4,6 @@ namespace Craftdig;
 public interface IServerComponents
 {
     // Socket
-    ClientThreadExecution SocketThread { get; set; }
     DateTime ConnectedTime { get; set; }
     long ConnectionGeneration { get; set; }
     ServerAuthChallenge? AuthChallenge { get; set; }

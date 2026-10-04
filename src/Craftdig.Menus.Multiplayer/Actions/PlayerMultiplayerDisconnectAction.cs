@@ -4,6 +4,7 @@ namespace Craftdig;
 public class PlayerMultiplayerDisconnectAction(
     WorldScope worldScope,
     PlayerScope playerScope,
+    PlayerSocket socket,
     WorldDimensionBag dimensionBag,
     PlayerPresenceClient presenceClient,
     PlayerIdentityRefresh identityRefresh,
@@ -43,5 +44,6 @@ public class PlayerMultiplayerDisconnectAction(
                 loader.Get<WorldFrontendUnloader>().Run();
                 loader.Get<WorldUnloader>().Run();
             });
+        socket.ReleaseState();
     }
 }

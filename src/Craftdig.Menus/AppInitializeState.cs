@@ -8,6 +8,7 @@ public class AppInitializeState(
     RootControlsToml controlsToml,
     RootScripts scripts,
     RootUi ui,
+    RootUnload unload,
     AppScope scope,
     InjectorScopeGraph graph,
     AppFiles files,
@@ -34,15 +35,17 @@ public class AppInitializeState(
         var module = graph.Scope<ModuleScope>(
             scope,
             "Craftdig module");
+        unload.Add(() => graph.End(module, ending => ending.Get<ModuleEntsMut>().Unload()));
+        unload.Add(module.Get<ModuleWorldSession>().Unload);
         module.Handler(module.Get<ModuleEntMutInjector>());
         graph.Run<ModuleLoaderScope>(
             module,
+            "Module load",
             loader =>
             {
                 loader.Get<ModuleLoader>().Run();
                 loader.Get<ModuleFrontendLoader>().Run();
-            },
-            "Module load");
+            });
         reset.Register(
             () => state.Current =
                 module.New<ModuleMenuState>());

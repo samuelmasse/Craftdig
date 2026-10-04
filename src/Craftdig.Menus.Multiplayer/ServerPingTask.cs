@@ -1,10 +1,17 @@
 namespace Craftdig;
 
-public class ServerPingTask
+public class ServerPingTask(ServerAddress address)
 {
-    public required ServerAddress Address { get; init; }
-    public CancellationTokenSource Token { get; } = new();
-    public Thread? Thread { get; set; }
-    public NetSocket? Socket { get; set; }
-    public ServerPingResult? Result { get; set; }
+    private readonly CancellationTokenSource token = new();
+    private readonly TcpClient tcp = new() { NoDelay = true };
+    private Thread? thread;
+    private NetSocket? socket;
+    private ServerPingResult? result;
+
+    public ServerAddress Address => address;
+    public CancellationTokenSource Token => token;
+    public TcpClient Tcp => tcp;
+    public ref Thread? Thread => ref thread;
+    public ref NetSocket? Socket => ref socket;
+    public ref ServerPingResult? Result => ref result;
 }

@@ -131,6 +131,7 @@ public sealed class ServerPresencePerformanceTest
             $"Inbox burst took {stopwatch.Elapsed.TotalMilliseconds:F3} ms.");
         Assert.IsTrue(allocated < 8_000_000L, $"Inbox burst allocated {allocated} bytes.");
         socket.Disconnect();
+        socket.ReleaseState();
     }
 
     private static PresenceProofRecord CreateProof()

@@ -6,13 +6,13 @@ public class PlayerMultiplayerLoadingState(
     RootUi ui,
     RootBackbuffer backbuffer,
     AppStyle s,
+    ModuleWorldSession session,
     DimensionFrontend dimensionFrontend,
     PlayerScope scope,
     PlayerClient client,
     PlayerEntSync entSync,
     PlayerTerrainLoading terrainLoading,
     PlayerSocket socket,
-    PlayerMultiplayerDisconnectAction disconnect,
     ModuleMainBackgroundMenu mainBackgroundMenu,
     AppTerrainLoadingMenu terrainLoadingMenu) : State
 {
@@ -46,7 +46,7 @@ public class PlayerMultiplayerLoadingState(
         if (!socket.Connected)
         {
             var disconnected = scope.New<PlayerMultiplayerDisconnectedState>();
-            disconnect.Run();
+            session.Unload();
             state.Current = disconnected;
             return;
         }

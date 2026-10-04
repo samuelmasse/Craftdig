@@ -2,6 +2,7 @@ namespace Craftdig;
 
 [Player]
 public class PlayerSingleplayerState(
+    ModuleWorldSession session,
     WorldTick tick,
     WorldBackend worldBackend,
     DimensionBackend backend,
@@ -11,7 +12,6 @@ public class PlayerSingleplayerState(
     PlayerEnt ent,
     PlayerCamera camera,
     PlayerCommonState commonState,
-    PlayerSingleplayerUnloadWorldAction singleplayerUnloadWorldAction,
     PlayerScreenshot screenshot) : State
 {
     private bool initialTick = true;
@@ -28,7 +28,7 @@ public class PlayerSingleplayerState(
     {
         screenshot.Run();
         commonState.Unload();
-        singleplayerUnloadWorldAction.Run();
+        session.Unload();
     }
 
     public override void Update(double time)

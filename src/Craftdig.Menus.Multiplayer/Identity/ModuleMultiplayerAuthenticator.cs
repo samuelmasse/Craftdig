@@ -7,15 +7,19 @@ public class ModuleMultiplayerAuthenticator(
     ModuleIdentityTicketClient identityTickets)
 {
     private static readonly TimeSpan ExchangeTimeout = TimeSpan.FromSeconds(20);
+    private CancellationTokenSource? pushCancellation;
+    private ManualResetEventSlim? resultEvent;
+    private Thread? loopThread;
+    private Thread? pushThread;
 
     public void Authenticate(NetSocket socket, PlayerIdentitySession identitySession, CancellationToken cancellationToken)
     {
         var loop = new NetLoop(log);
-        using var pushCancellation = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
-        using var resultEvent = ListenForResult(loop);
+        pushCancellation = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
+        resultEvent = ListenForResult(loop);
         var nonceListener = new NonceListener(log);
         loop.RegisterDecoded<ReadyAuthCommand, Nonce256>(ReadyAuthCommandCodec.TryRead, nonceListener.Receive);
-        var (loopThread, pushThread) = StartExchangeThreads(loop, socket, pushCancellation);
+        (loopThread, pushThread) = StartExchangeThreads(loop, socket, pushCancellation);
 
         var stopwatch = Stopwatch.StartNew();
         var pendingTicket = SendCredentials(socket, identitySession, nonceListener, loopThread, stopwatch, cancellationToken);
@@ -37,8 +41,20 @@ public class ModuleMultiplayerAuthenticator(
 
         log.Info("Multiplayer server accepted authentication");
 
-        loopThread.Join();
-        pushThread.Join();
+        Stop();
+    }
+
+    public void Stop()
+    {
+        pushCancellation?.Cancel();
+        loopThread?.Join();
+        pushThread?.Join();
+        resultEvent?.Dispose();
+        pushCancellation?.Dispose();
+        loopThread = null;
+        pushThread = null;
+        resultEvent = null;
+        pushCancellation = null;
     }
 
     private static (Thread Receive, Thread Push) StartExchangeThreads(

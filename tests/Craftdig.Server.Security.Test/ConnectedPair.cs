@@ -32,6 +32,7 @@ internal sealed class ConnectedPair : IDisposable
     public void Dispose()
     {
         Server.Disconnect();
+        Server.ReleaseState();
         server.Dispose();
         client.Dispose();
         listener.Dispose();

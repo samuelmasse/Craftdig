@@ -4,6 +4,7 @@ namespace Craftdig;
 public class PlayerMultiplayerState(
     RootState state,
     RootKeyboard keyboard,
+    ModuleWorldSession session,
     WorldTick tick,
     WorldClock clock,
     DimensionContext context,
@@ -14,7 +15,6 @@ public class PlayerMultiplayerState(
     PlayerFrontend player,
     PlayerCommonState commonState,
     PlayerIdentityCache identityCache,
-    PlayerMultiplayerDisconnectAction multiplayerDisconnectAction,
     PlayerSlowTickReceiver slowTickReceiver,
     PlayerClient client,
     PlayerMultiplayerDebugMenu multiplayerDebugMenu,
@@ -41,7 +41,7 @@ public class PlayerMultiplayerState(
     {
         identityCache.SetPlayerListOpen(false);
         commonState.Unload();
-        multiplayerDisconnectAction.Run();
+        session.Unload();
     }
 
     public override void Update(double time)

@@ -4,10 +4,12 @@ namespace Craftdig;
 public class ServerTick(
     WorldDimensionBag dimensions,
     WorldServer world,
+    ServerSockets sockets,
     ServerKicker kicker)
 {
     public void Tick()
     {
+        sockets.CollectCompleted();
         kicker.Tick();
         world.Tick();
 
@@ -18,5 +20,7 @@ public class ServerTick(
 
         foreach (var dimension in dimensions.Ents)
             dimension.DimensionScope.Get<DimensionServer>().Stream();
+
+        sockets.ReleaseCompleted();
     }
 }

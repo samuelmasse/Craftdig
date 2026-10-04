@@ -4,7 +4,6 @@ namespace Craftdig;
 public class ServerClientLimits(Log log, ServerSockets sockets)
 {
     private readonly ManualResetEventSlim gate = new(true);
-    private readonly List<NetSocket> buffer = [];
     private bool stop;
 
     public void Pulse()
@@ -14,14 +13,12 @@ public class ServerClientLimits(Log log, ServerSockets sockets)
             if (stop)
                 return;
 
-            sockets.ForEach(buffer.Add);
-
             int unauthCount = 0;
-            foreach (var socket in buffer)
+            sockets.ForEach(socket =>
             {
                 if (!socket.IsAuthenticated)
                     unauthCount++;
-            }
+            });
 
             if (unauthCount > 15)
             {
@@ -40,7 +37,6 @@ public class ServerClientLimits(Log log, ServerSockets sockets)
                 }
             }
 
-            buffer.Clear();
         }
     }
 

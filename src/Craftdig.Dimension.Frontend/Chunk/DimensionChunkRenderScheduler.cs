@@ -53,8 +53,7 @@ public class DimensionChunkRenderScheduler(DimensionChunks chunks, DimensionBloc
 
     private bool ShouldMesh(Vec2i cloc, ChunkBlocks blocks, int sz)
     {
-        var uniform = blocks.Uniform(sz);
-        if (uniform == default)
+        if (!blocks.TryGetUniform(sz, out var uniform))
             return true;
 
         if (!uniform.IsSolid)
@@ -76,8 +75,7 @@ public class DimensionChunkRenderScheduler(DimensionChunks chunks, DimensionBloc
 
     private bool IsUniformSolid(ChunkBlocks blocks, int sz)
     {
-        var uniform = blocks.Uniform(sz);
-        return uniform != default && uniform.IsSolid;
+        return blocks.TryGetUniform(sz, out var uniform) && uniform.IsSolid;
     }
 
     private bool IsUnavailable(Vec2i cloc) =>

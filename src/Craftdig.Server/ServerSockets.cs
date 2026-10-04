@@ -3,21 +3,42 @@ namespace Craftdig;
 [Server]
 public class ServerSockets
 {
-    private readonly List<NetSocket> list = [];
+    private readonly List<ServerSocketConnection> list = [];
+    private readonly List<ServerSocketConnection> completed = [];
 
-    public void Add(NetSocket ns)
+    public void Add(ServerSocketConnection connection)
     {
         lock (this)
         {
-            list.Add(ns);
+            list.Add(connection);
+            completed.EnsureCapacity(list.Count);
         }
     }
 
-    public void Remove(NetSocket ns)
+    // Capture before dimension queues run: completed I/O cannot enqueue another request.
+    public void CollectCompleted()
     {
         lock (this)
         {
-            list.Remove(ns);
+            foreach (var connection in list)
+            {
+                if (connection.IsCompleted && connection.Socket.PresenceConnection?.IsReleased != false)
+                    completed.Add(connection);
+            }
+        }
+    }
+
+    public void ReleaseCompleted()
+    {
+        lock (this)
+        {
+            foreach (var connection in completed)
+            {
+                list.Remove(connection);
+                connection.Socket.ReleaseState();
+            }
+
+            completed.Clear();
         }
     }
 
@@ -26,7 +47,10 @@ public class ServerSockets
         lock (this)
         {
             foreach (var item in list)
-                handler(item);
+            {
+                if (item.Socket.Connected)
+                    handler(item.Socket);
+            }
         }
     }
 }

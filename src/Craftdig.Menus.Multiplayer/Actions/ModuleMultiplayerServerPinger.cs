@@ -1,17 +1,30 @@
 namespace Craftdig;
 
 [Module]
-public class ModuleMultiplayerServerPinger(Log log, AppClientOptions clientOptions, ModuleMultiplayerServerCache serverCache)
+public class ModuleMultiplayerServerPinger
 {
+    private readonly Log log;
+    private readonly AppClientOptions clientOptions;
+    private readonly ModuleMultiplayerServerCache serverCache;
     private readonly Dictionary<ServerAddress, ServerPingTask> tasks = [];
 
     public ServerPingResult? this[ServerAddress address] => tasks[address].Result;
 
+    public ModuleMultiplayerServerPinger(
+        Log log,
+        RootUnload unload,
+        AppClientOptions clientOptions,
+        ModuleMultiplayerServerCache serverCache)
+    {
+        this.log = log;
+        this.clientOptions = clientOptions;
+        this.serverCache = serverCache;
+        unload.Add(CancelAll);
+    }
+
     public void PingAll(ReadOnlySpan<ServerEntry> servers)
     {
         CancelAll();
-
-        tasks.Clear();
 
         foreach (var server in servers)
             PingOne(server.Address);
@@ -21,8 +34,15 @@ public class ModuleMultiplayerServerPinger(Log log, AppClientOptions clientOptio
     {
         foreach (var task in tasks.Values)
         {
-            task.Token?.Cancel();
+            task.Token.Cancel();
             task.Socket?.Disconnect();
+            task.Tcp.Dispose();
+        }
+
+        foreach (var task in tasks.Values)
+        {
+            task.Thread?.Join();
+            task.Token.Dispose();
         }
 
         tasks.Clear();
@@ -33,7 +53,7 @@ public class ModuleMultiplayerServerPinger(Log log, AppClientOptions clientOptio
         if (tasks.ContainsKey(address))
             return;
 
-        var task = new ServerPingTask { Address = address };
+        var task = new ServerPingTask(address);
 
         task.Thread = new Thread(() => RunPingTask(task));
         tasks[address] = task;
@@ -42,54 +62,19 @@ public class ModuleMultiplayerServerPinger(Log log, AppClientOptions clientOptio
 
     private void RunPingTask(ServerPingTask task)
     {
-        TcpClient? tcp = null;
         NetSocket? socket = null;
+        Thread? loopThread = null;
+        Thread? pushThread = null;
+        using var done = new ManualResetEventSlim(false);
 
         try
         {
-            tcp = new TcpClient() { NoDelay = true };
-            tcp.Connect(task.Address.Host, task.Address.Port);
-
-            socket = new(
-                log,
-                tcp,
-                clientOptions.UseRawTcp
-                    ? tcp.GetStream()
-                    : ClientTls.Connect(log, tcp, task.Address.Host));
-
-            var loop = new NetLoop(log);
-            var done = new ManualResetEventSlim(false);
-            TimeSpan? ping = null;
-            int? maxPlayers = null;
-            int? currentPlayers = null;
-            string? description = null;
-            byte[]? iconData = null;
-
-            loop.Register((NetSocket ns, PongCommand cmd) =>
-            {
-                ping = DateTimeOffset.UtcNow - DateTimeOffset.FromUnixTimeMilliseconds(cmd.Ping.Timestamp);
-            });
-
-            loop.Register((NetSocket ns, ServerPopulationCommand cmd) =>
-            {
-                maxPlayers = cmd.MaxPlayers;
-                currentPlayers = cmd.CurrentPlayers;
-            });
-
-            loop.Register((NetSocket ns, ServerDescriptionCommand cmd, ReadOnlySpan<byte> data) =>
-            {
-                description = Encoding.UTF8.GetString(data);
-            });
-
-            loop.Register((NetSocket ns, ServerIconCommand cmd, ReadOnlySpan<byte> data) =>
-            {
-                iconData = data.ToArray();
-            });
-
-            loop.Register<ServerStatusDoneCommand>(done.Set);
-
-            var loopThread = new Thread(() => { try { loop.Run(socket); } catch { } });
-            var pushThread = new Thread(() => { try { socket.Push(task.Token.Token); } catch { } });
+            socket = Connect(task);
+            task.Socket = socket;
+            var result = new PingReply();
+            var loop = CreateLoop(result, done);
+            loopThread = new Thread(() => { try { loop.Run(socket); } catch { } });
+            pushThread = new Thread(() => { try { socket.Push(task.Token.Token); } catch { } });
             loopThread.Start();
             pushThread.Start();
 
@@ -100,27 +85,64 @@ public class ModuleMultiplayerServerPinger(Log log, AppClientOptions clientOptio
                 IconHash = serverCache.IconHash(task.Address)
             });
             done.Wait(2000, task.Token.Token);
-            task.Result = new()
-            {
-                Success = ping != null,
-                Ping = ping,
-                MaxPlayers = maxPlayers,
-                CurrentPlayers = currentPlayers,
-                Description = description,
-                IconData = iconData
-            };
-
+            task.Result = result.Snapshot();
             serverCache.Save(task.Address, task.Result);
-
-            socket.Disconnect();
-            loopThread.Join();
-            pushThread.Join();
         }
         catch
         {
             task.Result = new() { Success = false };
-            socket?.Disconnect();
-            tcp?.Dispose();
         }
+
+        socket?.Disconnect();
+        loopThread?.Join();
+        pushThread?.Join();
+        task.Socket = null;
+        socket?.ReleaseState();
+        task.Tcp.Dispose();
+    }
+
+    private NetSocket Connect(ServerPingTask task)
+    {
+        var tcp = task.Tcp;
+        tcp.ConnectAsync(task.Address.Host, task.Address.Port, task.Token.Token).GetAwaiter().GetResult();
+        Stream stream = clientOptions.UseRawTcp ? tcp.GetStream() : ClientTls.Connect(log, tcp, task.Address.Host);
+        return new(log, tcp, stream);
+    }
+
+    private NetLoop CreateLoop(PingReply result, ManualResetEventSlim done)
+    {
+        var loop = new NetLoop(log);
+        loop.Register((NetSocket ns, PongCommand cmd) =>
+            result.Ping = DateTimeOffset.UtcNow - DateTimeOffset.FromUnixTimeMilliseconds(cmd.Ping.Timestamp));
+        loop.Register((NetSocket ns, ServerPopulationCommand cmd) =>
+        {
+            result.MaxPlayers = cmd.MaxPlayers;
+            result.CurrentPlayers = cmd.CurrentPlayers;
+        });
+        loop.Register((NetSocket ns, ServerDescriptionCommand cmd, ReadOnlySpan<byte> data) =>
+            result.Description = Encoding.UTF8.GetString(data));
+        loop.Register((NetSocket ns, ServerIconCommand cmd, ReadOnlySpan<byte> data) =>
+            result.IconData = data.ToArray());
+        loop.Register<ServerStatusDoneCommand>(done.Set);
+        return loop;
+    }
+
+    private record PingReply
+    {
+        public TimeSpan? Ping { get; set; }
+        public int? MaxPlayers { get; set; }
+        public int? CurrentPlayers { get; set; }
+        public string? Description { get; set; }
+        public byte[]? IconData { get; set; }
+
+        public ServerPingResult Snapshot() => new()
+        {
+            Success = Ping != null,
+            Ping = Ping,
+            MaxPlayers = MaxPlayers,
+            CurrentPlayers = CurrentPlayers,
+            Description = Description,
+            IconData = IconData,
+        };
     }
 }

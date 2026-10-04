@@ -29,7 +29,7 @@ public abstract class EntSyncCatalog
         {
             var entry = entries[i];
             components[i] = Create(
-                new(entry.Property.PropertyType, entry.NameType),
+                new(entry.Property.PropertyType, entry.NameType, false),
                 i,
                 entry.Attribute.Audience,
                 entry.Attribute.MaximumCount);

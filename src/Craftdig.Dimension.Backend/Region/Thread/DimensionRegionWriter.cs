@@ -18,8 +18,8 @@ public class DimensionRegionWriter(
         var offset = sloc - state.Origin;
         ref var alloc = ref state.Index[offset];
 
-        if (blocks.Uniform(sz) != default)
-            EncodeIntoBuffer(blocks.Uniform(sz));
+        if (blocks.TryGetUniform(sz, out var uniform))
+            EncodeIntoBuffer(uniform);
         else EncodeIntoBuffer(blocks.Slice(sz));
 
         if (alloc.Bucket != 0)

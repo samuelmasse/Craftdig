@@ -20,8 +20,8 @@ public class RootBootState(
             .With(x => new AppMods(x.Get<AppModFinder>().Find()));
         graph.Run<AppLoaderScope>(
             app,
-            loader => loader.Get<AppFrontendLoader>().Run(),
-            "App load");
+            "App load",
+            loader => loader.Get<AppFrontendLoader>().Run());
         scripts.Add(app.Get<AppScript>());
         state.Current = app.New<AppInitializeState>();
     }

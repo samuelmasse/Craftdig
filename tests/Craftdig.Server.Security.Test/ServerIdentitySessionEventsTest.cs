@@ -34,6 +34,8 @@ public sealed class ServerIdentitySessionEventsTest
         {
             firstSocket.Disconnect();
             secondSocket.Disconnect();
+            firstSocket.ReleaseState();
+            secondSocket.ReleaseState();
         }
 
         var sessionEvents = new ServerIdentitySessionEvents(new() { MaxPlayers = 2 });
@@ -54,6 +56,8 @@ public sealed class ServerIdentitySessionEventsTest
         {
             firstSocket.Disconnect();
             secondSocket.Disconnect();
+            firstSocket.ReleaseState();
+            secondSocket.ReleaseState();
         }
     }
 
@@ -81,6 +85,7 @@ public sealed class ServerIdentitySessionEventsTest
         finally
         {
             socket.Disconnect();
+            socket.ReleaseState();
         }
     }
 

@@ -2,7 +2,6 @@ namespace Craftdig;
 
 [Module]
 public class ModuleMultiplayerConnectingMenu(
-    Log log,
     AppStyle s,
     ModuleMultiplayerConnectAction multiplayerConnectAction,
     ModuleMultiplayerJoinAction multiplayerJoinAction)
@@ -29,14 +28,10 @@ public class ModuleMultiplayerConnectingMenu(
                         return;
 
                     if (multiplayerConnectAction.TryTakeConnection(
-                            out var tcp,
-                            out var stream,
+                            out var socket,
                             out var identitySession))
                     {
-                        multiplayerJoinAction.Run(new(
-                            log,
-                            tcp,
-                            stream), identitySession);
+                        multiplayerJoinAction.Run(socket, identitySession);
                     }
                 });
 
