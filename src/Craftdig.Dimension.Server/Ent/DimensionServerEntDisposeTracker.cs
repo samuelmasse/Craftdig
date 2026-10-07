@@ -6,7 +6,7 @@ public class DimensionServerEntDisposeTracker(
     DimensionSockets sockets,
     DimensionEntDisposals disposals)
 {
-    public void InterceptDispose(EntMutIdx ent)
+    public void Capture(EntMutIdx ent)
     {
         NetSocket? owner = null;
         foreach (var socket in sockets.Span)

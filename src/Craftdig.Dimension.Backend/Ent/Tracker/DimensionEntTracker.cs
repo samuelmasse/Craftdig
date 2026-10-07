@@ -1,20 +1,15 @@
 namespace Craftdig;
 
 [Dimension]
-public partial class DimensionEntTracker(
+public class DimensionEntTracker(
     DimensionIndexedComponents indexedComponents,
     DimensionScope scope,
-    DimensionEntIdxContextBuilder context)
+    DimensionEntIdxContext context)
 {
-    private int index;
-
-    public void Tick()
+    public void Register()
     {
-        while (index < indexedComponents.Components.Length)
-        {
-            StartTracking(indexedComponents.Components[index]);
-            index++;
-        }
+        foreach (var component in indexedComponents.Components)
+            StartTracking(component);
     }
 
     private void StartTracking(EntComponent component)

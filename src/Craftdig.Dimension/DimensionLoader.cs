@@ -2,24 +2,24 @@ namespace Craftdig;
 
 [DimensionLoader]
 public class DimensionLoader(
-    DimensionEntIdxContextBuilder context,
+    DimensionEntIdxContext context,
     DimensionEntIndex entIndex,
-    DimensionChunkEntIdxContextBuilder chunkContext,
-    DimensionChunkBagMut chunkBag,
-    DimensionPlayerBagMut playerBag,
-    DimensionRigidBagMut rigidBag,
-    DimensionSeerBagMut seerBag,
+    DimensionChunkEntIdxContext chunkContext,
+    DimensionChunkBag chunkBag,
+    DimensionPlayerBag playerBag,
+    DimensionRigidBag rigidBag,
+    DimensionSeerBag seerBag,
     DimensionChunkRigids chunkRigids)
 {
     public void Run()
     {
-        context.AddPreDispose(entIndex.InterceptDispose);
-        context.AddPre<Guid, WorldComponents.Id>(entIndex.Intercept);
+        context.AddIndex(entIndex.Remove).OnChange<Guid, WorldComponents.Id>(entIndex.Update);
         context.AddBag(seerBag);
         context.AddGatedBag(playerBag);
         context.AddGatedBag(rigidBag);
-        context.AddPost<Vec3d, DimensionComponents.Position>(chunkRigids.Intercept);
-        context.AddPost<bool, DimensionComponents.IsRigid>(chunkRigids.Intercept);
+        context.AddIndex(chunkRigids.Remove)
+            .OnChange<Vec3d, DimensionComponents.Position>(chunkRigids.UpdatePosition)
+            .OnChange<bool, DimensionComponents.IsRigid>(chunkRigids.UpdateRigid);
         chunkContext.AddGatedBag(chunkBag);
     }
 }

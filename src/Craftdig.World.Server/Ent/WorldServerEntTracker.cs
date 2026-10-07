@@ -1,9 +1,9 @@
 namespace Craftdig;
 
 [World]
-public partial class WorldServerEntTracker(
+public class WorldServerEntTracker(
     WorldEntSyncCatalog catalog,
-    WorldEntIdxContextBuilder context,
+    WorldEntIdxContext context,
     WorldScope scope)
 {
     public void Run()

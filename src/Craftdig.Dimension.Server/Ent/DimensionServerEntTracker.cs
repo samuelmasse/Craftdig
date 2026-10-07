@@ -3,7 +3,7 @@ namespace Craftdig;
 [Dimension]
 public class DimensionServerEntTracker(
     DimensionEntSyncCatalog catalog,
-    DimensionEntIdxContextBuilder context,
+    DimensionEntIdxContext context,
     DimensionScope scope)
 {
     public void Run()

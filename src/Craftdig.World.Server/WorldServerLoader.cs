@@ -2,8 +2,8 @@ namespace Craftdig;
 
 [WorldLoader]
 public class WorldServerLoader(
-    WorldEntIdxContextBuilder context,
-    WorldScratchedBagMut scratchedBag,
+    WorldEntIdxContext context,
+    WorldScratchedBag scratchedBag,
     WorldEntScratched scratched,
     WorldServerEntTracker entTracker,
     WorldServerEntDisposeTracker entDisposeTracker)
@@ -11,8 +11,9 @@ public class WorldServerLoader(
     public void Run()
     {
         context.AddBag(scratchedBag);
-        context.AddPost<bool, WorldBackendComponents.IsLoading>(scratched.Mark);
-        context.AddPreDispose(entDisposeTracker.InterceptDispose);
+        context.OnWrite<bool, WorldBackendComponents.IsLoading>(scratched.Mark);
+        context.OnClearing(entDisposeTracker.Capture);
+        context.OnDisposing(entDisposeTracker.Capture);
         entTracker.Run();
     }
 }

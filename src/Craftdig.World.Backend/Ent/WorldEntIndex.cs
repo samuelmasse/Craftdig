@@ -24,19 +24,19 @@ public class WorldEntIndex
 
     public bool IsDuplicated(Guid id) => collisions.ContainsKey(id);
 
-    public void Intercept(EntMutIdx ent, in Guid value)
+    public void Update(EntMutIdx ent, in EntChange<Guid> change)
     {
-        if (ent.Id == value)
+        if (change.Before == change.After)
             return;
 
-        if (ent.Id != default)
-            Remove(ent.Id, ent);
+        if (change.Before != default)
+            Remove(change.Before, ent);
 
-        if (value != default)
-            Add(value, ent);
+        if (change.After != default)
+            Add(change.After, ent);
     }
 
-    public void InterceptDispose(EntMutIdx ent)
+    public void Remove(EntMutIdx ent)
     {
         if (ent.Id != default)
             Remove(ent.Id, ent);

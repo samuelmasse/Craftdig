@@ -1,7 +1,7 @@
 namespace Craftdig;
 
 [World]
-public class WorldEntArena(WorldEntIdxContextBuilder context) : EntIdxArena(context.Ent)
+public class WorldEntArena(WorldEntIdxContext context) : EntIdxArena(context)
 {
     public override EntPtrIdx Alloc() => Alloc(Guid.NewGuid());
 

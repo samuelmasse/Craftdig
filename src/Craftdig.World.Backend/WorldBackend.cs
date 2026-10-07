@@ -1,12 +1,11 @@
 namespace Craftdig;
 
 [World]
-public class WorldBackend(WorldClock clock, WorldEntTracker entTracker, WorldEntPersister entPersister)
+public class WorldBackend(WorldClock clock, WorldEntPersister entPersister)
 {
     public void Tick()
     {
         clock.Tick();
-        entTracker.Tick();
     }
 
     public void Frame()

@@ -7,8 +7,8 @@ public class ServerLoadDimensionsAction(ModuleEnts ents, WorldScope worldScope, 
     {
         worldScope.Scope<WorldLoaderScope>()
             .Run(x => x.Get<WorldLoader>().Run())
-            .Run(x => x.Get<WorldBackendLoader>().Run())
-            .Run(x => x.Get<WorldServerLoader>().Run());
+            .Run(x => x.Get<WorldServerLoader>().Run())
+            .Run(x => x.Get<WorldBackendLoader>().Run());
 
         // For now just find the first dimension
         var dimension = ents.Set.First(x => x.IsDimension);

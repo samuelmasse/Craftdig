@@ -1,5 +1,4 @@
 namespace Craftdig;
 
 [Dimension]
-public class DimensionEntScratched(DimensionEntDisposals disposals) :
-    EntScratched(disposals);
+public class DimensionEntScratched : EntScratched;

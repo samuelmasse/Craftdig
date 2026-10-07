@@ -3,7 +3,7 @@ namespace Craftdig;
 [DimensionLoader]
 public class DimensionBackendLoader(
     DimensionIndexedComponentsMut indexedComponents,
-    DimensionEntIdxContextBuilder context,
+    DimensionEntIdxContext context,
     DimensionPlayerSync playerSync,
     DimensionPlayerIndex playerIndex,
     DimensionChunkThreads chunkThreads,
@@ -14,17 +14,20 @@ public class DimensionBackendLoader(
 {
     public void Run()
     {
-        context.AddPreDispose(entDisposeTracker.InterceptDispose);
-        context.AddPreDispose(playerIndex.InterceptDispose);
-        context.AddPost<EntMutIdx, DimensionComponents.WorldPlayer>(playerIndex.Intercept);
-        context.AddPost<bool, DimensionComponents.IsPlayer>(playerIndex.Intercept);
-        context.AddPost<Vec3d, DimensionComponents.Position>(playerSync.Intercept);
-        context.AddPost<bool, DimensionComponents.IsPlayer>(playerSync.Intercept);
+        context.OnClearing(entDisposeTracker.Erase);
+        context.OnDisposing(entDisposeTracker.Erase);
+        context.AddIndex(playerIndex.Remove)
+            .OnChange<Guid, WorldComponents.Id>(playerIndex.UpdateId)
+            .OnChange<bool, DimensionComponents.IsPlayer>(playerIndex.UpdatePlayer);
+        context.OnWrite<Vec3d, DimensionComponents.Position>(playerSync.Update);
+        context.OnWrite<bool, DimensionComponents.IsPlayer>(playerSync.Update);
+        context.OnWrite<bool, WorldBackendComponents.IsLoading>(playerSync.Update);
+        context.OnWrite<EntMutIdx, DimensionComponents.WorldPlayer>(playerSync.Update);
         indexedComponents.AddSaved<DimensionComponents>();
 
         chunkThreads.Start();
         regionThread.Start();
         entRegionThread.Start();
-        entTracker.Tick();
+        entTracker.Register();
     }
 }

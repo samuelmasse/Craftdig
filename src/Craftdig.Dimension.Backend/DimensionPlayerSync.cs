@@ -5,7 +5,7 @@ public class DimensionPlayerSync(
     WorldEntIndex worldEntIndex,
     DimensionEnt dimension)
 {
-    public void Intercept(EntMutIdx ent)
+    public void Update(EntMutIdx ent)
     {
         if (ent.IsLoading)
             return;

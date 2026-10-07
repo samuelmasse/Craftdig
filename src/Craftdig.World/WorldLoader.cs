@@ -2,13 +2,13 @@ namespace Craftdig;
 
 [WorldLoader]
 public class WorldLoader(
-    WorldEntIdxContextBuilder context,
+    WorldEntIdxContext context,
     WorldEnts ents,
-    WorldDimensionBagMut dimensionBag)
+    WorldDimensionBag dimensionBag)
 {
     public void Run()
     {
-        context.AddPost<Guid, WorldComponents.Id>(ents.Intercept);
+        context.AddIndex(ents.Remove).OnChange<Guid, WorldComponents.Id>(ents.Update);
         context.AddGatedBag(dimensionBag);
     }
 }

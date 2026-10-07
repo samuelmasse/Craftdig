@@ -23,7 +23,7 @@ public class DimensionSingleplayerFindPlayerAction(
         var worldPlayer = worldEntArena.Alloc().Mutate()
             .IsWorldPlayer(true)
             .Ent;
-        return dimensionEntArena.Alloc().Mutate()
+        return dimensionEntArena.Alloc(worldPlayer.Id).Mutate()
             .WorldPlayer(worldPlayer)
             .Ent;
     }

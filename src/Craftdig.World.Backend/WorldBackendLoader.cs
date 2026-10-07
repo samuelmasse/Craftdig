@@ -3,10 +3,10 @@ namespace Craftdig;
 [WorldLoader]
 public class WorldBackendLoader(
     Log log,
-    ModuleWriteWorldStateAction writeWorldStateAction,
+    ModuleWriteWorldStateAction changeWorldStateAction,
     WorldPaths paths,
     WorldEntRegionStates entRegionStates,
-    WorldEntIdxContextBuilder context,
+    WorldEntIdxContext context,
     WorldEntIndex entIndex,
     WorldIndexedComponentsMut indexedComponents,
     WorldUniverseLoader universeLoader,
@@ -18,15 +18,15 @@ public class WorldBackendLoader(
 {
     public void Run()
     {
-        writeWorldStateAction.Write(new(DateTimeOffset.UtcNow), paths);
+        changeWorldStateAction.Write(new(DateTimeOffset.UtcNow), paths);
         moduleIndicesLoader.Run();
 
-        context.AddPreDispose(entDisposeTracker.InterceptDispose);
-        context.AddPreDispose(entIndex.InterceptDispose);
-        context.AddPre<Guid, WorldComponents.Id>(entIndex.Intercept);
+        context.OnClearing(entDisposeTracker.Erase);
+        context.OnDisposing(entDisposeTracker.Erase);
+        context.AddIndex(entIndex.Remove).OnChange<Guid, WorldComponents.Id>(entIndex.Update);
         indexedComponents.AddSaved<WorldComponents>();
 
-        entTracker.Tick();
+        entTracker.Register();
         entRegionThread.Start();
 
         var region = entRegionStates[default];

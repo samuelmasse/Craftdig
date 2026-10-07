@@ -1,23 +1,15 @@
 namespace Craftdig;
 
 [Dimension]
-public class DimensionEntDisposals : EntDisposals
+public class DimensionEntDisposals
 {
     private readonly Queue<DimensionEntDisposal> entries = [];
 
     public void Add(EntMutIdx ent, NetSocket? owner)
     {
-        Begin(ent);
         var id = ent.SyncCloc == null ? Guid.Empty : ent.Id;
-        entries.Enqueue(new(ent, id, ent.SyncCloc, owner));
+        entries.Enqueue(new(id, ent.SyncCloc, owner));
     }
 
-    public bool TryTake(out DimensionEntDisposal entry)
-    {
-        if (!entries.TryDequeue(out entry))
-            return false;
-
-        Finish(entry.Ent);
-        return true;
-    }
+    public bool TryTake(out DimensionEntDisposal entry) => entries.TryDequeue(out entry);
 }

@@ -2,7 +2,6 @@ namespace Craftdig;
 
 [Dimension]
 public class DimensionBackend(
-    DimensionEntTracker entTracker,
     DimensionEntPersister entPersister,
     DimensionChunkRequester chunkRequester,
     DimensionChunkReceiver chunkReceiver,
@@ -12,7 +11,6 @@ public class DimensionBackend(
 {
     public void Tick()
     {
-        entTracker.Tick();
         drop.Tick();
     }
 

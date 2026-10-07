@@ -20,11 +20,8 @@ public class WorldEntStreamer(
         foreach (var ent in scratchedBag.Ents)
             scratched.Add(ent);
 
-        while (disposals.TryTake(out var entry))
-        {
-            if (entry.Id != Guid.Empty)
-                disposed.Add(entry.Id);
-        }
+        while (disposals.TryTake(out var id))
+            disposed.Add(id);
 
         var viewers = sockets.Span;
         foreach (var socket in viewers)
@@ -59,9 +56,10 @@ public class WorldEntStreamer(
 
     private void WriteChanges(NetSocket socket)
     {
+        // End old lifetimes before publishing replacements that reuse the same ID.
+        WriteDeletes(socket);
         WriteCreates(socket, false);
         WriteStates(socket, false);
-        WriteDeletes(socket);
     }
 
     private void WriteBaseline(NetSocket socket)

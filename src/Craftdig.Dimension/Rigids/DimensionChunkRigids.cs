@@ -16,34 +16,51 @@ public class DimensionChunkRigids
         }
     }
 
-    public void Intercept(EntMutIdx ent)
+    public void UpdatePosition(EntMutIdx ent, in EntChange<Vec3d> change)
     {
-        Vec2i? cloc = ent.IsRigid ? ent.Position.ToLoc().Xy.ToCloc() : null;
-        var prevCloc = ent.RigidCloc;
+        Vec2i? previous = ent.IsRigid ? change.Before.ToLoc().Xy.ToCloc() : null;
+        Vec2i? current = ent.IsRigid ? change.After.ToLoc().Xy.ToCloc() : null;
+        Move(ent, previous, current);
+    }
 
-        if (prevCloc == cloc)
+    public void UpdateRigid(EntMutIdx ent, in EntChange<bool> change)
+    {
+        var cloc = ent.Position.ToLoc().Xy.ToCloc();
+        Move(ent, change.Before ? cloc : null, change.After ? cloc : null);
+    }
+
+    public void Remove(EntMutIdx ent)
+    {
+        if (ent.IsRigid)
+            Remove(ent, ent.Position.ToLoc().Xy.ToCloc());
+    }
+
+    private void Move(EntMutIdx ent, Vec2i? previous, Vec2i? current)
+    {
+        if (previous == current)
             return;
 
-        if (prevCloc != null)
-        {
-            var set = dict[prevCloc.Value];
-            set.Remove(ent);
-            if (set.Count == 0)
-                dict.Remove(prevCloc.Value);
+        if (previous != null)
+            Remove(ent, previous.Value);
 
-            ent.RigidCloc = null;
-        }
-
-        if (cloc != null)
+        if (current != null)
         {
-            if (!dict.TryGetValue(cloc.Value, out var set))
+            if (!dict.TryGetValue(current.Value, out var set))
             {
                 set = [];
-                dict.Add(cloc.Value, set);
+                dict.Add(current.Value, set);
             }
 
             set.Add(ent);
-            ent.RigidCloc = cloc;
         }
+    }
+
+    private void Remove(EntMutIdx ent, Vec2i cloc)
+    {
+        var set = dict[cloc];
+        set.Remove(ent);
+
+        if (set.Count == 0)
+            dict.Remove(cloc);
     }
 }

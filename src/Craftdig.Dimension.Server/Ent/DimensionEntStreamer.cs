@@ -92,9 +92,10 @@ public class DimensionEntStreamer(
 
     private void Stream(NetSocket socket)
     {
+        // End old lifetimes before publishing replacements that reuse the same ID.
+        WriteDeletes(socket);
         WriteCreates(socket);
         WriteStates(socket);
-        WriteDeletes(socket);
     }
 
     private void WriteCreates(NetSocket socket)
@@ -163,14 +164,8 @@ public class DimensionEntStreamer(
         Flush(socket, ref writer);
     }
 
-    private void WriteFull(
-        NetSocket socket,
-        ref EntUpdateWriter writer,
-        EntMutIdx ent,
-        Guid id,
-        bool owner,
-        ushort count,
-        int bytes)
+    private void WriteFull(NetSocket socket, ref EntUpdateWriter writer, EntMutIdx ent,
+        Guid id, bool owner, ushort count, int bytes)
     {
         if (!writer.TryStartState(id, EntStateFlags.Full, count, bytes))
         {
@@ -185,14 +180,8 @@ public class DimensionEntStreamer(
         }
     }
 
-    private void WriteDiff(
-        NetSocket socket,
-        ref EntUpdateWriter writer,
-        EntMutIdx ent,
-        Guid id,
-        bool owner,
-        ushort count,
-        int bytes)
+    private void WriteDiff(NetSocket socket, ref EntUpdateWriter writer, EntMutIdx ent,
+        Guid id, bool owner, ushort count, int bytes)
     {
         if (!writer.TryStartState(id, EntStateFlags.None, count, bytes))
         {

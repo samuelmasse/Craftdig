@@ -1,20 +1,15 @@
 namespace Craftdig;
 
 [World]
-public partial class WorldEntTracker(
+public class WorldEntTracker(
     WorldIndexedComponents indexedComponents,
     WorldScope scope,
-    WorldEntIdxContextBuilder context)
+    WorldEntIdxContext context)
 {
-    private int index;
-
-    public void Tick()
+    public void Register()
     {
-        while (index < indexedComponents.Components.Length)
-        {
-            StartTracking(indexedComponents.Components[index]);
-            index++;
-        }
+        foreach (var component in indexedComponents.Components)
+            StartTracking(component);
     }
 
     private void StartTracking(EntComponent component)

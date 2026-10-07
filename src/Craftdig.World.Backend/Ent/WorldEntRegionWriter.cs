@@ -24,6 +24,7 @@ public class WorldEntRegionWriter(
 
     public void Erase(EntMutIdx ent)
     {
+        // Teardown still needs the intact Ploc; clearing the component belongs to the Ent lifetime operation.
         RemoveFromRegion(ent);
     }
 
@@ -178,7 +179,6 @@ public class WorldEntRegionWriter(
 
         region.FreeMap.Free(ploc.Bucket, ploc.Index);
         region.Ents.Remove(ent);
-        ent.Ploc = null;
     }
 
     private void MoveToRegion(EntMutIdx ent, Vec2i next)

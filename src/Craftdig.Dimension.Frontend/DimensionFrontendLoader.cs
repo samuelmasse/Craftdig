@@ -2,8 +2,8 @@ namespace Craftdig;
 
 [DimensionLoader]
 public class DimensionFrontendLoader(
-    DimensionEntIdxContextBuilder context,
-    DimensionBlockParticleBagMut blockParticles,
+    DimensionEntIdxContext context,
+    DimensionBlockParticleBag blockParticles,
     DimensionSectionThreads sectionThreads)
 {
     public void Run()

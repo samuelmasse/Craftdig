@@ -43,7 +43,6 @@ public interface IDimensionComponents
     // Rigid
     Vec3d PrevPosition { get; set; }
     Vec3i CollisionNormal { get; set; }
-    Vec2i? RigidCloc { get; set; }
 
     // Playera action state
     MovementStep Movement { get; set; }

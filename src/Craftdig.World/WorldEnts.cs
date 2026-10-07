@@ -7,9 +7,11 @@ public class WorldEnts
 
     public HashSet<EntMutIdx>.Enumerator GetEnumerator() => ents.GetEnumerator();
 
-    public void Intercept(EntMutIdx ent)
+    public void Remove(EntMutIdx ent) => ents.Remove(ent);
+
+    public void Update(EntMutIdx ent, in EntChange<Guid> change)
     {
-        if (ent.Has<Guid, WorldComponents.Id>())
+        if (change.IsPresent)
             ents.Add(ent);
         else ents.Remove(ent);
     }

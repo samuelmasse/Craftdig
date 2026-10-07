@@ -39,7 +39,7 @@ public class WorldEntPersister(WorldEntRegionWriter entRegionWriter)
 
     private void Write(EntMutIdx ent)
     {
-        if (!ent.IsAlive)
+        if (!ent.IsAlive || !ent.IsDirty)
             return;
 
         entRegionWriter.Write(ent);
@@ -47,8 +47,7 @@ public class WorldEntPersister(WorldEntRegionWriter entRegionWriter)
         ent.IsDirty = false;
 
         var dirty = ent.DirtyComponents;
-        if (dirty != null)
-            Array.Clear(dirty);
+        dirty?.AsSpan().Clear();
     }
 
     private readonly record struct Persistence(EntMutIdx Ent, DateTime Time);
