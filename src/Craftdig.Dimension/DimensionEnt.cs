@@ -11,5 +11,12 @@ public class DimensionEnt(Ent ent) : IEntRead
     public EntHandle Handle => ent.Handle;
     public bool Has<T, N>() => ent.Has<T, N>();
     public T? Get<T, N>() => ent.Get<T, N>();
+
+    /// <inheritdoc />
+    public T? GetArchetypal<T, N, A>() => ent.GetArchetypal<T, N, A>();
+
+    /// <inheritdoc />
+    public bool HasArchetypal<T, N, A>() => ent.HasArchetypal<T, N, A>();
+
     public override string ToString() => ent.ToString();
 }

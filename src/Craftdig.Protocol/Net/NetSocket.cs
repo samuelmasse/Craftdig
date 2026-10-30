@@ -241,6 +241,18 @@ public class NetSocket(Log log, TcpClient tcp, Stream stream) : IEntMut
     public void Set<T, N>(in T value) => ent.Set<T, N>(value);
     public bool Unset<T, N>() => ent.Unset<T, N>();
 
+    /// <inheritdoc />
+    public T? GetArchetypal<T, N, A>() => ent.GetArchetypal<T, N, A>();
+
+    /// <inheritdoc />
+    public bool HasArchetypal<T, N, A>() => ent.HasArchetypal<T, N, A>();
+
+    /// <inheritdoc />
+    public void SetArchetypal<T, N, A>(in T value) => ent.SetArchetypal<T, N, A>(in value);
+
+    /// <inheritdoc />
+    public bool UnsetArchetypal<T, N, A>() => ent.UnsetArchetypal<T, N, A>();
+
     // The owner calls this only after I/O and every metadata consumer have finished.
     public void ReleaseState()
     {
