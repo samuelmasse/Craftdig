@@ -12,7 +12,8 @@ public class ModuleImages(RootPngs pngs, AppFiles files)
             if (!images.TryGetValue(file, out var value))
             {
                 string fullName = Path.Combine("Textures", file) + ".png";
-                value = pngs[files[fullName]];
+                using var stream = File.OpenRead(files[fullName]);
+                value = pngs.Read(stream);
                 images.Add(file, value);
             }
 

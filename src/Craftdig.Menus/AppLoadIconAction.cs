@@ -5,7 +5,8 @@ public class AppLoadIconAction(AppFiles files, RootPngs pngs, RootScreen screen)
 {
     public void Run()
     {
-        var image = pngs[files["Textures/Icon.png"]].FlippedVertically();
+        using var stream = File.OpenRead(files["Textures/Icon.png"]);
+        var image = pngs.Read(stream).FlippedVertically();
         screen.SetIcon((Vec2u)image.Size, image.Pixels.Span);
     }
 }

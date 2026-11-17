@@ -25,7 +25,8 @@ public class ModuleWorldScreenshots(RootBin bin, RootGl gl, RootPngs pngs)
             {
                 if (File.Exists(file))
                 {
-                    var image = pngs[file];
+                    using var stream = File.OpenRead(file);
+                    var image = pngs.Read(stream);
                     texture = new(bin, new Texture2D(gl, (Vec2u)image.Size)
                     {
                         PixelsMipmap = image.Pixels.Span,

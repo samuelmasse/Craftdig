@@ -1,1 +1,1 @@
-RootLoop.RunGlfw<RootLoadNativeState>(injector => injector.Add(new FailSafeConfig { Enabled = false }));
+RootLoop.RunGlfw<RootLoadNativeState>([], injector => injector.Add(new FailSafeConfig { Enabled = false }));

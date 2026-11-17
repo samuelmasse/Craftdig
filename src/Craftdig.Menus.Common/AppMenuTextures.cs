@@ -11,7 +11,8 @@ public class AppMenuTextures(RootPngs pngs, AppFiles files, AppGl gl)
         {
             if (!textures.TryGetValue(file, out var value))
             {
-                var data = pngs[files[Path.Combine("Textures", file) + ".png"]];
+                using var stream = File.OpenRead(files[Path.Combine("Textures", file) + ".png"]);
+                var data = pngs.Read(stream);
 
                 value = new Texture2D(gl, (Vec2u)data.Size)
                 {
