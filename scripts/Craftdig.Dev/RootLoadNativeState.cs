@@ -24,7 +24,7 @@ public class RootLoadNativeState(
         var graph = liveCode.Enable();
         if (Environment.GetEnvironmentVariable(SourceUpdateHostOptions.LaunchManifestVariable) != null)
         {
-            new RootSourceUpdate(
+            new SourceUpdateRegistration(
                 liveCode.Bridges,
                 SourceUpdateHostOptions.FromEnvironment(typeof(RootLoadNativeState).Assembly)).Enable();
         }
