@@ -1,7 +1,7 @@
 namespace Craftdig;
 
 [Server]
-public class SeverAllowlist(ServerDefaults defaults, ServerConfig config)
+public class ServerAllowlist(ServerDefaults defaults, ServerConfig config)
 {
     private readonly string file = Path.Join(config.RootPath, "Allowlist.txt");
     private HashSet<string>? set;

@@ -5,11 +5,9 @@ public class PlayerCommonState(
     RootCanvas canvas,
     RootMouse mouse,
     RootInput input,
-    RootUiFocus focus,
+    RootUi ui,
     RootKeyboard keyboard,
     RootSprites sprites,
-    RootUi ui,
-    RootUiScale scale,
     DimensionContext dimension,
     DimensionFrontend dimensionFrontend,
     DimensionSharedVertexBufferMenu dimensionSharedVertexBufferMenu,
@@ -30,14 +28,14 @@ public class PlayerCommonState(
         [Keys.G] = creativeInventoryMenu.Create,
         [Keys.E] = survivalInventoryMenu.Create,
     };
-    private readonly EntMut menus = Node(ui).OrderValueV(1).InnerAlignmentSnapV(s.ItemSpacingXS);
-    private readonly EntMut overlay = Node(ui).InnerAlignmentSnapV(s.ItemSpacingXS).Mutate(playerOverlayMenu.Create);
-    private readonly EntMut hand = Node(ui)
+    private readonly EntMut menus = Node(ui.Default.Root).OrderValueV(1).InnerAlignmentSnapV(s.ItemSpacingXS);
+    private readonly EntMut overlay = Node(ui.Default.Root).InnerAlignmentSnapV(s.ItemSpacingXS).Mutate(playerOverlayMenu.Create);
+    private readonly EntMut hand = Node(ui.Default.Root)
         .OrderValueV(1.5f)
         .InnerAlignmentSnapV(s.ItemSpacingXS)
         .IsDisabledV(true)
         .Mutate(playerHandMenu.Create);
-    private readonly EntMut dark = Node(ui).ColorV((0.3f, 0.3f, 0.3f, 0.3f)).IsDisabledV(true);
+    private readonly EntMut dark = Node(ui.Default.Root).ColorV((0.3f, 0.3f, 0.3f, 0.3f)).IsDisabledV(true);
 
     private Action<EntMut>? currentKeyMenu;
     private bool paused;
@@ -74,10 +72,10 @@ public class PlayerCommonState(
     public override void Unload()
     {
         input.Track = false;
-        NodesRemove(ui, hand);
-        NodesRemove(ui, menus);
-        NodesRemove(ui, overlay);
-        NodesRemove(ui, dark);
+        NodesRemove(ui.Default.Root, hand);
+        NodesRemove(ui.Default.Root, menus);
+        NodesRemove(ui.Default.Root, overlay);
+        NodesRemove(ui.Default.Root, dark);
     }
 
     public override void Update(double time)
@@ -132,7 +130,7 @@ public class PlayerCommonState(
 
         input.Track = !paused && !inv;
         if (mouse.Track)
-            focus.Focus(default, false);
+            ui.Focus.Focus(default, false);
         else construction.Reject();
     }
 
@@ -146,7 +144,7 @@ public class PlayerCommonState(
 
     public override void Draw()
     {
-        float cht = 4 * scale.Scale;
+        float cht = 4 * ui.Scale.Scale;
         float chl = cht * 9;
         var c = (Vec2)canvas.Size / 2;
 

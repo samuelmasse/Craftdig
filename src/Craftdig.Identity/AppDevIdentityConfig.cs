@@ -4,7 +4,7 @@ namespace Craftdig;
 // server trust that key instead of craftdig.io. Defaults to disabled and is only turned on by dev
 // composition scripts, so a production build never trusts the dev key.
 [App]
-public class DevIdentityConfig
+public class AppDevIdentityConfig
 {
     public bool Enabled { get; init; }
     public string? Name { get; init; }

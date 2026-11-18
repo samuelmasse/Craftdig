@@ -39,7 +39,7 @@ public class RootLoadNativeState(
                 new(typeof(ModuleNativeLoader), null),
                 new(typeof(ModuleNativeBackendLoader), null),
                 new(typeof(ModuleNativeFrontendLoader), null)]))
-            .With(new DevIdentityConfig
+            .With(new AppDevIdentityConfig
             {
                 Enabled = devIdentity != null,
                 Name = devIdentity,

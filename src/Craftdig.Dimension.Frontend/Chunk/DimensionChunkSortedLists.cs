@@ -1,5 +1,6 @@
 namespace Craftdig;
 
+[Dimension]
 public class DimensionChunkSortedLists
 {
     private readonly Queue<SortedList<int, int>> queue = [];

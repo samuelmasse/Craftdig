@@ -159,7 +159,7 @@ public partial class AppStyle
             return;
         }
 
-        int hit = TextboxMouseToCaretIndex(ent, sb, mouse.Position.X);
+        int hit = TextboxMouseToCaretIndex(ent, sb, ui.Mouse.Position.X);
         if (!ent.TextboxWasPressedR)
         {
             TextboxBeginMousePress(ent, sb, hit);
@@ -188,12 +188,12 @@ public partial class AppStyle
     {
         var now = DateTime.UtcNow;
         bool withinTimeWindow = (now - ent.TextboxLastClickAtR).TotalMilliseconds < TextboxDoubleClickWindowMs;
-        bool samePosition = mouse.Position == ent.TextboxLastClickPositionR;
+        bool samePosition = ui.Mouse.Position == ent.TextboxLastClickPositionR;
         bool chainContinues = withinTimeWindow && samePosition;
 
         ent.TextboxClickCountR = chainContinues ? ent.TextboxClickCountR + 1 : 1;
         ent.TextboxLastClickAtR = now;
-        ent.TextboxLastClickPositionR = mouse.Position;
+        ent.TextboxLastClickPositionR = ui.Mouse.Position;
         ent.TextboxPressStartIndexR = hit;
 
         if (ent.TextboxClickCountR == 2)
@@ -491,12 +491,12 @@ public partial class AppStyle
         if (font == null)
             return 0;
 
-        int fontSizePx = (int)(ent.FontSizeFV.Resolve() * scale.Scale);
+        int fontSizePx = (int)(ent.FontSizeFV.Resolve() * ui.Scale.Scale);
         if (fontSizePx <= 0)
             return 0;
 
         var fontSize = font.Size(fontSizePx);
-        float glyphSnap = ent.TextGlyphAlignmentSnapFV.Resolve() * scale.Scale;
+        float glyphSnap = ent.TextGlyphAlignmentSnapFV.Resolve() * ui.Scale.Scale;
 
         float pen = 0;
         int caret = 0;
@@ -513,7 +513,7 @@ public partial class AppStyle
                 pen += slot.Glyph.Advance;
                 caret += rune.Utf16SequenceLength;
 
-                float caretX = Snap.Round(pen, glyphSnap) / scale.Scale;
+                float caretX = Snap.Round(pen, glyphSnap) / ui.Scale.Scale;
                 float distance = Math.Abs(localX - caretX);
 
                 if (distance < bestDistance)
@@ -533,7 +533,7 @@ public partial class AppStyle
         if (font == null)
             return 0;
 
-        int fontSizePx = (int)(ent.FontSizeFV.Resolve() * scale.Scale);
+        int fontSizePx = (int)(ent.FontSizeFV.Resolve() * ui.Scale.Scale);
         if (fontSizePx <= 0)
             return 0;
 
@@ -558,7 +558,7 @@ public partial class AppStyle
             }
         }
 
-        float glyphSnap = ent.TextGlyphAlignmentSnapFV.Resolve() * scale.Scale;
-        return Snap.Round(pen, glyphSnap) / scale.Scale;
+        float glyphSnap = ent.TextGlyphAlignmentSnapFV.Resolve() * ui.Scale.Scale;
+        return Snap.Round(pen, glyphSnap) / ui.Scale.Scale;
     }
 }

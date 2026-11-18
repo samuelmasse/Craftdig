@@ -3,7 +3,7 @@ namespace Craftdig;
 [Player]
 public class PlayerMultiplayerNameplatesMenu(
     RootCanvas canvas,
-    RootUiScale scale,
+    RootUi ui,
     AppStyle s,
     WorldTick tick,
     DimensionRemoteInterpolation remoteInterpolation,
@@ -107,8 +107,8 @@ public class PlayerMultiplayerNameplatesMenu(
 
             var canvasSize = (Vec2)canvas.Size;
             point = (
-                (normalized.X + 1) * 0.5f * canvasSize.X / scale.Scale,
-                (1 - (normalized.Y + 1) * 0.5f) * canvasSize.Y / scale.Scale);
+                (normalized.X + 1) * 0.5f * canvasSize.X / ui.Scale.Scale,
+                (1 - (normalized.Y + 1) * 0.5f) * canvasSize.Y / ui.Scale.Scale);
             return true;
         }
     }

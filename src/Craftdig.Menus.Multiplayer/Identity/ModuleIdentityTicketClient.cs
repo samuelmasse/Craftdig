@@ -9,7 +9,7 @@ public class ModuleIdentityTicketClient(
     Log log,
     ModuleMultiplayerCredentials credentials,
     ModuleIdentityTrust identityTrust,
-    DevIdentityConfig dev)
+    AppDevIdentityConfig dev)
 {
     private const string TicketUrl = "https://craftdig.io/api/GetToken";
     private const int MaxResponseBytes = 8 * 1024;

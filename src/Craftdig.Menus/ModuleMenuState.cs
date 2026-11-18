@@ -10,7 +10,7 @@ public class ModuleMenuState(
     ModuleMainBackgroundMenu mainBackgroundMenu,
     ModuleMainMenu mainMenu) : State
 {
-    private readonly EntMut menus = Node(ui).InnerAlignmentSnapV(s.ItemSpacingXS);
+    private readonly EntMut menus = Node(ui.Default.Root).InnerAlignmentSnapV(s.ItemSpacingXS);
     private readonly Stopwatch watch = new();
     private int frame;
     private bool gc;
@@ -24,7 +24,7 @@ public class ModuleMenuState(
 
     public override void Unload()
     {
-        NodesRemove(ui, menus);
+        NodesRemove(ui.Default.Root, menus);
     }
 
     public override void Update(double time)

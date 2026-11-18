@@ -16,7 +16,7 @@ public class PlayerMultiplayerLoadingState(
     ModuleMainBackgroundMenu mainBackgroundMenu,
     AppTerrainLoadingMenu terrainLoadingMenu) : State
 {
-    private readonly EntMut menus = Node(ui);
+    private readonly EntMut menus = Node(ui.Default.Root);
     private EntMut loadingMenu;
     private EntMut waiting;
     private bool menuCreated;
@@ -37,7 +37,7 @@ public class PlayerMultiplayerLoadingState(
             .TextV("Loading terrain...");
     }
 
-    public override void Unload() => NodesRemove(ui, menus);
+    public override void Unload() => NodesRemove(ui.Default.Root, menus);
 
     public override void Frame(double _)
     {

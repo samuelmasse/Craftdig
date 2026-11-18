@@ -31,7 +31,7 @@ public partial class AppStyle
                 .CursorF(() => puck.IsPressedR ? CursorShape.ResizeHorizontal : CursorShape.Hand)
                 .OnPressF(() =>
                 {
-                    pressMouseX = mouse.Position.X;
+                    pressMouseX = ui.Mouse.Position.X;
                     pressValue = get();
                 })
                 .OnUpdateF(() =>
@@ -42,7 +42,7 @@ public partial class AppStyle
                         if (travel <= 0)
                             return;
 
-                        float dx = mouse.Position.X - pressMouseX;
+                        float dx = ui.Mouse.Position.X - pressMouseX;
                         float dt = dx / travel;
                         int dv = (int)Math.Round(dt * (max - min));
                         int newVal = Math.Clamp(pressValue + dv, min, max);

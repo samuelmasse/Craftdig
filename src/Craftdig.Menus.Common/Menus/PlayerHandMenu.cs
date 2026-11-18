@@ -1,7 +1,7 @@
 namespace Craftdig;
 
 [Player]
-public class PlayerHandMenu(RootUiMouse mouse, AppStyle s, PlayerEnt player)
+public class PlayerHandMenu(RootUi ui, AppStyle s, PlayerEnt player)
 {
     public void Create(EntMut root)
     {
@@ -12,7 +12,7 @@ public class PlayerHandMenu(RootUiMouse mouse, AppStyle s, PlayerEnt player)
             .GetSlotValueF(() => player.Offhand)
             .OffsetF(() =>
             {
-                var pos = mouse.Position - (s.SlotSize / 2, s.SlotSize / 2);
+                var pos = ui.Mouse.Position - (s.SlotSize / 2, s.SlotSize / 2);
                 return (Snap.Round(pos.X, s.ItemSpacingXS), Snap.Round(pos.Y, s.ItemSpacingXS));
             })
             .SizeF(() => player.Offhand == default ? (0, 0) : (s.SlotSize, s.SlotSize))

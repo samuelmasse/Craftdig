@@ -3,7 +3,7 @@ namespace Craftdig;
 [App]
 public class AppSettings
 {
-    private readonly RootUiScale scale;
+    private readonly RootUi ui;
     private readonly RootScreen screen;
     private readonly AppRenderDistance renderDistance;
     private readonly AppPaths paths;
@@ -12,9 +12,9 @@ public class AppSettings
 
     private SettingsData data;
 
-    public AppSettings(RootUiScale scale, RootScreen screen, AppRenderDistance renderDistance, AppPaths paths)
+    public AppSettings(RootUi ui, RootScreen screen, AppRenderDistance renderDistance, AppPaths paths)
     {
-        this.scale = scale;
+        this.ui = ui;
         this.screen = screen;
         this.renderDistance = renderDistance;
         this.paths = paths;
@@ -38,7 +38,7 @@ public class AppSettings
 
     public float Scale
     {
-        get => data.Scale ?? scale.Scale;
+        get => data.Scale ?? ui.Scale.Scale;
         set => Apply(data with { Scale = value });
     }
 
@@ -67,7 +67,7 @@ public class AppSettings
         Save();
 
         if (Scale != old.Scale)
-            scale.Scale = Scale;
+            ui.Scale.Scale = Scale;
 
         if (Vsync != old.Vsync)
             screen.IsVSyncEnabled = Vsync;

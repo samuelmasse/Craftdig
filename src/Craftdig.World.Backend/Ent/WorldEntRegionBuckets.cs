@@ -1,5 +1,6 @@
 namespace Craftdig;
 
+[World]
 public class WorldEntRegionBuckets
 {
     private readonly int[] sizes;

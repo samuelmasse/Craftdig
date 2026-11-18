@@ -2,11 +2,9 @@ namespace Craftdig;
 
 [App]
 public class AppInitializeState(
-    RootScope root,
     RootState state,
     RootScreen screen,
     RootControlsToml controlsToml,
-    RootScripts scripts,
     RootUi ui,
     RootUnload unload,
     AppScope scope,
@@ -26,11 +24,10 @@ public class AppInitializeState(
         loadIconAction.Run();
         screen.Size = screen.MonitorSize / 4u * 3u;
 
-        scripts.Add(root.Get<RootUiScript>());
-        Node(ui).Mutate(mouseTrackMenu.Create);
-        Node(ui).OrderValueV(2).Mutate(tooltipMenu.Create);
-        Node(ui).OrderValueV(5).Mutate(zoomMenu.Create);
-        Node(ui).OrderValueV(5).Mutate(fpsMenu.Create);
+        Node(ui.Default.Root).Mutate(mouseTrackMenu.Create);
+        Node(ui.Default.Root).OrderValueV(2).Mutate(tooltipMenu.Create);
+        Node(ui.Default.Root).OrderValueV(5).Mutate(zoomMenu.Create);
+        Node(ui.Default.Root).OrderValueV(5).Mutate(fpsMenu.Create);
 
         var module = graph.Scope<ModuleScope>(
             scope,

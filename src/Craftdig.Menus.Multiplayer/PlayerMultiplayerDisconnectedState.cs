@@ -5,9 +5,9 @@ public class PlayerMultiplayerDisconnectedState(
     RootUi ui,
     RootBackbuffer backbuffer,
     ModuleMainBackgroundMenu mainBackgroundMenu,
-    PlayerMultiplayerDisconnectedMenu multiplayerDisconnectedMenu) : State
+    ModuleMultiplayerDisconnectedMenu multiplayerDisconnectedMenu) : State
 {
-    private readonly EntMut menus = Node(ui);
+    private readonly EntMut menus = Node(ui.Default.Root);
 
     public override void Load()
     {
@@ -17,7 +17,7 @@ public class PlayerMultiplayerDisconnectedState(
 
     public override void Unload()
     {
-        NodesRemove(ui, menus);
+        NodesRemove(ui.Default.Root, menus);
     }
 
     public override void Render() => backbuffer.Clear();

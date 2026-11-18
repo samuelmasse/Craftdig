@@ -1,7 +1,7 @@
 namespace Craftdig;
 
 [Module]
-public class PlayerMultiplayerDisconnectedMenu(
+public class ModuleMultiplayerDisconnectedMenu(
     AppStyle s,
     AppReset reset)
 {

@@ -8,7 +8,7 @@ new Injector()
     .With(new AppMods([new(typeof(ModuleNativeLoader), null), new(typeof(ModuleNativeBackendLoader), null)]))
     // Trust the local dev issuer key so clients launched with CRAFTDIG_DEV_IDENTITY connect as verified
     // accounts without Google. Dev-only; a production server never sets this and trusts craftdig.io.
-    .With(new DevIdentityConfig() { Enabled = true })
+    .With(new AppDevIdentityConfig() { Enabled = true })
     .Run(x => x.Scope<ModuleScope>().Scope<WorldScope>().Scope<ServerScope>()
         .With(new ServerDefaults()
         {

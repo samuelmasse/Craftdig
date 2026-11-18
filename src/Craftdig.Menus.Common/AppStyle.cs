@@ -1,7 +1,13 @@
 namespace Craftdig;
 
 [App]
-public partial class AppStyle(RootText text, RootUiMouse mouse, RootKeyboard keyboard, RootInput input, RootUiScale scale, AppMenuTextures menuTextures, AppMonocraft monocraft)
+public partial class AppStyle(
+    RootText text,
+    RootUi ui,
+    RootKeyboard keyboard,
+    RootInput input,
+    AppMenuTextures menuTextures,
+    AppMonocraft monocraft)
 {
     public readonly Texture ArrowTexture = menuTextures["MenuArrow"];
     public readonly Texture SlotTexture = menuTextures["MenuSlot"];
@@ -216,14 +222,14 @@ public partial class AppStyle(RootText text, RootUiMouse mouse, RootKeyboard key
                 .OnPressF(() =>
                 {
                     pressScroll = scroll;
-                    pressPoint = mouse.Position - scrollBar.PositionR;
+                    pressPoint = ui.Mouse.Position - scrollBar.PositionR;
                 })
                 .OnUpdateF(() =>
                 {
                     if (!scrollPuck.IsPressedR)
                         return;
 
-                    var newPoint = mouse.Position - scrollBar.PositionR;
+                    var newPoint = ui.Mouse.Position - scrollBar.PositionR;
                     var delta = newPoint.Y - pressPoint.Y;
                     var deltaRelative = delta / scrollBar.SizeR.Y;
                     var deltaTranslated = deltaRelative * select.SizeInnerSumR.Y;

@@ -121,7 +121,7 @@ public sealed class ServerAuthTransportTest
         Directory.CreateDirectory(root);
         try
         {
-            var allowlist = new SeverAllowlist(
+            var allowlist = new ServerAllowlist(
                 new() { Allowlist = [allowedPlayerId.ToString("D"), "Alice"] },
                 new() { RootPath = root });
 
@@ -166,7 +166,7 @@ public sealed class ServerAuthTransportTest
         var defaults = new ServerDefaults();
         var sockets = new ServerSockets();
         var limits = new ServerClientLimits(log, sockets);
-        var allowlist = new SeverAllowlist(defaults, config);
+        var allowlist = new ServerAllowlist(defaults, config);
         var guards = new ServerAuthGuards(log, config, sockets, allowlist);
         var contexts = new ServerPublicContexts(log, config);
         var validator = new ServerIdentityTrust(log, config, contexts, new());

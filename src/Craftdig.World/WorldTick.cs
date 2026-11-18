@@ -1,5 +1,6 @@
 namespace Craftdig;
 
+[World]
 public class WorldTick
 {
     private readonly double rate = 20;
