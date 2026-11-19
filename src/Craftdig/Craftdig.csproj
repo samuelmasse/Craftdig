@@ -17,8 +17,6 @@
     <ItemGroup>
         <ProjectReference Include="$(AlvorKitRoot)src\AlvorKit.Engine.Loop\AlvorKit.Engine.Loop.csproj" />
         <ProjectReference Include="..\Craftdig.Menus\Craftdig.Menus.csproj" />
-        <ProjectReference
-            Include="$(AlvorKitRoot)src\AlvorKit.Injection.Graph\AlvorKit.Injection.Graph.csproj" />
     </ItemGroup>
 
 </Project>

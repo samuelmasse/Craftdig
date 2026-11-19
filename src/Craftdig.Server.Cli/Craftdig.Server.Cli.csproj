@@ -9,13 +9,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Condition="!Exists('$(BindingsRoot)\AlvorKit.FastNoise2.Backend\AlvorKit.FastNoise2.Backend.csproj')"
-            Include="AlvorKit.FastNoise2.Backend" Version="1.1.1.4" />
-        <ProjectReference Condition="Exists('$(BindingsRoot)\AlvorKit.FastNoise2.Backend\AlvorKit.FastNoise2.Backend.csproj')"
-            Include="$(BindingsRoot)\AlvorKit.FastNoise2.Backend\AlvorKit.FastNoise2.Backend.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
+        <ProjectReference Include="$(AlvorKitRoot)src\AlvorKit.Engine.Root.Host\AlvorKit.Engine.Root.Host.csproj" />
         <ProjectReference Include="..\Craftdig.Server\Craftdig.Server.csproj" />
     </ItemGroup>
 

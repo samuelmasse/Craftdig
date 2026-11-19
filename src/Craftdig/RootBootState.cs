@@ -2,17 +2,14 @@ namespace Craftdig;
 
 [Root]
 public class RootBootState(
-    Injector injector,
+    InjectorScopeGraph graph,
     RootState state,
     RootScope scope,
     RootScripts scripts) : State
 {
     public override void Load()
     {
-        var graph = new InjectorScopeGraph(
-            scope,
-            "Craftdig");
-        injector.Add(graph);
+        graph.Label(scope, "Craftdig");
 
         var app = graph.Scope<AppScope>(
                 scope,
