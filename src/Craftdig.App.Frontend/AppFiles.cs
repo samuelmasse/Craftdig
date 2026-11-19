@@ -23,5 +23,8 @@ public class AppFiles
         }
     }
 
+    /// <summary>Reads the asset selected by the current app and mod resource roots.</summary>
+    public byte[] ReadAllBytes(string path) => File.ReadAllBytes(this[path]);
+
     public void AddRoot(string root) => roots.Add(root);
 }
