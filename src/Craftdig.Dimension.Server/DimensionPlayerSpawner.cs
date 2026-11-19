@@ -14,9 +14,9 @@ public class DimensionPlayerSpawner(
     DimensionEntRegionStates entRegionStates,
     DimensionSockets sockets)
 {
-    private readonly ConcurrentQueue<(NetSocket Socket, Guid ProfileId)> queue = [];
+    private readonly ConcurrentQueue<(NetSocket Socket, Guid ProfileId, byte[]? DevelopmentName)> queue = [];
 
-    public void Add(NetSocket ns, Guid profileId) => queue.Enqueue((ns, profileId));
+    public void Add(NetSocket ns, Guid profileId, byte[]? developmentName) => queue.Enqueue((ns, profileId, developmentName));
 
     public void Tick()
     {
@@ -24,12 +24,12 @@ public class DimensionPlayerSpawner(
 
         while (count > 0 && queue.TryDequeue(out var request))
         {
-            Spawn(request.Socket, request.ProfileId);
+            Spawn(request.Socket, request.ProfileId, request.DevelopmentName);
             count--;
         }
     }
 
-    private void Spawn(NetSocket ns, Guid profileId)
+    private void Spawn(NetSocket ns, Guid profileId, byte[]? developmentName)
     {
         if (!ns.Connected)
             return;
@@ -57,9 +57,13 @@ public class DimensionPlayerSpawner(
                 return;
             }
 
-            queue.Enqueue((ns, profileId));
+            queue.Enqueue((ns, profileId, developmentName));
             return;
         }
+
+        if (developmentName != null)
+            player.DevelopmentName = developmentName;
+        else player.Unset<byte[]?, DimensionComponents.DevelopmentName>();
 
         Prepare(ns, worldPlayer, player);
     }

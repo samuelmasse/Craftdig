@@ -6,6 +6,7 @@ public interface IServerComponents
     // Socket
     DateTime ConnectedTime { get; set; }
     long ConnectionGeneration { get; set; }
+    ServerPingProbe PingProbe { get; set; }
     ServerAuthChallenge? AuthChallenge { get; set; }
     ServerIdentitySessionSnapshot? IdentitySession { get; set; }
     ServerPresenceConnection? PresenceConnection { get; set; }

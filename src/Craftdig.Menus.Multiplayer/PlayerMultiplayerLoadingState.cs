@@ -3,7 +3,7 @@ namespace Craftdig;
 [Player]
 public class PlayerMultiplayerLoadingState(
     RootState state,
-    RootUi ui,
+    AppMenuVisibility visibility,
     RootBackbuffer backbuffer,
     AppStyle s,
     ModuleWorldSession session,
@@ -16,7 +16,7 @@ public class PlayerMultiplayerLoadingState(
     ModuleMainBackgroundMenu mainBackgroundMenu,
     AppTerrainLoadingMenu terrainLoadingMenu) : State
 {
-    private readonly EntMut menus = Node(ui.Default.Root);
+    private readonly EntMut menus = Node(visibility.Root);
     private EntMut loadingMenu;
     private EntMut waiting;
     private bool menuCreated;
@@ -37,7 +37,7 @@ public class PlayerMultiplayerLoadingState(
             .TextV("Loading terrain...");
     }
 
-    public override void Unload() => NodesRemove(ui.Default.Root, menus);
+    public override void Unload() => NodesRemove(visibility.Root, menus);
 
     public override void Frame(double _)
     {

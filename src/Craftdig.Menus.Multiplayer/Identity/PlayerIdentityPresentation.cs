@@ -1,9 +1,9 @@
 namespace Craftdig;
 
 [Player]
-public class PlayerIdentityPresentation(AppClientOptions clientOptions, AppStyle s)
+public class PlayerIdentityPresentation(AppClientOptions clientOptions)
 {
-    private readonly Dictionary<string, int> duplicateNames = new(StringComparer.Ordinal);
+    private readonly Dictionary<string, int> duplicateNames = [];
     private IReadOnlyDictionary<Guid, PlayerIdentitySnapshot>? countedPlayers;
 
     public void Observe(IReadOnlyDictionary<Guid, PlayerIdentitySnapshot> players)
@@ -27,52 +27,29 @@ public class PlayerIdentityPresentation(AppClientOptions clientOptions, AppStyle
     public string DisplayName(PlayerIdentitySnapshot snapshot)
     {
         if (snapshot.Status == PlayerIdentityStatus.Unverified)
-            return $"development player #{ShortId(snapshot.PlayerId)}";
+            return snapshot.DevelopmentName ?? "Unknown player";
+
         if (string.IsNullOrWhiteSpace(snapshot.Username))
-        {
-            string label = snapshot.Status switch
-            {
-                PlayerIdentityStatus.Invalid => "invalid identity",
-                PlayerIdentityStatus.Stale => "stale identity",
-                PlayerIdentityStatus.Verified => "verified identity",
-                _ => "identity pending",
-            };
-            return $"{label} #{ShortId(snapshot.PlayerId)}";
-        }
+            return $"Player #{ShortId(snapshot.PlayerId)}";
 
         return duplicateNames.GetValueOrDefault(snapshot.Username) > 1
             ? $"{snapshot.Username} #{ShortId(snapshot.PlayerId)}"
             : snapshot.Username;
     }
 
-    public string StatusLabel(PlayerIdentityStatus status) => StatusStyle(status).Label;
-
-    public Vec4 StatusColor(PlayerIdentityStatus status) => StatusStyle(status).Color;
-
-    public string ConnectionLabel()
+    public (string Text, Vec4 Color) NameLabel(string name, PlayerIdentityStatus status) => status switch
     {
-        if (clientOptions.UseRawTcp)
-            return "DEVELOPMENT CONNECTION: RAW TCP + NO AUTH - UNVERIFIED";
-        if (clientOptions.NoAuthUser != null)
-            return "DEVELOPMENT CONNECTION: NO AUTH - UNVERIFIED";
-
-        return "VERIFIED marks a locally checked Identity proof";
-    }
-
-    public Vec4 ConnectionColor() =>
-        clientOptions.UseRawTcp || clientOptions.NoAuthUser != null
-            ? StatusColor(PlayerIdentityStatus.Unverified)
-            : s.TextColorFaint;
-
-    private static string ShortId(Guid playerId) => playerId.ToString("N")[..8];
-
-    private static (string Label, Vec4 Color) StatusStyle(PlayerIdentityStatus status) => status switch
-    {
-        PlayerIdentityStatus.Unverified => ("UNVERIFIED", (0.75f, 0.55f, 1, 1)),
-        PlayerIdentityStatus.Pending => ("PENDING", (1, 0.85f, 0.25f, 1)),
-        PlayerIdentityStatus.Verified => ("VERIFIED", (0.3f, 1, 0.4f, 1)),
-        PlayerIdentityStatus.Stale => ("STALE", (1, 0.55f, 0.15f, 1)),
-        PlayerIdentityStatus.Invalid => ("INVALID", (1, 0.2f, 0.2f, 1)),
+        PlayerIdentityStatus.Unverified => ($"%{name}%", (1, 0, 1, 1)),
+        PlayerIdentityStatus.Pending => ($"?{name}?", (1, 0.85f, 0.25f, 1)),
+        PlayerIdentityStatus.Verified => (name, (1, 1, 1, 1)),
+        PlayerIdentityStatus.Stale => ($"~{name}~", (1, 0.55f, 0.15f, 1)),
+        PlayerIdentityStatus.Invalid => ($"!{name}!", (1, 0.24f, 0.24f, 1)),
         _ => throw new UnreachableException(),
     };
+
+    public string RosterTitle(int count) => clientOptions.UseRawTcp || clientOptions.NoAuthUser != null
+        ? $"Players ({count}) - Development"
+        : $"Players ({count})";
+
+    private static string ShortId(Guid playerId) => playerId.ToString("N")[..8];
 }

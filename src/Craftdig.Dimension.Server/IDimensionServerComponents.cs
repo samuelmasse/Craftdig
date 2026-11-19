@@ -5,6 +5,7 @@ public interface IDimensionServerComponents
 {
     // Socket
     EntMutIdx SocketPlayer { get; set; }
+    bool CrouchHeld { get; set; }
     HashSet<Vec2i>? SocketStreamedChunks { get; set; }
     HashSet<Vec3i>? SocketForgottenSections { get; set; }
     Queue<Vec3i>? SocketForgottenSectionQueue { get; set; }

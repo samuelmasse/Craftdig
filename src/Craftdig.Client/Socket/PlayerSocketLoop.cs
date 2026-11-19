@@ -21,7 +21,7 @@ public class PlayerSocketLoop(
 
     public void Start()
     {
-        loop.Register<PingCommand>(pingReceiver.Receive);
+        loop.RegisterRaw<PingCommand>(pingReceiver.Receive);
         loop.Register<PongCommand>(pongReceiver.Receive);
         loop.Register<PositionUpdateCommand>(positionUpdateReceiver.Receive);
         loop.Register<ChunkUpdateCommand, byte>(chunkUpdateReceiver.Receive);

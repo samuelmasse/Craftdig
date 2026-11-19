@@ -3,7 +3,11 @@ namespace Craftdig;
 [App]
 public class AppMonocraft(RootFonts fonts, AppFiles files)
 {
-    private readonly Font font = fonts.Open(new() { Data = files.ReadAllBytes("Fonts/Monocraft.ttf") });
+    private readonly Font font = fonts.Open(new()
+    {
+        Data = files.ReadAllBytes("Fonts/Monocraft.ttf"),
+        MagFilter = GlTextureMagFilter.Nearest,
+    });
 
     public FontSize this[int size] => font.Size(size);
     public Font Font => font;

@@ -18,6 +18,7 @@ public class ServerClientLoop(
             ns.MaxMessageSize = ProtocolLimits.MaxClientMessageSize;
             ns.ConnectedTime = DateTime.UtcNow;
             ns.ConnectionGeneration = ++nextSocketId;
+            ns.PingProbe = new();
             ns.Tag = $"s{ns.ConnectionGeneration}";
 
             var receive = clientThreadPool.Start(execution => Loop(execution, ns));

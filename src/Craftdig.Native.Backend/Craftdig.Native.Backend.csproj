@@ -7,10 +7,6 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="$(AlvorKitRoot)src\AlvorKit.FastNoise2.Graph\AlvorKit.FastNoise2.Graph.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
         <ProjectReference Include="..\Craftdig.Dimension.Backend\Craftdig.Dimension.Backend.csproj" />
         <ProjectReference Include="..\Craftdig.Native\Craftdig.Native.csproj" />
     </ItemGroup>

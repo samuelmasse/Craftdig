@@ -6,4 +6,5 @@ public struct PongCommand : ICommand
     public static ushort CommandId => (ushort)Commands.Pong;
 
     public PingCommand Ping;
+    public bool RosterOpen;
 }

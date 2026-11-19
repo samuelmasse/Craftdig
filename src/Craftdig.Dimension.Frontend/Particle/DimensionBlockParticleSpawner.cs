@@ -3,6 +3,7 @@ namespace Craftdig;
 [Dimension]
 public class DimensionBlockParticleSpawner(
     DimensionEntArena arena,
+    WorldModuleIndices moduleIndices,
     DimensionBlockParticleBag particles)
 {
     private const int Subdivisions = 4;
@@ -10,11 +11,19 @@ public class DimensionBlockParticleSpawner(
     private const double CellPositionJitter = 0.28;
     private const double DirectionJitter = 0.55;
 
-    private readonly Random random = new();
+    private readonly byte[] burstKey = new byte[4 * sizeof(int)];
+    private long sampleIndex;
 
     public void Spawn(Vec3i location, Ent material)
     {
+        // The same four little-endian integers identify the burst on every client in this world.
+        BinaryPrimitives.WriteInt32LittleEndian(burstKey, location.X);
+        BinaryPrimitives.WriteInt32LittleEndian(burstKey.AsSpan(4), location.Y);
+        BinaryPrimitives.WriteInt32LittleEndian(burstKey.AsSpan(8), location.Z);
+        BinaryPrimitives.WriteInt32LittleEndian(burstKey.AsSpan(12), moduleIndices[material]);
+        sampleIndex = 0;
         var origin = new Vec3d(location.X, location.Y, location.Z);
+
         for (var z = 0; z < Subdivisions; z++)
         {
             for (var y = 0; y < Subdivisions; y++)
@@ -40,8 +49,8 @@ public class DimensionBlockParticleSpawner(
         var position = origin + new Vec3d(fx, fy, fz);
         var velocity = Velocity(fx, fy, fz);
         var uvMin = new Vec2(
-            random.Next(Subdivisions) / (float)Subdivisions,
-            random.Next(Subdivisions) / (float)Subdivisions);
+            (int)(NextSample() * Subdivisions) / (float)Subdivisions,
+            (int)(NextSample() * Subdivisions) / (float)Subdivisions);
         const float uvInset = 0.004f;
         uvMin += new Vec2(uvInset);
         var uvMax =
@@ -49,7 +58,7 @@ public class DimensionBlockParticleSpawner(
             + new Vec2(1f / Subdivisions - uvInset * 2);
         var maxAge = Math.Max(
             4,
-            (int)(4.0 / (random.NextDouble() * 0.9 + 0.1)));
+            (int)(4.0 / (NextSample() * 0.9 + 0.1)));
 
         var allocation = arena.AllocTransient();
         allocation.Mutate()
@@ -59,9 +68,9 @@ public class DimensionBlockParticleSpawner(
             .BlockParticlePrevPosition(position)
             .BlockParticleVelocity(velocity)
             .BlockParticleSize(
-                0.105f + (float)random.NextDouble() * 0.045f)
+                0.105f + (float)NextSample() * 0.045f)
             .BlockParticleBrightness(
-                0.72f + (float)random.NextDouble() * 0.28f)
+                0.72f + (float)NextSample() * 0.28f)
             .BlockParticleAge(0)
             .BlockParticleMaxAge(maxAge)
             .BlockParticleUvMin(uvMin)
@@ -90,8 +99,8 @@ public class DimensionBlockParticleSpawner(
             + direction.Z * direction.Z);
         var speed =
             0.035
-            + (random.NextDouble() + random.NextDouble()) * 0.035;
-        var lift = 0.008 + random.NextDouble() * 0.018;
+            + (NextSample() + NextSample()) * 0.035;
+        var lift = 0.008 + NextSample() * 0.018;
         return direction / length * speed
             + new Vec3d(0, 0, lift);
     }
@@ -107,5 +116,11 @@ public class DimensionBlockParticleSpawner(
     }
 
     private double Jitter(double magnitude) =>
-        (random.NextDouble() * 2.0 - 1.0) * magnitude;
+        (NextSample() * 2.0 - 1.0) * magnitude;
+
+    private double NextSample()
+    {
+        ulong bits = System.IO.Hashing.XxHash3.HashToUInt64(burstKey, sampleIndex++);
+        return (bits >> 11) * (1.0 / (1UL << 53));
+    }
 }

@@ -11,6 +11,7 @@ public interface IDimensionComponents
 
     // Player
     [Saved][Synced][ComponentToString] bool IsPlayer { get; set; }
+    [Synced(EntSyncAudience.Everyone, DevelopmentPlayerName.MaxBytes)] byte[]? DevelopmentName { get; set; }
     [Saved] EntMutIdx WorldPlayer { get; set; }
     [Saved][Synced(EntSyncAudience.Observers)] Vec3 LookAt { get; set; }
     [Saved][Synced(EntSyncAudience.Owner, Slots.ArmorCount)] Ent[]? ArmorSlotEnts { get; set; }

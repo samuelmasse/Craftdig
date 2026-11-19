@@ -201,7 +201,7 @@ public class PlayerEntUpdateApplier(
         }
 
         if (replica.Ent.IsPlayer)
-            identityCache.ObservePlayerEnt(id);
+            identityCache.ObservePlayerEnt(id, replica.Ent.DevelopmentName);
         else identityCache.ForgetPlayerEnt(id);
 
         if (replica.IsOwner)

@@ -4,4 +4,5 @@ public sealed record PlayerIdentitySnapshot(
     Guid PlayerId,
     string? Username,
     PlayerIdentityStatus Status,
-    bool EntPresent);
+    bool EntPresent,
+    string? DevelopmentName = null);

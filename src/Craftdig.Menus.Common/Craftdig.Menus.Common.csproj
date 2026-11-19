@@ -15,7 +15,6 @@
     <ItemGroup>
         <ProjectReference Include="$(AlvorKitRoot)src\AlvorKit.Engine.UI\AlvorKit.Engine.UI.csproj" />
         <ProjectReference Include="..\Craftdig.Player.Frontend\Craftdig.Player.Frontend.csproj" />
-        <ProjectReference Include="..\Craftdig.World\Craftdig.World.csproj" />
         <ProjectReference Include="$(AlvorKitRoot)src\AlvorKit.ECS.Generator\AlvorKit.ECS.Generator.csproj"
             OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
         <ProjectReference Include="$(AlvorKitRoot)src\AlvorKit.UI.Generator\AlvorKit.UI.Generator.csproj"

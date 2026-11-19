@@ -10,7 +10,6 @@
     <ItemGroup>
         <ProjectReference Include="..\Craftdig.Identity\Craftdig.Identity.csproj" />
         <ProjectReference Include="..\Craftdig.Player.Frontend\Craftdig.Player.Frontend.csproj" />
-        <ProjectReference Include="..\Craftdig.Protocol\Craftdig.Protocol.csproj" />
     </ItemGroup>
 
     <ItemGroup>

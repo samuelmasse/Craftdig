@@ -8,10 +8,8 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="$(AlvorKitRoot)src\AlvorKit.Engine.Root\AlvorKit.Engine.Root.csproj" />
         <ProjectReference Include="$(AlvorKitRoot)src/AlvorKit.ECS.Generator/AlvorKit.ECS.Generator.csproj"
             OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
-        <ProjectReference Include="..\Craftdig.Dimension.Backend\Craftdig.Dimension.Backend.csproj" />
         <ProjectReference Include="..\Craftdig.Dimension.Server\Craftdig.Dimension.Server.csproj" />
         <ProjectReference Include="..\Craftdig.Identity\Craftdig.Identity.csproj" />
     </ItemGroup>

@@ -605,8 +605,8 @@ The same `playerId` cannot identify two simultaneously visible player incarnatio
 ### Nameplates
 
 - Look up the immutable local cache by `remotePlayerEnt.Id`.
-- Show only the Identity-ticket username, never a server-provided string.
-- Visually distinguish `Verified`, `Pending`, `Stale`, `Invalid`, and `Unverified`.
+- Use the Identity-ticket username for signed identities. Hide overhead names while the remote player is crouching.
+- Use the same colors and symbols overhead and in the roster. Verified names are plain white. Unverified is magenta `%name%`, pending is yellow `?name?`, stale is orange `~name~`, and invalid is bright red `!name!`.
 - Perform no ticket parsing, HTTP, hashing, or signature verification during rendering.
 
 ### Player list
@@ -618,7 +618,7 @@ The same `playerId` cannot identify two simultaneously visible player incarnatio
 
 ### No-auth development mode
 
-- Retain the current visually distinct development name convention where useful.
+- Show the chosen development name with the unverified color and symbols in both the roster and the nameplate.
 - Never issue or synthesize an Identity ticket for no-auth users.
 - Never render no-auth users as `Verified`.
 - Raw TCP and no-auth deployments must show an explicit development/unverified indicator.

@@ -15,6 +15,7 @@ public class ServerRegisterHandlersAction(
     public void Run()
     {
         loop.Register<PingCommand>(pingReceiver.Receive);
+        loop.Register<PongCommand>(static (socket, pong) => socket.PingProbe.Receive(pong));
         loop.Register<ServerStatusCommand>(statusReceiver.Receive);
 
         loop.RegisterRaw<BeginAuthCommand>(authReceiver.BeginAuth);

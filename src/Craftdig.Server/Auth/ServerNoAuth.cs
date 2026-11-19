@@ -18,7 +18,9 @@ public class ServerNoAuth(
                 return;
             }
 
-            if (!TryReadName(data, out string? name))
+            string? name = DevelopmentPlayerName.Decode(data);
+
+            if (name == null)
             {
                 Reject(socket, "sent an invalid no-auth development name");
                 return;
@@ -37,7 +39,7 @@ public class ServerNoAuth(
             socket.IdentitySession = null;
             socket.PresenceConnection = registration.Connection;
             socket.AuthenticatedUid = uid;
-            socket.AuthenticatedUsername = uid;
+            socket.AuthenticatedUsername = name;
             socket.IsAuthenticated = true;
             socket.AuthChallenge = null;
             socket.Tag = uid;
@@ -69,22 +71,6 @@ public class ServerNoAuth(
         registration.Connection.Cancel();
         log.Warn("Socket {0} could not enqueue the authentication result", socket.Tag);
         socket.Disconnect();
-    }
-
-    private bool TryReadName(ReadOnlySpan<byte> data, [NotNullWhen(true)] out string? name)
-    {
-        name = null;
-        if (data.Length is < 1 or > 35)
-            return false;
-
-        foreach (byte value in data)
-        {
-            if (value is < 0x21 or > 0x7e)
-                return false;
-        }
-
-        name = Encoding.ASCII.GetString(data);
-        return true;
     }
 
     private void Reject(NetSocket socket, string reason)

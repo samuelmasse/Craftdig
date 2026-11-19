@@ -3,9 +3,9 @@ namespace Craftdig;
 [Player]
 public class PlayerCommonState(
     RootCanvas canvas,
-    RootMouse mouse,
     RootInput input,
     RootUi ui,
+    AppMenuVisibility visibility,
     RootKeyboard keyboard,
     RootSprites sprites,
     DimensionContext dimension,
@@ -28,14 +28,20 @@ public class PlayerCommonState(
         [Keys.G] = creativeInventoryMenu.Create,
         [Keys.E] = survivalInventoryMenu.Create,
     };
-    private readonly EntMut menus = Node(ui.Default.Root).OrderValueV(1).InnerAlignmentSnapV(s.ItemSpacingXS);
-    private readonly EntMut overlay = Node(ui.Default.Root).InnerAlignmentSnapV(s.ItemSpacingXS).Mutate(playerOverlayMenu.Create);
-    private readonly EntMut hand = Node(ui.Default.Root)
+    private readonly EntMut menus = Node(visibility.Root)
+        .OrderValueV(1)
+        .InnerAlignmentSnapV(s.ItemSpacingXS);
+    private readonly EntMut overlay = Node(visibility.Root)
+        .InnerAlignmentSnapV(s.ItemSpacingXS)
+        .Mutate(playerOverlayMenu.Create);
+    private readonly EntMut hand = Node(visibility.Root)
         .OrderValueV(1.5f)
         .InnerAlignmentSnapV(s.ItemSpacingXS)
         .IsDisabledV(true)
         .Mutate(playerHandMenu.Create);
-    private readonly EntMut dark = Node(ui.Default.Root).ColorV((0.3f, 0.3f, 0.3f, 0.3f)).IsDisabledV(true);
+    private readonly EntMut dark = Node(visibility.Root)
+        .ColorV((0.3f, 0.3f, 0.3f, 0.3f))
+        .IsDisabledV(true);
 
     private Action<EntMut>? currentKeyMenu;
     private bool paused;
@@ -43,7 +49,8 @@ public class PlayerCommonState(
 
     public EntMut Overlay => overlay;
     public bool Paused => paused;
-    public bool Inv => inv;
+    public bool Playing => !visibility.Hidden && !paused && !inv;
+    public bool ShowNameplates => !visibility.Hidden && !inv;
 
     public override void Load()
     {
@@ -71,14 +78,33 @@ public class PlayerCommonState(
 
     public override void Unload()
     {
-        input.Track = false;
-        NodesRemove(ui.Default.Root, hand);
-        NodesRemove(ui.Default.Root, menus);
-        NodesRemove(ui.Default.Root, overlay);
-        NodesRemove(ui.Default.Root, dark);
+        SetMouseTracking(false);
+        NodesRemove(visibility.Root, hand);
+        NodesRemove(visibility.Root, menus);
+        NodesRemove(visibility.Root, overlay);
+        NodesRemove(visibility.Root, dark);
     }
 
     public override void Update(double time)
+    {
+        if (!visibility.Hidden)
+            UpdateMenus();
+
+        SetMouseTracking(Playing);
+        if (Playing)
+            ui.Focus.Focus(default, false);
+        else construction.Reject();
+    }
+
+    private void SetMouseTracking(bool tracking)
+    {
+        input.Track = tracking;
+        var mode = tracking ? CursorMode.Disabled : CursorMode.Normal;
+        if (input.CursorMode != mode)
+            input.CursorMode = mode;
+    }
+
+    private void UpdateMenus()
     {
         if (keyboard.IsKeyPressed(Keys.Escape))
         {
@@ -127,11 +153,6 @@ public class PlayerCommonState(
             currentKeyMenu = null;
             dark.Mutate().IsDisabledV(true);
         }
-
-        input.Track = !paused && !inv;
-        if (mouse.Track)
-            ui.Focus.Focus(default, false);
-        else construction.Reject();
     }
 
     public override void Render()
@@ -139,11 +160,15 @@ public class PlayerCommonState(
         dimensionFrontend.Frame();
         dimension.Frame();
         playerRenderer.Render(canvas.Size);
-        playerViewModelRenderer.Render(canvas.Size);
+        if (!visibility.Hidden)
+            playerViewModelRenderer.Render(canvas.Size);
     }
 
     public override void Draw()
     {
+        if (visibility.Hidden)
+            return;
+
         float cht = 4 * ui.Scale.Scale;
         float chl = cht * 9;
         var c = (Vec2)canvas.Size / 2;

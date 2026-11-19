@@ -65,7 +65,7 @@ public class PlayerPosition(
             // Intentionally add some latency
             var command = new MovePlayerCommand
             {
-                Movement = new() { LookAt = ent.LookAt }
+                Movement = new() { LookAt = ent.LookAt, Crouch = ent.IsCrouching }
             };
             socket.Send(command);
             socket.Send(command);
@@ -84,7 +84,7 @@ public class PlayerPosition(
     {
         if (listen > 0)
         {
-            ent.Movement = new() { LookAt = ent.LookAt };
+            ent.Movement = new() { LookAt = ent.LookAt, Crouch = ent.Movement.Crouch };
             ent.Construction = default;
             listen--;
         }

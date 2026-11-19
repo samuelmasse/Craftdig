@@ -4,13 +4,14 @@ namespace Craftdig;
 public class ModuleMenuState(
     RootBackbuffer backbuffer,
     RootScreen screen,
-    RootUi ui,
+    AppMenuVisibility visibility,
     RootKeyboard keyboard,
     AppStyle s,
     ModuleMainBackgroundMenu mainBackgroundMenu,
     ModuleMainMenu mainMenu) : State
 {
-    private readonly EntMut menus = Node(ui.Default.Root).InnerAlignmentSnapV(s.ItemSpacingXS);
+    private readonly EntMut menus = Node(visibility.Root)
+        .InnerAlignmentSnapV(s.ItemSpacingXS);
     private readonly Stopwatch watch = new();
     private int frame;
     private bool gc;
@@ -24,12 +25,12 @@ public class ModuleMenuState(
 
     public override void Unload()
     {
-        NodesRemove(ui.Default.Root, menus);
+        NodesRemove(visibility.Root, menus);
     }
 
     public override void Update(double time)
     {
-        if (keyboard.IsKeyPressed(Keys.Escape))
+        if (!visibility.Hidden && keyboard.IsKeyPressed(Keys.Escape))
         {
             if (NodeStackCount(menus) > 1 && NodeStackTryPeek(menus, out var top) && !top.IsModalFV.Resolve())
                 PopMenu(menus);

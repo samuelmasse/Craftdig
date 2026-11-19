@@ -2,12 +2,12 @@ namespace Craftdig;
 
 [Player]
 public class PlayerMultiplayerDisconnectedState(
-    RootUi ui,
+    AppMenuVisibility visibility,
     RootBackbuffer backbuffer,
     ModuleMainBackgroundMenu mainBackgroundMenu,
     ModuleMultiplayerDisconnectedMenu multiplayerDisconnectedMenu) : State
 {
-    private readonly EntMut menus = Node(ui.Default.Root);
+    private readonly EntMut menus = Node(visibility.Root);
 
     public override void Load()
     {
@@ -17,7 +17,7 @@ public class PlayerMultiplayerDisconnectedState(
 
     public override void Unload()
     {
-        NodesRemove(ui.Default.Root, menus);
+        NodesRemove(visibility.Root, menus);
     }
 
     public override void Render() => backbuffer.Clear();

@@ -5,6 +5,7 @@ public class ServerTick(
     WorldDimensionBag dimensions,
     WorldServer world,
     ServerSockets sockets,
+    ServerRosterPings rosterPings,
     ServerKicker kicker)
 {
     public void Tick()
@@ -21,6 +22,7 @@ public class ServerTick(
         foreach (var dimension in dimensions.Ents)
             dimension.DimensionScope.Get<DimensionServer>().Stream();
 
+        rosterPings.Tick();
         sockets.ReleaseCompleted();
     }
 }

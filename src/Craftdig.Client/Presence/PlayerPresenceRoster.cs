@@ -97,7 +97,7 @@ internal sealed class PlayerPresenceRoster(PlayerIdentitySession identitySession
         PlayerIdentityLedger ledger,
         PlayerPresenceRounds rounds)
     {
-        bool entPresent = identityCache.IsEntPresent(playerId);
+        bool entPresent = identityCache.TryGetPlayerEnt(playerId, out var developmentName);
         long? lastActivity = lastIdentityActivity.TryGetValue(playerId, out long activity)
             ? activity
             : null;
@@ -111,7 +111,7 @@ internal sealed class PlayerPresenceRoster(PlayerIdentitySession identitySession
         var status = PlayerIdentityStatusPolicy.Evaluate(new()
         {
             HasVerifiableTransport = identitySession.ServerContext != null,
-            IdentityExpected = identitySession.IdentityEnabled,
+            IdentityExpected = identitySession.IdentityEnabled && developmentName == null,
             EntPresent = entPresent,
             Invalid = invalidPlayers.Contains(playerId) || verifiedRound?.Invalid == true,
             ProofSeen = proofSeenPlayers.Contains(playerId),
@@ -124,6 +124,7 @@ internal sealed class PlayerPresenceRoster(PlayerIdentitySession identitySession
         });
 
         var displayTicket = status == PlayerIdentityStatus.Verified ? verifiedTicket : currentTicket;
-        return new(playerId, displayTicket?.Username, status, entPresent);
+        return new(playerId, displayTicket?.Username, status, entPresent,
+            status == PlayerIdentityStatus.Unverified ? developmentName : null);
     }
 }

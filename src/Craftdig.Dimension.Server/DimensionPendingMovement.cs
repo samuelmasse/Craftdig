@@ -57,7 +57,7 @@ public class DimensionPendingMovement(Log log, DimensionSockets sockets)
 
             mov.FlyUp = cmov.FlyUp;
             mov.FlyDown = cmov.FlyDown;
-            mov.Crouch = cmov.Crouch;
+            ns.CrouchHeld = cmov.Crouch;
             mov.Vector = cmov.Vector;
             if (cmov.LookAt != default)
             {
@@ -70,6 +70,8 @@ public class DimensionPendingMovement(Log log, DimensionSockets sockets)
             drop = cmd.Drop;
         }
 
+        // A tick without a movement command must preserve the last held crouch input.
+        mov.Crouch = ns.CrouchHeld;
         ent.Movement = mov;
         ent.Drop = drop;
         ent.Construction = constr;

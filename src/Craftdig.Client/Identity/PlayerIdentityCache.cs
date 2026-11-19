@@ -4,7 +4,7 @@ namespace Craftdig;
 public class PlayerIdentityCache
 {
     private readonly Lock entGate = new();
-    private readonly HashSet<Guid> playerEnts = [];
+    private readonly Dictionary<Guid, string?> playerEnts = [];
     private IReadOnlyDictionary<Guid, PlayerIdentitySnapshot> players =
         FrozenDictionary<Guid, PlayerIdentitySnapshot>.Empty;
     private int playerListOpen;
@@ -15,12 +15,19 @@ public class PlayerIdentityCache
     public bool TryGet(Guid playerId, [NotNullWhen(true)] out PlayerIdentitySnapshot? snapshot) =>
         Players.TryGetValue(playerId, out snapshot);
 
-    public void ObservePlayerEnt(Guid playerId)
+    public void ObservePlayerEnt(Guid playerId, ReadOnlySpan<byte> developmentName = default)
     {
         lock (entGate)
         {
-            if (playerEnts.Count < ProtocolLimits.MaxPresencePlayers)
-                playerEnts.Add(playerId);
+            if (playerEnts.TryGetValue(playerId, out var previousName))
+            {
+                if (Ascii.Equals(developmentName, previousName.AsSpan()))
+                    return;
+            }
+            else if (playerEnts.Count >= ProtocolLimits.MaxPresencePlayers)
+                return;
+
+            playerEnts[playerId] = DevelopmentPlayerName.Decode(developmentName);
         }
     }
 
@@ -30,16 +37,18 @@ public class PlayerIdentityCache
             playerEnts.Remove(playerId);
     }
 
-    public bool IsEntPresent(Guid playerId)
+    public bool IsEntPresent(Guid playerId) => TryGetPlayerEnt(playerId, out _);
+
+    public bool TryGetPlayerEnt(Guid playerId, out string? developmentName)
     {
         lock (entGate)
-            return playerEnts.Contains(playerId);
+            return playerEnts.TryGetValue(playerId, out developmentName);
     }
 
     public Guid[] CaptureEnts()
     {
         lock (entGate)
-            return [.. playerEnts];
+            return [.. playerEnts.Keys];
     }
 
     public void SetPlayerListOpen(bool open) => Volatile.Write(ref playerListOpen, open ? 1 : 0);

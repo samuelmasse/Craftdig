@@ -18,7 +18,7 @@ public class PlayerMultiplayerState(
     PlayerSlowTickReceiver slowTickReceiver,
     PlayerClient client,
     PlayerMultiplayerDebugMenu multiplayerDebugMenu,
-    PlayerMultiplayerNameplatesMenu multiplayerNameplatesMenu,
+    PlayerMultiplayerNameplates nameplates,
     PlayerMultiplayerRosterMenu multiplayerRosterMenu) : State
 {
     private int delay;
@@ -33,7 +33,6 @@ public class PlayerMultiplayerState(
         ent.Movement = movement;
         ent.IsLoaded = true;
         Node(commonState.Overlay).Mutate(multiplayerDebugMenu.Create);
-        Node(commonState.Overlay).Mutate(multiplayerNameplatesMenu.Create);
         Node(commonState.Overlay).Mutate(multiplayerRosterMenu.Create);
     }
 
@@ -46,13 +45,11 @@ public class PlayerMultiplayerState(
 
     public override void Update(double time)
     {
-        bool playerListOpen = keyboard.IsKeyDown(Keys.Tab);
-        identityCache.SetPlayerListOpen(playerListOpen);
+        commonState.Update(time);
 
-        if (!keyboard.IsKeyPressed(Keys.Tab))
-            commonState.Update(time);
+        identityCache.SetPlayerListOpen(commonState.Playing && keyboard.IsKeyDown(Keys.Tab));
 
-        if (!commonState.Inv && !commonState.Paused)
+        if (commonState.Playing)
             player.Input();
     }
 
@@ -78,7 +75,7 @@ public class PlayerMultiplayerState(
         while (ticks > 0)
         {
             clock.Tick();
-            if (!commonState.Inv && !commonState.Paused)
+            if (commonState.Playing)
                 player.Tick();
             else player.NoTick();
 
@@ -103,6 +100,9 @@ public class PlayerMultiplayerState(
 
     public override void Draw()
     {
+        if (commonState.ShowNameplates)
+            nameplates.Draw();
+
         commonState.Draw();
     }
 }

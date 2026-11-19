@@ -42,7 +42,7 @@ public class PlayerSingleplayerState(
 
             while (ticks > 0)
             {
-                if (!commonState.Inv)
+                if (commonState.Playing)
                     player.Tick();
                 else player.NoTick();
 
@@ -56,7 +56,7 @@ public class PlayerSingleplayerState(
             }
 
             player.Update(time);
-            if (!commonState.Inv)
+            if (commonState.Playing)
                 player.Input();
         }
     }
